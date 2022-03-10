@@ -1,0 +1,27 @@
+﻿//////////// COLOR PALETTE ////////////
+
+// Base colors
+$color-orange-base: rgb(221, 87, 28); // #dd571c
+
+// Other base colors
+$color-red-base: rgb(237, 48, 48); // #ed3030
+$color-blue-base: rgb(56, 108, 225); // #386ce1
+
+// Gray scale
+$color-black: rgb(0, 0, 0); // #000
+$color-gray-very-dark: rgb(34, 34, 34); // #222
+$color-gray-dark: rgb(40, 45, 59); // #282d3b
+$color-gray-intermediate: rgb(166, 166, 166); // #a6a6a6
+$color-gray-light: rgb(221, 221, 221); // #ddd
+$color-gray-very-light: rgb(238, 238, 238); // #eee
+$color-white: rgb(255, 255, 255); // #fff
+
+//////////// ELEMENTS ////////////
+
+// Input
+$color-input-border: rgb(230, 230, 230); // #e6e6e6
+$color-input-text: rgb(118, 127, 132); // #767f84
+
+// Transparent overlay
+$color-overlay-gray: rgba(34, 34, 34, 0.8); // #222 + opacity 0.8
+$color-overlay-black: rgba(0, 0, 0, 0.8); // #000 + opacity 0.8

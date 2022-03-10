@@ -1,0 +1,128 @@
+﻿@use 'colors' as *;
+@use 'fonts' as *;
+
+//////////// GLOBAL RESET FOR STYLES ////////////
+
+/* ----------------------------------------- */
+/* ---------------- [RESET] ---------------- */
+/* ----------------------------------------- */
+/* http://meyerweb.com/eric/tools/css/reset/ */
+/* ------------ v1.0 | 20080212 ------------ */
+
+* {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        scroll-behavior: auto;
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+@-ms-viewport {
+    width: device-width;
+}
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body,
+input,
+textarea,
+select {
+    font: normal $font-size-normal $font-family-base;
+    color: $color-gray-dark;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    line-height: 1;
+}
+
+button,
+html [type='button'],
+[type='reset'],
+[type='submit'] {
+    -webkit-appearance: button;
+}
+
+button::-moz-focus-inner,
+[type='button']::-moz-focus-inner,
+[type='reset']::-moz-focus-inner,
+[type='submit']::-moz-focus-inner {
+    padding: 0;
+    border-style: none;
+}
+
+a,
+area,
+button,
+[role='button'],
+input:not([type='range']),
+label,
+select,
+summary,
+textarea {
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
