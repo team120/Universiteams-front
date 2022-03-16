@@ -1,11 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import type { NextPage } from 'next'
+import axios from 'axios'
 import Head from 'next/head'
 import Image from 'next/image'
 
 import styles from '../styles/home.module.scss'
 
 const Home: NextPage = () => {
+    const [dataTest, setDataTest] = useState([])
+
+    useEffect(() => {
+        const url = 'https://jsonplaceholder.typicode.com/users'
+        axios.get(url).then((res) => {
+            setDataTest(res.data)
+        })
+    }, [])
+
     return (
         <div className={styles.container}>
             <Head>
@@ -16,6 +26,12 @@ const Home: NextPage = () => {
 
             <main className={styles.main}>
                 <h1>Universiteams</h1>
+                <h3>Test names:</h3>
+                <ul>
+                    {dataTest.map((item: any, i: number) => (
+                        <li key={i}>{item.name}</li>
+                    ))}
+                </ul>
             </main>
 
             <footer className={styles.footer}>
