@@ -10,9 +10,9 @@ const Home: NextPage = () => {
     const [dataTest, setDataTest] = useState([])
 
     useEffect(() => {
-        const url = 'https://jsonplaceholder.typicode.com/users'
+        const url = 'http://localhost:3000/institutions/'
         axios.get(url).then((res) => {
-            setDataTest(res.data)
+            console.log(res)
         })
     }, [])
 
