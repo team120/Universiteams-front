@@ -10,9 +10,9 @@ const Home: NextPage = () => {
     const [dataTest, setDataTest] = useState([])
 
     useEffect(() => {
-        const url = 'http://localhost:3000/institutions/'
+        const url = 'http://api.localhost/institutions/'
         axios.get(url).then((res) => {
-            console.log(res)
+            setDataTest(res.data)
         })
     }, [])
 
