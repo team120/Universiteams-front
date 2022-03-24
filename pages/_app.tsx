@@ -17,8 +17,9 @@ const App = ({ Component, pageProps }: AppProps) => {
         setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
     const themeConfig: any = {
         colorScheme,
-        colors: { orange: ['#ddd571c'] },
-        primaryColor: 'orange',
+        colors: { blue: ['#1c7ed6'], orange: ['#dd571c'] },
+        primaryColor: 'blue',
+        secondaryColor: 'orange',
         fontFamily: 'Verdana, sans-serif',
         fontFamilyMonospace: 'Monaco, Courier, monospace',
         headings: { fontFamily: 'Greycliff CF, sans-serif' },
