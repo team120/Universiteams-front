@@ -15,12 +15,21 @@ const App = ({ Component, pageProps }: AppProps) => {
     })
     const toggleColorScheme = (value?: ColorScheme) =>
         setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
+    const themeConfig: any = {
+        colorScheme,
+        colors: { orange: ['#ddd571c'] },
+        primaryColor: 'orange',
+        fontFamily: 'Verdana, sans-serif',
+        fontFamilyMonospace: 'Monaco, Courier, monospace',
+        headings: { fontFamily: 'Greycliff CF, sans-serif' },
+        spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
+    }
 
     useHotkeys([['mod+J', () => toggleColorScheme()]])
 
     return (
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-            <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+            <MantineProvider theme={themeConfig} withGlobalStyles withNormalizeCSS>
                 <Layout className={'container'}>
                     <Component {...pageProps} />
                 </Layout>
