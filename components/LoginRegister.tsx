@@ -1,8 +1,11 @@
 import React from 'react'
-import { Box, Button, Card, Checkbox, Group, TextInput } from '@mantine/core'
+import { Button, Card, Checkbox, Group, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 
 const LoginRegister = () => {
+    const emailRegex = /^\S+@\S+$/
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+
     const form = useForm({
         initialValues: {
             email: '',
@@ -11,7 +14,11 @@ const LoginRegister = () => {
         },
 
         validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+            email: (value) => (emailRegex.test(value) ? null : 'Invalid email'),
+            password: (value) =>
+                passwordRegex.test(value)
+                    ? null
+                    : 'Minimum eight characters, at least one letter and one number',
         },
     })
 
