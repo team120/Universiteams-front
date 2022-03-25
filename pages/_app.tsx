@@ -17,7 +17,6 @@ const App = ({ Component, pageProps }: AppProps) => {
         setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
     const themeConfig: any = {
         colorScheme,
-        colors: { blue: ['#1c7ed6'], orange: ['#dd571c'] },
         primaryColor: 'blue',
         secondaryColor: 'orange',
         fontFamily: 'Verdana, sans-serif',
