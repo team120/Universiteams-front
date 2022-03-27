@@ -33,10 +33,6 @@ const Home: NextPage = () => {
                     ))}
                 </ul>
             </main>
-
-            <footer className={styles.footer}>
-                <p>Universiteams 2022</p>
-            </footer>
         </div>
     )
 }

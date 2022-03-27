@@ -1,5 +1,8 @@
 import { AppShell, Burger, Header, MediaQuery, Navbar, useMantineTheme } from '@mantine/core'
 import * as React from 'react'
+import HeaderContent from './HeaderContent'
+import NavbarContent from './NavbarContent'
+import FooterContent from './FooterContent'
 
 const Layout = (props: any) => {
     const [opened, setOpened] = React.useState(false)
@@ -9,15 +12,11 @@ const Layout = (props: any) => {
         <AppShell
             padding="md"
             navbarOffsetBreakpoint="sm"
+            fixed
             navbar={
-                <Navbar
-                    width={{ sm: 300, lg: 400 }}
-                    height={500}
-                    p="md"
-                    hiddenBreakpoint="sm"
-                    hidden={!opened}>
+                <Navbar width={{ sm: 300, lg: 400 }} p="md" hiddenBreakpoint="sm" hidden={!opened}>
                     {/* Navbar content */}
-                    Navbar
+                    <NavbarContent />
                 </Navbar>
             }
             header={
@@ -33,6 +32,7 @@ const Layout = (props: any) => {
                             />
                         </MediaQuery>
                     </div>
+                    <HeaderContent />
                 </Header>
             }
             styles={(theme) => ({
@@ -41,8 +41,8 @@ const Layout = (props: any) => {
                         theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
                 },
             })}>
-            {/* Your application here */}
             {props.children}
+            <FooterContent />
         </AppShell>
     )
 }
