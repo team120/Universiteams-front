@@ -22,7 +22,6 @@ const LoginRegister: React.FC = () => {
         initialValues: {
             email: '',
             password: '',
-            termsOfService: false,
         },
 
         validate: {
@@ -42,7 +41,7 @@ const LoginRegister: React.FC = () => {
                     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
                     fontWeight: 900,
                 })}>
-                Welcome back!
+                Welcome to Universiteams!
             </Title>
             <Text color="dimmed" size="sm" align="center" mt={5}>
                 Do not have an account yet?{' '}
@@ -52,17 +51,30 @@ const LoginRegister: React.FC = () => {
             </Text>
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-                <TextInput label="Email" placeholder="you@mantine.dev" required />
-                <PasswordInput label="Password" placeholder="Your password" required mt="md" />
-                <Group position="apart" mt="md">
-                    <Checkbox label="Remember me" />
-                    <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
-                        Forgot password?
-                    </Anchor>
-                </Group>
-                <Button fullWidth mt="xl">
-                    Login
-                </Button>
+                <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                    <TextInput
+                        label="Email"
+                        placeholder="you@mantine.dev"
+                        required
+                        {...form.getInputProps('email')}
+                    />
+                    <PasswordInput
+                        label="Password"
+                        placeholder="Your password"
+                        required
+                        mt="md"
+                        {...form.getInputProps('password')}
+                    />
+                    <Group position="apart" mt="md">
+                        <Checkbox label="Remember me" />
+                        <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
+                            Forgot password?
+                        </Anchor>
+                    </Group>
+                    <Button fullWidth mt="xl" type="submit">
+                        Login
+                    </Button>
+                </form>
             </Paper>
         </Container>
     )
