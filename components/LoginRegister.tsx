@@ -1,8 +1,20 @@
 import React from 'react'
-import { Button, Card, Checkbox, Group, TextInput } from '@mantine/core'
+import {
+    Anchor,
+    Button,
+    Card,
+    Checkbox,
+    Container,
+    Group,
+    Paper,
+    PasswordInput,
+    Text,
+    TextInput,
+    Title,
+} from '@mantine/core'
 import { useForm } from '@mantine/form'
 
-const LoginRegister = () => {
+const LoginRegister: React.FC = () => {
     const emailRegex = /^\S+@\S+$/
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
@@ -23,46 +35,36 @@ const LoginRegister = () => {
     })
 
     return (
-        <Card m="lg" p="lg">
-            <Card.Section
-                p="lg"
+        <Container size={420} my={40}>
+            <Title
+                align="center"
                 sx={(theme) => ({
-                    color: theme.colors.blue,
-                    background: theme.colors.dark[8],
-                    textAlign: 'center',
-                    fontSize: '2rem',
-                    fontWeight: 'bold',
+                    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+                    fontWeight: 900,
                 })}>
-                UNIVERSITEAMS
-            </Card.Section>
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
-                <TextInput
-                    mt="md"
-                    required
-                    label="Email"
-                    placeholder="your@email.com"
-                    {...form.getInputProps('email')}
-                />
+                Welcome back!
+            </Title>
+            <Text color="dimmed" size="sm" align="center" mt={5}>
+                Do not have an account yet?{' '}
+                <Anchor<'a'> href="#" size="sm" onClick={(event) => event.preventDefault()}>
+                    Create account
+                </Anchor>
+            </Text>
 
-                <TextInput
-                    mt="md"
-                    required
-                    label="Password"
-                    placeholder="********"
-                    {...form.getInputProps('password')}
-                />
-
-                <Checkbox
-                    mt="md"
-                    label="I agree to the Universiteams terms and conditions"
-                    {...form.getInputProps('termsOfService', { type: 'checkbox' })}
-                />
-
-                <Group position="right" mt="md">
-                    <Button type="submit">Submit</Button>
+            <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+                <TextInput label="Email" placeholder="you@mantine.dev" required />
+                <PasswordInput label="Password" placeholder="Your password" required mt="md" />
+                <Group position="apart" mt="md">
+                    <Checkbox label="Remember me" />
+                    <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
+                        Forgot password?
+                    </Anchor>
                 </Group>
-            </form>
-        </Card>
+                <Button fullWidth mt="xl">
+                    Login
+                </Button>
+            </Paper>
+        </Container>
     )
 }
 
