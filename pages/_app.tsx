@@ -24,6 +24,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         fontFamilyMonospace: 'Monaco, Courier, monospace',
         headings: { fontFamily: 'Greycliff CF, sans-serif' },
         spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
+        loader: 'bars',
     }
 
     useHotkeys([['mod+J', () => toggleColorScheme()]])
