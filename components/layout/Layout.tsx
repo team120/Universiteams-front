@@ -1,7 +1,7 @@
 import { AppShell, Burger, Header, MediaQuery, Navbar, useMantineTheme } from '@mantine/core'
 import * as React from 'react'
 import HeaderContent from './HeaderContent'
-import NavbarContent from './NavbarContent'
+import NavbarDouble from './NavbarDouble'
 import FooterContent from './FooterContent'
 
 const Layout = (props: any) => {
@@ -14,9 +14,13 @@ const Layout = (props: any) => {
             navbarOffsetBreakpoint="sm"
             fixed
             navbar={
-                <Navbar width={{ sm: 300, lg: 400 }} p="md" hiddenBreakpoint="sm" hidden={!opened}>
+                <Navbar
+                    width={{ sm: 300, lg: 400, base: 100 }}
+                    p="md"
+                    hiddenBreakpoint="sm"
+                    hidden={!opened}>
                     {/* Navbar content */}
-                    <NavbarContent />
+                    <NavbarDouble />
                 </Navbar>
             }
             header={
