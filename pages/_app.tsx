@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 
 import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks'
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
-import Layout from '../components/Layout'
+import Layout from '../components/layout/Layout'
 import '../styles/globals.scss'
 
 const App = ({ Component, pageProps }: AppProps) => {
