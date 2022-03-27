@@ -1,18 +1,38 @@
-import { AppShell, Header, Navbar } from '@mantine/core'
+import { AppShell, Burger, Header, MediaQuery, Navbar, useMantineTheme } from '@mantine/core'
 import * as React from 'react'
 
 const Layout = (props: any) => {
+    const [opened, setOpened] = React.useState(false)
+    const theme = useMantineTheme()
+
     return (
         <AppShell
             padding="md"
+            navbarOffsetBreakpoint="sm"
             navbar={
-                <Navbar width={{ base: 300 }} height={500} p="xs">
+                <Navbar
+                    width={{ sm: 300, lg: 400 }}
+                    height={500}
+                    p="md"
+                    hiddenBreakpoint="sm"
+                    hidden={!opened}>
                     {/* Navbar content */}
+                    Navbar
                 </Navbar>
             }
             header={
-                <Header height={60} p="xs">
-                    {/* Header content */}
+                <Header height={70} p="md">
+                    <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+                        <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+                            <Burger
+                                opened={opened}
+                                onClick={() => setOpened((o) => !o)}
+                                size="sm"
+                                color={theme.colors.gray[6]}
+                                mr="xl"
+                            />
+                        </MediaQuery>
+                    </div>
                 </Header>
             }
             styles={(theme) => ({
