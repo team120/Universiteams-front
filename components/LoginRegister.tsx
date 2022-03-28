@@ -32,12 +32,13 @@ const LoginRegister: React.FC = () => {
 
         validate: {
             email: (value) => (emailRegex.test(value) ? null : 'Invalid email'),
-            password: (value) =>
-                type !== 'register'
-                    ? undefined
-                    : passwordRegex.test(value)
-                    ? null
-                    : 'Minimum eight characters, at least one letter and one number',
+            password: (value) => {
+                if (type !== 'register') return null
+                if (!passwordRegex.test(value))
+                    return 'Minimum eight characters, at least one letter and one number'
+
+                return null
+            },
         },
     })
 
