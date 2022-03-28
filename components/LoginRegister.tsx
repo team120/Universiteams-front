@@ -22,6 +22,13 @@ const LoginRegister: React.FC = () => {
     const emailRegex = /^\S+@\S+$/
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
+    const validateName = (value: string) => {
+        if (type !== 'register') return null
+        if (value.length < 2) return 'Minimum two characters'
+
+        return null
+    }
+
     const form = useForm({
         initialValues: {
             firstName: '',
@@ -31,6 +38,8 @@ const LoginRegister: React.FC = () => {
         },
 
         validate: {
+            firstName: (value) => validateName(value),
+            lastName: (value) => validateName(value),
             email: (value) => (emailRegex.test(value) ? null : 'Invalid email'),
             password: (value) => {
                 if (type !== 'register') return null
