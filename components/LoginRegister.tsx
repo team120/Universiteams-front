@@ -100,7 +100,7 @@ const LoginRegister: React.FC = () => {
                     />
                     <Group position="apart" mt="md">
                         <Checkbox label="Remember me" />
-                        {type === 'register' && (
+                        {type === 'login' && (
                             <Anchor<'a'>
                                 onClick={(event) => event.preventDefault()}
                                 href="#"
