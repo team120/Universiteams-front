@@ -14,9 +14,11 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
+import { useRouter } from 'next/router'
 
 const LoginRegister: React.FC = () => {
     const [type, toggleType] = useToggle('login', ['login', 'register'])
+    const router = useRouter()
     const emailRegex = /^\S+@\S+$/
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
@@ -51,7 +53,14 @@ const LoginRegister: React.FC = () => {
             </Title>
             <Text color="dimmed" size="sm" align="center" mt={5}>
                 {type === 'register' ? 'Already have an account?' : "Don't have an account?"}{' '}
-                <Anchor<'a'> href="#" size="sm" onClick={() => toggleType()}>
+                <Anchor<'a'>
+                    href="#"
+                    size="sm"
+                    onClick={() => {
+                        toggleType()
+                        const route = type === 'register' ? '/Login' : '/Register'
+                        history.pushState(undefined, '', route)
+                    }}>
                     {type === 'register' ? 'Login' : 'Register'}
                 </Anchor>
             </Text>
