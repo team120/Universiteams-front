@@ -77,7 +77,7 @@ const LoginRegister: React.FC = () => {
 
                     <TextInput
                         label="Email"
-                        placeholder="you@mantine.dev"
+                        placeholder="your@email.com"
                         required
                         {...form.getInputProps('email')}
                     />
