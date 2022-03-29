@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Anchor,
     Box,
@@ -17,6 +17,8 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
+import { useRouter } from 'next/router'
+import axios, { AxiosError } from 'axios'
 import { Check, X } from 'tabler-icons-react'
 
 const requirements = [
@@ -54,7 +56,7 @@ const getStrengthBarColor = (strength: number) => {
     return strengthColor
 }
 
-const PasswordRequirement = ({ meets, label }: { meets: boolean; label: string }) => {
+const Requirement = ({ meets, label }: { meets: boolean; label: string }) => {
     return (
         <Text color={meets ? 'teal' : 'red'} mt={5} size="sm">
             <Center inline>
@@ -66,8 +68,18 @@ const PasswordRequirement = ({ meets, label }: { meets: boolean; label: string }
 }
 
 const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) => {
+    const router = useRouter()
     const [type, toggleType] = useToggle(initialType, ['login', 'register'])
     const emailRegex = /^\S+@\S+$/
+    const [serverErrors, setServerErrors] = useState<string[]>([])
+
+    const handleSubmit = async (values: typeof form.values) => {
+        const url = `http://api.localhost/auth/${type}`
+        axios
+            .post(url, values)
+            .then(() => router.push('/'))
+            .catch((error: AxiosError) => setServerErrors([error.response?.data.message]))
+    }
 
     const validateName = (value: string) => {
         if (type !== 'register') return null
@@ -100,7 +112,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
     const strengthBarColor = getStrengthBarColor(strength)
 
     const checks = requirements.map((requirement, index) => (
-        <PasswordRequirement
+        <Requirement
             key={index}
             meets={requirement.validate(form.values.password)}
             label={requirement.label}
@@ -132,7 +144,11 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
             </Text>
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-                <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                {serverErrors.map((error, index) => (
+                    <Requirement key={index} meets={false} label={error} />
+                ))}
+
+                <form onSubmit={form.onSubmit(handleSubmit)}>
                     {type === 'register' && (
                         <>
                             <TextInput
