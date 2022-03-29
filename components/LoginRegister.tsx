@@ -47,8 +47,8 @@ const getStrengthColorAndPhrase = (strength: number) => {
     const colors = ['red', 'yellow', 'orange', 'blue', 'green']
     const phrases = [
         'Sucks',
-        'Still not close yet',
         'My grandma can hack this',
+        'Still not close yet',
         'Fair enough',
         'Bullet proof',
     ]
@@ -116,7 +116,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
                     getPasswordStrength(value) <
                     (requirements.length - 1) * (100 / requirements.length)
                 )
-                    return 'Password must accomplish at least 4 of the 5 following guidelines'
+                    return 'Password must follow at least 4 of the next 5 guidelines'
 
                 return null
             },
