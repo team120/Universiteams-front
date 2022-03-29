@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Anchor,
     Box,
@@ -18,6 +18,7 @@ import {
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
 import { useRouter } from 'next/router'
+import { EnvKeys } from '../utils/env'
 import axios, { AxiosError } from 'axios'
 import { Check, X } from 'tabler-icons-react'
 
@@ -42,18 +43,26 @@ const getPasswordStrength = (password: string) => {
     return strengthAccumulator * (100 / requirements.length)
 }
 
-const getStrengthBarColor = (strength: number) => {
+const getStrengthColorAndPhrase = (strength: number) => {
     const colors = ['red', 'yellow', 'orange', 'blue', 'green']
+    const phrases = [
+        'Sucks',
+        'Still not close yet',
+        'My grandma can hack this',
+        'Fair enough',
+        'Bullet proof',
+    ]
 
-    const colorByPercentage = requirements.map((undefined, index) => ({
+    const colorAndPhraseByPercentage = requirements.map((undefined, index) => ({
         percentage: (index + 1) * (100 / requirements.length),
         color: colors[index],
+        phrase: phrases[index],
     }))
-    const strengthColor = colorByPercentage
+    const strengthColorAndPhrase = colorAndPhraseByPercentage
         .filter((e) => e.percentage <= strength)
-        .splice(-1)[0]?.color
+        .splice(-1)[0]
 
-    return strengthColor
+    return strengthColorAndPhrase
 }
 
 const Requirement = ({ meets, label }: { meets: boolean; label: string }) => {
@@ -103,13 +112,19 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
             password: (value) => {
                 if (type !== 'register') return null
 
+                if (
+                    getPasswordStrength(value) <
+                    (requirements.length - 1) * (100 / requirements.length)
+                )
+                    return 'Password must accomplish at least 4 of the 5 following guidelines'
+
                 return null
             },
         },
     })
 
     const strength = getPasswordStrength(form.values.password)
-    const strengthBarColor = getStrengthBarColor(strength)
+    const strengthColorAndPhrase = getStrengthColorAndPhrase(strength)
 
     const checks = requirements.map((requirement, index) => (
         <Requirement
@@ -181,7 +196,14 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
                     />
                     {type === 'register' && (
                         <>
-                            <Progress mt="xs" mb="md" value={strength} color={strengthBarColor} />
+                            <Progress
+                                mt="xs"
+                                value={strength}
+                                color={strengthColorAndPhrase?.color}
+                            />
+                            <Text size="sm" align="center" color={strengthColorAndPhrase?.color}>
+                                {strengthColorAndPhrase?.phrase}
+                            </Text>
                             {checks}
                         </>
                     )}
