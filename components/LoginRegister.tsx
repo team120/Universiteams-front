@@ -65,8 +65,8 @@ const PasswordRequirement = ({ meets, label }: { meets: boolean; label: string }
     )
 }
 
-const LoginRegister: React.FC = () => {
-    const [type, toggleType] = useToggle('login', ['login', 'register'])
+const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) => {
+    const [type, toggleType] = useToggle(initialType, ['login', 'register'])
     const emailRegex = /^\S+@\S+$/
 
     const validateName = (value: string) => {
