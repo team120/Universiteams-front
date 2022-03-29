@@ -122,6 +122,10 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
         },
     })
 
+    useEffect(() => {
+        setServerErrors([])
+    }, [type])
+
     const strength = getPasswordStrength(form.values.password)
     const strengthColorAndPhrase = getStrengthColorAndPhrase(strength)
 
