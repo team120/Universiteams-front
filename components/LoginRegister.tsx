@@ -18,7 +18,6 @@ import {
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
 import { useRouter } from 'next/router'
-import { EnvKeys } from '../utils/env'
 import axios, { AxiosError } from 'axios'
 import { Check, X } from 'tabler-icons-react'
 
@@ -116,7 +115,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
                     getPasswordStrength(value) <
                     (requirements.length - 1) * (100 / requirements.length)
                 )
-                    return 'Password must follow at least 4 of the next 5 guidelines'
+                    return 'Password must follow at least 4 of the 5 contiguous guidelines'
 
                 return null
             },
