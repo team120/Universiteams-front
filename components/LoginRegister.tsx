@@ -1,26 +1,73 @@
 import React from 'react'
 import {
     Anchor,
+    Box,
     Button,
     Card,
+    Center,
     Checkbox,
     Container,
     Group,
     Paper,
     PasswordInput,
+    Progress,
     Text,
     TextInput,
     Title,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
-import { useRouter } from 'next/router'
+import { Check, X } from 'tabler-icons-react'
+
+const requirements = [
+    { validate: (password: string) => password.length >= 8, label: 'Has at least 8 characters' },
+    { validate: (password: string) => /[0-9]/.test(password), label: 'Includes number' },
+    { validate: (password: string) => /[a-z]/.test(password), label: 'Includes lowercase letter' },
+    { validate: (password: string) => /[A-Z]/.test(password), label: 'Includes uppercase letter' },
+    {
+        validate: (password: string) => /[$&+,:;=?@#|'<>.^*()%!-]/.test(password),
+        label: 'Includes special symbol',
+    },
+]
+
+const getPasswordStrength = (password: string) => {
+    let strengthAccumulator = 0
+
+    requirements.forEach((requirement) => {
+        if (requirement.validate(password)) strengthAccumulator++
+    })
+
+    return strengthAccumulator * (100 / requirements.length)
+}
+
+const getStrengthBarColor = (strength: number) => {
+    const colors = ['red', 'yellow', 'orange', 'blue', 'green']
+
+    const colorByPercentage = requirements.map((undefined, index) => ({
+        percentage: (index + 1) * (100 / requirements.length),
+        color: colors[index],
+    }))
+    const strengthColor = colorByPercentage
+        .filter((e) => e.percentage <= strength)
+        .splice(-1)[0]?.color
+
+    return strengthColor
+}
+
+const PasswordRequirement = ({ meets, label }: { meets: boolean; label: string }) => {
+    return (
+        <Text color={meets ? 'teal' : 'red'} mt={5} size="sm">
+            <Center inline>
+                {meets ? <Check size={14} /> : <X size={14} />}
+                <Box ml={7}>{label}</Box>
+            </Center>
+        </Text>
+    )
+}
 
 const LoginRegister: React.FC = () => {
     const [type, toggleType] = useToggle('login', ['login', 'register'])
-    const router = useRouter()
     const emailRegex = /^\S+@\S+$/
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
     const validateName = (value: string) => {
         if (type !== 'register') return null
@@ -43,13 +90,22 @@ const LoginRegister: React.FC = () => {
             email: (value) => (emailRegex.test(value) ? null : 'Invalid email'),
             password: (value) => {
                 if (type !== 'register') return null
-                if (!passwordRegex.test(value))
-                    return 'Minimum eight characters, at least one letter and one number'
 
                 return null
             },
         },
     })
+
+    const strength = getPasswordStrength(form.values.password)
+    const strengthBarColor = getStrengthBarColor(strength)
+
+    const checks = requirements.map((requirement, index) => (
+        <PasswordRequirement
+            key={index}
+            meets={requirement.validate(form.values.password)}
+            label={requirement.label}
+        />
+    ))
 
     return (
         <Container size={420} my={40}>
@@ -107,6 +163,13 @@ const LoginRegister: React.FC = () => {
                         mt="xs"
                         {...form.getInputProps('password')}
                     />
+                    {type === 'register' && (
+                        <>
+                            <Progress mt="xs" mb="md" value={strength} color={strengthBarColor} />
+                            {checks}
+                        </>
+                    )}
+
                     <Group position="apart" mt="md">
                         <Checkbox label="Remember me" />
                         {type === 'login' && (
