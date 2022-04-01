@@ -16,10 +16,12 @@ describe('getStrengthColorAndPhrase', () => {
     describe('when password strength is zero', () => {
         it('should return zero percentage in red and sucks as feedback phrase', () => {
             const strength = 0
-            
+
             const result = getStrengthColorAndPhrase(strength)
 
             expect(result.phrase).toBe('Sucks')
+            expect(result.percentage).toBe(20)
+            expect(result.color).toBe('red')
         })
     })
 })

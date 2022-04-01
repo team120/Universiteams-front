@@ -56,9 +56,9 @@ export const getStrengthColorAndPhrase = (strength: number) => {
         color: colors[index],
         phrase: phrases[index],
     }))
-    const strengthColorAndPhrase = colorAndPhraseByPercentage
-        .filter((e) => e.percentage <= strength)
-        .splice(-1)[0]
+    const strengthColorAndPhrase = colorAndPhraseByPercentage.filter(
+        (e) => e.percentage >= strength
+    )[0]
 
     return strengthColorAndPhrase
 }
@@ -196,7 +196,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
                         mt="xs"
                         {...form.getInputProps('password')}
                     />
-                    {type === 'register' && (
+                    {type === 'register' && strength > 0 && (
                         <>
                             <Progress
                                 mt="xs"
