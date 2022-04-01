@@ -3,8 +3,8 @@ import type { NextPage } from 'next'
 
 import LoginRegister from '../components/LoginRegister'
 
-const Login: NextPage = () => {
-    return <LoginRegister initialType="login" />
+const Register: NextPage = () => {
+    return <LoginRegister initialType="register" />
 }
 
-export default Login
+export default Register
