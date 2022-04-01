@@ -26,7 +26,7 @@ const requirements = [
     { validate: (password: string) => /[a-z]/.test(password), label: 'Includes lowercase letter' },
     { validate: (password: string) => /[A-Z]/.test(password), label: 'Includes uppercase letter' },
     {
-        validate: (password: string) => /\W/.test(password),
+        validate: (password: string) => /[\W_]/.test(password),
         label: 'Includes special symbol',
     },
 ]
