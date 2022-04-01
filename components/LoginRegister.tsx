@@ -42,7 +42,7 @@ export const getPasswordStrength = (password: string) => {
 }
 
 export const getStrengthColorAndPhrase = (strength: number) => {
-    const colors = ['red', 'yellow', 'orange', 'blue', 'green']
+    const colors = ['red', 'orange', 'yellow', 'blue', 'green']
     const phrases = [
         'Sucks',
         'My grandma can hack this',
