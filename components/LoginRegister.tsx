@@ -3,7 +3,6 @@ import {
     Anchor,
     Box,
     Button,
-    Card,
     Center,
     Checkbox,
     Container,
@@ -27,12 +26,12 @@ const requirements = [
     { validate: (password: string) => /[a-z]/.test(password), label: 'Includes lowercase letter' },
     { validate: (password: string) => /[A-Z]/.test(password), label: 'Includes uppercase letter' },
     {
-        validate: (password: string) => /[$&+,:;=?@#|'<>.^*()%!-]/.test(password),
+        validate: (password: string) => /\W/.test(password),
         label: 'Includes special symbol',
     },
 ]
 
-const getPasswordStrength = (password: string) => {
+export const getPasswordStrength = (password: string) => {
     let strengthAccumulator = 0
 
     requirements.forEach((requirement) => {
@@ -42,7 +41,7 @@ const getPasswordStrength = (password: string) => {
     return strengthAccumulator * (100 / requirements.length)
 }
 
-const getStrengthColorAndPhrase = (strength: number) => {
+export const getStrengthColorAndPhrase = (strength: number) => {
     const colors = ['red', 'yellow', 'orange', 'blue', 'green']
     const phrases = [
         'Sucks',
