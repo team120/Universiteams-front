@@ -5,6 +5,7 @@ import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks'
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
 import Layout from '../components/Layout'
 import '../styles/globals.scss'
+import axios from 'axios'
 
 const App = ({ Component, pageProps }: AppProps) => {
     // Detect the user's theme preference (dark or light) and save it
@@ -17,7 +18,6 @@ const App = ({ Component, pageProps }: AppProps) => {
         setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
     const themeConfig: any = {
         colorScheme,
-        colors: { blue: ['#1c7ed6'], orange: ['#dd571c'] },
         primaryColor: 'blue',
         secondaryColor: 'orange',
         fontFamily: 'Verdana, sans-serif',
@@ -27,7 +27,11 @@ const App = ({ Component, pageProps }: AppProps) => {
         loader: 'bars',
     }
 
+    // Hotkeys
     useHotkeys([['mod+J', () => toggleColorScheme()]])
+
+    // Global configs
+    axios.defaults.withCredentials = true
 
     return (
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>

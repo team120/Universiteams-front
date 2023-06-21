@@ -8,9 +8,11 @@ import styles from '../styles/home.module.scss'
 
 const Home: NextPage = () => {
     const [dataTest, setDataTest] = useState([])
+    // const backend_api = process.env.BACKEND_HOST
+    const backend_api = 'http://api.localhost'
 
     useEffect(() => {
-        const url = 'http://api.localhost/institutions/'
+        const url = `${backend_api}/institutions/`
         axios.get(url).then((res) => {
             setDataTest(res.data)
         })
