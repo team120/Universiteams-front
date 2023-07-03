@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Start server
+        run: npm run start &
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Wait for server to start
+        run: npx wait-on http://localhost:3000
+
+      - name: Run tests
+        run: npm run test
