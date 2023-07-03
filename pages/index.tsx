@@ -5,6 +5,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 
 import styles from '../styles/home.module.scss'
+import Dropdown from '../components/Dropdown'
 
 const Home: NextPage = () => {
     const [dataTest, setDataTest] = useState([])
@@ -34,6 +35,8 @@ const Home: NextPage = () => {
                         <li key={i}>{item.name}</li>
                     ))}
                 </ul>
+
+                <Dropdown />
             </main>
 
             <footer className={styles.footer}>
