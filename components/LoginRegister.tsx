@@ -76,7 +76,7 @@ const Requirement = ({ meets, label }: { meets: boolean; label: string }) => {
 
 const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) => {
     const router = useRouter()
-    const [type, toggleType] = useToggle(initialType, ['login', 'register'])
+    const [type, toggleType] = useToggle(['login', 'register'])
     const emailRegex = /^\S+@\S+$/
     const [serverErrors, setServerErrors] = useState<string[]>([])
 
