@@ -20,7 +20,7 @@
     "@mantine/hooks": "^6.0.14",
     "@mantine/next": "^6.0.15",
     "@tabler/icons-react": "^2.23.0",
-    "axios": "^0.24.0",
+    "axios": "^1.4.0",
     "next": "^13.1.0",
     "react": "^18.0.3",
     "react-dom": "^18.0.3",
