@@ -83,7 +83,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
     const handleSubmit = async (values: typeof form.values) => {
         const url = `http://api.localhost/auth/${type}`
         axios
-            .post(url, values)
+            .post(url, values, { withCredentials: true })
             .then(() => router.push('/'))
             .catch((error: AxiosError) => setServerErrors([error.response?.data.message]))
     }
