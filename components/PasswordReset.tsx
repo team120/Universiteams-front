@@ -4,6 +4,13 @@ import { useForm } from '@mantine/form'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { PasswordInput } from '@mantine/core'
+import {
+    getPasswordStrength,
+    getStrengthColorAndPhrase,
+    passwordValidation,
+    requirements,
+} from '../service/password'
+import PasswordStrength from './PasswordStrength'
 
 function PasswordReset() {
     const [serverErrors, setServerErrors] = useState<string[]>([])
@@ -18,7 +25,7 @@ function PasswordReset() {
             confirmPassword: '',
         },
         validate: {
-            password: (value) => value.length >= 8 || 'Password must be at least 8 characters long',
+            password: (value) => passwordValidation(value),
             confirmPassword: (value, values) =>
                 value === values.password || 'Passwords do not match',
         },
@@ -48,6 +55,9 @@ function PasswordReset() {
     const handleGoHomeClick = () => {
         router.push('/')
     }
+
+    const strength = getPasswordStrength(form.values.password)
+    const strengthColorAndPhrase = getStrengthColorAndPhrase(strength)
 
     return (
         <div
@@ -89,6 +99,15 @@ function PasswordReset() {
                                 {...form.getInputProps('password')}
                                 style={{ marginBottom: '1rem' }}
                             />
+                            {strength > 0 && (
+                                <PasswordStrength
+                                    strength={strength}
+                                    phrase={strengthColorAndPhrase?.phrase}
+                                    color={strengthColorAndPhrase?.color}
+                                    requirements={requirements}
+                                    formValue={form.values.password}
+                                />
+                            )}
                             <PasswordInput
                                 required
                                 label="Confirm Password"
