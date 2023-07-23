@@ -11,6 +11,7 @@ import {
   Center,
   Box,
   rem,
+  CloseButton,
 } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useState } from "react";
@@ -42,6 +43,7 @@ const ForgotPassword = () => {
   const { classes } = useStyles();
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const [serverErrors, setServerErrors] = useState<string[]>([]);
 
   const handleGoBackToLoginClick = (
@@ -51,22 +53,47 @@ const ForgotPassword = () => {
     router.push("/Login");
   };
 
+  const handleDismiss = () => {
+    setIsSuccess(false);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const url = 'http://api.localhost/auth/forgot-password'
     try {
-      const response = await axios.post(url, { email })
-      if (response.status === 300) {
-        setServerErrors(response.data.errors)
+      const res = await axios.post(url, { email }, { withCredentials: true })
+      if (res.status === 200) {
+        setIsSuccess(true)
       }
-    } catch (error) {
-      console.error(error)
-      setServerErrors(['An unexpected error occurred'])
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        setServerErrors([error.response.data.message])
+      } else {
+        console.error(error)
+        setServerErrors(['An unexpected error occurred'])
+      }
     }
   }
 
   return (
     <Container size={460} my={30}>
+      {isSuccess && (
+        <div
+          style={{
+            backgroundColor: '#e6fffa',
+            padding: '8px',
+            borderRadius: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Text size="sm" color="teal">
+            Password reset email sent successfully!
+          </Text>
+          <CloseButton onClick={handleDismiss} style={{ marginLeft: '8px' }} />
+        </div>
+      )}
       <Title className={classes.title} align="center">
         Forgot your password?
       </Title>
