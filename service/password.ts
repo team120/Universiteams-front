@@ -1,4 +1,9 @@
-export const requirements = [
+export interface IRequirement {
+    validate: (password: string) => boolean;
+    label: string;
+}
+
+export const requirements: IRequirement[] = [
     {
         validate: (password: string) => password.length >= 8,
         label: 'Has at least 8 characters',

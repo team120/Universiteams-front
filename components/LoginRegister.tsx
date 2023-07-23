@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import axios, { AxiosError } from "axios";
 import Requirement from "./Requirement";
 import { getPasswordStrength, getStrengthColorAndPhrase, passwordValidation, requirements } from "../service/password";
+import PasswordStrength from "./PasswordStrength";
 
 const LoginRegister = ({
   initialType,
@@ -81,14 +82,6 @@ const LoginRegister = ({
 
   const strength = getPasswordStrength(form.values.password);
   const strengthColorAndPhrase = getStrengthColorAndPhrase(strength);
-
-  const checks = requirements.map((requirement, index) => (
-    <Requirement
-      key={index}
-      meets={requirement.validate(form.values.password)}
-      label={requirement.label}
-    />
-  ));
 
   return (
     <Container size={420} my={40}>
@@ -155,21 +148,13 @@ const LoginRegister = ({
             {...form.getInputProps("password")}
           />
           {type === "register" && strength > 0 && (
-            <>
-              <Progress
-                mt="xs"
-                value={strength}
-                color={strengthColorAndPhrase?.color}
-              />
-              <Text
-                size="sm"
-                align="center"
-                color={strengthColorAndPhrase?.color}
-              >
-                {strengthColorAndPhrase?.phrase}
-              </Text>
-              {checks}
-            </>
+            <PasswordStrength
+              strength={strength}
+              phrase={strengthColorAndPhrase?.phrase}
+              color={strengthColorAndPhrase?.color}
+              requirements={requirements}
+              formValue={form.values.password}
+            />
           )}
 
           <Group position="apart" mt="md">
