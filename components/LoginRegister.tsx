@@ -18,7 +18,7 @@ import { useForm } from "@mantine/form";
 import { useToggle } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import axios, { AxiosError } from "axios";
-import { Check, X } from "tabler-icons-react";
+import Requirement from "./Requirement";
 
 const requirements = [
   {
@@ -73,17 +73,6 @@ export const getStrengthColorAndPhrase = (strength: number) => {
   )[0];
 
   return strengthColorAndPhrase;
-};
-
-const Requirement = ({ meets, label }: { meets: boolean; label: string }) => {
-  return (
-    <Text color={meets ? "teal" : "red"} mt={5} size="sm">
-      <Center inline>
-        {meets ? <Check size={14} /> : <X size={14} />}
-        <Box ml={7}>{label}</Box>
-      </Center>
-    </Text>
-  );
 };
 
 const LoginRegister = ({
