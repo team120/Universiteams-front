@@ -11,13 +11,19 @@ import {
     requirements,
 } from '../service/password'
 import PasswordStrength from './PasswordStrength'
+import Requirement from './Requirement'
 
 function PasswordReset() {
     const [serverErrors, setServerErrors] = useState<string[]>([])
     const [isSuccess, setIsSuccess] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
-    const theme = useMantineTheme()
+
+    const validateConfirmPassword = (confirmPassword: string, password: string): string | null => {
+        if (confirmPassword !== password) return 'Passwords do not match'
+
+        return null
+    }
 
     const form = useForm({
         initialValues: {
@@ -26,8 +32,7 @@ function PasswordReset() {
         },
         validate: {
             password: (value) => passwordValidation(value),
-            confirmPassword: (value, values) =>
-                value === values.password || 'Passwords do not match',
+            confirmPassword: (value, values) => validateConfirmPassword(value, values.password),
         },
     })
 
@@ -84,13 +89,7 @@ function PasswordReset() {
                     ) : (
                         <form onSubmit={form.onSubmit(handleSubmit)}>
                             {serverErrors.map((error, index) => (
-                                <Alert
-                                    key={index}
-                                    color="red"
-                                    style={{ marginBottom: '1rem' }}
-                                    icon={<span style={{ color: theme.colors.red[6] }}>!</span>}>
-                                    {error}
-                                </Alert>
+                                <Requirement key={index} meets={false} label={error} />
                             ))}
                             <PasswordInput
                                 required
