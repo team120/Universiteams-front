@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Button, Text, Card, Alert, useMantineTheme, Loader } from '@mantine/core'
+import React, { useState } from 'react'
+import { Button, Text, Card, Loader } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import axios from 'axios'
 import { useRouter } from 'next/router'

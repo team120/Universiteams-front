@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   createStyles,
   Paper,
@@ -14,7 +15,6 @@ import {
   CloseButton,
 } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from 'axios'
 

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Progress, Text } from '@mantine/core'
 import Requirement from './Requirement'
 import { IRequirement } from '../service/password'

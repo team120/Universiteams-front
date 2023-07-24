@@ -1,3 +1,4 @@
+import React from 'react'
 import { Box, Center, Text } from '@mantine/core'
 import { Check, X } from 'tabler-icons-react'
 
