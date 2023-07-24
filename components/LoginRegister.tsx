@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
   Anchor,
-  Box,
   Button,
-  Center,
   Checkbox,
   Container,
   Group,
   Paper,
   PasswordInput,
-  Progress,
   Text,
   TextInput,
   Title,
@@ -170,7 +167,7 @@ const LoginRegister = ({
             )}
           </Group>
           <Button fullWidth mt="xl" type="submit">
-            Login
+            {type === "login" ? "Login" : "Register"}
           </Button>
         </form>
       </Paper>
