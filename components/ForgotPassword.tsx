@@ -17,6 +17,7 @@ import {
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import axios from 'axios'
+import Requirement from "./Requirement";
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -103,6 +104,13 @@ const ForgotPassword = () => {
 
       <form onSubmit={handleSubmit}>
         <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
+            {serverErrors?.length > 0 && (
+            <>
+              {serverErrors.map((error, index) => (
+                <Requirement key={index} meets={false} label={error} />
+              ))}
+            </>
+          )}
           <TextInput
             label="Your email"
             placeholder="you@frro.utn.edu.ar"
@@ -123,13 +131,6 @@ const ForgotPassword = () => {
           </Group>
         </Paper>
       </form>
-      {serverErrors?.length > 0 && (
-        <div>
-          {serverErrors.map((error) => (
-            <div key={error}>{error}</div>
-          ))}
-        </div>
-      )}
     </Container>
   );
 }
