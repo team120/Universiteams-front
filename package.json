@@ -15,7 +15,7 @@
     "test-watch": "jest --watch --detectOpenHandles"
   },
   "dependencies": {
-    "@mantine/core": "^6.0.14",
+    "@mantine/core": "^6.0.21",
     "@mantine/form": "^6.0.14",
     "@mantine/hooks": "^6.0.14",
     "@mantine/next": "^6.0.15",
