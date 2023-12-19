@@ -24,6 +24,10 @@ import {
 } from '../service/password'
 import PasswordStrength from './PasswordStrength'
 
+interface ErrorResponse {
+  message: string
+}
+
 const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) => {
   const router = useRouter()
   const [type, toggleType] = useToggle(['login', 'register'])
@@ -40,7 +44,10 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
     axios
       .post(url, values, { withCredentials: true })
       .then(() => router.push('/'))
-      .catch((error: AxiosError) => setServerErrors([error.response?.data.message]))
+      .catch((error: AxiosError<ErrorResponse>) => {
+        const message = error.response?.data?.message || 'An unexpected error occurred'
+        setServerErrors([message])
+      })
   }
 
   const validateName = (value: string) => {
