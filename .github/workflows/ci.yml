@@ -15,42 +15,42 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-          - name: Checkout code
-            uses: actions/checkout@v2
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-          - name: Install dependencies
-            run: npm install
+            - name: Install dependencies
+              run: npm install
 
-          - name: Build
-            run: npm run build
+            - name: Build
+              run: npm run build
 
-          - name: Start server
-            run: npm run start &
-            env:
-                NEXT_TELEMETRY_DISABLED: 1
+            - name: Start server
+              run: npm run start &
+              env:
+                  NEXT_TELEMETRY_DISABLED: 1
 
-          - name: Wait for server to start
-            run: npx wait-on http://localhost:3000
+            - name: Wait for server to start
+              run: npx wait-on http://localhost:3000
 
-          - name: Run tests
-            run: npm run test
+            - name: Run tests
+              run: npm run test
 
     static-checks:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
-        
-        - name: Install dependencies
-          run: npm install
-  
-        - name: Run linter
-          run: npm run lint
-        
-        - name: Run formatter
-          run: npm run prettier
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-        - name: 'Apply Linter and Formatter Changes'
-          uses: stefanzweifel/git-auto-commit-action@v4
-          with:
-              commit_message: Apply eslint and prettier code changes
+            - name: Install dependencies
+              run: npm install
+
+            - name: Run linter
+              run: npm run lint
+
+            - name: Run formatter
+              run: npm run prettier
+
+            - name: 'Apply Linter and Formatter Changes'
+              uses: stefanzweifel/git-auto-commit-action@v4
+              with:
+                  commit_message: Apply eslint and prettier code changes
