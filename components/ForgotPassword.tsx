@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   createStyles,
   Paper,
@@ -13,11 +13,11 @@ import {
   Box,
   rem,
   CloseButton,
-} from "@mantine/core";
-import { IconArrowLeft } from "@tabler/icons-react";
-import { useRouter } from "next/router";
+} from '@mantine/core'
+import { IconArrowLeft } from '@tabler/icons-react'
+import { useRouter } from 'next/router'
 import axios from 'axios'
-import Requirement from "./Requirement";
+import Requirement from './Requirement'
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -27,36 +27,34 @@ const useStyles = createStyles((theme) => ({
   },
 
   controls: {
-    [theme.fn.smallerThan("xs")]: {
-      flexDirection: "column-reverse",
+    [theme.fn.smallerThan('xs')]: {
+      flexDirection: 'column-reverse',
     },
   },
 
   control: {
-    [theme.fn.smallerThan("xs")]: {
-      width: "100%",
-      textAlign: "center",
+    [theme.fn.smallerThan('xs')]: {
+      width: '100%',
+      textAlign: 'center',
     },
   },
-}));
+}))
 
 const ForgotPassword = () => {
-  const { classes } = useStyles();
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [serverErrors, setServerErrors] = useState<string[]>([]);
+  const { classes } = useStyles()
+  const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [serverErrors, setServerErrors] = useState<string[]>([])
 
-  const handleGoBackToLoginClick = (
-    event: React.MouseEvent<HTMLAnchorElement>
-  ) => {
-    event.preventDefault();
-    router.push("/Login");
-  };
+  const handleGoBackToLoginClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    router.push('/Login')
+  }
 
   const handleDismiss = () => {
-    setIsSuccess(false);
-  };
+    setIsSuccess(false)
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -87,8 +85,7 @@ const ForgotPassword = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-          }}
-        >
+          }}>
           <Text size="sm" color="teal">
             Password reset email sent successfully!
           </Text>
@@ -104,7 +101,7 @@ const ForgotPassword = () => {
 
       <form onSubmit={handleSubmit}>
         <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-            {serverErrors?.length > 0 && (
+          {serverErrors?.length > 0 && (
             <>
               {serverErrors.map((error, index) => (
                 <Requirement key={index} meets={false} label={error} />
@@ -119,7 +116,11 @@ const ForgotPassword = () => {
             onChange={(event) => setEmail(event.currentTarget.value)}
           />
           <Group position="apart" mt="lg" className={classes.controls}>
-            <Anchor color="dimmed" size="sm" className={classes.control} onClick={handleGoBackToLoginClick}>
+            <Anchor
+              color="dimmed"
+              size="sm"
+              className={classes.control}
+              onClick={handleGoBackToLoginClick}>
               <Center inline>
                 <IconArrowLeft size={rem(12)} stroke={1.5} />
                 <Box ml={5}>Back to the login page</Box>
@@ -132,7 +133,7 @@ const ForgotPassword = () => {
         </Paper>
       </form>
     </Container>
-  );
+  )
 }
 
 export default ForgotPassword

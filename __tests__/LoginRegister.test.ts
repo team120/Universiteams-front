@@ -1,4 +1,4 @@
-import { getPasswordStrength, getStrengthColorAndPhrase } from "../service/password"
+import { getPasswordStrength, getStrengthColorAndPhrase } from '../service/password'
 
 describe('getPasswordStrength', () => {
   describe('when no requirements are satisfied', () => {
