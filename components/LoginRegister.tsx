@@ -25,7 +25,7 @@ import {
 import PasswordStrength from './PasswordStrength'
 
 interface ErrorResponse {
-    message: string
+  message: string
 }
 
 const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) => {
@@ -45,9 +45,9 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
       .post(url, values, { withCredentials: true })
       .then(() => router.push('/'))
       .catch((error: AxiosError<ErrorResponse>) => {
-              const message = error.response?.data?.message || 'An unexpected error occurred'
-              setServerErrors([message])
-            })
+        const message = error.response?.data?.message || 'An unexpected error occurred'
+        setServerErrors([message])
+      })
   }
 
   const validateName = (value: string) => {
