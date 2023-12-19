@@ -2,7 +2,7 @@ import React from 'react'
 import VerifyEmail from '../../components/VerifyEmail'
 
 const VerifyAccountPage = () => {
-    return <VerifyEmail />
+  return <VerifyEmail />
 }
 
 export default VerifyAccountPage
