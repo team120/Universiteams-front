@@ -36,13 +36,13 @@ const LoginRegister = ({
     router.push("/forgot-password");
   };
 
-    const handleSubmit = async (values: typeof form.values) => {
-        const url = `http://api.localhost/auth/${type}`
-        axios
-            .post(url, values, { withCredentials: true })
-            .then(() => router.push('/'))
-            .catch((error: AxiosError) => setServerErrors([error.response?.data.message]))
-    }
+  const handleSubmit = async (values: typeof form.values) => {
+    const url = `http://api.localhost/auth/${type}`
+    axios
+      .post(url, values, { withCredentials: true })
+      .then(() => router.push('/'))
+      .catch((error: AxiosError) => setServerErrors([error.response?.data.message]))
+  }
 
   const validateName = (value: string) => {
     if (type !== "register") return null;

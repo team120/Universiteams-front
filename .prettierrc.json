@@ -1,23 +1,23 @@
 {
-    "arrowParens": "always",
-    "bracketSameLine": true,
-    "bracketSpacing": true,
-    "embeddedLanguageFormatting": "auto",
-    "endOfLine": "lf",
-    "htmlWhitespaceSensitivity": "css",
-    "jsxSingleQuote": false,
-    "printWidth": 100,
-    "proseWrap": "preserve",
-    "quoteProps": "as-needed",
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "tabWidth": 4,
-    "useTabs": false,
-    "overrides": [
-        {
-            "files": ".prettierrc.json",
-            "options": { "parser": "json" }
-        }
-    ]
+  "arrowParens": "always",
+  "bracketSameLine": true,
+  "bracketSpacing": true,
+  "embeddedLanguageFormatting": "auto",
+  "endOfLine": "lf",
+  "htmlWhitespaceSensitivity": "css",
+  "jsxSingleQuote": false,
+  "printWidth": 100,
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "useTabs": false,
+  "overrides": [
+    {
+      "files": ".prettierrc.json",
+      "options": { "parser": "json" }
+    }
+  ]
 }

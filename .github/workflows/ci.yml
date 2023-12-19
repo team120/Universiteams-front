@@ -34,3 +34,24 @@ jobs:
 
       - name: Run tests
         run: npm run test
+
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run formatter
+        run: npm run prettier
+
+      - name: 'Apply Linter and Formatter Changes'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply eslint and prettier code changes
+          commit_options: '--no-verify'
