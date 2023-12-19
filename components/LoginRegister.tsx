@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import {
   Anchor,
-  Box,
   Button,
-  Center,
   Checkbox,
   Container,
   Group,
   Paper,
   PasswordInput,
-  Progress,
   Text,
   TextInput,
   Title,
@@ -18,67 +15,25 @@ import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
 import { useRouter } from 'next/router'
 import axios, { AxiosError } from 'axios'
-import { Check, X } from 'tabler-icons-react'
-
-const requirements = [
-  { validate: (password: string) => password.length >= 8, label: 'Has at least 8 characters' },
-  { validate: (password: string) => /[0-9]/.test(password), label: 'Includes number' },
-  { validate: (password: string) => /[a-z]/.test(password), label: 'Includes lowercase letter' },
-  { validate: (password: string) => /[A-Z]/.test(password), label: 'Includes uppercase letter' },
-  {
-    validate: (password: string) => /[\W_]/.test(password),
-    label: 'Includes special symbol',
-  },
-]
-
-export const getPasswordStrength = (password: string) => {
-  let strengthAccumulator = 0
-
-  requirements.forEach((requirement) => {
-    if (requirement.validate(password)) strengthAccumulator++
-  })
-
-  return strengthAccumulator * (100 / requirements.length)
-}
-
-export const getStrengthColorAndPhrase = (strength: number) => {
-  const colors = ['red', 'orange', 'yellow', 'blue', 'green']
-  const phrases = [
-    'Sucks',
-    'My grandma can hack this',
-    'Still not close yet',
-    'Fair enough',
-    'Bullet proof',
-  ]
-
-  const colorAndPhraseByPercentage = requirements.map((undefined, index) => ({
-    percentage: (index + 1) * (100 / requirements.length),
-    color: colors[index],
-    phrase: phrases[index],
-  }))
-  const strengthColorAndPhrase = colorAndPhraseByPercentage.filter(
-    (e) => e.percentage >= strength
-  )[0]
-
-  return strengthColorAndPhrase
-}
-
-const Requirement = ({ meets, label }: { meets: boolean; label: string }) => {
-  return (
-    <Text color={meets ? 'teal' : 'red'} mt={5} size="sm">
-      <Center inline>
-        {meets ? <Check size={14} /> : <X size={14} />}
-        <Box ml={7}>{label}</Box>
-      </Center>
-    </Text>
-  )
-}
+import Requirement from './Requirement'
+import {
+  getPasswordStrength,
+  getStrengthColorAndPhrase,
+  passwordValidation,
+  requirements,
+} from '../service/password'
+import PasswordStrength from './PasswordStrength'
 
 const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) => {
   const router = useRouter()
   const [type, toggleType] = useToggle(['login', 'register'])
   const emailRegex = /^\S+@\S+$/
   const [serverErrors, setServerErrors] = useState<string[]>([])
+
+  const handleForgotPasswordClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    router.push('/forgot-password')
+  }
 
   const handleSubmit = async (values: typeof form.values) => {
     const url = `http://api.localhost/auth/${type}`
@@ -110,10 +65,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
       password: (value) => {
         if (type !== 'register') return null
 
-        if (getPasswordStrength(value) < (requirements.length - 1) * (100 / requirements.length))
-          return 'Password must follow at least 4 of the 5 contiguous guidelines'
-
-        return null
+        return passwordValidation(value)
       },
     },
   })
@@ -124,14 +76,6 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
 
   const strength = getPasswordStrength(form.values.password)
   const strengthColorAndPhrase = getStrengthColorAndPhrase(strength)
-
-  const checks = requirements.map((requirement, index) => (
-    <Requirement
-      key={index}
-      meets={requirement.validate(form.values.password)}
-      label={requirement.label}
-    />
-  ))
 
   return (
     <Container size={420} my={40}>
@@ -194,25 +138,25 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
             {...form.getInputProps('password')}
           />
           {type === 'register' && strength > 0 && (
-            <>
-              <Progress mt="xs" value={strength} color={strengthColorAndPhrase?.color} />
-              <Text size="sm" align="center" color={strengthColorAndPhrase?.color}>
-                {strengthColorAndPhrase?.phrase}
-              </Text>
-              {checks}
-            </>
+            <PasswordStrength
+              strength={strength}
+              phrase={strengthColorAndPhrase?.phrase}
+              color={strengthColorAndPhrase?.color}
+              requirements={requirements}
+              formValue={form.values.password}
+            />
           )}
 
           <Group position="apart" mt="md">
             <Checkbox label="Remember me" />
             {type === 'login' && (
-              <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
+              <Anchor<'a'> onClick={handleForgotPasswordClick} href="#" size="sm">
                 Forgot password?
               </Anchor>
             )}
           </Group>
           <Button fullWidth mt="xl" type="submit">
-            Login
+            {type === 'login' ? 'Login' : 'Register'}
           </Button>
         </form>
       </Paper>
