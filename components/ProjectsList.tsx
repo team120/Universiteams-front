@@ -10,6 +10,7 @@ import {
   Image,
   Button,
   Box,
+  Chip,
 } from '@mantine/core'
 
 interface Institution {
@@ -80,40 +81,50 @@ function ProjectsList({ projects }: ProjectsListProps) {
     <>
       <List>
         {projects.map((project) => (
-          <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <Box style={{ display: 'flex', flexDirection: 'row' }}>
-              <Image
-                src='https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80'
-                width={160}
-                height={160}
-                alt='project image'
-                style={{ marginRight: theme.spacing.md }}
-              />
-              <div>
-                <Card.Section>
-                  <Text weight={500} style={{ fontSize: '1.25rem', lineHeight: '1.75rem' }}>
-                    {project.name}
-                  </Text>
-                </Card.Section>
-
-                <Group position="apart" mt="md" mb="xs">
+          <Card
+            shadow="sm"
+            padding="lg"
+            radius="md"
+            withBorder
+            style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+            <Image
+              src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
+              width={160}
+              height={160}
+              alt="project image"
+              style={{ marginRight: theme.spacing.md }}
+            />
+            <div style={{ width: '100%'}}>
+              <Card.Section>
+                <Text weight={500} style={{ fontSize: '1.25rem', lineHeight: '1.75rem' }}>
+                  {project.name}
+                </Text>
+                <Group position="apart" mb="xs">
                   <Text weight={500}>
-                    {project.type}|{project.creationDate}
+                    {project.type} | {formatDate(project.creationDate)}
                   </Text>
                   <Badge color="pink" variant="light">
                     {project.researchDepartments[0].name}
                   </Badge>
                 </Group>
+              </Card.Section>
 
-                <Text size="sm" color="dimmed">
-                  {/* Additional project information can go here */}
-                </Text>
-
-                <Button variant="light" color="blue" fullWidth mt="md" radius="md">
-                  Book classic tour now
-                </Button>
-              </div>
-            </Box>
+              <Chip.Group>
+                <Group position="left" spacing="xs" mt="xs">
+                  {project.enrollments && (
+                    <Chip color="blue">
+                      {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}
+                      , +{project.userCount} personas
+                    </Chip>
+                  )}
+                  {project.interests.map((interest) => (
+                    <Chip key={interest.id} color="blue">
+                      {interest.name}
+                    </Chip>
+                  ))}
+                </Group>
+              </Chip.Group>
+            </div>
           </Card>
         ))}
       </List>
