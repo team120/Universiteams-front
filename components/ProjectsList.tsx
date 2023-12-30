@@ -1,6 +1,57 @@
-import { Card, Text, Col, Badge, Divider, Grid, useMantineTheme, Group, Stack } from '@mantine/core'
+import {
+  Card,
+  Text,
+  Badge,
+  Divider,
+  useMantineTheme,
+  Group,
+  Stack,
+  List,
+  Image,
+  Button,
+  Box,
+} from '@mantine/core'
 
-interface Project {
+interface Institution {
+  id: number
+  name: string
+  abbreviation: string
+}
+
+interface Facility {
+  id: number
+  name: string
+  abbreviation: string
+  institution: Institution
+}
+
+interface ResearchDepartment {
+  id: number
+  name: string
+  abbreviation: string
+  facility: Facility
+}
+
+interface Interest {
+  id: number
+  name: string
+}
+
+interface User {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+}
+
+interface Enrollment {
+  id: number
+  role: string
+  user: User
+  project: Project
+}
+
+export interface Project {
   id: number
   name: string
   type: string
@@ -8,6 +59,9 @@ interface Project {
   creationDate: string
   endDate: string
   isDown: boolean
+  researchDepartments: ResearchDepartment[]
+  interests: Interest[]
+  enrollments: Enrollment[]
 }
 
 interface ProjectsListProps {
@@ -23,47 +77,47 @@ function ProjectsList({ projects }: ProjectsListProps) {
   }
 
   return (
-    <Grid>
-      {projects.map((project) => (
-        <Grid.Col span={12} md={6} lg={4} key={project.id}>
-          <Card
-            padding="md"
-            shadow="xs"
-            style={{ marginBottom: theme.spacing.md, cursor: 'pointer' }}
-            onMouseEnter={(event) => {
-              event.currentTarget.style.boxShadow = theme.shadows.md
-            }}
-            onMouseLeave={(event) => {
-              event.currentTarget.style.boxShadow = theme.shadows.xs
-            }}>
-            <Text weight={700} size="lg" style={{ marginBottom: theme.spacing.xs }}>
-              {project.name}
-            </Text>
-            <Divider style={{ marginBottom: theme.spacing.md }} />
-            <Stack spacing="xs">
-              <Group position="apart" style={{ width: '100%' }}>
-                <Text size="sm">Cantidad de usuarios:</Text>
-                <Badge size="sm">{project.userCount}</Badge>
-              </Group>
-              <Group position="apart" style={{ width: '100%' }}>
-                <Text size="sm">Fecha de creacion:</Text>
-                <Text size="sm">{formatDate(project.creationDate)}</Text>
-              </Group>
-              <Group position="apart" style={{ width: '100%' }}>
-                <Text size="sm">Fecha de fin:</Text>
-                <Text size="sm">{formatDate(project.endDate)}</Text>
-              </Group>
-              <Group position="apart" style={{ width: '100%' }}>
-                <Text size="sm">Esta activo:</Text>
-                <Badge color={project.isDown ? 'red' : 'green'} variant="light">
-                  {project.isDown ? 'Yes' : 'No'}
-                </Badge>
-              </Group>
-            </Stack>
+    <>
+      <List>
+        {projects.map((project) => (
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Box style={{ display: 'flex', flexDirection: 'row' }}>
+              <Image
+                src='https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80'
+                width={160}
+                height={160}
+                alt='project image'
+                style={{ marginRight: theme.spacing.md }}
+              />
+              <div>
+                <Card.Section>
+                  <Text weight={500} style={{ fontSize: '1.25rem', lineHeight: '1.75rem' }}>
+                    {project.name}
+                  </Text>
+                </Card.Section>
+
+                <Group position="apart" mt="md" mb="xs">
+                  <Text weight={500}>
+                    {project.type}|{project.creationDate}
+                  </Text>
+                  <Badge color="pink" variant="light">
+                    {project.researchDepartments[0].name}
+                  </Badge>
+                </Group>
+
+                <Text size="sm" color="dimmed">
+                  {/* Additional project information can go here */}
+                </Text>
+
+                <Button variant="light" color="blue" fullWidth mt="md" radius="md">
+                  Book classic tour now
+                </Button>
+              </div>
+            </Box>
           </Card>
-        </Grid.Col>
-      ))}
-    </Grid>
+        ))}
+      </List>
+    </>
   )
 }
 
