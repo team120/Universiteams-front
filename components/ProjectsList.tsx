@@ -2,14 +2,10 @@ import {
   Card,
   Text,
   Badge,
-  Divider,
   useMantineTheme,
   Group,
-  Stack,
   List,
   Image,
-  Button,
-  Box,
   Chip,
 } from '@mantine/core'
 
@@ -94,7 +90,7 @@ function ProjectsList({ projects }: ProjectsListProps) {
               alt="project image"
               style={{ marginRight: theme.spacing.md }}
             />
-            <div style={{ width: '100%'}}>
+            <div style={{ width: '100%' }}>
               <Card.Section>
                 <Text weight={500} style={{ fontSize: '1.25rem', lineHeight: '1.75rem' }}>
                   {project.name}
