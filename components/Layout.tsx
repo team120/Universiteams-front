@@ -1,8 +1,15 @@
 'use client'
 import React from 'react'
 
-import { AppShell, Burger, Group, Skeleton } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
+import {
+  AppShell,
+  Burger,
+  Group,
+  Skeleton,
+  useComputedColorScheme,
+  useMantineColorScheme,
+} from '@mantine/core'
+import { useDisclosure, useHotkeys } from '@mantine/hooks'
 
 interface Layout {
   children: React.ReactNode
@@ -11,6 +18,14 @@ interface Layout {
 
 const Layout = (props: Layout) => {
   const [opened, { toggle }] = useDisclosure()
+
+  // Change between theme preferences
+  const { setColorScheme } = useMantineColorScheme()
+  const computedColorScheme = useComputedColorScheme('dark')
+  const toggleColorScheme = () => setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark')
+
+  // Hotkeys
+  useHotkeys([['mod+J', () => toggleColorScheme()]])
 
   return (
     <AppShell

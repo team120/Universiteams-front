@@ -15,19 +15,9 @@ import { useHotkeys } from '@mantine/hooks'
 import '@/styles/globals.scss'
 import Layout from '@/components/Layout'
 
-interface App {
-  children: React.ReactNode
-  pageProps?: any
-}
-
-const App = ({ children, pageProps }: App) => {
+const App = ({ children, pageProps }: any) => {
   // Detect the user's theme preference (dark or light)
   const colorSchemeManager = localStorageColorSchemeManager({ key: 'mantine-color-scheme' })
-
-  // Change between theme preferences
-  const { setColorScheme } = useMantineColorScheme()
-  const computedColorScheme = useComputedColorScheme('dark')
-  const toggleColorScheme = () => setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark')
 
   // Mantine theme
   const theme = createTheme({
@@ -55,9 +45,6 @@ const App = ({ children, pageProps }: App) => {
     headings: { fontFamily: 'Greycliff CF, sans-serif' },
     spacing: { xs: '15', sm: '20', md: '25', lg: '30', xl: '40' },
   })
-
-  // Hotkeys
-  useHotkeys([['mod+J', () => toggleColorScheme()]])
 
   // Global configs
   axios.defaults.withCredentials = true
