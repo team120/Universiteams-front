@@ -11,7 +11,12 @@ import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core
 import '@/styles/globals.scss'
 import Layout from '@/components/Layout'
 
-const App = ({ children, pageProps }: any) => {
+interface App {
+  children: React.ReactNode
+  pageProps?: any
+}
+
+const App = ({ children, pageProps }: App) => {
   // Detect the user's theme preference (dark or light) and save it
   const preferredColorScheme = useColorScheme()
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -47,7 +52,7 @@ const App = ({ children, pageProps }: any) => {
       <body>
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
           <MantineProvider theme={themeConfig} withGlobalStyles withNormalizeCSS>
-            <Layout className={'container'}>
+            <Layout>
               {children}
               {/* <Component {...pageProps} /> */}
             </Layout>
