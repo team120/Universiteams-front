@@ -45,7 +45,7 @@ const VerifyEmail = () => {
       {isLoading && <Loader />}
       {!isLoading && (
         <Card shadow="sm" padding="lg" radius="md">
-          <Text size="lg" weight={500}>
+          <Text size="lg" style={{ weight: 500 }}>
             {isSuccess ? 'Email verified successfully!' : "Email couldn't be verified."}
           </Text>
           <Button
