@@ -15,12 +15,12 @@
     "test-watch": "jest --watch --detectOpenHandles"
   },
   "dependencies": {
-    "@mantine/core": "^6.0.21",
-    "@mantine/form": "^6.0.14",
-    "@mantine/hooks": "^6.0.14",
-    "@mantine/next": "^6.0.15",
+    "@mantine/core": "^7.3.2",
+    "@mantine/form": "^7.3.2",
+    "@mantine/hooks": "^7.3.2",
+    "@mantine/next": "^6.0.21",
     "@tabler/icons-react": "^2.23.0",
-    "axios": "^1.6.2",
+    "axios": "^1.6.3",
     "next": "^14.0.4",
     "react": "^18.0.3",
     "react-dom": "^18.0.3",
