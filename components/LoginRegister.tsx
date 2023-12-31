@@ -13,7 +13,7 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import axios, { AxiosError } from 'axios'
 import Requirement from './Requirement'
 import {

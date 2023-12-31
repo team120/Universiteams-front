@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Loader, Card, Text, Button } from '@mantine/core'
 import axios from 'axios'
 
 const VerifyEmail = () => {
   const router = useRouter()
+  const query = useSearchParams()
   const [isLoading, setIsLoading] = useState(true)
   const [isSuccess, setIsSuccess] = useState(false)
 
   useEffect(() => {
     const verifyEmail = async () => {
-      const token = router.query.token as string
+      const token = query.get('token') as string
       const url = `http://api.localhost/auth/verify-email`
       try {
         const response = await axios.post(
@@ -27,7 +28,7 @@ const VerifyEmail = () => {
       setIsLoading(false)
     }
     verifyEmail()
-  }, [router.query.token])
+  }, [query.get('token')])
 
   const handleGoHomeClick = () => {
     router.push('/')

@@ -15,7 +15,7 @@ import {
   CloseButton,
 } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import Requirement from './Requirement'
 
