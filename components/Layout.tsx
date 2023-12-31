@@ -45,7 +45,7 @@ const Layout = (props: Layout) => {
             <Skeleton key={index} h={28} mt="sm" animate={false} />
           ))}
       </AppShell.Navbar>
-      <AppShell.Main>Main</AppShell.Main>
+      <AppShell.Main>{props.children}</AppShell.Main>
     </AppShell>
   )
 }
