@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent } from '../test-utils'
 import '@testing-library/jest-dom/extend-expect' // Import the matchers
 import Login from 'src/app/account/login/page'
 
