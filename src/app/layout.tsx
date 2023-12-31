@@ -1,13 +1,21 @@
+'use client'
 import React from 'react'
-import type { AppProps } from 'next/app'
+import axios from 'axios'
+
+// import type { NextPage } from 'next'
+// import type { AppProps } from 'next/app'
 
 import { useColorScheme, useHotkeys, useLocalStorage } from '@mantine/hooks'
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
-import Layout from '../components/Layout'
-import '../styles/globals.scss'
-import axios from 'axios'
+import '@/styles/globals.scss'
+import Layout from '@/components/Layout'
 
-const App = ({ Component, pageProps }: AppProps) => {
+interface Layout {
+  children: React.ReactNode
+  pageProps: any
+}
+
+const App = ({ children, pageProps }: Layout) => {
   // Detect the user's theme preference (dark or light) and save it
   const preferredColorScheme = useColorScheme()
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -34,13 +42,24 @@ const App = ({ Component, pageProps }: AppProps) => {
   axios.defaults.withCredentials = true
 
   return (
-    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider theme={themeConfig} withGlobalStyles withNormalizeCSS>
-        <Layout className={'container'}>
-          <Component {...pageProps} />
-        </Layout>
-      </MantineProvider>
-    </ColorSchemeProvider>
+    <html>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        />
+      </head>
+      <body>
+        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+          <MantineProvider theme={themeConfig} withGlobalStyles withNormalizeCSS>
+            <Layout className={'container'}>
+              {children}
+              {/* <Component {...pageProps} /> */}
+            </Layout>
+          </MantineProvider>
+        </ColorSchemeProvider>
+      </body>
+    </html>
   )
 }
 
