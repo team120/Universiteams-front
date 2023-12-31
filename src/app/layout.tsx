@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import axios from 'axios'
+import Head from 'next/head'
 
 // import type { NextPage } from 'next'
 // import type { AppProps } from 'next/app'
@@ -10,12 +11,7 @@ import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core
 import '@/styles/globals.scss'
 import Layout from '@/components/Layout'
 
-interface Layout {
-  children: React.ReactNode
-  pageProps: any
-}
-
-const App = ({ children, pageProps }: Layout) => {
+const App = ({ children, pageProps }: any) => {
   // Detect the user's theme preference (dark or light) and save it
   const preferredColorScheme = useColorScheme()
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -43,12 +39,11 @@ const App = ({ children, pageProps }: Layout) => {
 
   return (
     <html>
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        />
-      </head>
+      <Head>
+        <title>Universiteams</title>
+        <meta name="description" content="Pro Scientific Dissemination & Volunteering" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <body>
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
           <MantineProvider theme={themeConfig} withGlobalStyles withNormalizeCSS>
