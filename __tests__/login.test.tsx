@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect' // Import the matchers
-import Login from '../pages/Login'
+import Login from 'src/app/account/login/page'
 
 jest.mock('next/router', () => require('next-router-mock'))
 
