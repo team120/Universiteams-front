@@ -1,4 +1,4 @@
-interface Facility {
+interface Institution {
   id: number
   name: string
   abbreviation: string
@@ -6,4 +6,4 @@ interface Facility {
   // facilities: Facility[]
 }
 
-export default Facility
+export default Institution
