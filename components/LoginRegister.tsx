@@ -21,7 +21,7 @@ import {
   getStrengthColorAndPhrase,
   passwordValidation,
   requirements,
-} from '../service/password'
+} from '../services/password'
 import PasswordStrength from './PasswordStrength'
 
 interface ErrorResponse {

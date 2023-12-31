@@ -1,7 +1,7 @@
 import React from 'react'
 import { Progress, Text } from '@mantine/core'
 import Requirement from './Requirement'
-import { IRequirement } from '../service/password'
+import { IRequirement } from '../services/password'
 
 interface PasswordStrengthProps {
   strength: number
