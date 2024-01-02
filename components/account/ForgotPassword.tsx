@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
 import {
-  createStyles,
   Paper,
   Title,
   Text,
@@ -15,33 +16,10 @@ import {
   CloseButton,
 } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
-import { useRouter } from 'next/router'
-import axios from 'axios'
 import Requirement from './Requirement'
-
-const useStyles = createStyles((theme) => ({
-  title: {
-    fontSize: rem(26),
-    fontWeight: 900,
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-  },
-
-  controls: {
-    [theme.fn.smallerThan('xs')]: {
-      flexDirection: 'column-reverse',
-    },
-  },
-
-  control: {
-    [theme.fn.smallerThan('xs')]: {
-      width: '100%',
-      textAlign: 'center',
-    },
-  },
-}))
+import classes from '@/styles/account.module.scss'
 
 const ForgotPassword = () => {
-  const { classes } = useStyles()
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
@@ -92,7 +70,7 @@ const ForgotPassword = () => {
           <CloseButton onClick={handleDismiss} style={{ marginLeft: '8px' }} />
         </div>
       )}
-      <Title className={classes.title} align="center">
+      <Title className={classes.title} style={{ align: 'center' }}>
         Forgot your password?
       </Title>
       <Text c="dimmed" fz="sm" ta="center">
@@ -115,7 +93,7 @@ const ForgotPassword = () => {
             value={email}
             onChange={(event) => setEmail(event.currentTarget.value)}
           />
-          <Group position="apart" mt="lg" className={classes.controls}>
+          <Group style={{ position: 'relative' }} mt="lg" className={classes.controls}>
             <Anchor
               color="dimmed"
               size="sm"

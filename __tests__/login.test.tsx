@@ -1,8 +1,8 @@
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent } from '../test-utils'
 import '@testing-library/jest-dom/extend-expect' // Import the matchers
-import Login from '../pages/Login'
+import Login from 'src/app/account/login/page'
 
-jest.mock('next/router', () => require('next-router-mock'))
+jest.mock('next/navigation', () => require('next-router-mock'))
 
 describe('Login page', () => {
   it('moves to register form if login button is clicked', () => {

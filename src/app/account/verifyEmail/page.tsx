@@ -1,5 +1,6 @@
+'use client'
 import React from 'react'
-import VerifyEmail from '../../components/VerifyEmail'
+import VerifyEmail from '@/components/account/VerifyEmail'
 
 const VerifyAccountPage = () => {
   return <VerifyEmail />

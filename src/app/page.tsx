@@ -1,20 +1,22 @@
+'use client'
 import React, { useState, useEffect } from 'react'
 import type { NextPage } from 'next'
-import axios from 'axios'
 import Head from 'next/head'
 
-import styles from '../styles/home.module.scss'
+import { Institutions } from '@/services/institutions'
+import Institution from '@/entities/Institution'
+import styles from '@/styles/home.module.scss'
 
 const Home: NextPage = () => {
-  const [dataTest, setDataTest] = useState([])
-  // const backend_api = process.env.BACKEND_HOST
-  const backend_api = 'http://api.localhost'
+  const [dataTest, setDataTest] = useState<Institution[]>([])
+
+  const getInstitutions = async () => {
+    const institutions: Institution[] | undefined = await Institutions.GetInstitutions()
+    if (institutions) setDataTest(institutions)
+  }
 
   useEffect(() => {
-    const url = `${backend_api}/institutions/`
-    axios.get(url).then((res) => {
-      setDataTest(res.data)
-    })
+    getInstitutions()
   }, [])
 
   return (
@@ -29,11 +31,12 @@ const Home: NextPage = () => {
         <h1>Universiteams</h1>
         <h3>Test names:</h3>
         <ul>
-          {dataTest.map((item: any, i: number) => (
-            <li key={i}>{item.name}</li>
-          ))}
+          {dataTest?.length > 0 &&
+            dataTest.map((item: Institution, i: number) => <li key={i}>{item.name}</li>)}
         </ul>
       </main>
+
+      {/* <LoginRegister initialType="login" /> */}
 
       <footer className={styles.footer}>
         <p>Testing Phase</p>

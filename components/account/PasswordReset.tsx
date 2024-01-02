@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Button, Text, Card, Loader } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import axios from 'axios'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { PasswordInput } from '@mantine/core'
 import {
   getPasswordStrength,
   getStrengthColorAndPhrase,
   passwordValidation,
   requirements,
-} from '../service/password'
+} from '@/services/password'
 import PasswordStrength from './PasswordStrength'
 import Requirement from './Requirement'
 
@@ -34,14 +34,15 @@ function PasswordReset() {
   const [isLoading, setIsLoading] = useState(false)
   const [emailTokenPayload, setEmailTokenPayload] = useState<EmailTokenPayload | null>(null)
   const router = useRouter()
+  const query = useSearchParams()
 
   useEffect(() => {
-    const token = router.query.token as string
+    const token = query.get('token') as string
     if (token) {
       const decodedToken: EmailTokenPayload = parseJwt(token)
       setEmailTokenPayload(decodedToken)
     }
-  }, [router.query.token])
+  }, [query.get('token')])
 
   const validateConfirmPassword = (confirmPassword: string, password: string): string | null => {
     if (confirmPassword !== password) return 'Passwords do not match'
@@ -63,7 +64,7 @@ function PasswordReset() {
   const handleSubmit = async (values: typeof form.values) => {
     setIsLoading(true)
     const url = 'http://api.localhost/auth/reset-password'
-    const token = router.query.token as string
+    const token = query.get('token') as string
     try {
       const res = await axios.post(url, { ...values, verificationToken: token })
       if (res.status === 200) {
@@ -99,7 +100,7 @@ function PasswordReset() {
       {isLoading && <Loader />}
       {!isLoading && (
         <Card shadow="sm" padding="lg" radius="md" style={{ maxWidth: '400px', width: '100%' }}>
-          <Text size="lg" weight={500} style={{ marginBottom: '1rem' }}>
+          <Text size="lg" style={{ weight: 500, marginBottom: '1rem' }}>
             {isSuccess
               ? 'Password reset successfully!'
               : `Change password for @${emailTokenPayload?.user}`}

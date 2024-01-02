@@ -13,7 +13,7 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import axios, { AxiosError } from 'axios'
 import Requirement from './Requirement'
 import {
@@ -21,7 +21,7 @@ import {
   getStrengthColorAndPhrase,
   passwordValidation,
   requirements,
-} from '../service/password'
+} from '@/services/password'
 import PasswordStrength from './PasswordStrength'
 
 interface ErrorResponse {
@@ -87,14 +87,14 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
   return (
     <Container size={420} my={40}>
       <Title
-        align="center"
-        sx={(theme) => ({
-          fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+        style={{
+          align: 'center',
+          fontFamily: 'Greycliff CF, sans-serif',
           fontWeight: 900,
-        })}>
+        }}>
         Welcome to Universiteams!
       </Title>
-      <Text color="dimmed" size="sm" align="center" mt={5}>
+      <Text style={{ align: 'center' }} color="dimmed" size="sm" mt={5}>
         {type === 'register' ? 'Already have an account?' : "Don't have an account?"}{' '}
         <Anchor<'a'>
           href="#"
@@ -154,7 +154,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
             />
           )}
 
-          <Group position="apart" mt="md">
+          <Group style={{ position: 'relative' }} mt="md">
             <Checkbox label="Remember me" />
             {type === 'login' && (
               <Anchor<'a'> onClick={handleForgotPasswordClick} href="#" size="sm">
