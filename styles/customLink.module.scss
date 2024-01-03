@@ -1,0 +1,11 @@
+.customLinks {
+  text-decoration: none;
+  color: unset;
+  &:hover,
+  &:visited {
+    color: unset;
+  }
+  &:hover {
+    opacity: 75%;
+  }
+}
