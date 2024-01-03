@@ -5,7 +5,6 @@ import Head from 'next/head'
 
 import { Institutions } from '@/services/institutions'
 import Institution from '@/entities/Institution'
-import styles from '@/styles/home.module.scss'
 
 const Home: NextPage = () => {
   const [dataTest, setDataTest] = useState<Institution[]>([])
@@ -20,14 +19,14 @@ const Home: NextPage = () => {
   }, [])
 
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>Universiteams</title>
         <meta name="description" content="Pro Scientific Dissemination & Volunteering" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <main className="mainContainer">
         <h1>Universiteams</h1>
         <h3>Test names:</h3>
         <ul>
@@ -35,13 +34,7 @@ const Home: NextPage = () => {
             dataTest.map((item: Institution, i: number) => <li key={i}>{item.name}</li>)}
         </ul>
       </main>
-
-      {/* <LoginRegister initialType="login" /> */}
-
-      <footer className={styles.footer}>
-        <p>Testing Phase</p>
-      </footer>
-    </div>
+    </>
   )
 }
 
