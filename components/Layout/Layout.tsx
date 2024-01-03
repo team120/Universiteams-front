@@ -29,8 +29,7 @@ const Layout = (props: Layout) => {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: { sm: 300, lg: 400 }, breakpoint: 'sm', collapsed: { mobile: !opened } }}
-      padding="md">
+      navbar={{ width: { sm: 300, lg: 400 }, breakpoint: 'sm', collapsed: { mobile: !opened } }}>
       <AppShell.Header>
         <Group ml={10} h="100%" px="md">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
