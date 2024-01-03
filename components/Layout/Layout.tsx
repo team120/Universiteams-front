@@ -1,15 +1,14 @@
-'use client'
 import React from 'react'
 
 import {
   AppShell,
   Burger,
   Group,
-  Skeleton,
   useComputedColorScheme,
   useMantineColorScheme,
 } from '@mantine/core'
 import { useDisclosure, useHotkeys } from '@mantine/hooks'
+import Navbar from './Navbar/Navbar'
 
 interface Layout {
   children: React.ReactNode
@@ -38,12 +37,7 @@ const Layout = (props: Layout) => {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
-        Navbar
-        {Array(15)
-          .fill(0)
-          .map((_, index) => (
-            <Skeleton key={index} h={28} mt="sm" animate={false} />
-          ))}
+        <Navbar />
       </AppShell.Navbar>
       <AppShell.Main>{props.children}</AppShell.Main>
     </AppShell>

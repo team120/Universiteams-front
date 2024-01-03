@@ -7,7 +7,7 @@ import { MantineProvider, localStorageColorSchemeManager } from '@mantine/core'
 import '@mantine/core/styles.css'
 import '@/styles/globals.scss'
 import Theme from './theme'
-import Layout from '@/components/Layout'
+import Layout from '@/components/Layout/Layout'
 
 const App = ({ children, pageProps }: any) => {
   // Detect the user's theme preference (dark or light)
