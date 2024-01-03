@@ -1,8 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 
-import classes from '@/styles/customLink.module.scss'
-
 interface ICustomLink {
   link: string
   content: any
@@ -10,7 +8,7 @@ interface ICustomLink {
 
 const CustomLink = (props: ICustomLink) => {
   return (
-    <Link href={props.link} className={classes.customLinks}>
+    <Link href={props.link} className="customLink">
       {props.content}
     </Link>
   )
