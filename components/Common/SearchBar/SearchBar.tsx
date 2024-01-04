@@ -8,11 +8,16 @@ import Theme from 'src/app/theme'
 
 interface SearchBarProps {
   endpoint: string
+  width?: number
 }
 
 const SearchBar = (props: SearchBarProps) => {
   const [searchText, setSearchText] = useState('')
   const router = useRouter()
+
+  // Set searchBar width
+  const widthEmpty = props.width ?? 55
+  const widthWithText = widthEmpty - 5
 
   const searchNowClick = () => {
     if (!searchText) return
@@ -29,7 +34,7 @@ const SearchBar = (props: SearchBarProps) => {
     <>
       <Input
         placeholder="Buscar..."
-        style={{ width: searchText ? '50vw' : '55vw' }}
+        style={{ width: searchText ? `${widthWithText}vw` : `${widthEmpty}vw` }}
         value={searchText}
         onChange={(event) => setSearchText(event.currentTarget.value)}
         onKeyUp={(event) => searchNowButton(event)}

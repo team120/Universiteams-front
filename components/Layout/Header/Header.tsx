@@ -7,6 +7,7 @@ import SearchBar from '@/components/Common/SearchBar/SearchBar'
 
 interface HeaderProps {
   opened: boolean
+  width?: number
   toggle: () => void
   toggleColorScheme: () => void
 }
