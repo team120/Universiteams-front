@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActionIcon, Burger, Group } from '@mantine/core'
+import { ActionIcon, Burger, Center, Container, Group } from '@mantine/core'
 import { IconSunMoon } from '@tabler/icons-react'
 
 import Theme from 'src/app/theme'
@@ -14,7 +14,7 @@ interface HeaderProps {
 const Header = (props: HeaderProps) => {
   return (
     <>
-      <Group ml={15} h="100%" px="md" gap={20}>
+      <Group ml={15} h="100%" gap={15}>
         <Burger opened={props.opened} onClick={props.toggle} hiddenFrom="sm" size="sm" />
         <ActionIcon
           variant="filled"
@@ -23,7 +23,11 @@ const Header = (props: HeaderProps) => {
           onClick={props.toggleColorScheme}>
           <IconSunMoon style={{ width: '70%', height: '70%' }} stroke={1.5} />
         </ActionIcon>
-        <SearchBar endpoint="projects" />
+        <Container fluid>
+          <Center inline>
+            <SearchBar endpoint="projects" />
+          </Center>
+        </Container>
       </Group>
     </>
   )

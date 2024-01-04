@@ -28,8 +28,7 @@ const SearchBar = (props: SearchBarProps) => {
   return (
     <>
       <Input
-        placeholder="Buscar proyectos..."
-        style={{ width: '50vw' }}
+        placeholder="Buscar..."
         value={searchText}
         onChange={(event) => setSearchText(event.currentTarget.value)}
         onKeyUp={(event) => searchNowButton(event)}
@@ -45,14 +44,14 @@ const SearchBar = (props: SearchBarProps) => {
       />
       <ActionIcon
         variant="filled"
+        ml={10}
         color={Theme.colors?.orange?.[4]}
         aria-label="Search button"
-        style={{ display: searchText ? undefined : 'none' }}
-        onClick={searchNowClick}>
+        onClick={searchNowClick}
+        style={{ display: searchText ? undefined : 'none' }}>
         <IconCheck style={{ width: '70%', height: '70%' }} stroke={1.5} />
       </ActionIcon>
     </>
   )
 }
-
 export default SearchBar
