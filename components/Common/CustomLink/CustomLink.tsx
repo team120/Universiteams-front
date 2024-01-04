@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 interface ICustomLink {
   link: string
-  content: any
+  content: string | JSX.Element
 }
 
 const CustomLink = (props: ICustomLink) => {
