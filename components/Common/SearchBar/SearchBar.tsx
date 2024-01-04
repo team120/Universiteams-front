@@ -29,7 +29,7 @@ const SearchBar = (props: SearchBarProps) => {
     <>
       <Input
         placeholder="Buscar proyectos..."
-        style={{ width: '80vw' }}
+        style={{ width: '50vw' }}
         value={searchText}
         onChange={(event) => setSearchText(event.currentTarget.value)}
         onKeyUp={(event) => searchNowButton(event)}
