@@ -6,7 +6,7 @@ import Theme from 'src/app/theme'
 export function render(ui: React.ReactNode) {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation(query => ({
+    value: jest.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -16,7 +16,7 @@ export function render(ui: React.ReactNode) {
       removeEventListener: jest.fn(),
       dispatchEvent: jest.fn(),
     })),
-  });
+  })
 
   return testingLibraryRender(<>{ui}</>, {
     wrapper: ({ children }: { children: React.ReactNode }) => (
