@@ -1,13 +1,8 @@
 import React from 'react'
-
-import {
-  AppShell,
-  Burger,
-  Group,
-  useComputedColorScheme,
-  useMantineColorScheme,
-} from '@mantine/core'
+import { AppShell, useComputedColorScheme, useMantineColorScheme } from '@mantine/core'
 import { useDisclosure, useHotkeys } from '@mantine/hooks'
+
+import Header from './Header/Header'
 import Navbar from './Navbar/Navbar'
 
 interface Layout {
@@ -31,9 +26,7 @@ const Layout = (props: Layout) => {
       header={{ height: 60 }}
       navbar={{ width: { sm: 300, lg: 400 }, breakpoint: 'sm', collapsed: { mobile: !opened } }}>
       <AppShell.Header>
-        <Group ml={10} h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        </Group>
+        <Header opened={opened} toggle={toggle} />
       </AppShell.Header>
       <AppShell.Navbar p="md">
         <Navbar />
