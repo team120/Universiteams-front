@@ -14,8 +14,8 @@ interface HeaderProps {
 const Header = (props: HeaderProps) => {
   return (
     <>
-      <Group ml={15} h="100%" gap={15}>
-        <Burger opened={props.opened} onClick={props.toggle} hiddenFrom="sm" size="sm" />
+      <Group ml={15} h="100%">
+        <Burger mr={15} opened={props.opened} onClick={props.toggle} hiddenFrom="sm" size="sm" />
         <ActionIcon
           variant="filled"
           color={Theme.colors?.orange?.[4]}
@@ -24,7 +24,7 @@ const Header = (props: HeaderProps) => {
           <IconSunMoon style={{ width: '70%', height: '70%' }} stroke={1.5} />
         </ActionIcon>
         <Container fluid>
-          <Center inline>
+          <Center>
             <SearchBar endpoint="projects" />
           </Center>
         </Container>

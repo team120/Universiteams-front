@@ -29,6 +29,7 @@ const SearchBar = (props: SearchBarProps) => {
     <>
       <Input
         placeholder="Buscar..."
+        style={{ width: searchText ? '50vw' : '55vw' }}
         value={searchText}
         onChange={(event) => setSearchText(event.currentTarget.value)}
         onKeyUp={(event) => searchNowButton(event)}
@@ -54,4 +55,5 @@ const SearchBar = (props: SearchBarProps) => {
     </>
   )
 }
+
 export default SearchBar
