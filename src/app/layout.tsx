@@ -1,11 +1,11 @@
 'use client'
 import React from 'react'
-import Head from 'next/head'
 import axios from 'axios'
 
 import { MantineProvider, localStorageColorSchemeManager } from '@mantine/core'
 import '@mantine/core/styles.css'
 import '@/styles/globals.scss'
+
 import Theme from './theme'
 import Layout from '@/components/Layout/Layout'
 
@@ -18,11 +18,11 @@ const App = ({ children, pageProps }: any) => {
 
   return (
     <html>
-      <Head>
+      <head>
         <title>Universiteams</title>
         <meta name="description" content="Pro Scientific Dissemination & Volunteering" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </head>
       <body>
         <MantineProvider
           theme={Theme}
