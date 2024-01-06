@@ -1,15 +1,9 @@
-'use client'
 import React from 'react'
-
-import {
-  AppShell,
-  Burger,
-  Group,
-  Skeleton,
-  useComputedColorScheme,
-  useMantineColorScheme,
-} from '@mantine/core'
+import { AppShell, useComputedColorScheme, useMantineColorScheme } from '@mantine/core'
 import { useDisclosure, useHotkeys } from '@mantine/hooks'
+
+import Header from './Header/Header'
+import Navbar from './Navbar/Navbar'
 
 interface Layout {
   children: React.ReactNode
@@ -30,20 +24,12 @@ const Layout = (props: Layout) => {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
-      padding="md">
+      navbar={{ width: { sm: 300, lg: 400 }, breakpoint: 'sm', collapsed: { mobile: !opened } }}>
       <AppShell.Header>
-        <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        </Group>
+        <Header opened={opened} toggle={toggle} toggleColorScheme={toggleColorScheme} />
       </AppShell.Header>
       <AppShell.Navbar p="md">
-        Navbar
-        {Array(15)
-          .fill(0)
-          .map((_, index) => (
-            <Skeleton key={index} h={28} mt="sm" animate={false} />
-          ))}
+        <Navbar />
       </AppShell.Navbar>
       <AppShell.Main>{props.children}</AppShell.Main>
     </AppShell>
