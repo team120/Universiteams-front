@@ -1,7 +1,7 @@
 import React from 'react'
 import { Progress, Text } from '@mantine/core'
 import Requirement from './Requirement'
-import { IRequirement } from '../services/password'
+import { IRequirement } from '@/services/password'
 
 interface PasswordStrengthProps {
   strength: number
@@ -25,7 +25,7 @@ function PasswordStrength({
   return (
     <>
       <Progress mt="xs" value={strength} color={color} />
-      <Text size="sm" align="center" color={color}>
+      <Text size="sm" style={{ align: 'center' }} color={color}>
         {phrase}
       </Text>
       {checks}

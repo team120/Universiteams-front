@@ -9,7 +9,7 @@ import {
   getStrengthColorAndPhrase,
   passwordValidation,
   requirements,
-} from '../services/password'
+} from '@/services/password'
 import PasswordStrength from './PasswordStrength'
 import Requirement from './Requirement'
 
@@ -100,7 +100,7 @@ function PasswordReset() {
       {isLoading && <Loader />}
       {!isLoading && (
         <Card shadow="sm" padding="lg" radius="md" style={{ maxWidth: '400px', width: '100%' }}>
-          <Text size="lg" weight={500} style={{ marginBottom: '1rem' }}>
+          <Text size="lg" style={{ weight: 500, marginBottom: '1rem' }}>
             {isSuccess
               ? 'Password reset successfully!'
               : `Change password for @${emailTokenPayload?.user}`}
