@@ -1,13 +1,4 @@
-import {
-  Card,
-  Text,
-  Badge,
-  useMantineTheme,
-  Group,
-  List,
-  Image,
-  Chip,
-} from '@mantine/core'
+import { Card, Text, Badge, useMantineTheme, Group, List, Image, Chip } from '@mantine/core'
 
 interface Institution {
   id: number
@@ -78,11 +69,16 @@ function ProjectsList({ projects }: ProjectsListProps) {
       <List>
         {projects.map((project) => (
           <Card
-            shadow="sm"
+            key={project.id}
             padding="lg"
             radius="md"
-            withBorder
-            style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              width: '100%',
+              borderStyle: 'solid',
+              borderColor: 'gray',
+            }}>
             <Image
               src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
               width={160}
@@ -92,11 +88,11 @@ function ProjectsList({ projects }: ProjectsListProps) {
             />
             <div style={{ width: '100%' }}>
               <Card.Section>
-                <Text weight={500} style={{ fontSize: '1.25rem', lineHeight: '1.75rem' }}>
+                <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
                   {project.name}
                 </Text>
-                <Group position="apart" mb="xs">
-                  <Text weight={500}>
+                <Group align="apart" style={{ marginBottom: theme.spacing.xs }}>
+                  <Text style={{ fontWeight: 500 }}>
                     {project.type} | {formatDate(project.creationDate)}
                   </Text>
                   <Badge color="pink" variant="light">
@@ -106,15 +102,15 @@ function ProjectsList({ projects }: ProjectsListProps) {
               </Card.Section>
 
               <Chip.Group>
-                <Group position="left" spacing="xs" mt="xs">
+                <Group align="left" gap="xs" style={{ marginTop: theme.spacing.xs }}>
                   {project.enrollments && (
-                    <Chip color="blue">
+                    <Chip color="blue" size="md">
                       {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}
                       , +{project.userCount} personas
                     </Chip>
                   )}
                   {project.interests.map((interest) => (
-                    <Chip key={interest.id} color="blue">
+                    <Chip key={interest.id} color="blue" size="md">
                       {interest.name}
                     </Chip>
                   ))}
