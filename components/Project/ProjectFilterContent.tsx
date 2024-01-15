@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { Select, Stack, Grid, ActionIcon, Group } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { IconArrowUp, IconArrowDown, IconCheck, IconTrash } from '@tabler/icons-react'

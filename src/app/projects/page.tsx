@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React from 'react'
 import { NextPage } from 'next'
 import ProjectsList, { Project } from '../../../components/Project/ProjectsList'
 import axios from 'axios'
