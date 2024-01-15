@@ -29,18 +29,21 @@ const Filter = (props: FilterProps) => {
       </ActionIcon>
 
       {isMobile && (
-        <Drawer
-          opened={opened}
-          onClose={() => setOpened(false)}
-          padding="xl"
-          size={sidebarWidth}
-          position="right">
-          {props.content}
-        </Drawer>
+        <>
+          <Drawer
+            opened={opened}
+            onClose={() => setOpened(false)}
+            padding="xl"
+            size={sidebarWidth}
+            position="right">
+            {props.content}
+          </Drawer>
+          {props.children}
+        </>
       )}
 
-      <Flex direction="row-reverse">
-        {!isMobile && (
+      {!isMobile && (
+        <Flex direction="row-reverse">
           <div
             style={{
               width: opened ? sidebarWidth : '0',
@@ -50,9 +53,9 @@ const Filter = (props: FilterProps) => {
             }}>
             {opened && props.content}
           </div>
-        )}
-        <div style={{ flex: 1 }}>{props.children}</div>
-      </Flex>
+          <div style={{ flex: 1 }}>{props.children}</div>
+        </Flex>
+      )}
     </>
   )
 }
