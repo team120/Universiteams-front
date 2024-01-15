@@ -3,6 +3,7 @@ import { ActionIcon, Drawer, Flex, Group } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { Filter as FilterIcon } from 'tabler-icons-react'
 import Theme from 'src/app/theme'
+import { IconXboxX } from '@tabler/icons-react'
 
 interface FilterProps {
   children: React.ReactNode
@@ -16,7 +17,6 @@ const Filter = (props: FilterProps) => {
 
   const [opened, setOpened] = useState(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
-  const sidebarWidth = '250px'
 
   return (
     <>
@@ -33,8 +33,11 @@ const Filter = (props: FilterProps) => {
           <Drawer
             opened={opened}
             onClose={() => setOpened(false)}
+            closeButtonProps={{
+              icon: <IconXboxX size={20} />,
+            }}
             padding="xl"
-            size={sidebarWidth}
+            size="100vw"
             position="right">
             {props.content}
           </Drawer>
@@ -46,7 +49,7 @@ const Filter = (props: FilterProps) => {
         <Flex direction="row-reverse">
           <div
             style={{
-              width: opened ? sidebarWidth : '0',
+              width: opened ? '250px' : '0',
               padding: opened ? '1rem' : '0',
               overflow: 'hidden',
               transition: 'width 0.3s ease, padding 0.3s ease',
