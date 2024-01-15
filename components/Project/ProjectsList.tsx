@@ -1,3 +1,4 @@
+import React from 'react';
 import { Card, Text, Badge, useMantineTheme, Group, List, Image, Chip } from '@mantine/core'
 
 interface Institution {
