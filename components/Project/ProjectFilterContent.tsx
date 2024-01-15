@@ -1,4 +1,4 @@
-import { Button, Select, Stack, Grid } from '@mantine/core'
+import { Button, Select, Stack, Grid, ActionIcon } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { IconArrowUp, IconArrowDown, IconCheck, IconTrash } from '@tabler/icons-react'
 import SelectItem from '../Common/SelectItem'
@@ -44,9 +44,9 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
               />
             </Grid.Col>
             <Grid.Col span={1}>
-              <Button onClick={toggleOrder}>
+              <ActionIcon  variant="transparent" onClick={toggleOrder}>
                 {sortAscending ? <IconArrowUp /> : <IconArrowDown />}
-              </Button>
+              </ActionIcon>
             </Grid.Col>
           </Grid>
 
