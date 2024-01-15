@@ -1,4 +1,4 @@
-import { Group, Button, Select, Stack } from '@mantine/core'
+import { Button, Select, Stack, Grid } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { IconArrowUp, IconArrowDown, IconCheck, IconTrash } from '@tabler/icons-react'
 import SelectItem from '../Common/SelectItem'
@@ -31,23 +31,27 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Group>
-          <Select
-            label="Ordenar por"
-            data={props.sortAttributes.map((attr) => ({
-              value: attr.attribute,
-              label: attr.displayName,
-            }))}
-            {...form.getInputProps('sortBy')}
-          />
-          <Button onClick={toggleOrder}>
-            {sortAscending ? <IconArrowUp /> : <IconArrowDown />}
-          </Button>
-        </Group>
-
-        <DateInput label="Creados desde" {...form.getInputProps('dateFrom')} />
-
         <Stack>
+          <Grid align="flex-end">
+            <Grid.Col span="auto">
+              <Select
+                label="Ordenar por"
+                data={props.sortAttributes.map((attr) => ({
+                  value: attr.attribute,
+                  label: attr.displayName,
+                }))}
+                {...form.getInputProps('sortBy')}
+              />
+            </Grid.Col>
+            <Grid.Col span={1}>
+              <Button onClick={toggleOrder}>
+                {sortAscending ? <IconArrowUp /> : <IconArrowDown />}
+              </Button>
+            </Grid.Col>
+          </Grid>
+
+          <DateInput label="Creados desde" {...form.getInputProps('dateFrom')} />
+
           <Button color="blue">
             <IconCheck />
             Aplicar
