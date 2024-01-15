@@ -20,13 +20,16 @@ const Filter = (props: FilterProps) => {
 
   return (
     <>
-      <ActionIcon
-        variant="filled"
-        aria-label="Filter"
-        onClick={() => toggle()}
-        ml={Theme.spacing?.xs}>
-        <FilterIcon style={{ width: '70%', height: '70%' }} />
-      </ActionIcon>
+      <Group>
+        <ActionIcon
+          variant="transparent"
+          aria-label="Filter"
+          size="lg"
+          onClick={() => toggle()}
+          ml={Theme.spacing?.xs}>
+          <FilterIcon style={{ width: '70%', height: '70%' }} />
+        </ActionIcon>
+      </Group>
 
       {isMobile && (
         <>
