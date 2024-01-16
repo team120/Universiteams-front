@@ -102,13 +102,13 @@ function ProjectsList({ projects }: ProjectsListProps) {
               <Chip.Group>
                 <Group align="left" gap="xs" style={{ marginTop: theme.spacing.xs }}>
                   {project.enrollments && (
-                    <Chip color="blue" size="md">
+                    <Chip variant="light" color="blue" size="md">
                       {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}
                       , +{project.userCount} personas
                     </Chip>
                   )}
                   {project.interests.map((interest) => (
-                    <Chip key={interest.id} color="blue" size="md">
+                    <Chip variant="light" key={interest.id} color="blue" size="md">
                       {interest.name}
                     </Chip>
                   ))}
