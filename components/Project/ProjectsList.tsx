@@ -91,7 +91,7 @@ function ProjectsList({ projects }: ProjectsListProps) {
                 </Text>
                 <Group justify="space-between" style={{ marginBottom: theme.spacing.xs }}>
                   <Text style={{ fontWeight: 500 }}>
-                    {project.type} | {formatDate(project.creationDate)}
+                    {project.type} | {formatDate(project.creationDate)}{project.endDate ? ' - ' + formatDate(project.endDate) : ''}
                   </Text>
                   <Badge color="pink" variant="light">
                     {project.researchDepartments[0].name}
