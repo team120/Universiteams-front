@@ -1,5 +1,7 @@
 import React from 'react'
 import { Card, Text, Badge, useMantineTheme, Group, List, Image, Chip } from '@mantine/core'
+import Theme from 'src/app/theme';
+import { useMediaQuery } from '@mantine/hooks';
 
 interface Institution {
   id: number
@@ -65,9 +67,11 @@ function ProjectsList({ projects }: ProjectsListProps) {
     return dateString ? new Date(dateString).toLocaleDateString() : 'N/A'
   }
 
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
   return (
     <>
-      <List>
+      <List ml={!isMobile ? Theme.spacing?.xs : 0}>
         {projects.map((project) => (
           <Card
             key={project.id}
@@ -80,13 +84,6 @@ function ProjectsList({ projects }: ProjectsListProps) {
               borderStyle: 'solid',
               borderColor: 'gray',
             }}>
-            <Image
-              src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-              width={160}
-              height={160}
-              alt="project image"
-              style={{ marginRight: theme.spacing.md }}
-            />
             <div style={{ width: '100%' }}>
               <Card.Section>
                 <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
