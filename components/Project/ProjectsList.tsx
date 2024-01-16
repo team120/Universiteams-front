@@ -101,7 +101,7 @@ function ProjectsList({ projects }: ProjectsListProps) {
               </Card.Section>
 
               <Chip.Group>
-                <Group align="left" gap="xs" style={{ marginTop: theme.spacing.xs }}>
+                <Group style={{ marginTop: theme.spacing.xs }}>
                   {project.enrollments && (
                     <Chip variant="light" color="blue" size="md">
                       {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}

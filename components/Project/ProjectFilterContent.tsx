@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select, Stack, Grid, ActionIcon, Group } from '@mantine/core'
+import { Select, Stack, Grid, ActionIcon, Group, Autocomplete, Switch } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { IconArrowUp, IconArrowDown, IconCheck, IconTrash } from '@tabler/icons-react'
 import SelectItem from '../Common/SelectItem'
@@ -54,6 +54,29 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
               </ActionIcon>
             </Grid.Col>
           </Grid>
+
+          <Autocomplete
+            label="Universidad"
+            placeholder='Ej: "UTN"'
+            data={['React', 'Angular', 'Vue', 'Svelte']}
+            {...form.getInputProps('university')}
+          />
+
+          <Autocomplete
+            label="Departamento"
+            placeholder='Ej: "Ingeniería En Sistemas"'
+            data={['React', 'Angular', 'Vue', 'Svelte']}
+            {...form.getInputProps('department')}
+          />
+
+          <Select
+            label="Tipo"
+            placeholder='Ej: "Formal"'
+            data={['React', 'Angular', 'Vue', 'Svelte']}
+            {...form.getInputProps('type')}
+          />
+
+          <Switch label="Descontinuados" mt={Theme.spacing?.xs} mb={Theme.spacing?.xs} {...form.getInputProps('state')}/>
 
           <DateInput label="Creados desde" {...form.getInputProps('dateFrom')} />
 

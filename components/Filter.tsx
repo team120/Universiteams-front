@@ -21,13 +21,14 @@ const Filter = (props: FilterProps) => {
 
   return (
     <>
-      <Group>
+      <Group justify={isMobile ? 'flex-end' : 'flex-start'}>
         <ActionIcon
           variant="transparent"
           aria-label="Filter"
           size="lg"
           onClick={() => toggle()}
-          ml={Theme.spacing?.xs}>
+          ml={Theme.spacing?.xs}
+          mr={Theme.spacing?.xs}>
           <FilterIcon style={{ width: '70%', height: '70%' }} />
         </ActionIcon>
       </Group>
