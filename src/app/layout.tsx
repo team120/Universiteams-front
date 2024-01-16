@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { MantineProvider, localStorageColorSchemeManager } from '@mantine/core'
 import '@mantine/core/styles.css'
-import '@mantine/dates/styles.css';
+import '@mantine/dates/styles.css'
 import '@/styles/globals.scss'
 
 import Theme from './theme'

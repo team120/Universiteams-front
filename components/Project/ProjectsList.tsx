@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Text, Badge, useMantineTheme, Group, List, Image, Chip } from '@mantine/core'
-import Theme from 'src/app/theme';
-import { useMediaQuery } from '@mantine/hooks';
+import Theme from 'src/app/theme'
+import { useMediaQuery } from '@mantine/hooks'
 
 interface Institution {
   id: number
