@@ -76,7 +76,12 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             {...form.getInputProps('type')}
           />
 
-          <Switch label="Descontinuados" mt={Theme.spacing?.xs} mb={Theme.spacing?.xs} {...form.getInputProps('state')}/>
+          <Switch
+            label="Descontinuados"
+            mt={Theme.spacing?.xs}
+            mb={Theme.spacing?.xs}
+            {...form.getInputProps('state')}
+          />
 
           <DateInput label="Creados desde" {...form.getInputProps('dateFrom')} />
 
