@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Text, Badge, useMantineTheme, Group, List, Image, Chip } from '@mantine/core'
+import { Card, Text, Badge, useMantineTheme, Group, List, Chip } from '@mantine/core'
 import Theme from 'src/app/theme'
 import { useMediaQuery } from '@mantine/hooks'
 
@@ -89,7 +89,7 @@ function ProjectsList({ projects }: ProjectsListProps) {
                 <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
                   {project.name}
                 </Text>
-                <Group align="apart" style={{ marginBottom: theme.spacing.xs }}>
+                <Group justify="space-between" style={{ marginBottom: theme.spacing.xs }}>
                   <Text style={{ fontWeight: 500 }}>
                     {project.type} | {formatDate(project.creationDate)}
                   </Text>
