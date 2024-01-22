@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { ActionIcon, Drawer, Flex, Group } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
@@ -12,12 +12,18 @@ interface FilterProps {
 }
 
 const Filter = (props: FilterProps) => {
+  const isMobile = useMediaQuery('(max-width: 768px)')
+  const [opened, setOpened] = useState(false)
+
+  useEffect(() => {
+    if (isMobile === true) {
+      setOpened(false)
+    }
+  }, [isMobile])
+
   const toggle = () => {
     setOpened((prevOpened) => !prevOpened)
   }
-
-  const isMobile = useMediaQuery('(max-width: 768px)')
-  const [opened, setOpened] = useState(isMobile ? false : true)
 
   return (
     <>
