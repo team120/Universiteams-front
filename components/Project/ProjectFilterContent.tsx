@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FormEvent } from 'react'
 import { Select, Stack, Grid, ActionIcon, Group, Autocomplete, Switch } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { IconArrowUp, IconArrowDown, IconCheck, IconTrash } from '@tabler/icons-react'
@@ -7,6 +7,7 @@ import { useForm } from '@mantine/form'
 import { useState } from 'react'
 import Theme from 'src/app/theme'
 import { useMediaQuery } from '@mantine/hooks'
+import { usePathname, useRouter } from 'next/navigation'
 
 interface ProjectFilterContentProps {
   sortAttributes: SelectItem[]
@@ -27,8 +28,27 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     },
   })
 
-  const handleSubmit = (values: any) => console.log(values)
-  const reset = () => form.reset()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const updateUrl = (values: typeof form.values) => {
+    const query = getUrlSearchParams(values)
+    router.push(`${pathname}?${query}`)
+  }
+
+  const handleSubmit = (
+    values: typeof form.values,
+    event: React.FormEvent<HTMLFormElement> | undefined
+  ) => {
+    event?.preventDefault()
+    updateUrl(values)
+    form.reset()
+  }
+
+  const reset = () => {
+    form.reset()
+  }
+
   const toggleOrder = () => setSortAscending(!sortAscending)
 
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -80,7 +100,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             label="Descontinuados"
             mt={Theme.spacing?.xs}
             mb={Theme.spacing?.xs}
-            {...form.getInputProps('state')}
+            {...form.getInputProps('isDown')}
           />
 
           <DateInput label="Creados desde" {...form.getInputProps('dateFrom')} />
@@ -89,7 +109,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             <ActionIcon color="red" onClick={reset}>
               <IconTrash />
             </ActionIcon>
-            <ActionIcon color="blue">
+            <ActionIcon color="blue" type="submit">
               <IconCheck />
             </ActionIcon>
           </Group>
@@ -100,3 +120,13 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
 }
 
 export default ProjectFilterContent
+function getUrlSearchParams(values: { [x: string]: any }) {
+  // Remove keys with empty values
+  Object.keys(values).forEach((key) => {
+    if (!values[key]) {
+      delete values[key]
+    }
+  })
+
+  return new URLSearchParams(values as any).toString()
+}
