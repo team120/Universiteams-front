@@ -42,11 +42,11 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   ) => {
     event?.preventDefault()
     updateUrl(values)
-    form.reset()
   }
 
   const reset = () => {
     form.reset()
+    updateUrl(form.values)
   }
 
   const toggleOrder = () => setSortAscending(!sortAscending)
@@ -61,10 +61,12 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             <Grid.Col span="auto">
               <Select
                 label="Ordenar por"
-                data={props.sortAttributes.map((attr) => ({
-                  value: attr.attribute,
-                  label: attr.displayName,
-                }))}
+                data={[{ value: '', label: '' }].concat(
+                  props.sortAttributes.map((attr) => ({
+                    value: attr.attribute,
+                    label: attr.displayName,
+                  }))
+                )}
                 {...form.getInputProps('sortBy')}
               />
             </Grid.Col>
@@ -78,21 +80,21 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
           <Autocomplete
             label="Universidad"
             placeholder='Ej: "UTN"'
-            data={['React', 'Angular', 'Vue', 'Svelte']}
+            data={['', 'React', 'Angular', 'Vue', 'Svelte']}
             {...form.getInputProps('university')}
           />
 
           <Autocomplete
             label="Departamento"
             placeholder='Ej: "Ingeniería En Sistemas"'
-            data={['React', 'Angular', 'Vue', 'Svelte']}
+            data={['', 'React', 'Angular', 'Vue', 'Svelte']}
             {...form.getInputProps('department')}
           />
 
           <Select
             label="Tipo"
             placeholder='Ej: "Formal"'
-            data={['React', 'Angular', 'Vue', 'Svelte']}
+            data={['', 'Formal', 'No Formal']}
             {...form.getInputProps('type')}
           />
 
@@ -100,7 +102,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             label="Descontinuados"
             mt={Theme.spacing?.xs}
             mb={Theme.spacing?.xs}
-            {...form.getInputProps('isDown')}
+            {...form.getInputProps('isDown', { type: 'checkbox' })}
           />
 
           <DateInput label="Creados desde" {...form.getInputProps('dateFrom')} />
