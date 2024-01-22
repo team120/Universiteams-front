@@ -16,8 +16,8 @@ const Filter = (props: FilterProps) => {
     setOpened((prevOpened) => !prevOpened)
   }
 
-  const [opened, setOpened] = useState(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
+  const [opened, setOpened] = useState(isMobile ? false : true)
 
   return (
     <>
