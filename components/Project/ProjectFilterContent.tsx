@@ -46,7 +46,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
 
   const reset = () => {
     form.reset()
-    updateUrl(form.values)
+    router.push(`${pathname}`)
   }
 
   const toggleOrder = () => setSortAscending(!sortAscending)
