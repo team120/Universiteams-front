@@ -1,6 +1,8 @@
 import React from 'react'
 import { Card, Text, Badge, useMantineTheme, Group, List, Chip } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
+
+import Dates from 'utils/string/Dates'
 import Theme from 'src/app/theme'
 import Project from '@/entities/Project'
 
@@ -10,11 +12,6 @@ interface ProjectsListProps {
 
 function ProjectsList({ projects }: ProjectsListProps) {
   const theme = useMantineTheme()
-
-  const formatDate = (dateString: string | undefined) => {
-    // A simple date formatter function to format the date strings
-    return dateString ? new Date(dateString).toLocaleDateString() : 'N/A'
-  }
 
   const isMobile = useMediaQuery('(max-width: 768px)')
 
@@ -41,8 +38,8 @@ function ProjectsList({ projects }: ProjectsListProps) {
                 </Text>
                 <Group justify="space-between" style={{ marginBottom: theme.spacing.xs }}>
                   <Text style={{ fontWeight: 500 }}>
-                    {project.type} | {formatDate(project.creationDate)}
-                    {project.endDate ? ' - ' + formatDate(project.endDate) : ''}
+                    {project.type} | {Dates.formatDate(project.creationDate)}
+                    {project.endDate ? ' - ' + Dates.formatDate(project.endDate) : ''}
                   </Text>
                   <Badge color="pink" variant="light">
                     {project.researchDepartments[0].name}
