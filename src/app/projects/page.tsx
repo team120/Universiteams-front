@@ -6,7 +6,7 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import Filter from '@/components/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
-import SelectItem from '@/components/Common/SelectItem'
+import SelectItem from '@/entities/CommonTypes/SelectItem'
 
 interface ProjectsResult {
   projects: Project[]
