@@ -3,7 +3,6 @@ import { Badge, Card, Chip, Group, Text, useMantineTheme } from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import Project from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
-import SkeletonSmall from '../Loader/SkeletonSmall'
 
 interface ProjectItemProps {
   project?: Project
@@ -19,12 +18,14 @@ const ProjectItem = (props: ProjectItemProps) => {
   return (
     <Card
       key={project.id}
-      padding="lg"
+      mx={'3%'}
+      mb={'0.5rem'}
+      p={'1rem'}
       radius="md"
       style={{
         display: 'flex',
         flexDirection: 'row',
-        width: '100%',
+        width: '94%',
         borderStyle: 'solid',
         borderColor: 'gray',
       }}>
@@ -33,10 +34,10 @@ const ProjectItem = (props: ProjectItemProps) => {
           <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
             {project.name}
           </Text>
-          <Group justify="space-between" style={{ marginBottom: theme.spacing.xs }}>
+          <Group gap={'1rem'} style={{ marginBottom: theme.spacing.xs }}>
             <Text style={{ fontWeight: 500 }}>
               {project.type} | {Dates.formatDate(project.creationDate)}
-              {project.endDate ? ' - ' + Dates.formatDate(project.endDate) : ''}
+              {project.endDate ? ` - ${Dates.formatDate(project.endDate)}` : ''}
             </Text>
             <Badge color="pink" variant="light">
               {project.researchDepartments[0].name}
@@ -45,7 +46,7 @@ const ProjectItem = (props: ProjectItemProps) => {
         </Card.Section>
 
         <Chip.Group>
-          <Group style={{ marginTop: theme.spacing.xs }}>
+          <Group gap={'0.5rem'} mt={'1rem'}>
             {project.enrollments && (
               <Chip variant="light" color="blue" size="md">
                 {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}, +
