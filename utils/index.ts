@@ -1,6 +1,7 @@
 //////////// EXPORT ALL TOOLS ////////////
-import Validation from './string/Validation'
+import Env from './config/Env'
 import RegEx from './string/RegEx'
+import Validation from './string/Validation'
 
-const Tools = { RegEx, Validation }
+const Tools = { Env, RegEx, Validation }
 export default Tools
