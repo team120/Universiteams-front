@@ -5,7 +5,7 @@ import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconArrowUp, IconArrowDown, IconCheck, IconTrash } from '@tabler/icons-react'
-import SelectItem from '@/entities/CommonTypes/SelectItem'
+import SelectItem from '@/entities/HelpTypes/SelectItem'
 import Theme from 'src/app/theme'
 
 interface ProjectFilterContentProps {

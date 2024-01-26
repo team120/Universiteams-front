@@ -4,7 +4,7 @@ import { NextPage } from 'next'
 
 import { Projects } from '@/services/projects'
 import ProjectsResult from '@/entities/ProjectsResult'
-import SelectItem from '@/entities/CommonTypes/SelectItem'
+import SelectItem from '@/entities/HelpTypes/SelectItem'
 
 import Filter from '@/components/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
