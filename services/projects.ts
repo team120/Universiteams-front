@@ -1,8 +1,10 @@
 import axios from 'axios'
+import Env from 'utils/config/Env'
+
 import Project from '@/entities/Project'
 import ProjectsResult from '@/entities/ProjectsResult'
 
-const prefix = `${process.env.NEXT_PUBLIC_BACKEND_HOST}/projects`
+const prefix = `${Env.backendAPI}/projects`
 
 // Find all projects
 const GetProjects = async (): Promise<ProjectsResult | undefined> => {
