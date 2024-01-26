@@ -1,8 +1,7 @@
 import axios from 'axios'
 import Institution from '@/entities/Institution'
 
-const backendAPI = process.env.NEXT_PUBLIC_BACKEND_HOST
-const prefix = `${backendAPI}/institutions`
+const prefix = `${process.env.NEXT_PUBLIC_BACKEND_HOST}/institutions`
 
 // Find all institutions
 const GetInstitutions = async (): Promise<Institution[] | undefined> => {
