@@ -2,58 +2,7 @@ import React from 'react'
 import { Card, Text, Badge, useMantineTheme, Group, List, Chip } from '@mantine/core'
 import Theme from 'src/app/theme'
 import { useMediaQuery } from '@mantine/hooks'
-
-interface Institution {
-  id: number
-  name: string
-  abbreviation: string
-}
-
-interface Facility {
-  id: number
-  name: string
-  abbreviation: string
-  institution: Institution
-}
-
-interface ResearchDepartment {
-  id: number
-  name: string
-  abbreviation: string
-  facility: Facility
-}
-
-interface Interest {
-  id: number
-  name: string
-}
-
-interface User {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-}
-
-interface Enrollment {
-  id: number
-  role: string
-  user: User
-  project: Project
-}
-
-export interface Project {
-  id: number
-  name: string
-  type: string
-  userCount: number
-  creationDate: string
-  endDate: string
-  isDown: boolean
-  researchDepartments: ResearchDepartment[]
-  interests: Interest[]
-  enrollments: Enrollment[]
-}
+import Project from '@/entities/Project'
 
 interface ProjectsListProps {
   projects: Project[]
