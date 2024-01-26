@@ -8,11 +8,11 @@ const prefix = `${backendAPI}/projects`
 const GetProjects = async (): Promise<Project[] | undefined> => {
   try {
     const url = `${prefix}/`
-    const result = await axios.get(url)
+    const result = await axios.get<Project[]>(url)
     return result.data
   } catch (error) {
     console.log(error)
-    return undefined
+    return
   }
 }
 
