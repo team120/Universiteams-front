@@ -1,13 +1,12 @@
-import React, { FormEvent } from 'react'
+import React, { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import { Select, Stack, Grid, ActionIcon, Group, Autocomplete, Switch } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
+import { useForm } from '@mantine/form'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconArrowUp, IconArrowDown, IconCheck, IconTrash } from '@tabler/icons-react'
 import SelectItem from '@/entities/CommonTypes/SelectItem'
-import { useForm } from '@mantine/form'
-import { useState } from 'react'
 import Theme from 'src/app/theme'
-import { useMediaQuery } from '@mantine/hooks'
-import { usePathname, useRouter } from 'next/navigation'
 
 interface ProjectFilterContentProps {
   sortAttributes: SelectItem[]

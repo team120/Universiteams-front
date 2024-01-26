@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ActionIcon, Drawer, Flex, Group } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { Filter as FilterIcon } from 'tabler-icons-react'
+import { IconFilter, IconXboxX } from '@tabler/icons-react'
 import Theme from 'src/app/theme'
-import { IconXboxX } from '@tabler/icons-react'
 
 interface FilterProps {
   children: React.ReactNode
@@ -35,7 +33,7 @@ const Filter = (props: FilterProps) => {
           onClick={() => toggle()}
           ml={Theme.spacing?.xs}
           mr={Theme.spacing?.xs}>
-          <FilterIcon style={{ width: '70%', height: '70%' }} />
+          <IconFilter style={{ width: '70%', height: '70%' }} />
         </ActionIcon>
       </Group>
 

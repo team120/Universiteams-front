@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Text, Badge, useMantineTheme, Group, List, Chip } from '@mantine/core'
-import Theme from 'src/app/theme'
 import { useMediaQuery } from '@mantine/hooks'
+import Theme from 'src/app/theme'
 import Project from '@/entities/Project'
 
 interface ProjectsListProps {
