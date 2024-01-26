@@ -5,7 +5,7 @@ import { useMediaQuery } from '@mantine/hooks'
 import Project from '@/entities/Project'
 
 interface ProjectsListProps {
-  projects: Project[]
+  projects?: Project[]
 }
 
 function ProjectsList({ projects }: ProjectsListProps) {
@@ -21,7 +21,8 @@ function ProjectsList({ projects }: ProjectsListProps) {
   return (
     <>
       <List ml={!isMobile ? Theme.spacing?.xs : 0}>
-        {projects.map((project) => (
+        {(!projects || projects.length == 0) && <p>No hay projects</p>}
+        {projects?.map((project) => (
           <Card
             key={project.id}
             padding="lg"

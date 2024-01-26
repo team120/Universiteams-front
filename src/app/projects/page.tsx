@@ -1,21 +1,17 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { NextPage } from 'next'
-import ProjectsList, { Project } from '../../../components/Project/ProjectsList'
-import axios from 'axios'
-import { useState, useEffect } from 'react'
-import Filter from '@/components/Filter'
-import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
+
+import { Projects } from '@/services/projects'
+import ProjectsResult from '@/entities/ProjectsResult'
 import SelectItem from '@/entities/CommonTypes/SelectItem'
 
-interface ProjectsResult {
-  projects: Project[]
-  suggestedSearchTerms?: string[]
-  projectCount: number
-}
+import Filter from '@/components/Filter'
+import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
+import ProjectsList from '@/components/Project/ProjectsList'
 
-const Projects: NextPage = () => {
-  const [projects, setProjects] = useState<Project[]>([])
+const ProjectsPage: NextPage = () => {
+  const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
 
   const sortAttributes: SelectItem[] = [
     { attribute: 'name', displayName: 'name' },
@@ -24,24 +20,26 @@ const Projects: NextPage = () => {
     { attribute: 'researchDepartment', displayName: 'researchDepartment' },
   ]
 
+  const getProjects = async () => {
+    const result = await Projects.GetProjects()
+    if (!result) {
+      setProjectsResult(undefined)
+      return
+    }
+    setProjectsResult(result)
+  }
+
   useEffect(() => {
-    axios
-      .get<ProjectsResult>('http://api.localhost/projects')
-      .then((response) => {
-        setProjects(response.data.projects)
-      })
-      .catch((error) => {
-        console.error('Error fetching data: ', error)
-      })
+    getProjects()
   }, [])
 
   return (
     <>
       <Filter content={<ProjectFilterContent sortAttributes={sortAttributes} />}>
-        <ProjectsList projects={projects} />
+        <ProjectsList projects={projectsResult?.projects} />
       </Filter>
     </>
   )
 }
 
-export default Projects
+export default ProjectsPage
