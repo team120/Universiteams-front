@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Select, Stack, Grid, ActionIcon, Group, Autocomplete, Switch } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
@@ -23,9 +23,23 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
       department: '',
       type: '',
       isDown: false,
-      dateFrom: null,
+      dateFrom: null as Date | null,
     },
   })
+
+  const searchQuery = useSearchParams()
+
+  useEffect(() => {
+    form.setValues({
+      generalSearch: searchQuery.get('generalSearch') ?? '',
+      sortBy: searchQuery.get('sortBy') ?? '',
+      university: searchQuery.get('university') ?? '',
+      department: searchQuery.get('department') ?? '',
+      type: searchQuery.get('type') ?? '',
+      isDown: searchQuery.get('isDown') === 'true',
+      dateFrom: searchQuery.get('dateFrom') ? new Date(searchQuery.get('dateFrom')!) : null,
+    })
+  }, [searchQuery])
 
   const router = useRouter()
   const pathname = usePathname()
