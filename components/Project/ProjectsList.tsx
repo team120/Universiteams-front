@@ -22,7 +22,7 @@ const ProjectsList = ({ projects }: ProjectsListProps) => {
     <Suspense fallback={<SkeletonFull />}>
       <List ml={!isMobile ? Theme.spacing?.xs : 0}>
         {projects.map((project) => (
-          <ProjectItem project={project} />
+          <ProjectItem key={project.id} project={project} />
         ))}
       </List>
     </Suspense>
