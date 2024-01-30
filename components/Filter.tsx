@@ -16,6 +16,8 @@ const Filter = (props: FilterProps) => {
   useEffect(() => {
     if (isMobile === true) {
       setOpened(false)
+    } else {
+      setOpened(true)
     }
   }, [isMobile])
 
