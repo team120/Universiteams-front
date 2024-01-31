@@ -13,12 +13,11 @@ interface ProjectFilterContentProps {
 }
 
 const ProjectFilterContent = (props: ProjectFilterContentProps) => {
-  const [sortAscending, setSortAscending] = useState(true)
-
   const form = useForm({
     initialValues: {
       generalSearch: '',
       sortBy: '',
+      inAscendingOrder: true,
       university: '',
       department: '',
       type: '',
@@ -33,6 +32,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     form.setValues({
       generalSearch: searchQuery.get('generalSearch') ?? '',
       sortBy: searchQuery.get('sortBy') ?? '',
+      inAscendingOrder: searchQuery.get('inAscendingOrder') !== 'false',
       university: searchQuery.get('university') ?? '',
       department: searchQuery.get('department') ?? '',
       type: searchQuery.get('type') ?? '',
@@ -62,7 +62,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     router.push(`${pathname}`)
   }
 
-  const toggleOrder = () => setSortAscending(!sortAscending)
+  const toggleOrder = () => form.setFieldValue('inAscendingOrder', !form.values.inAscendingOrder)
 
   const isMobile = useMediaQuery('(max-width: 768px)')
 
@@ -85,7 +85,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             </Grid.Col>
             <Grid.Col span={1}>
               <ActionIcon variant="transparent" onClick={toggleOrder}>
-                {sortAscending ? <IconArrowUp /> : <IconArrowDown />}
+                {form.values.inAscendingOrder ? <IconArrowUp /> : <IconArrowDown />}
               </ActionIcon>
             </Grid.Col>
           </Grid>
@@ -138,7 +138,7 @@ export default ProjectFilterContent
 function getUrlSearchParams(values: { [x: string]: any }) {
   // Remove keys with empty values
   Object.keys(values).forEach((key) => {
-    if (!values[key]) {
+    if (values[key] === null || values[key] === undefined || values[key] === '') {
       delete values[key]
     }
   })
