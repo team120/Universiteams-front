@@ -15,6 +15,8 @@ import { Institutions } from '@/services/institutions'
 const ProjectsPage: NextPage = () => {
   const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
   const [institutions, setInstitutions] = useState<SelectItem[]>()
+  const [facility, setFacility] = useState<SelectItem[]>()
+  const [departments, setDepartments] = useState<SelectItem[]>()
 
   const sortAttributes: SelectItem[] = [
     { attribute: 'name', displayName: 'nombre' },
@@ -24,14 +26,40 @@ const ProjectsPage: NextPage = () => {
   ]
 
   const getInstitutions = async () => {
-    const result = await Institutions.GetInstitutions()
-    const mappedResult = result?.map((institution) => {
-      return {
-        attribute: institution.id.toString(),
-        displayName: institution.name,
-      } as SelectItem
-    })
-    setInstitutions(mappedResult)
+    const institutions = await Institutions.GetInstitutions()
+
+    const institutionsSelectItems: SelectItem[] = []
+    const facilitiesSelectItems: SelectItem[] = []
+    const departmentsSelectItems: SelectItem[] = []
+    if (institutions) {
+      institutions.forEach((institution) => {
+        institutionsSelectItems.push({
+          attribute: institution.id.toString(),
+          displayName: institution.name,
+        } as SelectItem)
+
+        if (institution.facilities) {
+          institution.facilities.forEach((facility) => {
+            facilitiesSelectItems.push({
+              attribute: facility.id.toString(),
+              displayName: facility.name,
+            } as SelectItem)
+
+            if (facility.researchDepartments) {
+              facility.researchDepartments.forEach((department) => {
+                departmentsSelectItems.push({
+                  attribute: department.id.toString(),
+                  displayName: department.name,
+                } as SelectItem)
+              })
+            }
+          })
+        }
+      })
+      setInstitutions(institutionsSelectItems)
+      setFacility(facilitiesSelectItems)
+      setDepartments(departmentsSelectItems)
+    }
   }
 
   useEffect(() => {
@@ -74,7 +102,15 @@ const ProjectsPage: NextPage = () => {
 
   return (
     <>
-      <Filter content={<ProjectFilterContent sortAttributes={sortAttributes} institutions={institutions ?? []} />}>
+      <Filter
+        content={
+          <ProjectFilterContent
+            sortAttributes={sortAttributes}
+            institutions={institutions ?? []}
+            facilities={facility ?? []}
+            departments={departments ?? []}
+          />
+        }>
         <ProjectsList projects={projectsResult?.projects} />
       </Filter>
     </>

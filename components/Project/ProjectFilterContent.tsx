@@ -11,6 +11,8 @@ import Theme from 'src/app/theme'
 interface ProjectFilterContentProps {
   sortAttributes: SelectItem[]
   institutions: SelectItem[]
+  facilities: SelectItem[]
+  departments: SelectItem[]
 }
 
 const ProjectFilterContent = (props: ProjectFilterContentProps) => {
@@ -104,9 +106,25 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
           />
 
           <Autocomplete
+            label="Regional"
+            placeholder='Ej: "Regional Buenos Aires"'
+            data={[{ value: '', label: '' }].concat(
+              props.facilities.map((attr) => ({
+                value: attr.attribute,
+                label: attr.displayName,
+              }))
+            )}
+          />
+
+          <Autocomplete
             label="Departamento"
             placeholder='Ej: "Ingeniería En Sistemas"'
-            data={['', 'React', 'Angular', 'Vue', 'Svelte']}
+            data={[{ value: '', label: '' }].concat(
+              props.departments.map((attr) => ({
+                value: attr.attribute,
+                label: attr.displayName,
+              }))
+            )}
             {...form.getInputProps('department')}
           />
 
