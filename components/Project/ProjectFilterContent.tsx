@@ -10,6 +10,7 @@ import Theme from 'src/app/theme'
 
 interface ProjectFilterContentProps {
   sortAttributes: SelectItem[]
+  institutions: SelectItem[]
 }
 
 const ProjectFilterContent = (props: ProjectFilterContentProps) => {
@@ -93,7 +94,12 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
           <Autocomplete
             label="Universidad"
             placeholder='Ej: "UTN"'
-            data={['', 'React', 'Angular', 'Vue', 'Svelte']}
+            data={[{ value: '', label: '' }].concat(
+              props.institutions.map((attr) => ({
+                value: attr.attribute,
+                label: attr.displayName,
+              }))
+            )}
             {...form.getInputProps('university')}
           />
 

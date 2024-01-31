@@ -10,16 +10,33 @@ import Filter from '@/components/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
 import ProjectsList from '@/components/Project/ProjectsList'
 import { useSearchParams } from 'next/navigation'
+import { Institutions } from '@/services/institutions'
 
 const ProjectsPage: NextPage = () => {
   const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
+  const [institutions, setInstitutions] = useState<SelectItem[]>()
 
   const sortAttributes: SelectItem[] = [
-    { attribute: 'name', displayName: 'name' },
-    { attribute: 'facility', displayName: 'facility' },
-    { attribute: 'creationDate', displayName: 'creationDate' },
-    { attribute: 'researchDepartment', displayName: 'researchDepartment' },
+    { attribute: 'name', displayName: 'nombre' },
+    { attribute: 'facility', displayName: 'regional' },
+    { attribute: 'creationDate', displayName: 'fecha creación' },
+    { attribute: 'researchDepartment', displayName: 'departamento' },
   ]
+
+  const getInstitutions = async () => {
+    const result = await Institutions.GetInstitutions()
+    const mappedResult = result?.map((institution) => {
+      return {
+        attribute: institution.id.toString(),
+        displayName: institution.name,
+      } as SelectItem
+    })
+    setInstitutions(mappedResult)
+  }
+
+  useEffect(() => {
+    getInstitutions()
+  })
 
   const searchQuery = useSearchParams()
 
@@ -57,7 +74,7 @@ const ProjectsPage: NextPage = () => {
 
   return (
     <>
-      <Filter content={<ProjectFilterContent sortAttributes={sortAttributes} />}>
+      <Filter content={<ProjectFilterContent sortAttributes={sortAttributes} institutions={institutions ?? []} />}>
         <ProjectsList projects={projectsResult?.projects} />
       </Filter>
     </>
