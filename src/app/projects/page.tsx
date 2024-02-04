@@ -9,7 +9,7 @@ import SelectItem from '@/entities/HelpTypes/SelectItem'
 import Filter from '@/components/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
 import ProjectsList from '@/components/Project/ProjectsList'
-import { useSearchParams } from 'next/navigation'
+import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 import { Institutions } from '@/services/institutions'
 
 const ProjectsPage: NextPage = () => {
@@ -25,12 +25,18 @@ const ProjectsPage: NextPage = () => {
     { attribute: 'researchDepartment', displayName: 'departamento' },
   ]
 
-  const getInstitutions = async () => {
+  const searchQuery = useSearchParams()
+
+  const getInstitutions = async (searchQuery: ReadonlyURLSearchParams) => {
     const institutions = await Institutions.GetInstitutions()
 
     const institutionsSelectItems: SelectItem[] = []
     const facilitiesSelectItems: SelectItem[] = []
     const departmentsSelectItems: SelectItem[] = []
+
+    const selectedInstitution = searchQuery.get('university')
+    const selectedFacility = searchQuery.get('facility')
+
     if (institutions) {
       institutions.forEach((institution) => {
         institutionsSelectItems.push({
@@ -38,14 +44,14 @@ const ProjectsPage: NextPage = () => {
           displayName: institution.name,
         } as SelectItem)
 
-        if (institution.facilities) {
+        if (institution.facilities && selectedInstitution && institution.id === parseInt(selectedInstitution)) {
           institution.facilities.forEach((facility) => {
             facilitiesSelectItems.push({
               attribute: facility.id.toString(),
               displayName: facility.name,
             } as SelectItem)
 
-            if (facility.researchDepartments) {
+            if (facility.researchDepartments && selectedFacility && facility.id === parseInt(selectedFacility)) {
               facility.researchDepartments.forEach((department) => {
                 departmentsSelectItems.push({
                   attribute: department.id.toString(),
@@ -63,10 +69,8 @@ const ProjectsPage: NextPage = () => {
   }
 
   useEffect(() => {
-    getInstitutions()
-  })
-
-  const searchQuery = useSearchParams()
+    getInstitutions(searchQuery)
+  }, [searchQuery])
 
   const getProjects = async (params: GetProjectsInput) => {
     const result = await Projects.GetProjects(params)

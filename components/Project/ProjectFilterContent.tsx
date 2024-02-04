@@ -22,6 +22,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
       sortBy: '',
       inAscendingOrder: true,
       university: '',
+      facility: '',
       department: '',
       type: '',
       isDown: false,
@@ -37,6 +38,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
       sortBy: searchQuery.get('sortBy') ?? '',
       inAscendingOrder: searchQuery.get('inAscendingOrder') !== 'false',
       university: searchQuery.get('university') ?? '',
+      facility: searchQuery.get('facility') ?? '',
       department: searchQuery.get('department') ?? '',
       type: searchQuery.get('type') ?? '',
       isDown: searchQuery.get('isDown') === 'true',
@@ -57,6 +59,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     event: React.FormEvent<HTMLFormElement> | undefined
   ) => {
     event?.preventDefault()
+    console.log('values', values)
     updateUrl(values)
   }
 
@@ -93,7 +96,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             </Grid.Col>
           </Grid>
 
-          <Autocomplete
+          <Select
             label="Universidad"
             placeholder='Ej: "UTN"'
             data={[{ value: '', label: '' }].concat(
@@ -105,7 +108,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             {...form.getInputProps('university')}
           />
 
-          <Autocomplete
+          <Select
             label="Regional"
             placeholder='Ej: "Regional Buenos Aires"'
             data={[{ value: '', label: '' }].concat(
@@ -114,9 +117,10 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
                 label: attr.displayName,
               }))
             )}
+            {...form.getInputProps('facility')}
           />
 
-          <Autocomplete
+          <Select
             label="Departamento"
             placeholder='Ej: "Ingeniería En Sistemas"'
             data={[{ value: '', label: '' }].concat(
