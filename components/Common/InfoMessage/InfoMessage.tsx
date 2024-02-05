@@ -18,14 +18,14 @@ const Message = (props: MessageProps) => {
         return <IconAlertTriangle color="yellow" size={'2.5rem'} />
       case 'info':
       default:
-        return <IconInfoCircle color="lightgreen" size={'2.5rem'} />
+        return <IconInfoCircle color="lightblue" size={'2.5rem'} />
     }
   }
 
   const icon = setIcon()
 
   return (
-    <Flex m={20} p={20} bg={'dark'} align={'center'}>
+    <Flex m={20} p={20} bg="var(--mantine-color-gray-light)" align={'center'}>
       {icon}{' '}
       <Text ml={10} size="1.2rem">
         {props.text}
