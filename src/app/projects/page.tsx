@@ -44,14 +44,22 @@ const ProjectsPage: NextPage = () => {
           displayName: institution.name,
         } as SelectItem)
 
-        if (institution.facilities && selectedInstitution && institution.id === parseInt(selectedInstitution)) {
+        if (
+          institution.facilities &&
+          selectedInstitution &&
+          institution.id === parseInt(selectedInstitution)
+        ) {
           institution.facilities.forEach((facility) => {
             facilitiesSelectItems.push({
               attribute: facility.id.toString(),
               displayName: facility.name,
             } as SelectItem)
 
-            if (facility.researchDepartments && selectedFacility && facility.id === parseInt(selectedFacility)) {
+            if (
+              facility.researchDepartments &&
+              selectedFacility &&
+              facility.id === parseInt(selectedFacility)
+            ) {
               facility.researchDepartments.forEach((department) => {
                 departmentsSelectItems.push({
                   attribute: department.id.toString(),

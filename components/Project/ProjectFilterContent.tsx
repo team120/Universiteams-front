@@ -1,14 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import {
-  Select,
-  Stack,
-  Grid,
-  ActionIcon,
-  Group,
-  Switch,
-  ComboboxItem,
-} from '@mantine/core'
+import { Select, Stack, Grid, ActionIcon, Group, Switch, ComboboxItem } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
