@@ -106,6 +106,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             <Grid.Col span="auto">
               <Select
                 label="Ordenar por"
+                placeholder='Ej: "nombre"'
                 data={[{ value: '', label: '' }].concat(
                   props.sortAttributes.map((attr) => ({
                     value: attr.attribute,
@@ -186,6 +187,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
           <DateInput
             label="Creados desde"
             clearable
+            placeholder='Ej: "Febrero 15, 2024"'
             value={form.values.dateFrom}
             onChange={handleDateInputChange}
           />
