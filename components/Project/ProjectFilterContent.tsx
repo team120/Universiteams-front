@@ -94,7 +94,10 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     router.push(`${pathname}`)
   }
 
-  const toggleOrder = () => form.setFieldValue('inAscendingOrder', !form.values.inAscendingOrder)
+  const handleOrderChange = () => {
+    form.values.inAscendingOrder = !form.values.inAscendingOrder
+    updateUrl(form.values)
+  }
 
   const isMobile = useMediaQuery('(max-width: 768px)')
 
@@ -119,7 +122,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
               />
             </Grid.Col>
             <Grid.Col span={1}>
-              <ActionIcon variant="transparent" onClick={toggleOrder}>
+              <ActionIcon variant="transparent" onClick={handleOrderChange}>
                 {form.values.inAscendingOrder ? <IconArrowUp /> : <IconArrowDown />}
               </ActionIcon>
             </Grid.Col>
