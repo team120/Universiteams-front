@@ -1,6 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Select, Stack, Grid, ActionIcon, Group, Autocomplete, Switch } from '@mantine/core'
+import {
+  Select,
+  Stack,
+  Grid,
+  ActionIcon,
+  Group,
+  Switch,
+  ComboboxItem,
+} from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
@@ -22,6 +30,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
       sortBy: '',
       inAscendingOrder: true,
       university: '',
+      facility: '',
       department: '',
       type: '',
       isDown: false,
@@ -37,6 +46,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
       sortBy: searchQuery.get('sortBy') ?? '',
       inAscendingOrder: searchQuery.get('inAscendingOrder') !== 'false',
       university: searchQuery.get('university') ?? '',
+      facility: searchQuery.get('facility') ?? '',
       department: searchQuery.get('department') ?? '',
       type: searchQuery.get('type') ?? '',
       isDown: searchQuery.get('isDown') === 'true',
@@ -52,12 +62,39 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     router.push(`${pathname}?${query}`)
   }
 
-  const handleSubmit = (
-    values: typeof form.values,
-    event: React.FormEvent<HTMLFormElement> | undefined
-  ) => {
-    event?.preventDefault()
-    updateUrl(values)
+  const handleSortByChange = (value: string | null, op: ComboboxItem) => {
+    form.values.sortBy = value ?? ''
+    updateUrl(form.values)
+  }
+
+  const handleUniversityChange = (value: string | null, op: ComboboxItem) => {
+    form.values.university = value ?? ''
+    updateUrl(form.values)
+  }
+
+  const handleFacilityChange = (value: string | null, op: ComboboxItem) => {
+    form.values.facility = value ?? ''
+    updateUrl(form.values)
+  }
+
+  const handleDepartmentChange = (value: string | null, op: ComboboxItem) => {
+    form.values.department = value ?? ''
+    updateUrl(form.values)
+  }
+
+  const handleTypeChange = (value: string | null, op: ComboboxItem) => {
+    form.values.type = value ?? ''
+    updateUrl(form.values)
+  }
+
+  const handleSwitchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    form.values.isDown = event.target.checked
+    updateUrl(form.values)
+  }
+
+  const handleDateInputChange = (value: Date | null) => {
+    form.values.dateFrom = value
+    updateUrl(form.values)
   }
 
   const reset = () => {
@@ -71,7 +108,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
 
   return (
     <>
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <form>
         <Stack ml={isMobile ? Theme.spacing?.xs : 0} mr={isMobile ? Theme.spacing?.xs : 0}>
           <Grid align="flex-end">
             <Grid.Col span="auto">
@@ -83,7 +120,9 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
                     label: attr.displayName,
                   }))
                 )}
-                {...form.getInputProps('sortBy')}
+                clearable
+                value={form.values.sortBy}
+                onChange={handleSortByChange}
               />
             </Grid.Col>
             <Grid.Col span={1}>
@@ -93,7 +132,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             </Grid.Col>
           </Grid>
 
-          <Autocomplete
+          <Select
             label="Universidad"
             placeholder='Ej: "UTN"'
             data={[{ value: '', label: '' }].concat(
@@ -102,10 +141,12 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
                 label: attr.displayName,
               }))
             )}
-            {...form.getInputProps('university')}
+            clearable
+            value={form.values.university}
+            onChange={handleUniversityChange}
           />
 
-          <Autocomplete
+          <Select
             label="Regional"
             placeholder='Ej: "Regional Buenos Aires"'
             data={[{ value: '', label: '' }].concat(
@@ -114,9 +155,12 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
                 label: attr.displayName,
               }))
             )}
+            clearable
+            value={form.values.facility}
+            onChange={handleFacilityChange}
           />
 
-          <Autocomplete
+          <Select
             label="Departamento"
             placeholder='Ej: "Ingeniería En Sistemas"'
             data={[{ value: '', label: '' }].concat(
@@ -125,31 +169,38 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
                 label: attr.displayName,
               }))
             )}
-            {...form.getInputProps('department')}
+            clearable
+            value={form.values.department}
+            onChange={handleDepartmentChange}
           />
 
           <Select
             label="Tipo"
             placeholder='Ej: "Formal"'
             data={['', 'Formal', 'No Formal']}
-            {...form.getInputProps('type')}
+            clearable
+            value={form.values.type}
+            onChange={handleTypeChange}
           />
 
           <Switch
             label="Descontinuados"
             mt={Theme.spacing?.xs}
             mb={Theme.spacing?.xs}
-            {...form.getInputProps('isDown', { type: 'checkbox' })}
+            checked={form.values.isDown}
+            onChange={handleSwitchChange}
           />
 
-          <DateInput label="Creados desde" {...form.getInputProps('dateFrom')} />
+          <DateInput
+            label="Creados desde"
+            clearable
+            value={form.values.dateFrom}
+            onChange={handleDateInputChange}
+          />
 
-          <Group grow gap={Theme.spacing?.xs} mt={Theme.spacing?.sm}>
+          <Group grow mt={Theme.spacing?.sm}>
             <ActionIcon color="red" onClick={reset}>
               <IconTrash />
-            </ActionIcon>
-            <ActionIcon color="blue" type="submit">
-              <IconCheck />
             </ActionIcon>
           </Group>
         </Stack>
