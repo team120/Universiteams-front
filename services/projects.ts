@@ -25,7 +25,7 @@ const GetProjects = async (params?: GetProjectsInput): Promise<ProjectsResult | 
       .concat(params?.universityId ? `universityId=${params.universityId}&` : '')
       .concat(params?.departmentId ? `departmentId=${params.departmentId}&` : '')
       .concat(params?.type ? `type=${params.type}&` : '')
-      .concat(params?.dateFrom ? `dateFrom=${params.dateFrom}&` : '')
+      .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
       .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
       .concat(
         params?.sortBy
