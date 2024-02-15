@@ -18,10 +18,10 @@ const ProjectItem = (props: ProjectItemProps) => {
   const pathname = usePathname()
 
   const handleChipClick = (id: number) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString());
-    currentUrlParams.set('interestIds', id.toString());
+    const currentUrlParams = new URLSearchParams(searchQuery.toString())
+    currentUrlParams.set('interestIds', id.toString())
     router.push(`${pathname}?${currentUrlParams.toString()}`)
-  };
+  }
 
   // Small loader needed?
   if (!project) return <InfoMessage text="No se ha podido cargar el projecto" type="error" />
@@ -65,7 +65,12 @@ const ProjectItem = (props: ProjectItemProps) => {
               </Chip>
             )}
             {project.interests.map((interest) => (
-              <Chip variant="light" key={interest.id} color="blue" size="md" onClick={() => handleChipClick(interest.id)}>
+              <Chip
+                variant="light"
+                key={interest.id}
+                color="blue"
+                size="md"
+                onClick={() => handleChipClick(interest.id)}>
                 {interest.name}
               </Chip>
             ))}
