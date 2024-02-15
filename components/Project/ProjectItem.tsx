@@ -3,6 +3,7 @@ import { Badge, Card, Chip, Group, Text, useMantineTheme } from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import Project from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 interface ProjectItemProps {
   project?: Project
@@ -11,6 +12,16 @@ interface ProjectItemProps {
 const ProjectItem = (props: ProjectItemProps) => {
   const theme = useMantineTheme()
   const project = props.project
+
+  const searchQuery = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const handleChipClick = (id: number) => {
+    const currentUrlParams = new URLSearchParams(searchQuery.toString());
+    currentUrlParams.set('interestIds', id.toString());
+    router.push(`${pathname}?${currentUrlParams.toString()}`)
+  };
 
   // Small loader needed?
   if (!project) return <InfoMessage text="No se ha podido cargar el projecto" type="error" />
@@ -54,7 +65,7 @@ const ProjectItem = (props: ProjectItemProps) => {
               </Chip>
             )}
             {project.interests.map((interest) => (
-              <Chip variant="light" key={interest.id} color="blue" size="md">
+              <Chip variant="light" key={interest.id} color="blue" size="md" onClick={() => handleChipClick(interest.id)}>
                 {interest.name}
               </Chip>
             ))}

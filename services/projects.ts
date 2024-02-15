@@ -9,6 +9,7 @@ export interface GetProjectsInput {
   generalSearchTerm?: string
   institutionId?: number
   departmentId?: number
+  interestIds?: number[]
   type?: string
   dateFrom?: Date
   isDown?: boolean
@@ -24,6 +25,7 @@ const GetProjects = async (params?: GetProjectsInput): Promise<ProjectsResult | 
       .concat(params?.generalSearchTerm ? `generalSearch=${params.generalSearchTerm}&` : '')
       .concat(params?.institutionId ? `institutionId=${params.institutionId}&` : '')
       .concat(params?.departmentId ? `departmentId=${params.departmentId}&` : '')
+      .concat(params?.interestIds ? `interestIds=${params.interestIds}&` : '')
       .concat(params?.type ? `type=${params.type}&` : '')
       .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
       .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
