@@ -49,9 +49,17 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const updateUrl = (values: typeof form.values) => {
-    const query = getUrlSearchParams(values)
-    router.push(`${pathname}?${query}`)
+  const updateUrl = (filters: { [key: string]: any }) => {
+    const currentUrlParams = new URLSearchParams(searchQuery.toString())
+    Object.keys(filters).forEach((key) => {
+      const value = filters[key]
+      if (value === null || value === undefined || value === '') {
+        currentUrlParams.delete(key)
+      } else {
+        currentUrlParams.set(key, value)
+      }
+    })
+    router.push(`${pathname}?${currentUrlParams.toString()}`)
   }
 
   const handleSortByChange = (value: string | null, op: ComboboxItem) => {
@@ -207,13 +215,3 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
 }
 
 export default ProjectFilterContent
-function getUrlSearchParams(values: { [x: string]: any }) {
-  // Remove keys with empty values
-  Object.keys(values).forEach((key) => {
-    if (values[key] === null || values[key] === undefined || values[key] === '') {
-      delete values[key]
-    }
-  })
-
-  return new URLSearchParams(values as any).toString()
-}
