@@ -29,6 +29,12 @@ const ProjectItem = (props: ProjectItemProps) => {
     router.push(`${pathname}?${currentUrlParams.toString()}`)
   }
 
+  const handleLeaderChipClick = (id: number) => {
+    const currentUrlParams = new URLSearchParams(searchQuery.toString())
+    currentUrlParams.set('user', id.toString())
+    router.push(`${pathname}?${currentUrlParams.toString()}`)
+  }
+
   // Small loader needed?
   if (!project) return <InfoMessage text="No se ha podido cargar el projecto" type="error" />
 
@@ -73,7 +79,11 @@ const ProjectItem = (props: ProjectItemProps) => {
         <Chip.Group>
           <Group gap={'0.5rem'} mt={'1rem'}>
             {project.enrollments && (
-              <Chip variant="light" color="blue" size="md">
+              <Chip
+                variant="light"
+                color="blue"
+                size="md"
+                onClick={() => handleLeaderChipClick(project.enrollments[0].user.id)}>
                 {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}, +
                 {project.userCount} personas
               </Chip>

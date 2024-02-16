@@ -96,6 +96,7 @@ const ProjectsPage: NextPage = () => {
         ? parseInt(searchQuery.get('department')!)
         : undefined,
       interestIds: searchQuery.getAll('interestIds').map((id) => parseInt(id)),
+      userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')!) : undefined,
       type: searchQuery.get('type') || undefined,
       isDown:
         searchQuery.get('isDown') === 'true'

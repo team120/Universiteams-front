@@ -11,6 +11,7 @@ export interface GetProjectsInput {
   facilityId?: number
   researchDepartmentId?: number
   interestIds?: number[]
+  userId?: number
   type?: string
   dateFrom?: Date
   isDown?: boolean
@@ -26,14 +27,9 @@ const GetProjects = async (params?: GetProjectsInput): Promise<ProjectsResult | 
       .concat(params?.generalSearchTerm ? `generalSearch=${params.generalSearchTerm}&` : '')
       .concat(params?.institutionId ? `institutionId=${params.institutionId}&` : '')
       .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
-      .concat(
-        params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : ''
-      )
-      .concat(
-        params?.interestIds && params?.interestIds.length > 0
-          ? `interestIds=${params.interestIds}&`
-          : ''
-      )
+      .concat(params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : '')
+      .concat(params?.interestIds && params?.interestIds.length > 0 ? `interestIds=${params.interestIds}&` : '')
+      .concat(params?.userId ? `userId=${params.userId}&` : '')
       .concat(params?.type ? `type=${params.type}&` : '')
       .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
       .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
