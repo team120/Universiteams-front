@@ -86,7 +86,6 @@ const ProjectsPage: NextPage = () => {
   }
 
   useEffect(() => {
-    console.log(searchQuery.toString())
     getProjects({
       generalSearchTerm: searchQuery.get('generalSearch') || undefined,
       institutionId: searchQuery.get('university')

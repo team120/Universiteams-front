@@ -17,9 +17,15 @@ const ProjectItem = (props: ProjectItemProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleChipClick = (id: number) => {
+  const handleInterestChipClick = (id: number) => {
     const currentUrlParams = new URLSearchParams(searchQuery.toString())
     currentUrlParams.set('interestIds', id.toString())
+    router.push(`${pathname}?${currentUrlParams.toString()}`)
+  }
+
+  const handleDepartmentBadgeClick = (id: number) => {
+    const currentUrlParams = new URLSearchParams(searchQuery.toString())
+    currentUrlParams.set('department', id.toString())
     router.push(`${pathname}?${currentUrlParams.toString()}`)
   }
 
@@ -50,9 +56,17 @@ const ProjectItem = (props: ProjectItemProps) => {
               {project.type} | {Dates.formatDate(project.creationDate)}
               {project.endDate ? ` - ${Dates.formatDate(project.endDate)}` : ''}
             </Text>
-            <Badge color="pink" variant="light">
-              {project.researchDepartments[0].name}
-            </Badge>
+            {project.researchDepartments.map((department) => (
+              <Badge
+                key={department.id}
+                color="pink"
+                variant="light"
+                component="button"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleDepartmentBadgeClick(department.id)}>
+                {department.name}
+              </Badge>
+            ))}
           </Group>
         </Card.Section>
 
@@ -70,7 +84,7 @@ const ProjectItem = (props: ProjectItemProps) => {
                 key={interest.id}
                 color="blue"
                 size="md"
-                onClick={() => handleChipClick(interest.id)}>
+                onClick={() => handleInterestChipClick(interest.id)}>
                 {interest.name}
               </Chip>
             ))}
