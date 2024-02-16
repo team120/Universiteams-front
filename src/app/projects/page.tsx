@@ -92,7 +92,8 @@ const ProjectsPage: NextPage = () => {
       institutionId: searchQuery.get('university')
         ? parseInt(searchQuery.get('university')!)
         : undefined,
-      departmentId: searchQuery.get('department')
+      facilityId: searchQuery.get('facility') ? parseInt(searchQuery.get('facility')!) : undefined,
+      researchDepartmentId: searchQuery.get('department')
         ? parseInt(searchQuery.get('department')!)
         : undefined,
       interestIds: searchQuery.getAll('interestIds').map((id) => parseInt(id)),

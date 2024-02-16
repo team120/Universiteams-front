@@ -8,7 +8,8 @@ const prefix = `${Env.backendAPI}/projects`
 export interface GetProjectsInput {
   generalSearchTerm?: string
   institutionId?: number
-  departmentId?: number
+  facilityId?: number
+  researchDepartmentId?: number
   interestIds?: number[]
   type?: string
   dateFrom?: Date
@@ -24,7 +25,8 @@ const GetProjects = async (params?: GetProjectsInput): Promise<ProjectsResult | 
       .concat(params ? '?' : '')
       .concat(params?.generalSearchTerm ? `generalSearch=${params.generalSearchTerm}&` : '')
       .concat(params?.institutionId ? `institutionId=${params.institutionId}&` : '')
-      .concat(params?.departmentId ? `researchDepartmentId=${params.departmentId}&` : '')
+      .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
+      .concat(params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : '')
       .concat(params?.interestIds ? `interestIds=${params.interestIds}&` : '')
       .concat(params?.type ? `type=${params.type}&` : '')
       .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
