@@ -4,6 +4,9 @@ import Dates from 'utils/string/Dates'
 import Project from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import ResearchDepartment from '@/entities/ResearchDepartment'
+import User from '@/entities/User'
+import Interest from '@/entities/Interest'
 
 interface ProjectItemProps {
   project?: Project
@@ -17,21 +20,21 @@ const ProjectItem = (props: ProjectItemProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleInterestChipClick = (id: number) => {
+  const handleInterestChipClick = (interest: Interest) => {
     const currentUrlParams = new URLSearchParams(searchQuery.toString())
-    currentUrlParams.set('interestIds', id.toString())
+    currentUrlParams.set('interest', `${interest.id}|${interest.name}`)
     router.push(`${pathname}?${currentUrlParams.toString()}`)
   }
 
-  const handleDepartmentBadgeClick = (id: number) => {
+  const handleDepartmentBadgeClick = (department: ResearchDepartment) => {
     const currentUrlParams = new URLSearchParams(searchQuery.toString())
-    currentUrlParams.set('department', id.toString())
+    currentUrlParams.set('department', `${department.id}|${department.name}`)
     router.push(`${pathname}?${currentUrlParams.toString()}`)
   }
 
-  const handleLeaderChipClick = (id: number) => {
+  const handleLeaderChipClick = (user: User) => {
     const currentUrlParams = new URLSearchParams(searchQuery.toString())
-    currentUrlParams.set('user', id.toString())
+    currentUrlParams.set('user', `${user.id}|${user.firstName} ${user.lastName}`)
     router.push(`${pathname}?${currentUrlParams.toString()}`)
   }
 
@@ -69,7 +72,7 @@ const ProjectItem = (props: ProjectItemProps) => {
                 variant="light"
                 component="button"
                 style={{ cursor: 'pointer' }}
-                onClick={() => handleDepartmentBadgeClick(department.id)}>
+                onClick={() => handleDepartmentBadgeClick(department)}>
                 {department.name}
               </Badge>
             ))}
@@ -83,7 +86,7 @@ const ProjectItem = (props: ProjectItemProps) => {
                 variant="light"
                 color="blue"
                 size="md"
-                onClick={() => handleLeaderChipClick(project.enrollments[0].user.id)}>
+                onClick={() => handleLeaderChipClick(project.enrollments[0].user)}>
                 {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}, +
                 {project.userCount} personas
               </Chip>
@@ -94,7 +97,7 @@ const ProjectItem = (props: ProjectItemProps) => {
                 key={interest.id}
                 color="blue"
                 size="md"
-                onClick={() => handleInterestChipClick(interest.id)}>
+                onClick={() => handleInterestChipClick(interest)}>
                 {interest.name}
               </Chip>
             ))}
