@@ -96,12 +96,16 @@ const ProjectsPage: NextPage = () => {
       institutionId: searchQuery.get('university')
         ? parseInt(searchQuery.get('university')?.split('|')[0]!)
         : undefined,
-      facilityId: searchQuery.get('facility') ? parseInt(searchQuery.get('facility')?.split('|')[0]!) : undefined,
+      facilityId: searchQuery.get('facility')
+        ? parseInt(searchQuery.get('facility')?.split('|')[0]!)
+        : undefined,
       researchDepartmentId: searchQuery.get('department')
         ? parseInt(searchQuery.get('department')?.split('|')[0]!)
         : undefined,
       interestIds: searchQuery.getAll('interestIds').map((id) => parseInt(id)),
-      userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')?.split('|')[0]!) : undefined,
+      userId: searchQuery.get('user')
+        ? parseInt(searchQuery.get('user')?.split('|')[0]!)
+        : undefined,
       type: searchQuery.get('type') || undefined,
       isDown:
         searchQuery.get('isDown') === 'true'
