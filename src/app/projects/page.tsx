@@ -9,13 +9,15 @@ import SelectItem from '@/entities/HelpTypes/SelectItem'
 import Filter from '@/components/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
 import ProjectsList from '@/components/Project/ProjectsList'
-import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Institutions } from '@/services/institutions'
+import { Facilities } from '@/services/facilities'
+import { ResearchDepartments } from '@/services/departments'
 
 const ProjectsPage: NextPage = () => {
   const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
   const [institutions, setInstitutions] = useState<SelectItem[]>()
-  const [facility, setFacility] = useState<SelectItem[]>()
+  const [facility, setFacilities] = useState<SelectItem[]>()
   const [departments, setDepartments] = useState<SelectItem[]>()
 
   const sortAttributes: SelectItem[] = [
@@ -27,15 +29,39 @@ const ProjectsPage: NextPage = () => {
 
   const searchQuery = useSearchParams()
 
-  const getInstitutions = async (searchQuery: ReadonlyURLSearchParams) => {
-    const institutions = await Institutions.GetInstitutions()
-
-    const institutionsSelectItems: SelectItem[] = []
+  const getFacilities = async (institutionId: number) => {
+    const facilities = await Facilities.GetFacilities({ institutionId: institutionId })
     const facilitiesSelectItems: SelectItem[] = []
+
+    if (facilities) {
+      facilities.forEach((facility) => {
+        facilitiesSelectItems.push({
+          attribute: facility.id.toString(),
+          displayName: facility.name,
+        } as SelectItem)
+      })
+      setFacilities(facilitiesSelectItems)
+    }
+  }
+
+  const getDepartments = async (facilityId: number) => {
+    const departments = await ResearchDepartments.GetResearchDepartments({ facilityId: facilityId })
     const departmentsSelectItems: SelectItem[] = []
 
-    const selectedInstitution = searchQuery.get('university')
-    const selectedFacility = searchQuery.get('facility')
+    if (departments) {
+      departments.forEach((department) => {
+        departmentsSelectItems.push({
+          attribute: department.id.toString(),
+          displayName: department.name,
+        } as SelectItem)
+      })
+      setDepartments(departmentsSelectItems)
+    }
+  }
+
+  const getInstitutions = async () => {
+    const institutions = await Institutions.GetInstitutions()
+    const institutionsSelectItems: SelectItem[] = []
 
     if (institutions) {
       institutions.forEach((institution) => {
@@ -43,41 +69,20 @@ const ProjectsPage: NextPage = () => {
           attribute: institution.id.toString(),
           displayName: institution.name,
         } as SelectItem)
-
-        if (
-          institution.facilities &&
-          selectedInstitution &&
-          institution.id === parseInt(selectedInstitution)
-        ) {
-          institution.facilities.forEach((facility) => {
-            facilitiesSelectItems.push({
-              attribute: facility.id.toString(),
-              displayName: facility.name,
-            } as SelectItem)
-
-            if (
-              facility.researchDepartments &&
-              selectedFacility &&
-              facility.id === parseInt(selectedFacility)
-            ) {
-              facility.researchDepartments.forEach((department) => {
-                departmentsSelectItems.push({
-                  attribute: department.id.toString(),
-                  displayName: department.name,
-                } as SelectItem)
-              })
-            }
-          })
-        }
       })
       setInstitutions(institutionsSelectItems)
-      setFacility(facilitiesSelectItems)
-      setDepartments(departmentsSelectItems)
     }
   }
 
   useEffect(() => {
-    getInstitutions(searchQuery)
+    const selectedInstitution = searchQuery.get('university')
+    const selectedFacility = searchQuery.get('facility')
+
+    Promise.all([
+      getInstitutions(),
+      selectedInstitution ? getFacilities(parseInt(selectedInstitution)) : Promise.resolve(),
+      selectedFacility ? getDepartments(parseInt(selectedFacility)) : Promise.resolve(),
+    ])
   }, [searchQuery])
 
   const getProjects = async (params: GetProjectsInput) => {
