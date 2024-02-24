@@ -94,18 +94,14 @@ const ProjectsPage: NextPage = () => {
     getProjects({
       generalSearchTerm: searchQuery.get('generalSearch') || undefined,
       institutionId: searchQuery.get('university')
-        ? parseInt(searchQuery.get('university')?.split('|')[0]!)
+        ? parseInt(searchQuery.get('university')!)
         : undefined,
-      facilityId: searchQuery.get('facility')
-        ? parseInt(searchQuery.get('facility')?.split('|')[0]!)
-        : undefined,
+      facilityId: searchQuery.get('facility') ? parseInt(searchQuery.get('facility')!) : undefined,
       researchDepartmentId: searchQuery.get('department')
-        ? parseInt(searchQuery.get('department')?.split('|')[0]!)
+        ? parseInt(searchQuery.get('department')!)
         : undefined,
       interestIds: searchQuery.getAll('interestIds').map((id) => parseInt(id)),
-      userId: searchQuery.get('user')
-        ? parseInt(searchQuery.get('user')?.split('|')[0]!)
-        : undefined,
+      userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')!) : undefined,
       type: searchQuery.get('type') || undefined,
       isDown:
         searchQuery.get('isDown') === 'true'

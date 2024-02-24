@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Select, Stack, Grid, ActionIcon, Group, Switch, ComboboxItem, Chip } from '@mantine/core'
+import { Select, Stack, Grid, ActionIcon, Group, Switch, ComboboxItem } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
@@ -37,9 +37,9 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
       generalSearch: searchQuery.get('generalSearch') ?? '',
       sortBy: searchQuery.get('sortBy') ?? '',
       inAscendingOrder: searchQuery.get('inAscendingOrder') !== 'false',
-      university: searchQuery.get('university')?.split('|')[0] ?? '',
-      facility: searchQuery.get('facility')?.split('|')[0] ?? '',
-      department: searchQuery.get('department')?.split('|')[0] ?? '',
+      university: searchQuery.get('university') ?? '',
+      facility: searchQuery.get('facility') ?? '',
+      department: searchQuery.get('department') ?? '',
       type: searchQuery.get('type') ?? '',
       isDown: searchQuery.get('isDown') === 'true',
       dateFrom: searchQuery.get('dateFrom') ? new Date(searchQuery.get('dateFrom')!) : null,
@@ -68,26 +68,17 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   }
 
   const handleUniversityChange = (value: string | null, op: ComboboxItem) => {
-    form.values.university = ''
-    if (op) {
-      form.values.university = `${op.value}|${op.label}`
-    }
+    form.values.university = value ?? ''
     updateUrl(form.values)
   }
 
   const handleFacilityChange = (value: string | null, op: ComboboxItem) => {
-    form.values.facility = ''
-    if (op) {
-      form.values.facility = `${op.value}|${op.label}`
-    }
+    form.values.facility = value ?? ''
     updateUrl(form.values)
   }
 
   const handleDepartmentChange = (value: string | null, op: ComboboxItem) => {
-    form.values.department = ''
-    if (op) {
-      form.values.department = `${op.value}|${op.label}`
-    }
+    form.values.department = value ?? ''
     updateUrl(form.values)
   }
 
@@ -190,7 +181,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
           <Select
             label="Tipo"
             placeholder='Ej: "Formal"'
-            data={['', 'Formal', 'Informal']}
+            data={['', 'Formal', 'No Formal']}
             clearable
             value={form.values.type}
             onChange={handleTypeChange}
