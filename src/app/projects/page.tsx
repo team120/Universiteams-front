@@ -26,9 +26,7 @@ const ProjectsPage: NextPage = () => {
 
   const sortAttributes: SelectItem[] = [
     { attribute: 'name', displayName: 'nombre' },
-    { attribute: 'facility', displayName: 'regional' },
     { attribute: 'creationDate', displayName: 'fecha creación' },
-    { attribute: 'researchDepartment', displayName: 'departamento' },
   ]
 
   const searchQuery = useSearchParams()
