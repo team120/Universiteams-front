@@ -28,21 +28,21 @@ const GetProjects = async (params?: GetProjectsInput): Promise<ProjectsResult | 
       .concat(params?.institutionId ? `institutionId=${params.institutionId}&` : '')
       .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
       .concat(
-        params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : ''
+      params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : ''
       )
       .concat(
-        params?.interestIds && params?.interestIds.length > 0
-          ? `interestIds=${params.interestIds}&`
-          : ''
+      params?.interestIds && params?.interestIds.length > 0
+        ? params.interestIds.map(id => `interestIds=${id}&`).join('')
+        : ''
       )
       .concat(params?.userId ? `userId=${params.userId}&` : '')
       .concat(params?.type ? `type=${params.type}&` : '')
       .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
       .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
       .concat(
-        params?.sortBy
-          ? `sortBy=${params.sortBy}&inAscendingOrder=${params?.inAscendingOrder ?? true}&`
-          : ''
+      params?.sortBy
+        ? `sortBy=${params.sortBy}&inAscendingOrder=${params?.inAscendingOrder ?? true}&`
+        : ''
       )
 
     console.log(url)

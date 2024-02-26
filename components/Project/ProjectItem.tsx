@@ -19,7 +19,9 @@ const ProjectItem = (props: ProjectItemProps) => {
 
   const handleInterestChipClick = (id: number) => {
     const currentUrlParams = new URLSearchParams(searchQuery.toString())
-    currentUrlParams.set('interestIds', id.toString())
+
+    currentUrlParams.append('interest', id.toString())
+
     router.push(`${pathname}?${currentUrlParams.toString()}`)
   }
 

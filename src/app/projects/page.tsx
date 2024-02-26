@@ -13,12 +13,14 @@ import { useSearchParams } from 'next/navigation'
 import { Institutions } from '@/services/institutions'
 import { Facilities } from '@/services/facilities'
 import { ResearchDepartments } from '@/services/departments'
+import { Interests } from '@/services/interests'
 
 const ProjectsPage: NextPage = () => {
   const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
   const [institutions, setInstitutions] = useState<SelectItem[]>()
   const [facility, setFacilities] = useState<SelectItem[]>()
   const [departments, setDepartments] = useState<SelectItem[]>()
+  const [interests, setInterests] = useState<SelectItem[]>()
 
   const sortAttributes: SelectItem[] = [
     { attribute: 'name', displayName: 'nombre' },
@@ -74,6 +76,21 @@ const ProjectsPage: NextPage = () => {
     }
   }
 
+  const getInterests = async () => {
+    const interests = await Interests.GetInterests()
+    const interestsSelectItems: SelectItem[] = []
+
+    if (interests) {
+      interests.forEach((interest) => {
+        interestsSelectItems.push({
+          attribute: interest.id.toString(),
+          displayName: interest.name,
+        } as SelectItem)
+      })
+    }
+    setInterests(interestsSelectItems)
+  }
+
   useEffect(() => {
     const selectedInstitution = searchQuery.get('university')
     const selectedFacility = searchQuery.get('facility')
@@ -82,6 +99,7 @@ const ProjectsPage: NextPage = () => {
       getInstitutions(),
       selectedInstitution ? getFacilities(parseInt(selectedInstitution)) : Promise.resolve(),
       selectedFacility ? getDepartments(parseInt(selectedFacility)) : Promise.resolve(),
+      getInterests(),
     ])
   }, [searchQuery])
 
@@ -100,7 +118,7 @@ const ProjectsPage: NextPage = () => {
       researchDepartmentId: searchQuery.get('department')
         ? parseInt(searchQuery.get('department')!)
         : undefined,
-      interestIds: searchQuery.getAll('interestIds').map((id) => parseInt(id)),
+      interestIds: searchQuery.getAll('interest').map((id) => parseInt(id)),
       userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')!) : undefined,
       type: searchQuery.get('type') || undefined,
       isDown:
@@ -129,6 +147,7 @@ const ProjectsPage: NextPage = () => {
             institutions={institutions ?? []}
             facilities={facility ?? []}
             departments={departments ?? []}
+            interests={interests ?? []}
           />
         }>
         <ProjectsList projects={projectsResult?.projects} />
