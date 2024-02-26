@@ -104,13 +104,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   }
 
   const handleDateInputChange = (value: Date | null) => {
-    Url.setUrlParam(
-      router,
-      pathname,
-      searchQuery,
-      'dateFrom',
-      value ? value.toISOString() : null
-    )
+    Url.setUrlParam(router, pathname, searchQuery, 'dateFrom', value ? value.toISOString() : null)
   }
 
   const handleOrderChange = () => {
