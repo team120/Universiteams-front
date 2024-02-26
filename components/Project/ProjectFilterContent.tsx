@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import {
   Select,
   Stack,
@@ -16,6 +16,7 @@ import { useMediaQuery } from '@mantine/hooks'
 import { IconArrowUp, IconArrowDown, IconTrash } from '@tabler/icons-react'
 import SelectItem from '@/entities/HelpTypes/SelectItem'
 import Theme from 'src/app/theme'
+import { Url } from '@/services/url'
 
 interface ProjectFilterContentProps {
   sortAttributes: SelectItem[]
@@ -64,66 +65,57 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleUrlParamChange = (paramName: string, value: string | null) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-
-    if (value === null || value === undefined || value === '') {
-      currentUrlParams.delete(paramName)
-    } else {
-      currentUrlParams.set(paramName, value)
-    }
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
-  }
-
   const handleSortByChange = (value: string | null, _: ComboboxItem) => {
-    handleUrlParamChange('sortBy', value)
+    Url.setUrlParam(router, pathname, searchQuery, 'sortBy', value)
   }
 
   const handleUniversityChange = (value: string | null, _: ComboboxItem) => {
-    handleUrlParamChange('university', value)
+    Url.setUrlParam(router, pathname, searchQuery, 'university', value)
   }
 
   const handleFacilityChange = (value: string | null, _: ComboboxItem) => {
-    handleUrlParamChange('facility', value)
+    Url.setUrlParam(router, pathname, searchQuery, 'facility', value)
   }
 
   const handleDepartmentChange = (value: string | null, _: ComboboxItem) => {
-    handleUrlParamChange('department', value)
+    Url.setUrlParam(router, pathname, searchQuery, 'department', value)
   }
 
   const handleUserChange = (value: string | null, _: ComboboxItem) => {
-    handleUrlParamChange('user', value)
+    Url.setUrlParam(router, pathname, searchQuery, 'user', value)
   }
 
   const handleInterestsChange = (value: string[]) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-
-    currentUrlParams.delete('interest') // Remove the old interests
-    if (value !== null && value !== undefined && value.length > 0) {
-      value.forEach((interest) => {
-        currentUrlParams.append('interest', interest)
-      })
-    }
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
+    Url.replaceArrayInUrl(router, pathname, searchQuery, 'interest', value)
   }
 
   const handleTypeChange = (value: string | null, op: ComboboxItem) => {
-    handleUrlParamChange('type', value)
+    Url.setUrlParam(router, pathname, searchQuery, 'type', value)
   }
 
   const handleIsDownChange = (event: ChangeEvent<HTMLInputElement>) => {
-    handleUrlParamChange('isDown', event.target.checked ? 'true' : 'false')
+    Url.setUrlParam(
+      router,
+      pathname,
+      searchQuery,
+      'isDown',
+      event.target.checked ? 'true' : 'false'
+    )
   }
 
   const handleDateInputChange = (value: Date | null) => {
-    handleUrlParamChange('dateFrom', value ? value.toISOString() : null)
+    Url.setUrlParam(
+      router,
+      pathname,
+      searchQuery,
+      'dateFrom',
+      value ? value.toISOString() : null
+    )
   }
 
   const handleOrderChange = () => {
     const value = !form.values.inAscendingOrder
-    handleUrlParamChange('inAscendingOrder', value.toString())
+    Url.setUrlParam(router, pathname, searchQuery, 'inAscendingOrder', value.toString())
   }
 
   const reset = () => {

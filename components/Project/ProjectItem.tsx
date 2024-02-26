@@ -4,6 +4,7 @@ import Dates from 'utils/string/Dates'
 import Project from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { Url } from '@/services/url'
 
 interface ProjectItemProps {
   project?: Project
@@ -18,23 +19,15 @@ const ProjectItem = (props: ProjectItemProps) => {
   const pathname = usePathname()
 
   const handleInterestChipClick = (id: number) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-
-    currentUrlParams.append('interest', id.toString())
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
+    Url.appendToUrl(router, pathname, searchQuery, 'interest', [id.toString()])
   }
 
   const handleDepartmentBadgeClick = (id: number) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-    currentUrlParams.set('department', id.toString())
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
+    Url.setUrlParam(router, pathname, searchQuery, 'department', id.toString())
   }
 
   const handleLeaderChipClick = (id: number) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-    currentUrlParams.set('user', id.toString())
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
+    Url.setUrlParam(router, pathname, searchQuery, 'user', id.toString())
   }
 
   // Small loader needed?

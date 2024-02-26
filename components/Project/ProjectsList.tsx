@@ -16,7 +16,7 @@ const ProjectsList = ({ projects }: ProjectsListProps) => {
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   if (projects === undefined) return <SkeletonFull />
-  if (projects.length == 0) return <InfoMessage text="Aún no tienes projectos" type="info" />
+  if (projects.length == 0) return <InfoMessage text="Aún no tienes proyectos" type="info" />
 
   return (
     <Suspense fallback={<SkeletonFull />}>
