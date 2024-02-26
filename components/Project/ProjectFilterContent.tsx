@@ -64,56 +64,36 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleSortByChange = (value: string | null, _: ComboboxItem) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-
-    if (value !== null && value !== undefined && value !== '') {
-      currentUrlParams.set('sortBy', value)
-    }
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
-  }
-
-  const handleUniversityChange = (value: string | null, _: ComboboxItem) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-
-    if (value !== null && value !== undefined && value !== '') {
-      currentUrlParams.set('university', value)
-    }
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
-  }
-
-  const handleFacilityChange = (value: string | null, _: ComboboxItem) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-
-    if (value !== null && value !== undefined && value !== '') {
-      currentUrlParams.set('facility', value)
-    }
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
-  }
-
-  const handleDepartmentChange = (value: string | null, _: ComboboxItem) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-
-    if (value !== null && value !== undefined && value !== '') {
-      currentUrlParams.set('department', value)
-    }
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
-  }
-
-  const handleUserChange = (value: string | null, _: ComboboxItem) => {
+  const handleUrlParamChange = (paramName: string, value: string | null) => {
     const currentUrlParams = new URLSearchParams(searchQuery.toString())
 
     if (value === null || value === undefined || value === '') {
-      currentUrlParams.delete('user')
+      currentUrlParams.delete(paramName)
     } else {
-      currentUrlParams.set('user', value)
+      currentUrlParams.set(paramName, value)
     }
 
     router.push(`${pathname}?${currentUrlParams.toString()}`)
+  }
+
+  const handleSortByChange = (value: string | null, _: ComboboxItem) => {
+    handleUrlParamChange('sortBy', value)
+  }
+
+  const handleUniversityChange = (value: string | null, _: ComboboxItem) => {
+    handleUrlParamChange('university', value)
+  }
+
+  const handleFacilityChange = (value: string | null, _: ComboboxItem) => {
+    handleUrlParamChange('facility', value)
+  }
+
+  const handleDepartmentChange = (value: string | null, _: ComboboxItem) => {
+    handleUrlParamChange('department', value)
+  }
+
+  const handleUserChange = (value: string | null, _: ComboboxItem) => {
+    handleUrlParamChange('user', value)
   }
 
   const handleInterestsChange = (value: string[]) => {
@@ -130,47 +110,25 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   }
 
   const handleTypeChange = (value: string | null, op: ComboboxItem) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-
-    if (value !== null && value !== undefined && value !== '') {
-      currentUrlParams.set('type', value)
-    }
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
+    handleUrlParamChange('type', value)
   }
 
   const handleIsDownChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-
-    const value = event.target.checked
-    if (value !== null && value !== undefined) {
-      currentUrlParams.set('isDown', value.toString())
-    }
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
+    handleUrlParamChange('isDown', event.target.checked ? 'true' : 'false')
   }
 
   const handleDateInputChange = (value: Date | null) => {
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
+    handleUrlParamChange('dateFrom', value ? value.toISOString() : null)
+  }
 
-    if (value !== null && value !== undefined) {
-      currentUrlParams.set('dateFrom', value.toISOString())
-    }
-
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
+  const handleOrderChange = () => {
+    const value = !form.values.inAscendingOrder
+    handleUrlParamChange('inAscendingOrder', value.toString())
   }
 
   const reset = () => {
     form.reset()
     router.push(`${pathname}`)
-  }
-
-  const handleOrderChange = () => {
-    const value = !form.values.inAscendingOrder
-
-    const currentUrlParams = new URLSearchParams(searchQuery.toString())
-    currentUrlParams.set('inAscendingOrder', value.toString())
-    router.push(`${pathname}?${currentUrlParams.toString()}`)
   }
 
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -260,7 +218,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
 
           <MultiSelect
             label="Intereses"
-            placeholder='Ej: "Desarrollo Web"'
+            placeholder={form.values.interests.length === 0 ? 'Ej: "Inteligencia Artificial"' : ''}
             data={[{ value: '', label: '' }].concat(
               props.interests.map((attr) => ({
                 value: attr.attribute,
