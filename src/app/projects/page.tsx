@@ -14,6 +14,7 @@ import { Institutions } from '@/services/institutions'
 import { Facilities } from '@/services/facilities'
 import { ResearchDepartments } from '@/services/departments'
 import { Interests } from '@/services/interests'
+import { Users } from '@/services/user'
 
 const ProjectsPage: NextPage = () => {
   const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
@@ -21,6 +22,7 @@ const ProjectsPage: NextPage = () => {
   const [facility, setFacilities] = useState<SelectItem[]>()
   const [departments, setDepartments] = useState<SelectItem[]>()
   const [interests, setInterests] = useState<SelectItem[]>()
+  const [users, setUsers] = useState<SelectItem[]>()
 
   const sortAttributes: SelectItem[] = [
     { attribute: 'name', displayName: 'nombre' },
@@ -30,6 +32,21 @@ const ProjectsPage: NextPage = () => {
   ]
 
   const searchQuery = useSearchParams()
+
+  const getUsers = async () => {
+    const users = await Users.GetUsers()
+    const usersSelectItems: SelectItem[] = []
+
+    if (users) {
+      users.forEach((user) => {
+        usersSelectItems.push({
+          attribute: user.id.toString(),
+          displayName: `${user.firstName} ${user.lastName}`,
+        } as SelectItem)
+      })
+      setUsers(usersSelectItems)
+    }
+  }
 
   const getFacilities = async (institutionId: number) => {
     const facilities = await Facilities.GetFacilities({ institutionId: institutionId })
@@ -100,6 +117,7 @@ const ProjectsPage: NextPage = () => {
       selectedInstitution ? getFacilities(parseInt(selectedInstitution)) : Promise.resolve(),
       selectedFacility ? getDepartments(parseInt(selectedFacility)) : Promise.resolve(),
       getInterests(),
+      getUsers(),
     ])
   }, [searchQuery])
 
@@ -148,6 +166,7 @@ const ProjectsPage: NextPage = () => {
             facilities={facility ?? []}
             departments={departments ?? []}
             interests={interests ?? []}
+            users={users ?? []}
           />
         }>
         <ProjectsList projects={projectsResult?.projects} />
