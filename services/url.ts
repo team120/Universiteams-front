@@ -7,7 +7,7 @@ const setUrlParam = (
   searchQuery: ReadonlyURLSearchParams,
   paramName: string,
   value: string | null
-) => {
+): ReadonlyURLSearchParams => {
   const currentUrlParams = new URLSearchParams(searchQuery.toString())
 
   if (value === null || value === undefined || value === '') {
@@ -17,6 +17,8 @@ const setUrlParam = (
   }
 
   router.push(`${pathname}?${currentUrlParams.toString()}`)
+
+  return currentUrlParams as ReadonlyURLSearchParams;
 }
 
 const appendToUrl = (

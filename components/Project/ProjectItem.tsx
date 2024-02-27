@@ -18,16 +18,41 @@ const ProjectItem = (props: ProjectItemProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleInterestChipClick = (id: number) => {
-    Url.appendToUrl(router, pathname, searchQuery, 'interest', [id.toString()])
+  const handleInterestChipClick = (interestId: number) => {
+    Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
   }
 
-  const handleDepartmentBadgeClick = (id: number) => {
-    Url.setUrlParam(router, pathname, searchQuery, 'department', id.toString())
+  const handleDepartmentBadgeClick = (
+    institutionId: number,
+    facilityId: number,
+    departmentId: number
+  ) => {
+    let modifiedSearchQuery = searchQuery
+    modifiedSearchQuery = Url.setUrlParam(
+      router,
+      pathname,
+      searchQuery,
+      'university',
+      institutionId.toString()
+    )
+    modifiedSearchQuery = Url.setUrlParam(
+      router,
+      pathname,
+      modifiedSearchQuery,
+      'facility',
+      facilityId.toString()
+    )
+    modifiedSearchQuery = Url.setUrlParam(
+      router,
+      pathname,
+      modifiedSearchQuery,
+      'department',
+      departmentId.toString()
+    )
   }
 
-  const handleLeaderChipClick = (id: number) => {
-    Url.setUrlParam(router, pathname, searchQuery, 'user', id.toString())
+  const handleLeaderChipClick = (userId: number) => {
+    Url.setUrlParam(router, pathname, searchQuery, 'user', userId.toString())
   }
 
   // Small loader needed?
@@ -64,7 +89,13 @@ const ProjectItem = (props: ProjectItemProps) => {
                 variant="light"
                 component="button"
                 style={{ cursor: 'pointer' }}
-                onClick={() => handleDepartmentBadgeClick(department.id)}>
+                onClick={() =>
+                  handleDepartmentBadgeClick(
+                    department.facility.institution.id,
+                    department.facility.id,
+                    department.id
+                  )
+                }>
                 {department.name}
               </Badge>
             ))}
