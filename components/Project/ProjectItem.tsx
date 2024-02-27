@@ -96,8 +96,8 @@ const ProjectItem = (props: ProjectItemProps) => {
                     department.id
                   )
                 }>
-                {department.facility.institution.abbreviation} | {department.facility.abbreviation} |{' '}
-                {department.name}
+                {department.facility.institution.abbreviation} | {department.facility.abbreviation}{' '}
+                | {department.name}
               </Badge>
             ))}
           </Group>

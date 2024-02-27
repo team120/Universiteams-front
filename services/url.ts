@@ -18,7 +18,7 @@ const setUrlParam = (
 
   router.push(`${pathname}?${currentUrlParams.toString()}`)
 
-  return currentUrlParams as ReadonlyURLSearchParams;
+  return currentUrlParams as ReadonlyURLSearchParams
 }
 
 const appendToUrl = (
