@@ -24,7 +24,7 @@ const Layout = (props: Layout) => {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: { sm: 300, lg: 400 }, breakpoint: 'sm', collapsed: { mobile: !opened } }}>
+      navbar={{ width: { base: 270 }, breakpoint: 'sm', collapsed: { mobile: !opened } }}>
       <AppShell.Header>
         <Header opened={opened} toggle={toggle} toggleColorScheme={toggleColorScheme} />
       </AppShell.Header>
