@@ -7,7 +7,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useDebouncedValue } from '@mantine/hooks'
 
 interface SearchBarProps {
-  endpoint: string
   width?: number
 }
 

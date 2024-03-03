@@ -25,7 +25,7 @@ const Header = (props: HeaderProps) => {
         </ActionIcon>
         <Container fluid>
           <Center>
-            <SearchBar endpoint="projects" />
+            <SearchBar />
           </Center>
         </Container>
       </Group>
