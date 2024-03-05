@@ -1,10 +1,12 @@
-import React, { Suspense } from 'react'
-import { Badge, Card, Chip, Group, Text, useMantineTheme } from '@mantine/core'
+import React from 'react'
+import { ActionIcon, Badge, Card, Chip, Group, Text, useMantineTheme } from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import Project from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
+import { Projects } from '@/services/projects'
+import { Bookmark } from 'tabler-icons-react'
 
 interface ProjectItemProps {
   project?: Project
@@ -20,6 +22,10 @@ const ProjectItem = (props: ProjectItemProps) => {
 
   const handleInterestChipClick = (interestId: number) => {
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
+  }
+
+  const handleBookmarkClick = (projectId: number) => {
+    Projects.Bookmark(projectId)
   }
 
   const handleDepartmentBadgeClick = (
@@ -66,6 +72,7 @@ const ProjectItem = (props: ProjectItemProps) => {
       p={'1rem'}
       radius="md"
       style={{
+        position: 'relative', // This is necessary for absolute positioning of the child
         display: 'flex',
         flexDirection: 'row',
         width: '94%',
@@ -127,6 +134,18 @@ const ProjectItem = (props: ProjectItemProps) => {
             ))}
           </Group>
         </Chip.Group>
+
+        <ActionIcon
+          variant="transparent"
+          aria-label="Guardar en marcadores"
+          onClick={() => handleBookmarkClick(project.id)}
+          style={{
+            position: 'absolute',
+            top: '-0.2rem', // Adjust as needed
+            right: '-0.2rem', // Adjust as needed
+          }}>
+          <Bookmark style={{width: '100%', height: '100%'}} />
+        </ActionIcon>
       </div>
     </Card>
   )

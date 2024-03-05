@@ -54,4 +54,15 @@ const GetProjects = async (params?: GetProjectsInput): Promise<ProjectsResult | 
   }
 }
 
-export const Projects = { GetProjects }
+const Bookmark = async (projectId: number): Promise<boolean> => {
+  try {
+    const url = `${prefix}/bookmark/${projectId}`
+    const result = await axios.post(url, { withCredentials: true })
+    return result.status === 200
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+}
+
+export const Projects = { GetProjects, Bookmark }
