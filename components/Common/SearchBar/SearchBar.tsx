@@ -3,11 +3,11 @@ import { CloseButton, TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 
 import { Url } from '@/services/url'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useDebouncedValue } from '@mantine/hooks'
 
 interface SearchBarProps {
-  width?: number
+  width?: number // You might consider removing this if you're going to use all space
 }
 
 const SearchBar = (props: SearchBarProps) => {
@@ -16,11 +16,8 @@ const SearchBar = (props: SearchBarProps) => {
   const searchQuery = useSearchParams()
 
   const [generalSearch, setGeneralSearch] = useState('')
+  const [isFocused, setIsFocused] = useState(false)
   const [debouncedGeneralSearch] = useDebouncedValue(generalSearch, 400)
-
-  // Set searchBar width
-  const widthEmpty = props.width ?? 55
-  const widthWithText = widthEmpty - 5
 
   const searchNowButton = () => {
     Url.setUrlParam(router, pathname, searchQuery, 'generalSearch', generalSearch)
@@ -34,9 +31,13 @@ const SearchBar = (props: SearchBarProps) => {
     <>
       <TextInput
         placeholder="Buscar..."
-        style={{ width: generalSearch ? `${widthWithText}vw` : `${widthEmpty}vw` }}
+        style={{
+          width: isFocused || generalSearch ? '100%' : '55vw', // Adjust this value as needed
+        }}
         value={generalSearch}
         onChange={(event) => setGeneralSearch(event.currentTarget.value)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         leftSection={<IconSearch size={16} />}
         rightSectionPointerEvents="all"
         rightSection={
