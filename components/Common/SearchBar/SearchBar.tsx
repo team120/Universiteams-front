@@ -30,7 +30,7 @@ const SearchBar = () => {
       <TextInput
         placeholder="Buscar..."
         style={{
-          width: isMobile ? '100%' : '55vw',
+          width: isMobile ? '70vw' : '55vw',
         }}
         value={generalSearch}
         onChange={(event) => setGeneralSearch(event.currentTarget.value)}
