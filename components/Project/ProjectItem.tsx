@@ -1,12 +1,12 @@
-import React from 'react'
-import { ActionIcon, Badge, Card, Chip, Group, Text, useMantineTheme } from '@mantine/core'
+import React, { useState } from 'react'
+import { ActionIcon, Badge, Card, Chip, Flex, Group, Text, useMantineTheme } from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import Project from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
 import { Projects } from '@/services/projects'
-import { Bookmark } from 'tabler-icons-react'
+import { IconBookmark, IconBookmarkFilled } from '@tabler/icons-react'
 
 interface ProjectItemProps {
   project?: Project
@@ -16,6 +16,9 @@ const ProjectItem = (props: ProjectItemProps) => {
   const theme = useMantineTheme()
   const project = props.project
 
+  const [isBookmarked, setIsBookmarked] = useState(project?.isBookmarked)
+  const [bookmarkCount, setBookmarkCount] = useState(project?.bookmarkCount)
+
   const searchQuery = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -24,8 +27,20 @@ const ProjectItem = (props: ProjectItemProps) => {
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
   }
 
-  const handleBookmarkClick = (projectId: number) => {
-    Projects.Bookmark(projectId)
+  const handleBookmarkClick = async (projectId: number) => {
+    if (isBookmarked) {
+      const result = await Projects.unbookmark(projectId)
+      if (result) {
+        setIsBookmarked(false)
+        bookmarkCount !== undefined && setBookmarkCount(bookmarkCount - 1)
+      }
+    } else {
+      const result = await Projects.bookmark(projectId)
+      if (result) {
+        setIsBookmarked(true)
+        bookmarkCount !== undefined && setBookmarkCount(bookmarkCount + 1)
+      }
+    }
   }
 
   const handleDepartmentBadgeClick = (
@@ -135,17 +150,17 @@ const ProjectItem = (props: ProjectItemProps) => {
           </Group>
         </Chip.Group>
 
-        <ActionIcon
-          variant="transparent"
-          aria-label="Guardar en marcadores"
-          onClick={() => handleBookmarkClick(project.id)}
-          style={{
-            position: 'absolute',
-            top: '-0.2rem', // Adjust as needed
-            right: '-0.2rem', // Adjust as needed
-          }}>
-          <Bookmark style={{width: '100%', height: '100%'}} />
-        </ActionIcon>
+        <Flex justify="flex-end" align="center">
+          <ActionIcon
+            variant="transparent"
+            aria-label="Guardar en marcadores"
+            onClick={() => handleBookmarkClick(project.id)}
+            size="lg"
+            color={isBookmarked ? 'blue' : 'gray'}>
+            {isBookmarked ? <IconBookmarkFilled /> : <IconBookmark />}
+          </ActionIcon>
+          <Text size="sm">{bookmarkCount}</Text>
+        </Flex>
       </div>
     </Card>
   )

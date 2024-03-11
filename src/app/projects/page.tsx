@@ -120,7 +120,7 @@ const ProjectsPage: NextPage = () => {
   }, [searchQuery])
 
   const getProjects = async (params: GetProjectsInput) => {
-    const result = await Projects.GetProjects(params)
+    const result = await Projects.getProjects(params)
     setProjectsResult(result)
   }
 
