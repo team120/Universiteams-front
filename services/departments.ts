@@ -23,5 +23,5 @@ export const ResearchDepartments = {
       console.log(error)
       return
     }
-  }
+  },
 }

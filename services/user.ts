@@ -14,5 +14,5 @@ export const Users = {
       console.log(error)
       return
     }
-  }
+  },
 }

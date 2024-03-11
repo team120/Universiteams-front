@@ -15,5 +15,5 @@ export const Institutions = {
       console.log(error)
       return
     }
-  }
+  },
 }

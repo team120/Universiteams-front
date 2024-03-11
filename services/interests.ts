@@ -14,5 +14,5 @@ export const Interests = {
       console.log(error)
       return
     }
-  }
+  },
 }

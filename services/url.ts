@@ -57,5 +57,5 @@ export const Url = {
     })
 
     router.push(`${pathname}?${currentUrlParams.toString()}`)
-  }
+  },
 }
