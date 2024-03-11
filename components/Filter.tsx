@@ -10,7 +10,7 @@ interface FilterProps {
 }
 
 const Filter = (props: FilterProps) => {
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
   const [opened, setOpened] = useState(false)
 
   useEffect(() => {

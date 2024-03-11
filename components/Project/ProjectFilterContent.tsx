@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect } from 'react'
-import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import {
   Select,
   Stack,
@@ -117,7 +117,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     router.push(`${pathname}`)
   }
 
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
 
   return (
     <>
