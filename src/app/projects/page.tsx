@@ -143,6 +143,10 @@ const ProjectsPage: NextPage = () => {
           : searchQuery.get('isDown') === 'false'
           ? false
           : undefined,
+      isBookmarked:
+        searchQuery.get('isBookmarked') === undefined
+          ? undefined
+          : searchQuery.get('isBookmarked') === 'true',
       dateFrom: searchQuery.get('dateFrom') ? new Date(searchQuery.get('dateFrom')!) : undefined,
       sortBy: searchQuery.get('sortBy') || undefined,
       inAscendingOrder:

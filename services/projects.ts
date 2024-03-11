@@ -15,6 +15,7 @@ export interface GetProjectsInput {
   type?: string
   dateFrom?: Date
   isDown?: boolean
+  isBookmarked?: boolean
   sortBy?: string
   inAscendingOrder?: boolean
 }
@@ -40,6 +41,7 @@ export const Projects = {
         .concat(params?.type ? `type=${params.type}&` : '')
         .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
         .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
+        .concat(params?.isBookmarked ? `isBookmarked=${params.isBookmarked}&` : '')
         .concat(
           params?.sortBy
             ? `sortBy=${params.sortBy}&inAscendingOrder=${params?.inAscendingOrder ?? true}&`

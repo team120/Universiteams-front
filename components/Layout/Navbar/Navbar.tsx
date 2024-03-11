@@ -3,8 +3,11 @@ import { AppShell, Divider, ScrollArea } from '@mantine/core'
 import NavbarItem from './NavbarItem'
 import {
   IconAlertCircle,
+  IconBookmark,
   IconBuildingCommunity,
   IconFileDescription,
+  IconFolder,
+  IconFolderBolt,
   IconHome,
   IconShare,
   IconStar,
@@ -37,6 +40,12 @@ const Navbar = () => {
       <AppShell.Section>
         <NavbarItem text="UPM Feed" link="feed" icon={<IconHome size={iconSize} />} />
         <NavbarItem text="Mis Solicitudes" link="solicitudes" icon={<IconStar size={iconSize} />} />
+        <NavbarItem text="Proyectos" link="projects" icon={<IconFolder size={iconSize} />} />
+        <NavbarItem
+          text="Proyectos Marcados"
+          link="projects?isBookmarked=true"
+          icon={<IconBookmark size={iconSize} />}
+        />
       </AppShell.Section>
       <Divider />
       <AppShell.Section grow component={ScrollArea}>
