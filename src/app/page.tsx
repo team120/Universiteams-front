@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   const [dataTest, setDataTest] = useState<Institution[]>([])
 
   const getInstitutions = async () => {
-    const institutions: Institution[] | undefined = await Institutions.GetInstitutions()
+    const institutions: Institution[] | undefined = await Institutions.getInstitutions()
     if (institutions) setDataTest(institutions)
   }
 

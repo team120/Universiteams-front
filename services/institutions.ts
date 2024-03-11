@@ -5,16 +5,15 @@ import Institution from '@/entities/Institution'
 
 const prefix = `${Env.backendAPI}/institutions`
 
-// Find all institutions
-const GetInstitutions = async (): Promise<Institution[] | undefined> => {
-  try {
-    const url = `${prefix}/`
-    const result = await axios.get<Institution[]>(url)
-    return result.data
-  } catch (error) {
-    console.log(error)
-    return
+export const Institutions = {
+  getInstitutions: async (): Promise<Institution[] | undefined> => {
+    try {
+      const url = `${prefix}/`
+      const result = await axios.get<Institution[]>(url)
+      return result.data
+    } catch (error) {
+      console.log(error)
+      return
+    }
   }
 }
-
-export const Institutions = { GetInstitutions }
