@@ -32,7 +32,7 @@ const ProjectsPage: NextPage = () => {
   const searchQuery = useSearchParams()
 
   const getUsers = async () => {
-    const users = await Users.GetUsers()
+    const users = await Users.getUsers()
     const usersSelectItems: SelectItem[] = []
 
     if (users) {
@@ -47,7 +47,7 @@ const ProjectsPage: NextPage = () => {
   }
 
   const getFacilities = async (institutionId: number) => {
-    const facilities = await Facilities.GetFacilities({ institutionId: institutionId })
+    const facilities = await Facilities.getFacilities({ institutionId: institutionId })
     const facilitiesSelectItems: SelectItem[] = []
 
     if (facilities) {
@@ -62,7 +62,7 @@ const ProjectsPage: NextPage = () => {
   }
 
   const getDepartments = async (facilityId: number) => {
-    const departments = await ResearchDepartments.GetResearchDepartments({ facilityId: facilityId })
+    const departments = await ResearchDepartments.getResearchDepartments({ facilityId: facilityId })
     const departmentsSelectItems: SelectItem[] = []
 
     if (departments) {
@@ -77,7 +77,7 @@ const ProjectsPage: NextPage = () => {
   }
 
   const getInstitutions = async () => {
-    const institutions = await Institutions.GetInstitutions()
+    const institutions = await Institutions.getInstitutions()
     const institutionsSelectItems: SelectItem[] = []
 
     if (institutions) {
@@ -92,7 +92,7 @@ const ProjectsPage: NextPage = () => {
   }
 
   const getInterests = async () => {
-    const interests = await Interests.GetInterests()
+    const interests = await Interests.getInterests()
     const interestsSelectItems: SelectItem[] = []
 
     if (interests) {
@@ -120,7 +120,7 @@ const ProjectsPage: NextPage = () => {
   }, [searchQuery])
 
   const getProjects = async (params: GetProjectsInput) => {
-    const result = await Projects.GetProjects(params)
+    const result = await Projects.getProjects(params)
     setProjectsResult(result)
   }
 
@@ -143,6 +143,10 @@ const ProjectsPage: NextPage = () => {
           : searchQuery.get('isDown') === 'false'
           ? false
           : undefined,
+      isFavorite:
+        searchQuery.get('isFavorite') === undefined
+          ? undefined
+          : searchQuery.get('isFavorite') === 'true',
       dateFrom: searchQuery.get('dateFrom') ? new Date(searchQuery.get('dateFrom')!) : undefined,
       sortBy: searchQuery.get('sortBy') || undefined,
       inAscendingOrder:

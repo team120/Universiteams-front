@@ -1,10 +1,12 @@
-import React, { Suspense } from 'react'
-import { Badge, Card, Chip, Group, Text, useMantineTheme } from '@mantine/core'
+import React, { useState } from 'react'
+import { ActionIcon, Badge, Card, Chip, Flex, Group, Text, useMantineTheme } from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import Project from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
+import { Projects } from '@/services/projects'
+import { IconHeart, IconHeartFilled } from '@tabler/icons-react'
 
 interface ProjectItemProps {
   project?: Project
@@ -14,12 +16,31 @@ const ProjectItem = (props: ProjectItemProps) => {
   const theme = useMantineTheme()
   const project = props.project
 
+  const [isFavorite, setIsFavorite] = useState(project?.isFavorite)
+  const [favoriteCount, setFavoriteCount] = useState(project?.favoriteCount)
+
   const searchQuery = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
   const handleInterestChipClick = (interestId: number) => {
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
+  }
+
+  const handlefavoriteClick = async (projectId: number) => {
+    if (isFavorite) {
+      const result = await Projects.unfavorite(projectId)
+      if (result) {
+        setIsFavorite(false)
+        favoriteCount !== undefined && setFavoriteCount(favoriteCount - 1)
+      }
+    } else {
+      const result = await Projects.favorite(projectId)
+      if (result) {
+        setIsFavorite(true)
+        favoriteCount !== undefined && setFavoriteCount(favoriteCount + 1)
+      }
+    }
   }
 
   const handleDepartmentBadgeClick = (
@@ -66,6 +87,7 @@ const ProjectItem = (props: ProjectItemProps) => {
       p={'1rem'}
       radius="md"
       style={{
+        position: 'relative', // This is necessary for absolute positioning of the child
         display: 'flex',
         flexDirection: 'row',
         width: '94%',
@@ -127,6 +149,18 @@ const ProjectItem = (props: ProjectItemProps) => {
             ))}
           </Group>
         </Chip.Group>
+
+        <Flex justify="flex-end" align="center">
+          <ActionIcon
+            variant="transparent"
+            aria-label="Guardar en marcadores"
+            onClick={() => handlefavoriteClick(project.id)}
+            size="lg"
+            color={isFavorite ? 'blue' : 'gray'}>
+            {isFavorite ? <IconHeartFilled /> : <IconHeart />}
+          </ActionIcon>
+          <Text size="sm">{favoriteCount}</Text>
+        </Flex>
       </div>
     </Card>
   )

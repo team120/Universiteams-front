@@ -5,6 +5,8 @@ import {
   IconAlertCircle,
   IconBuildingCommunity,
   IconFileDescription,
+  IconFolderHeart,
+  IconFolderStar,
   IconFolders,
   IconHome,
   IconShare,
@@ -37,8 +39,13 @@ const Navbar = () => {
       <Divider />
       <AppShell.Section>
         <NavbarItem text="UPM Feed" link="feed" icon={<IconHome size={iconSize} />} />
-        <NavbarItem text="Proyectos" link="projects" icon={<IconFolders size={iconSize} />} />
         <NavbarItem text="Mis Solicitudes" link="solicitudes" icon={<IconStar size={iconSize} />} />
+        <NavbarItem text="Proyectos" link="projects" icon={<IconFolders size={iconSize} />} />
+        <NavbarItem
+          text="Proyectos Favoritos"
+          link="projects?isFavorite=true"
+          icon={<IconFolderHeart size={iconSize} />}
+        />
       </AppShell.Section>
       <Divider />
       <AppShell.Section grow component={ScrollArea}>
