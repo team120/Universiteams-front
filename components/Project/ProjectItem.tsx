@@ -6,7 +6,7 @@ import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
 import { Projects } from '@/services/projects'
-import { IconBookmark, IconBookmarkFilled } from '@tabler/icons-react'
+import { IconHeart, IconHeartFilled } from '@tabler/icons-react'
 
 interface ProjectItemProps {
   project?: Project
@@ -16,8 +16,8 @@ const ProjectItem = (props: ProjectItemProps) => {
   const theme = useMantineTheme()
   const project = props.project
 
-  const [isBookmarked, setIsBookmarked] = useState(project?.isBookmarked)
-  const [bookmarkCount, setBookmarkCount] = useState(project?.bookmarkCount)
+  const [isFavorite, setIsFavorite] = useState(project?.isFavorite)
+  const [favoriteCount, setFavoriteCount] = useState(project?.favoriteCount)
 
   const searchQuery = useSearchParams()
   const router = useRouter()
@@ -27,18 +27,18 @@ const ProjectItem = (props: ProjectItemProps) => {
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
   }
 
-  const handleBookmarkClick = async (projectId: number) => {
-    if (isBookmarked) {
-      const result = await Projects.unbookmark(projectId)
+  const handlefavoriteClick = async (projectId: number) => {
+    if (isFavorite) {
+      const result = await Projects.unfavorite(projectId)
       if (result) {
-        setIsBookmarked(false)
-        bookmarkCount !== undefined && setBookmarkCount(bookmarkCount - 1)
+        setIsFavorite(false)
+        favoriteCount !== undefined && setFavoriteCount(favoriteCount - 1)
       }
     } else {
-      const result = await Projects.bookmark(projectId)
+      const result = await Projects.favorite(projectId)
       if (result) {
-        setIsBookmarked(true)
-        bookmarkCount !== undefined && setBookmarkCount(bookmarkCount + 1)
+        setIsFavorite(true)
+        favoriteCount !== undefined && setFavoriteCount(favoriteCount + 1)
       }
     }
   }
@@ -154,12 +154,12 @@ const ProjectItem = (props: ProjectItemProps) => {
           <ActionIcon
             variant="transparent"
             aria-label="Guardar en marcadores"
-            onClick={() => handleBookmarkClick(project.id)}
+            onClick={() => handlefavoriteClick(project.id)}
             size="lg"
-            color={isBookmarked ? 'blue' : 'gray'}>
-            {isBookmarked ? <IconBookmarkFilled /> : <IconBookmark />}
+            color={isFavorite ? 'blue' : 'gray'}>
+            {isFavorite ? <IconHeartFilled /> : <IconHeart />}
           </ActionIcon>
-          <Text size="sm">{bookmarkCount}</Text>
+          <Text size="sm">{favoriteCount}</Text>
         </Flex>
       </div>
     </Card>

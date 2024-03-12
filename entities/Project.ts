@@ -7,11 +7,11 @@ interface Project {
   name: string
   type: string
   userCount: number
-  bookmarkCount: number
+  favoriteCount: number
   creationDate: string
   endDate: string
   isDown: boolean
-  isBookmarked?: boolean
+  isFavorite?: boolean
   researchDepartments: ResearchDepartment[]
   interests: Interest[]
   enrollments: Enrollment[]

@@ -5,6 +5,7 @@ import {
   IconAlertCircle,
   IconBuildingCommunity,
   IconFileDescription,
+  IconFolderHeart,
   IconFolderStar,
   IconFolders,
   IconHome,
@@ -41,9 +42,9 @@ const Navbar = () => {
         <NavbarItem text="Mis Solicitudes" link="solicitudes" icon={<IconStar size={iconSize} />} />
         <NavbarItem text="Proyectos" link="projects" icon={<IconFolders size={iconSize} />} />
         <NavbarItem
-          text="Proyectos Marcados"
-          link="projects?isBookmarked=true"
-          icon={<IconFolderStar size={iconSize} />}
+          text="Proyectos Favoritos"
+          link="projects?isFavorite=true"
+          icon={<IconFolderHeart size={iconSize} />}
         />
       </AppShell.Section>
       <Divider />

@@ -15,7 +15,7 @@ export interface GetProjectsInput {
   type?: string
   dateFrom?: Date
   isDown?: boolean
-  isBookmarked?: boolean
+  isFavorite?: boolean
   sortBy?: string
   inAscendingOrder?: boolean
 }
@@ -41,7 +41,7 @@ export const Projects = {
         .concat(params?.type ? `type=${params.type}&` : '')
         .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
         .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
-        .concat(params?.isBookmarked ? `isBookmarked=${params.isBookmarked}&` : '')
+        .concat(params?.isFavorite ? `isFavorite=${params.isFavorite}&` : '')
         .concat(
           params?.sortBy
             ? `sortBy=${params.sortBy}&inAscendingOrder=${params?.inAscendingOrder ?? true}&`
@@ -57,36 +57,36 @@ export const Projects = {
     }
   },
 
-  async bookmark(id: number): Promise<boolean> {
+  async favorite(id: number): Promise<boolean> {
     try {
-      await axios.post(`${prefix}/bookmark/${id}`)
+      await axios.post(`${prefix}/favorite/${id}`)
       return true
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(
-          `Failed to bookmark project with ID ${id}:`,
+          `Failed to favorite project with ID ${id}:`,
           error.response?.data || error.message
         )
       } else {
-        console.error(`An unknown error occurred while bookmarking project with ID ${id}:`, error)
+        console.error(`An unknown error occurred while favoriteing project with ID ${id}:`, error)
       }
       return false
     }
   },
 
-  // Unbookmark a project
-  async unbookmark(id: number): Promise<boolean> {
+  // Unfavorite a project
+  async unfavorite(id: number): Promise<boolean> {
     try {
-      await axios.delete(`${prefix}/bookmark/${id}`)
+      await axios.delete(`${prefix}/favorite/${id}`)
       return true
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(
-          `Failed to unbookmark project with ID ${id}:`,
+          `Failed to unfavorite project with ID ${id}:`,
           error.response?.data || error.message
         )
       } else {
-        console.error(`An unknown error occurred while unbookmarking project with ID ${id}:`, error)
+        console.error(`An unknown error occurred while unfavoriteing project with ID ${id}:`, error)
       }
       return false
     }
