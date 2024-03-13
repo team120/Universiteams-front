@@ -5,7 +5,7 @@ const verifyToken = (token: string) => {
   if (!token) return null
 
   // Erase bearer part
-  if (token.includes('Bearer%20')) token = token.split('%20')[1] || ''
+  if (token.includes('Bearer ')) token = token.split(' ')[1] || ''
   if (!token) return null
 
   const SECRET_KEY = process.env.JWT_KEY || ''
