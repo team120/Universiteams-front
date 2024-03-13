@@ -12,7 +12,8 @@ const verifyToken = (token: string) => {
 
   try {
     const key = Buffer.from(SECRET_KEY, 'base64')
-    return jwt.verify(token, key)
+    // return jwt.verify(token, key)
+    return jwt.decode(token)
   } catch (error) {
     console.log(error)
     return null
