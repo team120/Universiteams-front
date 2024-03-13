@@ -7,6 +7,7 @@ import SearchBar from '@/components/Common/SearchBar/SearchBar'
 
 interface HeaderProps {
   opened: boolean
+  showNavAndSearch: boolean
   toggle: () => void
   toggleColorScheme: () => void
 }
@@ -15,7 +16,9 @@ const Header = (props: HeaderProps) => {
   return (
     <>
       <Group ml={15} h="100%">
-        <Burger mr={15} opened={props.opened} onClick={props.toggle} hiddenFrom="sm" size="sm" />
+        {props.showNavAndSearch && (
+          <Burger mr={15} opened={props.opened} onClick={props.toggle} hiddenFrom="sm" size="sm" />
+        )}
         <ActionIcon
           variant="filled"
           color={Theme.colors?.orange?.[4]}
@@ -23,11 +26,13 @@ const Header = (props: HeaderProps) => {
           onClick={props.toggleColorScheme}>
           <IconSunMoon style={{ width: '70%', height: '70%' }} stroke={1.5} />
         </ActionIcon>
-        <Container fluid>
-          <Center>
-            <SearchBar endpoint="projects" />
-          </Center>
-        </Container>
+        {props.showNavAndSearch && (
+          <Container fluid>
+            <Center>
+              <SearchBar endpoint="projects" />
+            </Center>
+          </Container>
+        )}
       </Group>
     </>
   )

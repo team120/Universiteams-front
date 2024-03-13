@@ -1,6 +1,7 @@
 import React from 'react'
 import { AppShell, useComputedColorScheme, useMantineColorScheme } from '@mantine/core'
 import { useDisclosure, useHotkeys } from '@mantine/hooks'
+import { usePathname } from 'next/navigation'
 
 import Header from './Header/Header'
 import Navbar from './Navbar/Navbar'
@@ -12,6 +13,7 @@ interface Layout {
 
 const Layout = (props: Layout) => {
   const [opened, { toggle }] = useDisclosure()
+  const pathName = usePathname()
 
   // Change between theme preferences
   const { setColorScheme } = useMantineColorScheme()
@@ -21,12 +23,36 @@ const Layout = (props: Layout) => {
   // Hotkeys
   useHotkeys([['mod+J', () => toggleColorScheme()]])
 
+  // Validate pathname - Layout without navigation
+  const navigationBlacklist = ['/account/login', 'account/register']
+  if (navigationBlacklist.includes(pathName)) {
+    return (
+      <AppShell header={{ height: 60 }}>
+        <AppShell.Header>
+          <Header
+            opened={false}
+            toggle={toggle}
+            toggleColorScheme={toggleColorScheme}
+            showNavAndSearch={false}
+          />
+        </AppShell.Header>
+        <AppShell.Main>{props.children}</AppShell.Main>
+      </AppShell>
+    )
+  }
+
+  // Layout with navigation
   return (
     <AppShell
       header={{ height: 60 }}
       navbar={{ width: { base: 270 }, breakpoint: 'sm', collapsed: { mobile: !opened } }}>
       <AppShell.Header>
-        <Header opened={opened} toggle={toggle} toggleColorScheme={toggleColorScheme} />
+        <Header
+          opened={opened}
+          toggle={toggle}
+          toggleColorScheme={toggleColorScheme}
+          showNavAndSearch={true}
+        />
       </AppShell.Header>
       <AppShell.Navbar p="md">
         <Navbar />
