@@ -12,6 +12,7 @@ import {
 } from '@/services/password'
 import PasswordStrength from './PasswordStrength'
 import Requirement from './Requirement'
+import Theme from '../../src/app/theme'
 
 const parseJwt = (token: string) => {
   if (!token) {
@@ -106,7 +107,7 @@ function PasswordReset() {
               : `Change password for @${emailTokenPayload?.user}`}
           </Text>
           {isSuccess ? (
-            <Button variant="outline" color="blue" onClick={handleGoHomeClick}>
+            <Button variant="outline" color={Theme.colors?.blue?.[6]} onClick={handleGoHomeClick}>
               Go to home page
             </Button>
           ) : (
@@ -137,7 +138,7 @@ function PasswordReset() {
                 {...form.getInputProps('confirmPassword')}
                 style={{ marginBottom: '1rem' }}
               />
-              <Button type="submit" color="blue" style={{ marginTop: '1rem' }}>
+              <Button type="submit" color={Theme.colors?.blue?.[6]} style={{ marginTop: '1rem' }}>
                 Reset Password
               </Button>
             </form>
