@@ -1,4 +1,20 @@
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { AxiosError } from 'axios'
+
+import RegEx from '../../utils/string/RegEx'
+import {
+  getPasswordStrength,
+  getStrengthColorAndPhrase,
+  passwordValidation,
+  requirements,
+} from '@/services/password'
+import { Account } from '@/services/account'
+import PasswordStrength from './PasswordStrength'
+
+import Login from '@/entities/HelpTypes/Login'
+import LoginRegisterType from '@/entities/HelpTypes/LoginRegisterType'
+
 import {
   Anchor,
   Button,
@@ -13,22 +29,7 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
-import { useRouter } from 'next/navigation'
-import axios, { AxiosError } from 'axios'
 import Requirement from './Requirement'
-import {
-  getPasswordStrength,
-  getStrengthColorAndPhrase,
-  passwordValidation,
-  requirements,
-} from '@/services/password'
-
-import RegEx from '../../utils/string/RegEx'
-import PasswordStrength from './PasswordStrength'
-
-import Login from '@/entities/HelpTypes/Login'
-import LoginRegisterType from '@/entities/HelpTypes/LoginRegisterType'
-import { Account } from '@/services/account'
 
 interface LoginRegisterProps {
   initialType: LoginRegisterType
