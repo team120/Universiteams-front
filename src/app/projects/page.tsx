@@ -19,7 +19,7 @@ import { Center, Pagination } from '@mantine/core'
 
 const ProjectsPage: NextPage = () => {
   const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
-  const projectsPerPage = 10
+  const projectsPerPage = 5
   const totalPages = projectsResult?.projectCount
     ? Math.ceil(projectsResult?.projectCount / projectsPerPage)
     : 1
@@ -161,8 +161,10 @@ const ProjectsPage: NextPage = () => {
           : searchQuery.get('inAscendingOrder') === 'false'
           ? false
           : undefined,
+      offset: (currentPage - 1) * projectsPerPage,
+      limit: projectsPerPage,
     })
-  }, [searchQuery])
+  }, [searchQuery, currentPage ?? 1])
 
   return (
     <>

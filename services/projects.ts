@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios'
 import Env from 'utils/config/Env'
 
 import ProjectsResult from '@/entities/ProjectsResult'
+import { off } from 'process'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -18,6 +19,8 @@ export interface GetProjectsInput {
   isFavorite?: boolean
   sortBy?: string
   inAscendingOrder?: boolean
+  limit?: number
+  offset?: number
 }
 
 export const Projects = {
@@ -47,6 +50,8 @@ export const Projects = {
             ? `sortBy=${params.sortBy}&inAscendingOrder=${params?.inAscendingOrder ?? true}&`
             : ''
         )
+        .concat(params?.limit ? `limit=${params.limit}&` : '')
+        .concat(params?.offset ? `offset=${params.offset}&` : '')
 
       console.log(url)
       const result = await axios.get<ProjectsResult>(url)
