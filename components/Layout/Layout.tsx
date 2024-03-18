@@ -3,6 +3,7 @@ import { AppShell, useComputedColorScheme, useMantineColorScheme } from '@mantin
 import { useDisclosure, useHotkeys } from '@mantine/hooks'
 import { usePathname } from 'next/navigation'
 
+import Constants from '../../utils/string/Constants'
 import Header from './Header/Header'
 import Navbar from './Navbar/Navbar'
 
@@ -24,8 +25,7 @@ const Layout = (props: Layout) => {
   useHotkeys([['mod+J', () => toggleColorScheme()]])
 
   // Validate pathname - Layout without navigation
-  const navigationBlacklist = ['/account/login', 'account/register']
-  if (navigationBlacklist.includes(pathName)) {
+  if (Constants.noAuthRoutes.includes(pathName)) {
     return (
       <AppShell header={{ height: 60 }}>
         <AppShell.Header>
