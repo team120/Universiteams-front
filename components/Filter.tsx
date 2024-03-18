@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { ActionIcon, Drawer, Flex, Group } from '@mantine/core'
+import { ActionIcon, Drawer, Flex, Group, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconFilter, IconXboxX } from '@tabler/icons-react'
 import Theme from 'src/app/theme'
 
 interface FilterProps {
+  counter: number
   children: React.ReactNode
   content: React.ReactNode
 }
@@ -25,18 +26,20 @@ const Filter = (props: FilterProps) => {
     setOpened((prevOpened) => !prevOpened)
   }
 
+  const resultsCounter = <Text>{props.counter} Resultados</Text>
   return (
     <>
       <Group justify={isMobile ? 'flex-end' : 'flex-start'}>
+        {isMobile && resultsCounter}
         <ActionIcon
           variant="transparent"
           aria-label="Filter"
           size="lg"
           onClick={() => toggle()}
-          ml={Theme.spacing?.xs}
-          mr={Theme.spacing?.xs}>
+          ml={!isMobile ? Theme.spacing?.xs : 0}>
           <IconFilter style={{ width: '70%', height: '70%' }} />
         </ActionIcon>
+        {!isMobile && resultsCounter}
       </Group>
 
       {isMobile && (

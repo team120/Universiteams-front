@@ -15,9 +15,15 @@ import { Facilities } from '@/services/facilities'
 import { ResearchDepartments } from '@/services/departments'
 import { Interests } from '@/services/interests'
 import { Users } from '@/services/user'
+import { Center, Pagination } from '@mantine/core'
 
 const ProjectsPage: NextPage = () => {
   const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
+  const projectsPerPage = 10
+  const totalPages = projectsResult?.projectCount
+    ? Math.ceil(projectsResult?.projectCount / projectsPerPage)
+    : 1
+  const [currentPage, setCurrentPage] = useState(1)
   const [institutions, setInstitutions] = useState<SelectItem[]>()
   const [facility, setFacilities] = useState<SelectItem[]>()
   const [departments, setDepartments] = useState<SelectItem[]>()
@@ -161,6 +167,7 @@ const ProjectsPage: NextPage = () => {
   return (
     <>
       <Filter
+        counter={projectsResult?.projectCount ?? 0}
         content={
           <ProjectFilterContent
             sortAttributes={sortAttributes}
@@ -172,6 +179,17 @@ const ProjectsPage: NextPage = () => {
           />
         }>
         <ProjectsList projects={projectsResult?.projects} />
+        {totalPages > 1 && (
+          <Center>
+            <Pagination
+              value={currentPage}
+              total={totalPages}
+              onChange={(page) => {
+                setCurrentPage(page)
+              }}
+            />
+          </Center>
+        )}
       </Filter>
     </>
   )
