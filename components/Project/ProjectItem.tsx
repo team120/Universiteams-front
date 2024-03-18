@@ -23,7 +23,7 @@ const ProjectItem = (props: ProjectItemProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleInterestChipClick = (interestId: number) => {
+  const handleInterestTagClick = (interestId: number) => {
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
   }
 
@@ -72,7 +72,7 @@ const ProjectItem = (props: ProjectItemProps) => {
     )
   }
 
-  const handleLeaderChipClick = (userId: number) => {
+  const handleLeaderTagClick = (userId: number) => {
     Url.setUrlParam(router, pathname, searchQuery, 'user', userId.toString())
   }
 
@@ -87,7 +87,6 @@ const ProjectItem = (props: ProjectItemProps) => {
       p={'1rem'}
       radius="md"
       style={{
-        position: 'relative', // This is necessary for absolute positioning of the child
         display: 'flex',
         flexDirection: 'row',
         width: '94%',
@@ -128,24 +127,26 @@ const ProjectItem = (props: ProjectItemProps) => {
         <Chip.Group>
           <Group gap={'0.5rem'} mt={'1rem'}>
             {project.enrollments && (
-              <Chip
-                variant="light"
-                color="blue"
-                size="md"
-                onClick={() => handleLeaderChipClick(project.enrollments[0].user.id)}>
+              <Badge
+                variant="filled"
+                color="violet"
+                size="lg"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleLeaderTagClick(project.enrollments[0].user.id)}>
                 {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}, +
                 {project.userCount} personas
-              </Chip>
+              </Badge>
             )}
             {project.interests.map((interest) => (
-              <Chip
-                variant="light"
+              <Badge
+                variant="dot"
                 key={interest.id}
                 color="blue"
-                size="md"
-                onClick={() => handleInterestChipClick(interest.id)}>
+                size="lg"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleInterestTagClick(interest.id)}>
                 {interest.name}
-              </Chip>
+              </Badge>
             ))}
           </Group>
         </Chip.Group>
