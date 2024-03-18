@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Loader, Card, Text, Button } from '@mantine/core'
 import axios from 'axios'
+import Theme from '../../src/app/theme'
 
 const VerifyEmail = () => {
   const router = useRouter()
@@ -50,7 +51,7 @@ const VerifyEmail = () => {
           </Text>
           <Button
             variant="outline"
-            color="blue"
+            color={Theme.colors?.blue?.[6]}
             onClick={handleGoHomeClick}
             style={{ marginTop: '1rem' }}>
             Go to home page

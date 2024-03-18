@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
 import { Projects } from '@/services/projects'
 import { IconHeart, IconHeartFilled } from '@tabler/icons-react'
+import Theme from '../../src/app/theme'
 
 interface ProjectItemProps {
   project?: Project
@@ -106,7 +107,7 @@ const ProjectItem = (props: ProjectItemProps) => {
             {project.researchDepartments.map((department) => (
               <Badge
                 key={department.id}
-                color="pink"
+                color={Theme.colors?.pink?.[6]}
                 variant="light"
                 component="button"
                 style={{ cursor: 'pointer' }}
@@ -129,7 +130,7 @@ const ProjectItem = (props: ProjectItemProps) => {
             {project.enrollments && (
               <Badge
                 variant="filled"
-                color="violet"
+                color={Theme.colors?.violet?.[6]}
                 size="lg"
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleLeaderTagClick(project.enrollments[0].user.id)}>
@@ -141,7 +142,7 @@ const ProjectItem = (props: ProjectItemProps) => {
               <Badge
                 variant="dot"
                 key={interest.id}
-                color="blue"
+                color={Theme.colors?.blue?.[6]}
                 size="lg"
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleInterestTagClick(interest.id)}>

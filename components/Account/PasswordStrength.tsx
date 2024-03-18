@@ -25,7 +25,7 @@ function PasswordStrength({
   return (
     <>
       <Progress mt="xs" value={strength} color={color} />
-      <Text size="sm" style={{ align: 'center' }} color={color}>
+      <Text size="sm" style={{ align: 'center' }} c={color}>
         {phrase}
       </Text>
       {checks}

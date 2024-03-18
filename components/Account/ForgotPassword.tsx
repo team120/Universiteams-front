@@ -18,6 +18,7 @@ import {
 import { IconArrowLeft } from '@tabler/icons-react'
 import Requirement from './Requirement'
 import classes from '@/styles/account.module.scss'
+import Theme from '../../src/app/theme'
 
 const ForgotPassword = () => {
   const router = useRouter()
@@ -64,7 +65,7 @@ const ForgotPassword = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text size="sm" color="teal">
+          <Text size="sm" c={Theme.colors?.teal?.[6]}>
             Password reset email sent successfully!
           </Text>
           <CloseButton onClick={handleDismiss} style={{ marginLeft: '8px' }} />
@@ -73,7 +74,7 @@ const ForgotPassword = () => {
       <Title className={classes.title} style={{ align: 'center' }}>
         Forgot your password?
       </Title>
-      <Text c="dimmed" fz="sm" ta="center">
+      <Text c={Theme.colors?.dimmed?.[6]} fz="sm" ta="center">
         Enter your email to get a reset link
       </Text>
 
@@ -95,7 +96,7 @@ const ForgotPassword = () => {
           />
           <Group style={{ position: 'relative' }} mt="lg" className={classes.controls}>
             <Anchor
-              color="dimmed"
+              c={Theme.colors?.dimmed?.[6]}
               size="sm"
               className={classes.control}
               onClick={handleGoBackToLoginClick}>
