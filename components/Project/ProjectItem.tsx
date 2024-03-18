@@ -1,10 +1,13 @@
-import React, { Suspense } from 'react'
-import { Badge, Card, Chip, Group, Text, useMantineTheme } from '@mantine/core'
+import React, { useState } from 'react'
+import { ActionIcon, Badge, Card, Chip, Flex, Group, Text, useMantineTheme } from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import Project from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
+import { Projects } from '@/services/projects'
+import { IconHeart, IconHeartFilled } from '@tabler/icons-react'
+import Theme from '../../src/app/theme'
 
 interface ProjectItemProps {
   project?: Project
@@ -14,12 +17,31 @@ const ProjectItem = (props: ProjectItemProps) => {
   const theme = useMantineTheme()
   const project = props.project
 
+  const [isFavorite, setIsFavorite] = useState(project?.isFavorite)
+  const [favoriteCount, setFavoriteCount] = useState(project?.favoriteCount)
+
   const searchQuery = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleInterestChipClick = (interestId: number) => {
+  const handleInterestTagClick = (interestId: number) => {
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
+  }
+
+  const handlefavoriteClick = async (projectId: number) => {
+    if (isFavorite) {
+      const result = await Projects.unfavorite(projectId)
+      if (result) {
+        setIsFavorite(false)
+        favoriteCount !== undefined && setFavoriteCount(favoriteCount - 1)
+      }
+    } else {
+      const result = await Projects.favorite(projectId)
+      if (result) {
+        setIsFavorite(true)
+        favoriteCount !== undefined && setFavoriteCount(favoriteCount + 1)
+      }
+    }
   }
 
   const handleDepartmentBadgeClick = (
@@ -51,7 +73,7 @@ const ProjectItem = (props: ProjectItemProps) => {
     )
   }
 
-  const handleLeaderChipClick = (userId: number) => {
+  const handleLeaderTagClick = (userId: number) => {
     Url.setUrlParam(router, pathname, searchQuery, 'user', userId.toString())
   }
 
@@ -85,7 +107,7 @@ const ProjectItem = (props: ProjectItemProps) => {
             {project.researchDepartments.map((department) => (
               <Badge
                 key={department.id}
-                color="pink"
+                color={Theme.colors?.pink?.[6]}
                 variant="light"
                 component="button"
                 style={{ cursor: 'pointer' }}
@@ -106,27 +128,41 @@ const ProjectItem = (props: ProjectItemProps) => {
         <Chip.Group>
           <Group gap={'0.5rem'} mt={'1rem'}>
             {project.enrollments && (
-              <Chip
-                variant="light"
-                color="blue"
-                size="md"
-                onClick={() => handleLeaderChipClick(project.enrollments[0].user.id)}>
+              <Badge
+                variant="filled"
+                color={Theme.colors?.violet?.[6]}
+                size="lg"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleLeaderTagClick(project.enrollments[0].user.id)}>
                 {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}, +
                 {project.userCount} personas
-              </Chip>
+              </Badge>
             )}
             {project.interests.map((interest) => (
-              <Chip
-                variant="light"
+              <Badge
+                variant="dot"
                 key={interest.id}
-                color="blue"
-                size="md"
-                onClick={() => handleInterestChipClick(interest.id)}>
+                color={Theme.colors?.blue?.[6]}
+                size="lg"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleInterestTagClick(interest.id)}>
                 {interest.name}
-              </Chip>
+              </Badge>
             ))}
           </Group>
         </Chip.Group>
+
+        <Flex justify="flex-end" align="center">
+          <ActionIcon
+            variant="transparent"
+            aria-label="Guardar en marcadores"
+            onClick={() => handlefavoriteClick(project.id)}
+            size="lg"
+            color={isFavorite ? 'blue' : 'gray'}>
+            {isFavorite ? <IconHeartFilled /> : <IconHeart />}
+          </ActionIcon>
+          <Text size="sm">{favoriteCount}</Text>
+        </Flex>
       </div>
     </Card>
   )

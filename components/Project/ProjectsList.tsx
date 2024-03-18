@@ -13,7 +13,7 @@ interface ProjectsListProps {
 }
 
 const ProjectsList = ({ projects }: ProjectsListProps) => {
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
 
   if (projects === undefined) return <SkeletonFull />
   if (projects.length == 0) return <InfoMessage text="Aún no tienes proyectos" type="info" />

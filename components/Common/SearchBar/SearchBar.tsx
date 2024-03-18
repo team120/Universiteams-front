@@ -1,62 +1,49 @@
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { CloseButton, TextInput, useMantineTheme } from '@mantine/core'
+import { IconSearch } from '@tabler/icons-react'
 
-import { ActionIcon, CloseButton, Input } from '@mantine/core'
-import { IconCheck, IconSearch } from '@tabler/icons-react'
-
+import { Url } from '@/services/url'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { useDebouncedValue, useMediaQuery } from '@mantine/hooks'
 import Theme from 'src/app/theme'
 
-interface SearchBarProps {
-  endpoint: string
-  width?: number
-}
-
-const SearchBar = (props: SearchBarProps) => {
-  const [searchText, setSearchText] = useState('')
+const SearchBar = () => {
   const router = useRouter()
+  const pathname = usePathname()
+  const searchQuery = useSearchParams()
 
-  // Set searchBar width
-  const widthEmpty = props.width ?? 55
-  const widthWithText = widthEmpty - 5
+  const [generalSearch, setGeneralSearch] = useState('')
+  const [debouncedGeneralSearch] = useDebouncedValue(generalSearch, 400)
 
-  const searchNowClick = () => {
-    if (!searchText) return
-    router.push(`/${props.endpoint}?q=${searchText}`)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
+
+  const searchNowButton = () => {
+    Url.setUrlParam(router, pathname, searchQuery, 'generalSearch', generalSearch)
   }
 
-  const searchNowButton = (event: React.KeyboardEvent<any>) => {
-    if (!searchText) return
-    if (event.key != 'Enter') return
-    router.push(`/${props.endpoint}?q=${searchText}`)
-  }
+  useEffect(() => {
+    searchNowButton()
+  }, [debouncedGeneralSearch])
 
   return (
     <>
-      <Input
+      <TextInput
         placeholder="Buscar..."
-        style={{ width: searchText ? `${widthWithText}vw` : `${widthEmpty}vw` }}
-        value={searchText}
-        onChange={(event) => setSearchText(event.currentTarget.value)}
-        onKeyUp={(event) => searchNowButton(event)}
+        style={{
+          width: isMobile ? '70vw' : '55vw',
+        }}
+        value={generalSearch}
+        onChange={(event) => setGeneralSearch(event.currentTarget.value)}
         leftSection={<IconSearch size={16} />}
         rightSectionPointerEvents="all"
         rightSection={
           <CloseButton
-            aria-label="Clear input"
-            onClick={() => setSearchText('')}
-            style={{ display: searchText ? undefined : 'none' }}
+            aria-label="Limpiar búsqueda"
+            onClick={() => setGeneralSearch('')}
+            style={{ display: generalSearch ? undefined : 'none' }}
           />
         }
       />
-      <ActionIcon
-        variant="filled"
-        ml={10}
-        color={Theme.colors?.orange?.[4]}
-        aria-label="Search button"
-        onClick={searchNowClick}
-        style={{ display: searchText ? undefined : 'none' }}>
-        <IconCheck style={{ width: '70%', height: '70%' }} stroke={1.5} />
-      </ActionIcon>
     </>
   )
 }

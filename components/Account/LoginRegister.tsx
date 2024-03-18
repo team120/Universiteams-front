@@ -30,6 +30,7 @@ import {
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
 import Requirement from './Requirement'
+import Theme from '../../src/app/theme'
 
 interface LoginRegisterProps {
   initialType: LoginRegisterType
@@ -105,7 +106,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
         }}>
         Welcome to Universiteams!
       </Title>
-      <Text style={{ align: 'center' }} color="dimmed" size="sm" mt={5}>
+      <Text style={{ align: 'center' }} c={Theme.colors?.dimmed?.[6]} size="sm" mt={5}>
         {type === 'register' ? 'Already have an account?' : "Don't have an account?"}{' '}
         <Anchor<'a'>
           href="#"

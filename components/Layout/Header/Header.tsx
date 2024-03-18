@@ -29,7 +29,7 @@ const Header = (props: HeaderProps) => {
         {props.showNavAndSearch && (
           <Container fluid>
             <Center>
-              <SearchBar endpoint="projects" />
+              <SearchBar />
             </Center>
           </Container>
         )}
