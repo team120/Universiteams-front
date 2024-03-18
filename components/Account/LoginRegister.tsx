@@ -22,16 +22,21 @@ import {
   passwordValidation,
   requirements,
 } from '@/services/password'
+
+import RegEx from '../../utils/string/RegEx'
 import PasswordStrength from './PasswordStrength'
 
-interface ErrorResponse {
-  message: string
+import Login from '@/entities/HelpTypes/Login'
+import LoginRegisterType from '@/entities/HelpTypes/LoginRegisterType'
+import { Account } from '@/services/account'
+
+interface LoginRegisterProps {
+  initialType: LoginRegisterType
 }
 
-const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) => {
+const LoginRegister = ({ initialType }: LoginRegisterProps) => {
   const router = useRouter()
-  const [type, toggleType] = useToggle(['login', 'register'])
-  const emailRegex = /^\S+@\S+$/
+  const [type, toggleType] = useToggle<LoginRegisterType>(['login', 'register'])
   const [serverErrors, setServerErrors] = useState<string[]>([])
 
   const handleForgotPasswordClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -39,15 +44,20 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
     router.push('/forgot-password')
   }
 
-  const handleSubmit = async (values: typeof form.values) => {
-    const url = `http://api.localhost/auth/${type}`
-    axios
-      .post(url, values, { withCredentials: true })
-      .then(() => router.push('/'))
-      .catch((error: AxiosError<ErrorResponse>) => {
-        const message = error.response?.data?.message || 'An unexpected error occurred'
+  const handleSubmit = async (values: Login) => {
+    try {
+      const response = await Account.Auth(values, type)
+      if (response instanceof AxiosError) {
+        const message = response?.message || 'An unexpected error occurred'
         setServerErrors([message])
-      })
+        return
+      }
+
+      setServerErrors([])
+      router.push('/')
+    } catch (error) {
+      setServerErrors(['An unexpected error occurred'])
+    }
   }
 
   const validateName = (value: string) => {
@@ -57,7 +67,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
     return null
   }
 
-  const form = useForm({
+  const form = useForm<Login>({
     initialValues: {
       firstName: '',
       lastName: '',
@@ -68,7 +78,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
     validate: {
       firstName: (value) => validateName(value),
       lastName: (value) => validateName(value),
-      email: (value) => (emailRegex.test(value) ? null : 'Invalid email'),
+      email: (value) => (RegEx.email.test(value) ? null : 'Invalid email'),
       password: (value) => {
         if (type !== 'register') return null
 
