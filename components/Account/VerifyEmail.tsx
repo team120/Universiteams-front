@@ -35,6 +35,8 @@ const VerifyEmail = () => {
     router.push('/')
   }
 
+  if (isLoading) return <Loader />
+
   return (
     <div
       style={{
@@ -43,21 +45,20 @@ const VerifyEmail = () => {
         alignItems: 'center',
         height: '100vh',
       }}>
-      {isLoading && <Loader />}
-      {!isLoading && (
-        <Card shadow="sm" padding="lg" radius="md">
-          <Text size="lg" style={{ weight: 500 }}>
-            {isSuccess ? 'Email verified successfully!' : "Email couldn't be verified."}
-          </Text>
-          <Button
-            variant="outline"
-            color={Theme.colors?.blue?.[6]}
-            onClick={handleGoHomeClick}
-            style={{ marginTop: '1rem' }}>
-            Go to home page
-          </Button>
-        </Card>
-      )}
+      <Card shadow="sm" padding="lg" radius="md">
+        <Text size="lg" style={{ weight: 500 }}>
+          {isSuccess
+            ? '¡Correo electrónico verificado con éxito!'
+            : 'No se pudo verificar el correo electrónico.'}
+        </Text>
+        <Button
+          variant="outline"
+          color={Theme.colors?.blue?.[6]}
+          onClick={handleGoHomeClick}
+          style={{ marginTop: '1rem' }}>
+          Ir a la página de inicio
+        </Button>
+      </Card>
     </div>
   )
 }
