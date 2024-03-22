@@ -14,10 +14,11 @@ import {
   Box,
   rem,
   CloseButton,
+  Stack,
+  Space,
 } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Requirement from './Requirement'
-import classes from '@/styles/account.module.scss'
 import Theme from '../../src/app/theme'
 
 const ForgotPassword = () => {
@@ -28,7 +29,7 @@ const ForgotPassword = () => {
 
   const handleGoBackToLoginClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
-    router.push('/Login')
+    router.push('/account/login')
   }
 
   const handleDismiss = () => {
@@ -71,12 +72,12 @@ const ForgotPassword = () => {
           <CloseButton onClick={handleDismiss} style={{ marginLeft: '8px' }} />
         </div>
       )}
-      <Title className={classes.title} style={{ align: 'center' }}>
-        Forgot your password?
-      </Title>
-      <Text c={Theme.colors?.dimmed?.[6]} fz="sm" ta="center">
-        Enter your email to get a reset link
-      </Text>
+      <Stack align="center">
+        <Title>Forgot your password?</Title>
+        <Text c={Theme.colors?.dimmed?.[6]} fz="sm" ta="center">
+          Enter your email to get a reset link
+        </Text>
+      </Stack>
 
       <form onSubmit={handleSubmit}>
         <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
@@ -94,21 +95,17 @@ const ForgotPassword = () => {
             value={email}
             onChange={(event) => setEmail(event.currentTarget.value)}
           />
-          <Group style={{ position: 'relative' }} mt="lg" className={classes.controls}>
-            <Anchor
-              c={Theme.colors?.dimmed?.[6]}
-              size="sm"
-              className={classes.control}
-              onClick={handleGoBackToLoginClick}>
+          <Stack align="flex-start" mt={Theme.spacing?.xs}>
+            <Anchor c={Theme.colors?.dimmed?.[6]} size="sm" onClick={handleGoBackToLoginClick}>
               <Center inline>
-                <IconArrowLeft size={rem(12)} stroke={1.5} />
+                <IconArrowLeft stroke={1.5} />
                 <Box ml={5}>Back to the login page</Box>
               </Center>
             </Anchor>
-            <Button className={classes.control} type="submit">
+            <Button mt={Theme.spacing?.xs} type="submit">
               Reset password
             </Button>
-          </Group>
+          </Stack>
         </Paper>
       </form>
     </Container>
