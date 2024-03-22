@@ -229,7 +229,9 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
 
           <Group mt={Theme.spacing?.xs} mb={Theme.spacing?.xs}>
             <Switch checked={form.values.isDown} onChange={handleIsDownChange} />
-            <Text size='sm' ml={6}>Descontinuados</Text>
+            <Text size="sm" ml={6}>
+              Descontinuados
+            </Text>
           </Group>
 
           <DateInput
