@@ -6,23 +6,23 @@ export interface IRequirement {
 export const requirements: IRequirement[] = [
   {
     validate: (password: string) => password.length >= 8,
-    label: 'Has at least 8 characters',
+    label: 'Tiene al menos 8 caracteres',
   },
   {
     validate: (password: string) => /[0-9]/.test(password),
-    label: 'Includes number',
+    label: 'Incluye un número',
   },
   {
     validate: (password: string) => /[a-z]/.test(password),
-    label: 'Includes lowercase letter',
+    label: 'Incluye una letra minúscula',
   },
   {
     validate: (password: string) => /[A-Z]/.test(password),
-    label: 'Includes uppercase letter',
+    label: 'Incluye una letra mayúscula',
   },
   {
     validate: (password: string) => /[\W_]/.test(password),
-    label: 'Includes special symbol',
+    label: 'Incluye un símbolo especial',
   },
 ]
 
@@ -39,11 +39,11 @@ export const getPasswordStrength = (password: string) => {
 export const getStrengthColorAndPhrase = (strength: number) => {
   const colors = ['red', 'orange', 'yellow', 'blue', 'green']
   const phrases = [
-    'Sucks',
-    'My grandma can hack this',
-    'Still not close yet',
-    'Fair enough',
-    'Bullet proof',
+    'Inadecuado',
+    'Fácilmente Vulnerable',
+    'Aún No Suficiente',
+    'Aceptable',
+    'Altamente Seguro',
   ]
 
   const colorAndPhraseByPercentage = requirements.map((undefined, index) => ({
@@ -60,7 +60,7 @@ export const getStrengthColorAndPhrase = (strength: number) => {
 
 export const passwordValidation = (value: string): string | null => {
   if (getPasswordStrength(value) < 3)
-    return 'Password must follow at least 4 of the 5 contiguous guidelines'
+    return 'La contraseña debe cumplir al menos 4 de las 5 pautas contiguas'
 
   return null
 }
