@@ -43,7 +43,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
 
   const handleForgotPasswordClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
-    router.push('/forgot-password')
+    router.push('/account/forgotPassword')
   }
 
   const handleSubmit = async (values: Login) => {
