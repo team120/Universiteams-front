@@ -170,7 +170,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
             />
           )}
 
-          <Group style={{ position: 'relative' }} mt="md">
+          <Group justify="space-between" mt={Theme.spacing?.xs} mb={Theme.spacing?.xs}>
             <Checkbox label="Remember me" />
             {type === 'login' && (
               <Anchor<'a'> onClick={handleForgotPasswordClick} href="#" size="sm">
