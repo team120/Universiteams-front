@@ -17,6 +17,7 @@ import LoginRegisterType from '@/entities/HelpTypes/LoginRegisterType'
 
 import {
   Anchor,
+  Box,
   Button,
   Checkbox,
   Container,
@@ -28,7 +29,7 @@ import {
   Title,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { useToggle } from '@mantine/hooks'
+import { useMediaQuery, useToggle } from '@mantine/hooks'
 import Requirement from './Requirement'
 import Theme from '../../src/app/theme'
 
@@ -40,6 +41,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
   const router = useRouter()
   const [type, toggleType] = useToggle<LoginRegisterType>(['login', 'register'])
   const [serverErrors, setServerErrors] = useState<string[]>([])
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
 
   const handleForgotPasswordClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
@@ -98,27 +100,29 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
 
   return (
     <Container size={420} my={40}>
-      <Title
-        style={{
-          align: 'center',
-          fontFamily: 'Greycliff CF, sans-serif',
-          fontWeight: 900,
-        }}>
-        Welcome to Universiteams!
-      </Title>
-      <Text style={{ align: 'center' }} c={Theme.colors?.dimmed?.[6]} size="sm" mt={5}>
-        {type === 'register' ? 'Already have an account?' : "Don't have an account?"}{' '}
-        <Anchor<'a'>
-          href="#"
-          size="sm"
-          onClick={() => {
-            toggleType()
-            const route = type === 'register' ? '/Login' : '/Register'
-            history.pushState(undefined, '', route)
+      <Box ml={isMobile ? Theme.spacing?.sm : 0}>
+        <Title
+          style={{
+            align: 'center',
+            fontFamily: 'Greycliff CF, sans-serif',
+            fontWeight: 900,
           }}>
-          {type === 'register' ? 'Login' : 'Register'}
-        </Anchor>
-      </Text>
+          Welcome to Universiteams!
+        </Title>
+        <Text style={{ align: 'center' }} c={Theme.colors?.dimmed?.[6]} size="sm" mt={5}>
+          {type === 'register' ? 'Already have an account?' : "Don't have an account?"}{' '}
+          <Anchor<'a'>
+            href="#"
+            size="sm"
+            onClick={() => {
+              toggleType()
+              const route = type === 'register' ? '/Login' : '/Register'
+              history.pushState(undefined, '', route)
+            }}>
+            {type === 'register' ? 'Login' : 'Register'}
+          </Anchor>
+        </Text>
+      </Box>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         {serverErrors.map((error, index) => (
