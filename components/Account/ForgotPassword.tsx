@@ -49,7 +49,7 @@ const ForgotPassword = () => {
         setServerErrors([error.response.data.message])
       } else {
         console.error(error)
-        setServerErrors(['An unexpected error occurred'])
+        setServerErrors(['Ocurrió un error inesperado'])
       }
     }
   }
@@ -67,15 +67,15 @@ const ForgotPassword = () => {
             justifyContent: 'space-between',
           }}>
           <Text size="sm" c={Theme.colors?.teal?.[6]}>
-            Password reset email sent successfully!
+            ¡Correo electrónico de restablecimiento de contraseña enviado con éxito!
           </Text>
           <CloseButton onClick={handleDismiss} style={{ marginLeft: '8px' }} />
         </div>
       )}
       <Stack align="center">
-        <Title>Forgot your password?</Title>
+        <Title>¿Olvidaste tu contraseña?</Title>
         <Text c={Theme.colors?.dimmed?.[6]} fz="sm" ta="center">
-          Enter your email to get a reset link
+          Ingresa tu correo electrónico para obtener un enlace de restablecimiento
         </Text>
       </Stack>
 
@@ -89,8 +89,8 @@ const ForgotPassword = () => {
             </>
           )}
           <TextInput
-            label="Your email"
-            placeholder="you@frro.utn.edu.ar"
+            label="Tu correo electrónico"
+            placeholder="tu@frro.utn.edu.ar"
             required
             value={email}
             onChange={(event) => setEmail(event.currentTarget.value)}
@@ -99,11 +99,11 @@ const ForgotPassword = () => {
             <Anchor c={Theme.colors?.dimmed?.[6]} size="sm" onClick={handleGoBackToLoginClick}>
               <Center inline>
                 <IconArrowLeft stroke={1.5} />
-                <Box ml={5}>Back to the login page</Box>
+                <Box ml={5}>Volver a la página de inicio de sesión</Box>
               </Center>
             </Anchor>
             <Button mt={Theme.spacing?.xs} type="submit">
-              Reset password
+              Restablecer contraseña
             </Button>
           </Stack>
         </Paper>
