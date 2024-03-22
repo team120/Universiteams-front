@@ -53,7 +53,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
     try {
       const response = await Account.Auth(values, type)
       if (response instanceof AxiosError) {
-        const message = response?.message || 'An unexpected error occurred'
+        const message = response?.message || 'Ocurrió un error inesperado'
         setServerErrors([message])
         return
       }
@@ -61,13 +61,13 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
       setServerErrors([])
       router.push('/')
     } catch (error) {
-      setServerErrors(['An unexpected error occurred'])
+      setServerErrors(['Ocurrió un error inesperado'])
     }
   }
 
   const validateName = (value: string) => {
     if (type !== 'register') return null
-    if (value.length < 2) return 'Minimum two characters'
+    if (value.length < 2) return 'Mínimo dos caracteres'
 
     return null
   }
@@ -83,7 +83,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
     validate: {
       firstName: (value) => validateName(value),
       lastName: (value) => validateName(value),
-      email: (value) => (RegEx.email.test(value) ? null : 'Invalid email'),
+      email: (value) => (RegEx.email.test(value) ? null : 'Correo electrónico inválido'),
       password: (value) => {
         if (type !== 'register') return null
 
@@ -108,10 +108,10 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
             fontFamily: 'Greycliff CF, sans-serif',
             fontWeight: 900,
           }}>
-          Welcome to Universiteams!
+          ¡Bienvenido a Universiteams!
         </Title>
         <Text style={{ align: 'center' }} c={Theme.colors?.dimmed?.[6]} size="sm" mt={5}>
-          {type === 'register' ? 'Already have an account?' : "Don't have an account?"}{' '}
+          {type === 'register' ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?'}{' '}
           <Anchor<'a'>
             href="#"
             size="sm"
@@ -120,7 +120,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
               const route = type === 'register' ? '/Login' : '/Register'
               history.pushState(undefined, '', route)
             }}>
-            {type === 'register' ? 'Login' : 'Register'}
+            {type === 'register' ? 'Iniciar sesión' : 'Registrarse'}
           </Anchor>
         </Text>
       </Box>
@@ -134,14 +134,14 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
           {type === 'register' && (
             <>
               <TextInput
-                label="First Name"
-                placeholder="Your first name"
+                label="Nombre"
+                placeholder="Tu nombre"
                 required
                 {...form.getInputProps('firstName')}
               />
               <TextInput
-                label="Last Name"
-                placeholder="Your last name"
+                label="Apellido"
+                placeholder="Tu apellido"
                 required
                 {...form.getInputProps('lastName')}
               />
@@ -149,14 +149,14 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
           )}
 
           <TextInput
-            label="Email"
-            placeholder="your@email.com"
+            label="Correo electrónico"
+            placeholder="tu@correo.com"
             required
             {...form.getInputProps('email')}
           />
           <PasswordInput
-            label="Password"
-            placeholder="Your password"
+            label="Contraseña"
+            placeholder="Tu contraseña"
             required
             mt="xs"
             {...form.getInputProps('password')}
@@ -175,17 +175,17 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
             <Center inline>
               <Checkbox />
               <Text size="sm" ml={5}>
-                Remember me
+                Recuérdame
               </Text>
             </Center>
             {type === 'login' && (
               <Anchor<'a'> onClick={handleForgotPasswordClick} href="#" size="sm">
-                Forgot password?
+                ¿Olvidaste tu contraseña?
               </Anchor>
             )}
           </Group>
           <Button fullWidth mt="xl" type="submit">
-            {type === 'login' ? 'Login' : 'Register'}
+            {type === 'login' ? 'Iniciar sesión' : 'Registrarse'}
           </Button>
         </form>
       </Paper>
