@@ -47,7 +47,7 @@ function PasswordReset() {
   }, [query.get('token')])
 
   const validateConfirmPassword = (confirmPassword: string, password: string): string | null => {
-    if (confirmPassword !== password) return 'Passwords do not match'
+    if (confirmPassword !== password) return 'Las contraseñas no coinciden'
 
     return null
   }
@@ -77,7 +77,7 @@ function PasswordReset() {
         setServerErrors([error.response.data.message])
       } else {
         console.error(error)
-        setServerErrors(['An unexpected error occurred'])
+        setServerErrors(['Ocurrió un error inesperado'])
       }
     } finally {
       setIsLoading(false)
@@ -107,12 +107,12 @@ function PasswordReset() {
           title="Error"
           icon={<IconAlertCircle />}>
           <Text size="lg" style={{ weight: 500 }} mb={Theme.spacing?.xs}>
-            Token invalido o expirado
+            Token inválido o expirado
           </Text>
           <Anchor size="md" onClick={handleGoBackToLoginClick}>
             <Center inline>
               <IconArrowLeft stroke={1.5} />
-              <Box ml={5}>Back to the login page</Box>
+              <Box ml={5}>Volver a la página de inicio de sesión</Box>
             </Center>
           </Anchor>
         </Alert>
@@ -127,60 +127,58 @@ function PasswordReset() {
         alignItems: 'center',
         height: '100vh',
       }}>
-      {!isLoading && emailTokenPayload && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh',
-          }}>
-          <Card shadow="sm" padding="lg" radius="md" style={{ maxWidth: '400px', width: '100%' }}>
-            <Text size="lg" style={{ weight: 500, marginBottom: '1rem' }}>
-              {isSuccess
-                ? 'Password reset successfully!'
-                : `Change password for @${emailTokenPayload?.user}`}
-            </Text>
-            {isSuccess ? (
-              <Button variant="outline" color={Theme.colors?.blue?.[6]} onClick={handleGoHomeClick}>
-                Go to home page
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}>
+        <Card shadow="sm" padding="lg" radius="md" style={{ maxWidth: '400px', width: '100%' }}>
+          <Text size="lg" style={{ weight: 500, marginBottom: '1rem' }}>
+            {isSuccess
+              ? '¡Contraseña restablecida con éxito!'
+              : `Cambiar contraseña para @${emailTokenPayload?.user}`}
+          </Text>
+          {isSuccess ? (
+            <Button variant="outline" color={Theme.colors?.blue?.[6]} onClick={handleGoHomeClick}>
+              Ir a la página de inicio
+            </Button>
+          ) : (
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+              {serverErrors.map((error, index) => (
+                <Requirement key={index} meets={false} label={error} />
+              ))}
+              <PasswordInput
+                required
+                label="Nueva contraseña"
+                placeholder="Ingresa tu nueva contraseña"
+                {...form.getInputProps('password')}
+                style={{ marginBottom: '1rem' }}
+              />
+              {strength > 0 && (
+                <PasswordStrength
+                  strength={strength}
+                  phrase={strengthColorAndPhrase?.phrase}
+                  color={strengthColorAndPhrase?.color}
+                  requirements={requirements}
+                  formValue={form.values.password}
+                />
+              )}
+              <PasswordInput
+                required
+                label="Confirmar contraseña"
+                placeholder="Confirma tu nueva contraseña"
+                {...form.getInputProps('confirmPassword')}
+                style={{ marginBottom: '1rem' }}
+              />
+              <Button type="submit" color={Theme.colors?.blue?.[6]} style={{ marginTop: '1rem' }}>
+                Restablecer contraseña
               </Button>
-            ) : (
-              <form onSubmit={form.onSubmit(handleSubmit)}>
-                {serverErrors.map((error, index) => (
-                  <Requirement key={index} meets={false} label={error} />
-                ))}
-                <PasswordInput
-                  required
-                  label="New Password"
-                  placeholder="Enter your new password"
-                  {...form.getInputProps('password')}
-                  style={{ marginBottom: '1rem' }}
-                />
-                {strength > 0 && (
-                  <PasswordStrength
-                    strength={strength}
-                    phrase={strengthColorAndPhrase?.phrase}
-                    color={strengthColorAndPhrase?.color}
-                    requirements={requirements}
-                    formValue={form.values.password}
-                  />
-                )}
-                <PasswordInput
-                  required
-                  label="Confirm Password"
-                  placeholder="Confirm your new password"
-                  {...form.getInputProps('confirmPassword')}
-                  style={{ marginBottom: '1rem' }}
-                />
-                <Button type="submit" color={Theme.colors?.blue?.[6]} style={{ marginTop: '1rem' }}>
-                  Reset Password
-                </Button>
-              </form>
-            )}
-          </Card>
-        </div>
-      )}
+            </form>
+          )}
+        </Card>
+      </div>
     </div>
   )
 }
