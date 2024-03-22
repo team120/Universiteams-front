@@ -2,7 +2,7 @@
 import React from 'react'
 import axios from 'axios'
 
-import { ColorSchemeScript, MantineProvider, localStorageColorSchemeManager } from '@mantine/core'
+import { MantineProvider, localStorageColorSchemeManager } from '@mantine/core'
 import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
 import '@/styles/globals.scss'
