@@ -8,14 +8,11 @@ import {
   TextInput,
   Button,
   Container,
-  Group,
   Anchor,
   Center,
   Box,
-  rem,
   CloseButton,
   Stack,
-  Space,
 } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Requirement from './Requirement'
