@@ -3,12 +3,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Loader, Card, Text, Button } from '@mantine/core'
 import axios from 'axios'
 import Theme from '../../src/app/theme'
+import { useMediaQuery } from '@mantine/hooks'
 
 const VerifyEmail = () => {
   const router = useRouter()
   const query = useSearchParams()
   const [isLoading, setIsLoading] = useState(true)
   const [isSuccess, setIsSuccess] = useState(false)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -43,19 +45,20 @@ const VerifyEmail = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
       }}>
-      <Card shadow="sm" padding="lg" radius="md">
-        <Text size="lg" style={{ weight: 500 }}>
+      <Card mt={Theme.spacing?.lg} shadow="sm" padding="lg" radius="md">
+        <Text size="lg" ml={isMobile ? Theme.spacing?.xs : 0} style={{ weight: 500 }}>
           {isSuccess
             ? '¡Correo electrónico verificado con éxito!'
-            : 'No se pudo verificar el correo electrónico.'}
+            : 'No se pudo verificar el correo electrónico'}
         </Text>
         <Button
           variant="outline"
           color={Theme.colors?.blue?.[6]}
           onClick={handleGoHomeClick}
-          style={{ marginTop: '1rem' }}>
+          ml={isMobile ? Theme.spacing?.xs : 0}
+          mr={isMobile ? Theme.spacing?.xs : 0}
+          mt={Theme.spacing?.xs}>
           Ir a la página de inicio
         </Button>
       </Card>
