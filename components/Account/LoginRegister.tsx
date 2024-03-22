@@ -19,6 +19,7 @@ import {
   Anchor,
   Box,
   Button,
+  Center,
   Checkbox,
   Container,
   Group,
@@ -171,7 +172,12 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
           )}
 
           <Group justify="space-between" mt={Theme.spacing?.xs} mb={Theme.spacing?.xs}>
-            <Checkbox label="Remember me" />
+            <Center inline>
+              <Checkbox />
+              <Text size="sm" ml={5}>
+                Remember me
+              </Text>
+            </Center>
             {type === 'login' && (
               <Anchor<'a'> onClick={handleForgotPasswordClick} href="#" size="sm">
                 Forgot password?
