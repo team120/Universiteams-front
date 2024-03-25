@@ -40,7 +40,7 @@ interface LoginRegisterProps {
 
 const LoginRegister = ({ initialType }: LoginRegisterProps) => {
   const router = useRouter()
-  const [type, toggleType] = useToggle<LoginRegisterType>(['login', 'register'])
+  const [type, toggleType] = useToggle<LoginRegisterType>(getInitialToggleTypes(initialType))
   const [serverErrors, setServerErrors] = useState<string[]>([])
   const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
 
@@ -117,8 +117,8 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
             size="sm"
             onClick={() => {
               toggleType()
-              const route = type === 'register' ? '/Login' : '/Register'
-              history.pushState(undefined, '', route)
+              const route = type === 'register' ? '/login' : '/register'
+              router.push(`/account/${route}`)
             }}>
             {type === 'register' ? 'Iniciar sesión' : 'Registrarse'}
           </Anchor>
@@ -194,3 +194,9 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
 }
 
 export default LoginRegister
+
+function getInitialToggleTypes(initialType: LoginRegisterType): readonly LoginRegisterType[] {
+  if (initialType === 'register') return ['register', 'login']
+
+  return ['login', 'register']
+}
