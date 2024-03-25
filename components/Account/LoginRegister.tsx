@@ -51,17 +51,17 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
 
   const handleSubmit = async (values: Login) => {
     try {
-      const response = await Account.Auth(values, type)
-      if (response instanceof AxiosError) {
-        const message = response?.message || 'Ocurrió un error inesperado'
-        setServerErrors([message])
-        return
-      }
-
+      await Account.Authenticate(values, type)
       setServerErrors([])
       router.push('/')
     } catch (error) {
-      setServerErrors(['Ocurrió un error inesperado'])
+      const defaultErrorMsg = 'Ocurrió un error inesperado'
+      if (error instanceof AxiosError) {
+        const message = error?.message || defaultErrorMsg
+        setServerErrors([message])
+      }
+
+      setServerErrors([defaultErrorMsg])
     }
   }
 
