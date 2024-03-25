@@ -8,16 +8,14 @@ import {
   TextInput,
   Button,
   Container,
-  Group,
   Anchor,
   Center,
   Box,
-  rem,
   CloseButton,
+  Stack,
 } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Requirement from './Requirement'
-import classes from '@/styles/account.module.scss'
 import Theme from '../../src/app/theme'
 
 const ForgotPassword = () => {
@@ -28,7 +26,7 @@ const ForgotPassword = () => {
 
   const handleGoBackToLoginClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
-    router.push('/Login')
+    router.push('/account/login')
   }
 
   const handleDismiss = () => {
@@ -48,7 +46,7 @@ const ForgotPassword = () => {
         setServerErrors([error.response.data.message])
       } else {
         console.error(error)
-        setServerErrors(['An unexpected error occurred'])
+        setServerErrors(['Ocurrió un error inesperado'])
       }
     }
   }
@@ -66,17 +64,17 @@ const ForgotPassword = () => {
             justifyContent: 'space-between',
           }}>
           <Text size="sm" c={Theme.colors?.teal?.[6]}>
-            Password reset email sent successfully!
+            ¡Correo electrónico de restablecimiento de contraseña enviado con éxito!
           </Text>
           <CloseButton onClick={handleDismiss} style={{ marginLeft: '8px' }} />
         </div>
       )}
-      <Title className={classes.title} style={{ align: 'center' }}>
-        Forgot your password?
-      </Title>
-      <Text c={Theme.colors?.dimmed?.[6]} fz="sm" ta="center">
-        Enter your email to get a reset link
-      </Text>
+      <Stack align="center">
+        <Title>¿Olvidaste tu contraseña?</Title>
+        <Text c={Theme.colors?.dimmed?.[6]} fz="sm" ta="center">
+          Ingresa tu correo electrónico para obtener un enlace de restablecimiento
+        </Text>
+      </Stack>
 
       <form onSubmit={handleSubmit}>
         <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
@@ -88,27 +86,23 @@ const ForgotPassword = () => {
             </>
           )}
           <TextInput
-            label="Your email"
-            placeholder="you@frro.utn.edu.ar"
+            label="Tu correo electrónico"
+            placeholder="tu@frro.utn.edu.ar"
             required
             value={email}
             onChange={(event) => setEmail(event.currentTarget.value)}
           />
-          <Group style={{ position: 'relative' }} mt="lg" className={classes.controls}>
-            <Anchor
-              c={Theme.colors?.dimmed?.[6]}
-              size="sm"
-              className={classes.control}
-              onClick={handleGoBackToLoginClick}>
+          <Stack align="flex-start" mt={Theme.spacing?.xs}>
+            <Anchor c={Theme.colors?.dimmed?.[6]} size="sm" onClick={handleGoBackToLoginClick}>
               <Center inline>
-                <IconArrowLeft size={rem(12)} stroke={1.5} />
-                <Box ml={5}>Back to the login page</Box>
+                <IconArrowLeft stroke={1.5} />
+                <Box ml={5}>Volver a la página de inicio de sesión</Box>
               </Center>
             </Anchor>
-            <Button className={classes.control} type="submit">
-              Reset password
+            <Button mt={Theme.spacing?.xs} type="submit">
+              Restablecer contraseña
             </Button>
-          </Group>
+          </Stack>
         </Paper>
       </form>
     </Container>

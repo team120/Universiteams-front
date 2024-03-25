@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Text, Card, Loader } from '@mantine/core'
+import { Button, Text, Card, Loader, Alert, Anchor, Box, Center } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import axios from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -13,6 +13,7 @@ import {
 import PasswordStrength from './PasswordStrength'
 import Requirement from './Requirement'
 import Theme from '../../src/app/theme'
+import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react'
 
 const parseJwt = (token: string) => {
   if (!token) {
@@ -46,7 +47,7 @@ function PasswordReset() {
   }, [query.get('token')])
 
   const validateConfirmPassword = (confirmPassword: string, password: string): string | null => {
-    if (confirmPassword !== password) return 'Passwords do not match'
+    if (confirmPassword !== password) return 'Las contraseñas no coinciden'
 
     return null
   }
@@ -76,7 +77,7 @@ function PasswordReset() {
         setServerErrors([error.response.data.message])
       } else {
         console.error(error)
-        setServerErrors(['An unexpected error occurred'])
+        setServerErrors(['Ocurrió un error inesperado'])
       }
     } finally {
       setIsLoading(false)
@@ -87,8 +88,36 @@ function PasswordReset() {
     router.push('/')
   }
 
+  const handleGoBackToLoginClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    router.push('/account/login')
+  }
+
   const strength = getPasswordStrength(form.values.password)
   const strengthColorAndPhrase = getStrengthColorAndPhrase(strength)
+
+  if (isLoading) return <Loader />
+
+  if (!emailTokenPayload)
+    return (
+      <>
+        <Alert
+          variant="light"
+          color={Theme.colors?.red?.[6]}
+          title="Error"
+          icon={<IconAlertCircle />}>
+          <Text size="lg" style={{ weight: 500 }} mb={Theme.spacing?.xs}>
+            Token inválido o expirado
+          </Text>
+          <Anchor size="md" onClick={handleGoBackToLoginClick}>
+            <Center inline>
+              <IconArrowLeft stroke={1.5} />
+              <Box ml={5}>Volver a la página de inicio de sesión</Box>
+            </Center>
+          </Anchor>
+        </Alert>
+      </>
+    )
 
   return (
     <div
@@ -98,17 +127,22 @@ function PasswordReset() {
         alignItems: 'center',
         height: '100vh',
       }}>
-      {isLoading && <Loader />}
-      {!isLoading && (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}>
         <Card shadow="sm" padding="lg" radius="md" style={{ maxWidth: '400px', width: '100%' }}>
           <Text size="lg" style={{ weight: 500, marginBottom: '1rem' }}>
             {isSuccess
-              ? 'Password reset successfully!'
-              : `Change password for @${emailTokenPayload?.user}`}
+              ? '¡Contraseña restablecida con éxito!'
+              : `Cambiar contraseña para @${emailTokenPayload?.user}`}
           </Text>
           {isSuccess ? (
             <Button variant="outline" color={Theme.colors?.blue?.[6]} onClick={handleGoHomeClick}>
-              Go to home page
+              Ir a la página de inicio
             </Button>
           ) : (
             <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -117,8 +151,8 @@ function PasswordReset() {
               ))}
               <PasswordInput
                 required
-                label="New Password"
-                placeholder="Enter your new password"
+                label="Nueva contraseña"
+                placeholder="Ingresa tu nueva contraseña"
                 {...form.getInputProps('password')}
                 style={{ marginBottom: '1rem' }}
               />
@@ -133,18 +167,18 @@ function PasswordReset() {
               )}
               <PasswordInput
                 required
-                label="Confirm Password"
-                placeholder="Confirm your new password"
+                label="Confirmar contraseña"
+                placeholder="Confirma tu nueva contraseña"
                 {...form.getInputProps('confirmPassword')}
                 style={{ marginBottom: '1rem' }}
               />
               <Button type="submit" color={Theme.colors?.blue?.[6]} style={{ marginTop: '1rem' }}>
-                Reset Password
+                Restablecer contraseña
               </Button>
             </form>
           )}
         </Card>
-      )}
+      </div>
     </div>
   )
 }

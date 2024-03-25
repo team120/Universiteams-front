@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Loader, Card, Text, Button } from '@mantine/core'
+import { Loader, Card, Text, Button, Alert, Anchor, Box, Center } from '@mantine/core'
 import axios from 'axios'
 import Theme from '../../src/app/theme'
+import { useMediaQuery } from '@mantine/hooks'
+import { IconAlertCircle, IconArrowLeft, IconInfoCircle } from '@tabler/icons-react'
 
 const VerifyEmail = () => {
   const router = useRouter()
@@ -35,29 +37,29 @@ const VerifyEmail = () => {
     router.push('/')
   }
 
+  if (isLoading) return <Loader />
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-      }}>
-      {isLoading && <Loader />}
-      {!isLoading && (
-        <Card shadow="sm" padding="lg" radius="md">
-          <Text size="lg" style={{ weight: 500 }}>
-            {isSuccess ? 'Email verified successfully!' : "Email couldn't be verified."}
+    <div>
+      {isSuccess ? (
+        <Alert color="green" title="Success" mb={Theme.spacing?.xs} icon={<IconInfoCircle />}>
+          <Text size="lg" style={{ weight: 500 }} mb={Theme.spacing?.xs}>
+            ¡Correo electrónico verificado con éxito!
           </Text>
-          <Button
-            variant="outline"
-            color={Theme.colors?.blue?.[6]}
-            onClick={handleGoHomeClick}
-            style={{ marginTop: '1rem' }}>
-            Go to home page
-          </Button>
-        </Card>
+        </Alert>
+      ) : (
+        <Alert color="red" title="Error" mb={Theme.spacing?.xs} icon={<IconAlertCircle />}>
+          <Text size="lg" style={{ weight: 500 }} mb={Theme.spacing?.xs}>
+            No se pudo verificar el correo electrónico
+          </Text>
+        </Alert>
       )}
+      <Anchor size="md" onClick={handleGoHomeClick}>
+        <Center inline>
+          <IconArrowLeft stroke={1.5} />
+          <Box ml={5}>Volver a la página de inicio</Box>
+        </Center>
+      </Anchor>
     </div>
   )
 }

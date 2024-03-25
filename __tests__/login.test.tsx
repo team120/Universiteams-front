@@ -7,10 +7,10 @@ jest.mock('next/navigation', () => require('next-router-mock'))
 describe('Login page', () => {
   it('moves to register form if login button is clicked', () => {
     const { getByText } = render(<Login />)
-    const registerLink = getByText('Register')
+    const registerLink = getByText('Registrarse')
 
     fireEvent.click(registerLink)
-    const registerExtraField = getByText('First Name')
+    const registerExtraField = getByText('Nombre')
     expect(registerExtraField).toBeInTheDocument()
   })
 })
