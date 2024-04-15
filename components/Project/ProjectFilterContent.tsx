@@ -227,14 +227,9 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             onChange={handleTypeChange}
           />
 
-          <Group>
-            <Switch
-              mt={Theme.spacing?.xs}
-              mb={Theme.spacing?.xs}
-              checked={form.values.isDown}
-              onChange={handleIsDownChange}
-            />
-            <Text size="sm" ml={5}>
+          <Group mt={Theme.spacing?.xs} mb={Theme.spacing?.xs}>
+            <Switch checked={form.values.isDown} onChange={handleIsDownChange} />
+            <Text size="sm" ml={6}>
               Descontinuados
             </Text>
           </Group>
