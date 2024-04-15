@@ -1,7 +1,25 @@
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { AxiosError } from 'axios'
+
+import RegEx from '../../utils/string/RegEx'
+import {
+  getPasswordStrength,
+  getStrengthColorAndPhrase,
+  passwordValidation,
+  requirements,
+} from '@/services/password'
+import { Account } from '@/services/account'
+import PasswordStrength from './PasswordStrength'
+
+import Login from '@/entities/HelpTypes/Login'
+import LoginRegisterType from '@/entities/HelpTypes/LoginRegisterType'
+
 import {
   Anchor,
+  Box,
   Button,
+  Center,
   Checkbox,
   Container,
   Group,
@@ -12,53 +30,49 @@ import {
   Title,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { useToggle } from '@mantine/hooks'
-import { useRouter } from 'next/navigation'
-import axios, { AxiosError } from 'axios'
+import { useMediaQuery, useToggle } from '@mantine/hooks'
 import Requirement from './Requirement'
-import {
-  getPasswordStrength,
-  getStrengthColorAndPhrase,
-  passwordValidation,
-  requirements,
-} from '@/services/password'
-import PasswordStrength from './PasswordStrength'
 import Theme from '../../src/app/theme'
 
-interface ErrorResponse {
-  message: string
+interface LoginRegisterProps {
+  initialType: LoginRegisterType
 }
 
-const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) => {
+const LoginRegister = ({ initialType }: LoginRegisterProps) => {
   const router = useRouter()
-  const [type, toggleType] = useToggle(['login', 'register'])
-  const emailRegex = /^\S+@\S+$/
+  const [type, toggleType] = useToggle<LoginRegisterType>(getInitialToggleTypes(initialType))
   const [serverErrors, setServerErrors] = useState<string[]>([])
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
 
   const handleForgotPasswordClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
-    router.push('/forgot-password')
+    router.push('/account/forgotPassword')
   }
 
-  const handleSubmit = async (values: typeof form.values) => {
-    const url = `http://api.localhost/auth/${type}`
-    axios
-      .post(url, values, { withCredentials: true })
-      .then(() => router.push('/'))
-      .catch((error: AxiosError<ErrorResponse>) => {
-        const message = error.response?.data?.message || 'An unexpected error occurred'
+  const handleSubmit = async (values: Login) => {
+    try {
+      await Account.Authenticate(values, type)
+      setServerErrors([])
+      router.push('/')
+    } catch (error) {
+      const defaultErrorMsg = 'Ocurrió un error inesperado'
+      if (error instanceof AxiosError) {
+        const message = error?.message || defaultErrorMsg
         setServerErrors([message])
-      })
+      }
+
+      setServerErrors([defaultErrorMsg])
+    }
   }
 
   const validateName = (value: string) => {
     if (type !== 'register') return null
-    if (value.length < 2) return 'Minimum two characters'
+    if (value.length < 2) return 'Mínimo dos caracteres'
 
     return null
   }
 
-  const form = useForm({
+  const form = useForm<Login>({
     initialValues: {
       firstName: '',
       lastName: '',
@@ -69,7 +83,7 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
     validate: {
       firstName: (value) => validateName(value),
       lastName: (value) => validateName(value),
-      email: (value) => (emailRegex.test(value) ? null : 'Invalid email'),
+      email: (value) => (RegEx.email.test(value) ? null : 'Correo electrónico inválido'),
       password: (value) => {
         if (type !== 'register') return null
 
@@ -87,27 +101,29 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
 
   return (
     <Container size={420} my={40}>
-      <Title
-        style={{
-          align: 'center',
-          fontFamily: 'Greycliff CF, sans-serif',
-          fontWeight: 900,
-        }}>
-        Welcome to Universiteams!
-      </Title>
-      <Text style={{ align: 'center' }} c={Theme.colors?.dimmed?.[6]} size="sm" mt={5}>
-        {type === 'register' ? 'Already have an account?' : "Don't have an account?"}{' '}
-        <Anchor<'a'>
-          href="#"
-          size="sm"
-          onClick={() => {
-            toggleType()
-            const route = type === 'register' ? '/Login' : '/Register'
-            history.pushState(undefined, '', route)
+      <Box ml={isMobile ? Theme.spacing?.sm : 0}>
+        <Title
+          style={{
+            align: 'center',
+            fontFamily: 'Greycliff CF, sans-serif',
+            fontWeight: 900,
           }}>
-          {type === 'register' ? 'Login' : 'Register'}
-        </Anchor>
-      </Text>
+          ¡Bienvenido a Universiteams!
+        </Title>
+        <Text style={{ align: 'center' }} c={Theme.colors?.dimmed?.[6]} size="sm" mt={5}>
+          {type === 'register' ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?'}{' '}
+          <Anchor<'a'>
+            href="#"
+            size="sm"
+            onClick={() => {
+              toggleType()
+              const route = type === 'register' ? '/login' : '/register'
+              router.push(`/account/${route}`)
+            }}>
+            {type === 'register' ? 'Iniciar sesión' : 'Registrarse'}
+          </Anchor>
+        </Text>
+      </Box>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         {serverErrors.map((error, index) => (
@@ -118,14 +134,14 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
           {type === 'register' && (
             <>
               <TextInput
-                label="First Name"
-                placeholder="Your first name"
+                label="Nombre"
+                placeholder="Tu nombre"
                 required
                 {...form.getInputProps('firstName')}
               />
               <TextInput
-                label="Last Name"
-                placeholder="Your last name"
+                label="Apellido"
+                placeholder="Tu apellido"
                 required
                 {...form.getInputProps('lastName')}
               />
@@ -133,14 +149,14 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
           )}
 
           <TextInput
-            label="Email"
-            placeholder="your@email.com"
+            label="Correo electrónico"
+            placeholder="tu@correo.com"
             required
             {...form.getInputProps('email')}
           />
           <PasswordInput
-            label="Password"
-            placeholder="Your password"
+            label="Contraseña"
+            placeholder="Tu contraseña"
             required
             mt="xs"
             {...form.getInputProps('password')}
@@ -155,16 +171,21 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
             />
           )}
 
-          <Group style={{ position: 'relative' }} mt="md">
-            <Checkbox label="Remember me" />
+          <Group justify="space-between" mt={Theme.spacing?.xs} mb={Theme.spacing?.xs}>
+            <Center inline>
+              <Checkbox />
+              <Text size="sm" ml={5}>
+                Recuérdame
+              </Text>
+            </Center>
             {type === 'login' && (
               <Anchor<'a'> onClick={handleForgotPasswordClick} href="#" size="sm">
-                Forgot password?
+                ¿Olvidaste tu contraseña?
               </Anchor>
             )}
           </Group>
           <Button fullWidth mt="xl" type="submit">
-            {type === 'login' ? 'Login' : 'Register'}
+            {type === 'login' ? 'Iniciar sesión' : 'Registrarse'}
           </Button>
         </form>
       </Paper>
@@ -173,3 +194,9 @@ const LoginRegister = ({ initialType }: { initialType: 'login' | 'register' }) =
 }
 
 export default LoginRegister
+
+function getInitialToggleTypes(initialType: LoginRegisterType): readonly LoginRegisterType[] {
+  if (initialType === 'register') return ['register', 'login']
+
+  return ['login', 'register']
+}

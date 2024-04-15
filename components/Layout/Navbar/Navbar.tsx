@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppShell, Divider, ScrollArea } from '@mantine/core'
 import NavbarItem from './NavbarItem'
 import {
@@ -6,7 +6,6 @@ import {
   IconBuildingCommunity,
   IconFileDescription,
   IconFolderHeart,
-  IconFolderStar,
   IconFolders,
   IconHome,
   IconShare,
@@ -14,11 +13,7 @@ import {
   IconTerminal2,
   IconUserCircle,
 } from '@tabler/icons-react'
-
-const mockUser = {
-  name: 'Adriandrés Mecaduy',
-  email: 'ttads120@gmail.com',
-}
+import { CurrentUserInfo, CurrentUserService } from '../../../services/currentUser'
 
 const mockAppVersion = 'v1.0.0'
 
@@ -26,26 +21,55 @@ const mockAppVersion = 'v1.0.0'
 const iconSize = 40
 
 const Navbar = () => {
+  const [currentUser, setCurrentUser] = useState<CurrentUserInfo | null>(null)
+
+  const fetchCurrentUser = async () => {
+    const user = await CurrentUserService.fetchUserInfo()
+    setCurrentUser(user)
+  }
+
+  useEffect(() => {
+    fetchCurrentUser()
+  }, [])
+
   return (
     <>
-      <AppShell.Section>
-        <NavbarItem
-          text={mockUser.name}
-          textSecondLine={mockUser.email}
-          link="perfil"
-          icon={<IconUserCircle size={iconSize} />}
-        />
-      </AppShell.Section>
+      {currentUser ? (
+        <AppShell.Section>
+          <NavbarItem
+            text={currentUser.user}
+            textSecondLine={currentUser.email}
+            link="perfil"
+            icon={<IconUserCircle size={iconSize} />}
+          />
+        </AppShell.Section>
+      ) : (
+        <AppShell.Section>
+          <NavbarItem
+            text="Iniciar Sesión"
+            link="account/login"
+            icon={<IconUserCircle size={iconSize} />}
+          />
+        </AppShell.Section>
+      )}
       <Divider />
       <AppShell.Section>
         <NavbarItem text="UPM Feed" link="feed" icon={<IconHome size={iconSize} />} />
-        <NavbarItem text="Mis Solicitudes" link="solicitudes" icon={<IconStar size={iconSize} />} />
+        {currentUser && (
+          <NavbarItem
+            text="Mis Solicitudes"
+            link="solicitudes"
+            icon={<IconStar size={iconSize} />}
+          />
+        )}
         <NavbarItem text="Proyectos" link="projects" icon={<IconFolders size={iconSize} />} />
-        <NavbarItem
-          text="Proyectos Favoritos"
-          link="projects?isFavorite=true"
-          icon={<IconFolderHeart size={iconSize} />}
-        />
+        {currentUser && (
+          <NavbarItem
+            text="Proyectos Favoritos"
+            link="projects?isFavorite=true"
+            icon={<IconFolderHeart size={iconSize} />}
+          />
+        )}
       </AppShell.Section>
       <Divider />
       <AppShell.Section grow component={ScrollArea}>
