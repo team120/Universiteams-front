@@ -9,6 +9,8 @@ import {
   Switch,
   ComboboxItem,
   MultiSelect,
+  Center,
+  Text,
 } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
@@ -225,13 +227,17 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             onChange={handleTypeChange}
           />
 
-          <Switch
-            label="Descontinuados"
-            mt={Theme.spacing?.xs}
-            mb={Theme.spacing?.xs}
-            checked={form.values.isDown}
-            onChange={handleIsDownChange}
-          />
+          <Group>
+            <Switch
+              mt={Theme.spacing?.xs}
+              mb={Theme.spacing?.xs}
+              checked={form.values.isDown}
+              onChange={handleIsDownChange}
+            />
+            <Text size="sm" ml={5}>
+              Descontinuados
+            </Text>
+          </Group>
 
           <DateInput
             label="Creados desde"
