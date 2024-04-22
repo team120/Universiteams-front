@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
 import { ActionIcon, Badge, Card, Chip, Flex, Group, Text, useMantineTheme } from '@mantine/core'
 import Dates from 'utils/string/Dates'
-import Project from '@/entities/Project'
+import Project, { RequestState } from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
 import { Projects } from '@/services/projects'
-import { IconHeart, IconHeartFilled } from '@tabler/icons-react'
+import {
+  IconHeart,
+  IconHeartFilled,
+  IconSend,
+  IconUserCheck,
+  IconUserPlus,
+} from '@tabler/icons-react'
 import Theme from '../../src/app/theme'
 
 interface ProjectItemProps {
@@ -20,6 +26,8 @@ const ProjectItem = (props: ProjectItemProps) => {
   const [isFavorite, setIsFavorite] = useState(project?.isFavorite)
   const [favoriteCount, setFavoriteCount] = useState(project?.favoriteCount)
 
+  const [requestState, setRequestState] = useState(project?.requestState)
+
   const searchQuery = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -28,7 +36,7 @@ const ProjectItem = (props: ProjectItemProps) => {
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
   }
 
-  const handlefavoriteClick = async (projectId: number) => {
+  const handleFavoriteClick = async (projectId: number) => {
     if (isFavorite) {
       const result = await Projects.unfavorite(projectId)
       if (result) {
@@ -41,6 +49,33 @@ const ProjectItem = (props: ProjectItemProps) => {
         setIsFavorite(true)
         favoriteCount !== undefined && setFavoriteCount(favoriteCount + 1)
       }
+    }
+  }
+
+  const handleEnrollmentRequestClick = async (projectId: number) => {
+    try {
+      await Projects.requestEnrollment(projectId)
+      setRequestState(RequestState.Pending)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleEnrollmentRequestCancelClick = async (projectId: number) => {
+    try {
+      await Projects.cancelEnrollmentRequest(projectId)
+      setRequestState(undefined)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleEnrollmentCancelClick = async (projectId: number) => {
+    try {
+      await Projects.cancelEnrollment(projectId)
+      setRequestState(undefined)
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -75,6 +110,46 @@ const ProjectItem = (props: ProjectItemProps) => {
 
   const handleLeaderTagClick = (userId: number) => {
     Url.setUrlParam(router, pathname, searchQuery, 'user', userId.toString())
+  }
+
+  const renderActionIcon = (requestState: RequestState | undefined, projectId: number) => {
+    let icon = null
+    let ariaLabel = ''
+    let color = 'gray'
+    let handlerFunc = (_: number) => console.log('No handler function defined')
+
+    switch (requestState) {
+      case null:
+        icon = <IconUserPlus />
+        ariaLabel = 'Solicitar inscripción'
+        handlerFunc = handleEnrollmentRequestClick
+        break
+      case RequestState.Pending:
+        icon = <IconSend />
+        color = 'blue'
+        ariaLabel = 'Cancelar solicitud de inscripción'
+        handlerFunc = handleEnrollmentRequestCancelClick
+        break
+      case RequestState.Accepted:
+        icon = <IconUserCheck />
+        color = 'blue'
+        ariaLabel = 'Cancelar inscripción'
+        handlerFunc = handleEnrollmentCancelClick
+        break
+      default:
+        return <></>
+    }
+
+    return (
+      <ActionIcon
+        variant="transparent"
+        aria-label={ariaLabel}
+        onClick={() => handlerFunc(projectId)}
+        size="lg"
+        color={color}>
+        {icon}
+      </ActionIcon>
+    )
   }
 
   // Small loader needed?
@@ -153,10 +228,12 @@ const ProjectItem = (props: ProjectItemProps) => {
         </Chip.Group>
 
         <Flex justify="flex-end" align="center">
+          {renderActionIcon(requestState, project.id)}
+
           <ActionIcon
             variant="transparent"
             aria-label="Guardar en marcadores"
-            onClick={() => handlefavoriteClick(project.id)}
+            onClick={() => handleFavoriteClick(project.id)}
             size="lg"
             color={isFavorite ? 'blue' : 'gray'}>
             {isFavorite ? <IconHeartFilled /> : <IconHeart />}

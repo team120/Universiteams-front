@@ -4,16 +4,21 @@ import NavbarItem from './NavbarItem'
 import {
   IconAlertCircle,
   IconBuildingCommunity,
+  IconBulb,
   IconFileDescription,
+  IconFolderBolt,
   IconFolderHeart,
+  IconFolderQuestion,
   IconFolders,
   IconHome,
+  IconQuestionMark,
+  IconSend,
   IconShare,
-  IconStar,
   IconTerminal2,
   IconUserCircle,
 } from '@tabler/icons-react'
 import { CurrentUserInfo, CurrentUserService } from '../../../services/currentUser'
+import { RequestState } from '../../../entities/Project'
 
 const mockAppVersion = 'v1.0.0'
 
@@ -57,9 +62,16 @@ const Navbar = () => {
         <NavbarItem text="UPM Feed" link="feed" icon={<IconHome size={iconSize} />} />
         {currentUser && (
           <NavbarItem
+            text="Mis Proyectos"
+            link={`projects?requestState=${RequestState.Accepted}`}
+            icon={<IconBulb size={iconSize} />}
+          />
+        )}
+        {currentUser && (
+          <NavbarItem
             text="Mis Solicitudes"
-            link="solicitudes"
-            icon={<IconStar size={iconSize} />}
+            link={`projects?requestState=${RequestState.Pending}`}
+            icon={<IconSend size={iconSize} />}
           />
         )}
         <NavbarItem text="Proyectos" link="projects" icon={<IconFolders size={iconSize} />} />

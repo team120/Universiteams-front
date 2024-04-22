@@ -2,6 +2,12 @@ import Enrollment from './Enrollment'
 import Interest from './Interest'
 import ResearchDepartment from './ResearchDepartment'
 
+export enum RequestState {
+  Pending = 'Pending',
+  Accepted = 'Accepted',
+  Rejected = 'Rejected',
+}
+
 interface Project {
   id: number
   name: string
@@ -12,6 +18,7 @@ interface Project {
   endDate: string
   isDown: boolean
   isFavorite?: boolean
+  requestState?: RequestState
   researchDepartments: ResearchDepartment[]
   interests: Interest[]
   enrollments: Enrollment[]

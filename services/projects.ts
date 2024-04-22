@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import Env from 'utils/config/Env'
 
 import ProjectsResult from '@/entities/ProjectsResult'
-import { off } from 'process'
+import { RequestState } from '../entities/Project'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -14,6 +14,7 @@ export interface GetProjectsInput {
   interestIds?: number[]
   userId?: number
   type?: string
+  requestState?: RequestState
   dateFrom?: Date
   isDown?: boolean
   isFavorite?: boolean
@@ -42,6 +43,7 @@ export const Projects = {
         )
         .concat(params?.userId ? `userId=${params.userId}&` : '')
         .concat(params?.type ? `type=${params.type}&` : '')
+        .concat(params?.requestState ? `requestState=${params.requestState}&` : '')
         .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
         .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
         .concat(params?.isFavorite ? `isFavorite=${params.isFavorite}&` : '')
@@ -95,5 +97,17 @@ export const Projects = {
       }
       return false
     }
+  },
+
+  async requestEnrollment(id: number): Promise<void> {
+    await axios.post(`${prefix}/request-enroll/${id}`)
+  },
+
+  async cancelEnrollmentRequest(id: number): Promise<void> {
+    await axios.delete(`${prefix}/cancel-enroll-request/${id}`)
+  },
+
+  async cancelEnrollment(id: number): Promise<void> {
+    await axios.delete(`${prefix}/cancel-enroll/${id}`)
   },
 }

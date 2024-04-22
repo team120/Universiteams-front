@@ -16,6 +16,7 @@ import { ResearchDepartments } from '@/services/departments'
 import { Interests } from '@/services/interests'
 import { Users } from '@/services/user'
 import { Center, Pagination } from '@mantine/core'
+import { RequestState } from '../../../entities/Project'
 
 const ProjectsPage: NextPage = () => {
   const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
@@ -143,6 +144,7 @@ const ProjectsPage: NextPage = () => {
       interestIds: searchQuery.getAll('interest').map((id) => parseInt(id)),
       userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')!) : undefined,
       type: searchQuery.get('type') || undefined,
+      requestState: (searchQuery.get('requestState') as RequestState) || undefined,
       isDown:
         searchQuery.get('isDown') === 'true'
           ? true
