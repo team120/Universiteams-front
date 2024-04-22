@@ -59,7 +59,6 @@ const Navbar = () => {
       )}
       <Divider />
       <AppShell.Section>
-        <NavbarItem text="UPM Feed" link="feed" icon={<IconHome size={iconSize} />} />
         {currentUser && (
           <NavbarItem
             text="Mis Proyectos"
