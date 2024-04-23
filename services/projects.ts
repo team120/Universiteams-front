@@ -100,14 +100,10 @@ export const Projects = {
   },
 
   async requestEnrollment(id: number): Promise<void> {
-    await axios.post(`${prefix}/request-enroll/${id}`)
-  },
-
-  async cancelEnrollmentRequest(id: number): Promise<void> {
-    await axios.delete(`${prefix}/cancel-enroll-request/${id}`)
+    await axios.post(`${prefix}/enroll-request/${id}`)
   },
 
   async cancelEnrollment(id: number): Promise<void> {
-    await axios.delete(`${prefix}/cancel-enroll/${id}`)
+    await axios.delete(`${prefix}/enroll/${id}`)
   },
 }

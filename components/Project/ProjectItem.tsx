@@ -14,6 +14,7 @@ import {
   IconUserPlus,
 } from '@tabler/icons-react'
 import Theme from '../../src/app/theme'
+import { notifications } from '@mantine/notifications'
 
 interface ProjectItemProps {
   project?: Project
@@ -26,7 +27,9 @@ const ProjectItem = (props: ProjectItemProps) => {
   const [isFavorite, setIsFavorite] = useState(project?.isFavorite)
   const [favoriteCount, setFavoriteCount] = useState(project?.favoriteCount)
 
-  const [requestState, setRequestState] = useState(project?.requestState)
+  const [requestState, setRequestState] = useState(
+    project?.requestState == null ? undefined : project.requestState
+  )
 
   const searchQuery = useSearchParams()
   const router = useRouter()
@@ -56,6 +59,10 @@ const ProjectItem = (props: ProjectItemProps) => {
     try {
       await Projects.requestEnrollment(projectId)
       setRequestState(RequestState.Pending)
+      notifications.show({
+        title: 'Solicitud de inscripcion enviada',
+        message: 'Espera a que el líder del proyecto acepte tu solicitud',
+      })
     } catch (error) {
       console.error(error)
     }
@@ -63,8 +70,12 @@ const ProjectItem = (props: ProjectItemProps) => {
 
   const handleEnrollmentRequestCancelClick = async (projectId: number) => {
     try {
-      await Projects.cancelEnrollmentRequest(projectId)
+      await Projects.cancelEnrollment(projectId)
       setRequestState(undefined)
+      notifications.show({
+        title: 'Solicitud de inscripcion cancelada',
+        message: 'Tu solicitud de inscripción ha sido cancelada',
+      })
     } catch (error) {
       console.error(error)
     }
@@ -74,6 +85,10 @@ const ProjectItem = (props: ProjectItemProps) => {
     try {
       await Projects.cancelEnrollment(projectId)
       setRequestState(undefined)
+      notifications.show({
+        title: 'Inscripción cancelada',
+        message: 'Tu inscripción en el proyecto ha sido cancelada',
+      })
     } catch (error) {
       console.error(error)
     }
@@ -119,7 +134,7 @@ const ProjectItem = (props: ProjectItemProps) => {
     let handlerFunc = (_: number) => console.log('No handler function defined')
 
     switch (requestState) {
-      case null:
+      case undefined:
         icon = <IconUserPlus />
         ariaLabel = 'Solicitar inscripción'
         handlerFunc = handleEnrollmentRequestClick

@@ -5,12 +5,14 @@ import axios from 'axios'
 import { MantineProvider, localStorageColorSchemeManager } from '@mantine/core'
 import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
+import '@mantine/notifications/styles.css'
 import '@/styles/globals.scss'
 
 import Theme from './theme'
 import Layout from '@/components/Layout/Layout'
+import { Notifications } from '@mantine/notifications'
 
-const App = ({ children, pageProps }: any) => {
+const App = ({ children }: any) => {
   // Detect the user's theme preference (dark or light)
   const colorSchemeManager = localStorageColorSchemeManager({ key: 'mantine-color-scheme' })
 
@@ -31,7 +33,7 @@ const App = ({ children, pageProps }: any) => {
           defaultColorScheme="dark">
           <Layout>
             {children}
-            {/* <Component {...pageProps} /> */}
+            <Notifications />
           </Layout>
         </MantineProvider>
       </body>
