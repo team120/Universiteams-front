@@ -96,7 +96,6 @@ const Theme = createTheme({
   fontFamily: 'Verdana, sans-serif',
   fontFamilyMonospace: 'Monaco, Courier, monospace',
   headings: { fontFamily: 'Greycliff CF, sans-serif' },
-  spacing: { xs: '15', sm: '20', md: '25', lg: '30', xl: '40' },
   breakpoints: { xs: '36em', sm: '576px', md: '768px', lg: '992px', xl: '1200px' },
 })
 
