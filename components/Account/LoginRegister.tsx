@@ -101,7 +101,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
 
   return (
     <Container size={420} my={40}>
-      <Box ml={isMobile ? Theme.spacing?.sm : 0}>
+      <Box ml={isMobile ? 'xs' : 0}>
         <Title
           style={{
             align: 'center',
@@ -171,7 +171,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
             />
           )}
 
-          <Group justify="space-between" mt={Theme.spacing?.xs} mb={Theme.spacing?.xs}>
+          <Group justify="space-between" mt='xs' mb='xs'>
             <Center inline>
               <Checkbox />
               <Text size="sm" ml={5}>

@@ -25,7 +25,7 @@ const Header = (props: HeaderProps) => {
         <ActionIcon
           variant="transparent"
           color={Theme.colors?.blue?.[4]}
-          mr={Theme.spacing?.xs}
+          mr='xs'
           onClick={() => router.push('/')}
           aria-label="Universiteams Icon">
           <img src="/favicon.ico" alt="Project favicon" style={{ width: '100%', height: '100%' }} />{' '}

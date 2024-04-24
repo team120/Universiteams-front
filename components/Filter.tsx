@@ -36,7 +36,7 @@ const Filter = (props: FilterProps) => {
           aria-label="Filter"
           size="lg"
           onClick={() => toggle()}
-          ml={!isMobile ? Theme.spacing?.xs : 0}>
+          ml={!isMobile ? 'xs' : 0}>
           <IconFilter style={{ width: '70%', height: '70%' }} />
         </ActionIcon>
         {!isMobile && resultsCounter}

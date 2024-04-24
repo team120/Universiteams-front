@@ -54,7 +54,7 @@ const Layout = (props: Layout) => {
           showNavAndSearch={true}
         />
       </AppShell.Header>
-      <AppShell.Navbar p="md">
+      <AppShell.Navbar>
         <Navbar />
       </AppShell.Navbar>
       <AppShell.Main>{props.children}</AppShell.Main>

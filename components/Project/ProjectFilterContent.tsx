@@ -124,7 +124,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   return (
     <>
       <form>
-        <Stack ml={isMobile ? Theme.spacing?.xs : 0} mr={isMobile ? Theme.spacing?.xs : 0}>
+        <Stack gap='xs' ml={isMobile ? 'xs' : 0} mr={isMobile ? 'xs' : 0}>
           <Grid align="flex-end">
             <Grid.Col span="auto">
               <Select
@@ -141,7 +141,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
                 onChange={handleSortByChange}
               />
             </Grid.Col>
-            <Grid.Col span={1}>
+            <Grid.Col span={2}>
               <ActionIcon variant="transparent" onClick={handleOrderChange}>
                 {form.values.inAscendingOrder ? <IconArrowUp /> : <IconArrowDown />}
               </ActionIcon>
@@ -227,12 +227,12 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             onChange={handleTypeChange}
           />
 
-          <Group mt={Theme.spacing?.xs} mb={Theme.spacing?.xs}>
-            <Switch checked={form.values.isDown} onChange={handleIsDownChange} />
-            <Text size="sm" ml={6}>
-              Descontinuados
-            </Text>
-          </Group>
+          <Switch
+            checked={form.values.isDown}
+            onChange={handleIsDownChange}
+            label="Descontinuados"
+            mt='xs'
+          />
 
           <DateInput
             label="Creados desde"
@@ -242,7 +242,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             onChange={handleDateInputChange}
           />
 
-          <Group grow mt={Theme.spacing?.sm}>
+          <Group grow mt='xs'>
             <ActionIcon color="red" onClick={reset}>
               <IconTrash />
             </ActionIcon>

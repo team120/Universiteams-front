@@ -42,14 +42,14 @@ const VerifyEmail = () => {
   return (
     <div>
       {isSuccess ? (
-        <Alert color="green" title="Success" mb={Theme.spacing?.xs} icon={<IconInfoCircle />}>
-          <Text size="lg" style={{ weight: 500 }} mb={Theme.spacing?.xs}>
+        <Alert color="green" title="Success" mb='xs' icon={<IconInfoCircle />}>
+          <Text size="lg" style={{ weight: 500 }} mb='xs'>
             ¡Correo electrónico verificado con éxito!
           </Text>
         </Alert>
       ) : (
-        <Alert color="red" title="Error" mb={Theme.spacing?.xs} icon={<IconAlertCircle />}>
-          <Text size="lg" style={{ weight: 500 }} mb={Theme.spacing?.xs}>
+        <Alert color="red" title="Error" mb='xs' icon={<IconAlertCircle />}>
+          <Text size="lg" style={{ weight: 500 }} mb='xs'>
             No se pudo verificar el correo electrónico
           </Text>
         </Alert>

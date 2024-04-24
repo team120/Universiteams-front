@@ -175,7 +175,7 @@ const ProjectItem = (props: ProjectItemProps) => {
       key={project.id}
       mx={'3%'}
       mb={'0.5rem'}
-      p={'1rem'}
+      p='lg'
       radius="md"
       style={{
         display: 'flex',
@@ -189,7 +189,7 @@ const ProjectItem = (props: ProjectItemProps) => {
           <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
             {project.name}
           </Text>
-          <Group gap={'1rem'} style={{ marginBottom: theme.spacing.xs }}>
+          <Group gap={'1rem'} style={{ marginBottom: 'xs' }}>
             <Text style={{ fontWeight: 500 }}>
               {project.type} | {Dates.formatDate(project.creationDate)}
               {project.endDate ? ` - ${Dates.formatDate(project.endDate)}` : ''}

@@ -92,14 +92,14 @@ const ForgotPassword = () => {
             value={email}
             onChange={(event) => setEmail(event.currentTarget.value)}
           />
-          <Stack align="flex-start" mt={Theme.spacing?.xs}>
+          <Stack align="flex-start" mt='xs'>
             <Anchor c={Theme.colors?.dimmed?.[6]} size="sm" onClick={handleGoBackToLoginClick}>
               <Center inline>
                 <IconArrowLeft stroke={1.5} />
                 <Box ml={5}>Volver a la página de inicio de sesión</Box>
               </Center>
             </Anchor>
-            <Button mt={Theme.spacing?.xs} type="submit">
+            <Button mt='xs' type="submit">
               Restablecer contraseña
             </Button>
           </Stack>
