@@ -72,12 +72,13 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
     return null
   }
 
-  const form = useForm<Login>({
+  const form = useForm({
     initialValues: {
       firstName: '',
       lastName: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
 
     validate: {
@@ -88,6 +89,12 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
         if (type !== 'register') return null
 
         return passwordValidation(value)
+      },
+      confirmPassword: (value) => {
+        if (type !== 'register') return null
+        if (value !== form.values.password) return 'Las contraseñas no coinciden'
+
+        return null
       },
     },
   })
@@ -158,7 +165,6 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
             label="Contraseña"
             placeholder="Tu contraseña"
             required
-            mt="xs"
             {...form.getInputProps('password')}
           />
           {type === 'register' && strength > 0 && (
@@ -168,6 +174,14 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
               color={strengthColorAndPhrase?.color}
               requirements={requirements}
               formValue={form.values.password}
+            />
+          )}
+          {type === 'register' && (
+            <PasswordInput
+              label="Confirmar contraseña"
+              placeholder="Tu contraseña"
+              required
+              {...form.getInputProps('confirmPassword')}
             />
           )}
 
