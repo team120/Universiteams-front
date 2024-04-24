@@ -29,7 +29,7 @@ const Filter = (props: FilterProps) => {
   const resultsCounter = <Text>{props.counter} Resultados</Text>
   return (
     <>
-      <Group justify={isMobile ? 'flex-end' : 'flex-start'}>
+      <Group justify={isMobile ? 'flex-end' : 'flex-start'} gap="xs">
         {isMobile && resultsCounter}
         <ActionIcon
           variant="transparent"
