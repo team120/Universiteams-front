@@ -171,13 +171,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
             />
           )}
 
-          <Group justify="space-between" mt='xs' mb='xs'>
-            <Center inline>
-              <Checkbox />
-              <Text size="sm" ml={5}>
-                Recuérdame
-              </Text>
-            </Center>
+          <Group justify="space-between" mt="xs" mb="xs">
             {type === 'login' && (
               <Anchor<'a'> onClick={handleForgotPasswordClick} href="#" size="sm">
                 ¿Olvidaste tu contraseña?
