@@ -180,7 +180,6 @@ const ProjectItem = (props: ProjectItemProps) => {
       style={{
         display: 'flex',
         flexDirection: 'row',
-        width: '94%',
         borderStyle: 'solid',
         borderColor: 'gray',
       }}>
