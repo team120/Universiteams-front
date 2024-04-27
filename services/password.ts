@@ -29,15 +29,18 @@ export const requirements: IRequirement[] = [
 export const getPasswordStrength = (password: string) => {
   let strengthAccumulator = 0
 
-  requirements.forEach((requirement) => {
-    if (requirement.validate(password)) strengthAccumulator++
-  })
+  for (const requirement of requirements) {
+    if (requirement.validate(password)) {
+      strengthAccumulator++;
+    }
+  }
 
-  return strengthAccumulator * (100 / requirements.length)
+  return strengthAccumulator
 }
 
 export const getStrengthColorAndPhrase = (strength: number) => {
-  const colors = ['red', 'orange', 'yellow', 'blue', 'green']
+  const strengthPercentage = strength * (100 / requirements.length)
+  const colors = ['red.6', 'orange.6', 'yellow.6', 'blue.6', 'green.6']
   const phrases = [
     'Inadecuado',
     'Fácilmente Vulnerable',
@@ -46,20 +49,22 @@ export const getStrengthColorAndPhrase = (strength: number) => {
     'Altamente Seguro',
   ]
 
-  const colorAndPhraseByPercentage = requirements.map((undefined, index) => ({
+  const colorAndPhraseByPercentage = requirements.map((_, index) => ({
     percentage: (index + 1) * (100 / requirements.length),
     color: colors[index],
     phrase: phrases[index],
   }))
   const strengthColorAndPhrase = colorAndPhraseByPercentage.filter(
-    (e) => e.percentage >= strength
+    (req) => req.percentage >= strengthPercentage
   )[0]
 
   return strengthColorAndPhrase
 }
 
 export const passwordValidation = (value: string): string | null => {
-  if (getPasswordStrength(value) < 3)
+  const newLocal = getPasswordStrength(value)
+  console.log('password strength', newLocal)
+  if (newLocal < 3)
     return 'La contraseña debe cumplir al menos 4 de las 5 pautas contiguas'
 
   return null

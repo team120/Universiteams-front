@@ -11,20 +11,22 @@ interface PasswordStrengthProps {
   formValue: string
 }
 
-function PasswordStrength({
+const PasswordStrength = ({
   strength,
   phrase,
   color,
   requirements,
   formValue,
-}: PasswordStrengthProps) {
+}: PasswordStrengthProps) => {
+  const strengthPercentage = strength * (100 / requirements.length)
+
   const checks = requirements.map((requirement, index) => (
     <Requirement key={index} meets={requirement.validate(formValue)} label={requirement.label} />
   ))
 
   return (
     <>
-      <Progress mt="xs" value={strength} color={color} />
+      <Progress mt="xs" value={strengthPercentage} color={color} />
       <Text size="sm" style={{ align: 'center' }} c={color}>
         {phrase}
       </Text>
