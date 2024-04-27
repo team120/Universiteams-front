@@ -63,7 +63,7 @@ const ForgotPassword = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text size="sm" c='teal.6'>
+          <Text size="sm" c="teal.6">
             ¡Correo electrónico de restablecimiento de contraseña enviado con éxito!
           </Text>
           <CloseButton onClick={handleDismiss} style={{ marginLeft: '8px' }} />
@@ -71,7 +71,7 @@ const ForgotPassword = () => {
       )}
       <Stack align="center">
         <Title>¿Olvidaste tu contraseña?</Title>
-        <Text c='dimmed.6' fz="sm" ta="center">
+        <Text c="dimmed.6" fz="sm" ta="center">
           Ingresa tu correo electrónico para obtener un enlace de restablecimiento
         </Text>
       </Stack>
@@ -93,7 +93,7 @@ const ForgotPassword = () => {
             onChange={(event) => setEmail(event.currentTarget.value)}
           />
           <Stack align="flex-start" mt="xs">
-            <Anchor c='dimmed.6' size="sm" onClick={handleGoBackToLoginClick}>
+            <Anchor c="dimmed.6" size="sm" onClick={handleGoBackToLoginClick}>
               <Center inline>
                 <IconArrowLeft stroke={1.5} />
                 <Box ml={5}>Volver a la página de inicio de sesión</Box>

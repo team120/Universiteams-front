@@ -31,7 +31,7 @@ export const getPasswordStrength = (password: string) => {
 
   for (const requirement of requirements) {
     if (requirement.validate(password)) {
-      strengthAccumulator++;
+      strengthAccumulator++
     }
   }
 
@@ -64,8 +64,7 @@ export const getStrengthColorAndPhrase = (strength: number) => {
 export const passwordValidation = (value: string): string | null => {
   const newLocal = getPasswordStrength(value)
   console.log('password strength', newLocal)
-  if (newLocal < 3)
-    return 'La contraseña debe cumplir al menos 4 de las 5 pautas contiguas'
+  if (newLocal < 3) return 'La contraseña debe cumplir al menos 4 de las 5 pautas contiguas'
 
   return null
 }

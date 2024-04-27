@@ -115,7 +115,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
           }}>
           ¡Bienvenido a Universiteams!
         </Title>
-        <Text style={{ align: 'center' }} c='dimmed.6' size="sm" mt={5}>
+        <Text style={{ align: 'center' }} c="dimmed.6" size="sm" mt={5}>
           {type === 'register' ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?'}{' '}
           <Anchor<'a'>
             href="#"

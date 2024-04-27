@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex, Text } from '@mantine/core'
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react'
 
 const Requirement = ({ meets, label }: { meets: boolean; label: string }) => {
   return (
