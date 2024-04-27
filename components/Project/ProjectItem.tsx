@@ -175,7 +175,7 @@ const ProjectItem = (props: ProjectItemProps) => {
       key={project.id}
       mx={'3%'}
       mb={'0.5rem'}
-      p='lg'
+      p="lg"
       radius="md"
       style={{
         display: 'flex',

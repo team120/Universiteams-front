@@ -106,7 +106,7 @@ function PasswordReset() {
           color={Theme.colors?.red?.[6]}
           title="Error"
           icon={<IconAlertCircle />}>
-          <Text size="lg" style={{ weight: 500 }} mb='xs'>
+          <Text size="lg" style={{ weight: 500 }} mb="xs">
             Token inválido o expirado
           </Text>
           <Anchor size="md" onClick={handleGoBackToLoginClick}>

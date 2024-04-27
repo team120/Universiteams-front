@@ -124,7 +124,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   return (
     <>
       <form>
-        <Stack gap='xs' ml={isMobile ? 'xs' : 0} mr={isMobile ? 'xs' : 0}>
+        <Stack gap="xs" ml={isMobile ? 'xs' : 0} mr={isMobile ? 'xs' : 0}>
           <Grid align="flex-end">
             <Grid.Col span="auto">
               <Select
@@ -231,7 +231,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             checked={form.values.isDown}
             onChange={handleIsDownChange}
             label="Descontinuados"
-            mt='xs'
+            mt="xs"
           />
 
           <DateInput
@@ -242,7 +242,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             onChange={handleDateInputChange}
           />
 
-          <Group grow mt='xs'>
+          <Group grow mt="xs">
             <ActionIcon color="red" onClick={reset}>
               <IconTrash />
             </ActionIcon>
