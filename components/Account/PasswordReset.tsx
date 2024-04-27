@@ -103,7 +103,7 @@ function PasswordReset() {
       <>
         <Alert
           variant="light"
-          color={Theme.colors?.red?.[6]}
+          color='red.6'
           title="Error"
           icon={<IconAlertCircle />}>
           <Text size="lg" style={{ weight: 500 }} mb="xs">
@@ -141,7 +141,7 @@ function PasswordReset() {
               : `Cambiar contraseña para @${emailTokenPayload?.user}`}
           </Text>
           {isSuccess ? (
-            <Button variant="outline" color={Theme.colors?.blue?.[6]} onClick={handleGoHomeClick}>
+            <Button variant="outline" color='blue.6' onClick={handleGoHomeClick}>
               Ir a la página de inicio
             </Button>
           ) : (
@@ -172,7 +172,7 @@ function PasswordReset() {
                 {...form.getInputProps('confirmPassword')}
                 style={{ marginBottom: '1rem' }}
               />
-              <Button type="submit" color={Theme.colors?.blue?.[6]} style={{ marginTop: '1rem' }}>
+              <Button type="submit" color='blue.6' style={{ marginTop: '1rem' }}>
                 Restablecer contraseña
               </Button>
             </form>

@@ -40,7 +40,7 @@ export const getPasswordStrength = (password: string) => {
 
 export const getStrengthColorAndPhrase = (strength: number) => {
   const strengthPercentage = strength * (100 / requirements.length)
-  const colors = ['red.6', 'orange.6', 'yellow.6', 'blue.6', 'green.6']
+  const colors = ['red.8', 'orange.6', 'yellow.6', 'blue.6', 'green.6']
   const phrases = [
     'Inadecuado',
     'Fácilmente Vulnerable',

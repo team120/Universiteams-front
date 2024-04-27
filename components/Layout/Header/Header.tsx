@@ -24,14 +24,14 @@ const Header = (props: HeaderProps) => {
         )}
         <ActionIcon
           variant="transparent"
-          color={Theme.colors?.blue?.[4]}
+          color='blue.4'
           onClick={() => router.push('/')}
           aria-label="Universiteams Icon">
           <img src="/favicon.ico" alt="Project favicon" style={{ width: '100%', height: '100%' }} />{' '}
         </ActionIcon>
         <ActionIcon
           variant="filled"
-          color={Theme.colors?.orange?.[4]}
+          color='orange.4'
           aria-label="Toggle dark/light theme"
           onClick={props.toggleColorScheme}>
           <IconSunMoon style={{ width: '70%', height: '70%' }} stroke={1.5} />

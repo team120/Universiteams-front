@@ -196,7 +196,7 @@ const ProjectItem = (props: ProjectItemProps) => {
             {project.researchDepartments.map((department) => (
               <Badge
                 key={department.id}
-                color={Theme.colors?.pink?.[6]}
+                color='pink.6'
                 variant="light"
                 component="button"
                 style={{ cursor: 'pointer' }}
@@ -219,7 +219,7 @@ const ProjectItem = (props: ProjectItemProps) => {
             {project.enrollments && (
               <Badge
                 variant="filled"
-                color={Theme.colors?.violet?.[6]}
+                color='violet.6'
                 size="lg"
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleLeaderTagClick(project.enrollments[0].user.id)}>
@@ -231,7 +231,7 @@ const ProjectItem = (props: ProjectItemProps) => {
               <Badge
                 variant="dot"
                 key={interest.id}
-                color={Theme.colors?.blue?.[6]}
+                color='blue.6'
                 size="lg"
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleInterestTagClick(interest.id)}>
