@@ -18,14 +18,13 @@ const Header = (props: HeaderProps) => {
 
   return (
     <>
-      <Group ml={15} h="100%">
+      <Group ml={15} h="100%" gap="xs">
         {props.showNavAndSearch && (
-          <Burger mr={15} opened={props.opened} onClick={props.toggle} hiddenFrom="sm" size="sm" />
+          <Burger opened={props.opened} onClick={props.toggle} hiddenFrom="sm" size="sm" />
         )}
         <ActionIcon
           variant="transparent"
           color={Theme.colors?.blue?.[4]}
-          mr='xs'
           onClick={() => router.push('/')}
           aria-label="Universiteams Icon">
           <img src="/favicon.ico" alt="Project favicon" style={{ width: '100%', height: '100%' }} />{' '}
