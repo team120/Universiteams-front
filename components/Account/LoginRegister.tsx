@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AxiosError } from 'axios'
 
@@ -19,8 +19,6 @@ import {
   Anchor,
   Box,
   Button,
-  Center,
-  Checkbox,
   Container,
   Group,
   Paper,
@@ -103,8 +101,8 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
     setServerErrors([])
   }, [type])
 
-  const strength = getPasswordStrength(form.values.password)
-  const strengthColorAndPhrase = getStrengthColorAndPhrase(strength)
+  const strength = useMemo(() => getPasswordStrength(form.values.password), [form.values.password])
+  const strengthColorAndPhrase = useMemo(() => getStrengthColorAndPhrase(strength), [strength])
 
   return (
     <Container size={420} my={40}>
