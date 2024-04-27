@@ -1,16 +1,20 @@
 import React from 'react'
-import { Box, Center, Text } from '@mantine/core'
+import { Flex, Text } from '@mantine/core'
 import { Check, X } from 'tabler-icons-react'
 import Theme from '../../src/app/theme'
 
 const Requirement = ({ meets, label }: { meets: boolean; label: string }) => {
   return (
-    <Text c={meets ? Theme.colors?.teal?.[6] : Theme.colors?.red?.[6]} mt={5} size="sm">
-      <Center inline>
-        {meets ? <Check size={14} /> : <X size={14} />}
-        <Box ml={7}>{label}</Box>
-      </Center>
-    </Text>
+    <Flex align="center" mt={5}>
+      {meets ? (
+        <Check size={14} color={Theme.colors?.teal?.[6]} />
+      ) : (
+        <X size={14} color={Theme.colors?.red?.[6]} />
+      )}
+      <Text ml={7} size="sm" color={meets ? Theme.colors?.teal?.[6] : Theme.colors?.red?.[6]}>
+        {label}
+      </Text>
+    </Flex>
   )
 }
 
