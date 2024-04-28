@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { AppShell, Divider, ScrollArea } from '@mantine/core'
 import NavbarItem from './NavbarItem'
 import {
@@ -13,8 +13,9 @@ import {
   IconTerminal2,
   IconUserCircle,
 } from '@tabler/icons-react'
-import { CurrentUserInfo, CurrentUserService } from '../../../services/currentUser'
+import { CurrentUserService } from '../../../services/currentUser'
 import { RequestState } from '../../../entities/Project'
+import { useQuery } from '@tanstack/react-query'
 
 const mockAppVersion = 'v1.0.0'
 
@@ -22,16 +23,10 @@ const mockAppVersion = 'v1.0.0'
 const iconSize = 40
 
 const Navbar = () => {
-  const [currentUser, setCurrentUser] = useState<CurrentUserInfo | null>(null)
-
-  const fetchCurrentUser = async () => {
-    const user = await CurrentUserService.fetchUserInfo()
-    setCurrentUser(user)
-  }
-
-  useEffect(() => {
-    fetchCurrentUser()
-  }, [])
+  const { data: currentUser } = useQuery({
+    queryKey: [CurrentUserService.fetchUserInfo.name],
+    queryFn: CurrentUserService.fetchUserInfo,
+  })
 
   return (
     <>
