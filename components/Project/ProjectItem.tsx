@@ -13,7 +13,6 @@ import {
   IconUserCheck,
   IconUserPlus,
 } from '@tabler/icons-react'
-import Theme from '../../src/app/theme'
 import { notifications } from '@mantine/notifications'
 
 interface ProjectItemProps {
@@ -21,7 +20,6 @@ interface ProjectItemProps {
 }
 
 const ProjectItem = (props: ProjectItemProps) => {
-  const theme = useMantineTheme()
   const project = props.project
 
   const [isFavorite, setIsFavorite] = useState(project?.isFavorite)
@@ -173,8 +171,8 @@ const ProjectItem = (props: ProjectItemProps) => {
   return (
     <Card
       key={project.id}
-      mx={'3%'}
-      mb={'0.5rem'}
+      mx='md'
+      mb='0.5rem'
       p="md"
       radius="md"
       style={{

@@ -63,7 +63,8 @@ const Filter = (props: FilterProps) => {
         <Flex direction="row-reverse">
           <div
             style={{
-              width: opened ? '250px' : '0',
+              minWidth: opened ? '210px' : '0',
+              maxWidth: opened ? '294px' : '0',
               padding: opened ? '1rem' : '0',
               overflow: 'hidden',
               transition: 'width 0.3s ease, padding 0.3s ease',
