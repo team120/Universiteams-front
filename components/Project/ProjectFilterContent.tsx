@@ -210,7 +210,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
           <Select
             label="Tipo"
             placeholder='Ej: "Formal"'
-            data={['', 'Formal', 'No Formal']}
+            data={['', 'Formal', 'Informal']}
             clearable
             value={form.values.type}
             onChange={handleTypeChange}
