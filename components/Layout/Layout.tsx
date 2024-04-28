@@ -1,6 +1,6 @@
 import React from 'react'
 import { AppShell, useComputedColorScheme, useMantineColorScheme } from '@mantine/core'
-import { useDisclosure, useHotkeys } from '@mantine/hooks'
+import { useHotkeys } from '@mantine/hooks'
 import { usePathname } from 'next/navigation'
 
 import Constants from '../../utils/string/Constants'
@@ -13,10 +13,7 @@ interface Layout {
 }
 
 const Layout = (props: Layout) => {
-  const { opened, toggle } = useSidebarStore((state) => ({
-    opened: state.opened,
-    toggle: state.toggle,
-  }))
+  const opened = useSidebarStore((state) => state.opened)
   const pathName = usePathname()
 
   // Change between theme preferences
