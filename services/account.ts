@@ -1,10 +1,9 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import Env from 'utils/config/Env'
 
-import ErrorResponse from '@/entities/HelpTypes/ErrorResponse'
 import Login from '@/entities/HelpTypes/Login'
 import LoginRegisterType from '@/entities/HelpTypes/LoginRegisterType'
-import { CurrentUserInfo, CurrentUserService } from './currentUser'
+import { CurrentUserInfo } from './currentUser'
 
 const prefix = `${Env.backendAPI}/auth`
 

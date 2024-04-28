@@ -40,7 +40,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
   const router = useRouter()
   const [type, toggleType] = useToggle<LoginRegisterType>(getInitialToggleTypes(initialType))
   const [serverErrors, setServerErrors] = useState<string[]>([])
-  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   const handleForgotPasswordClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()

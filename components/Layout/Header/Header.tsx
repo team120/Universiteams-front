@@ -1,8 +1,7 @@
 import React from 'react'
 import { ActionIcon, Burger, Center, Container, Group } from '@mantine/core'
-import { IconSchool, IconSunMoon } from '@tabler/icons-react'
+import { IconSunMoon } from '@tabler/icons-react'
 
-import Theme from 'src/app/theme'
 import SearchBar from '@/components/Common/SearchBar/SearchBar'
 import { useRouter } from 'next/navigation'
 

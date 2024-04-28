@@ -15,7 +15,7 @@ const SearchBar = () => {
   const [generalSearch, setGeneralSearch] = useState('')
   const [debouncedGeneralSearch] = useDebouncedValue(generalSearch, 400)
 
-  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   const searchNowButton = () => {
     Url.setUrlParam(router, pathname, searchQuery, 'generalSearch', generalSearch)

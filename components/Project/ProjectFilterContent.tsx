@@ -119,7 +119,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     router.push(`${pathname}`)
   }
 
-  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   return (
     <>
