@@ -6,13 +6,17 @@ import { usePathname } from 'next/navigation'
 import Constants from '../../utils/string/Constants'
 import Header from './Header/Header'
 import Navbar from './Navbar/Navbar'
+import useSidebarStore from './useSidebarStore'
 
 interface Layout {
   children: React.ReactNode
 }
 
 const Layout = (props: Layout) => {
-  const [opened, { toggle }] = useDisclosure()
+  const { opened, toggle } = useSidebarStore((state) => ({
+    opened: state.opened,
+    toggle: state.toggle,
+  }))
   const pathName = usePathname()
 
   // Change between theme preferences
@@ -28,12 +32,7 @@ const Layout = (props: Layout) => {
     return (
       <AppShell header={{ height: 60 }}>
         <AppShell.Header>
-          <Header
-            opened={false}
-            toggle={toggle}
-            toggleColorScheme={toggleColorScheme}
-            showNavAndSearch={false}
-          />
+          <Header toggleColorScheme={toggleColorScheme} showNavAndSearch={false} />
         </AppShell.Header>
         <AppShell.Main>{props.children}</AppShell.Main>
       </AppShell>
@@ -46,12 +45,7 @@ const Layout = (props: Layout) => {
       header={{ height: 60 }}
       navbar={{ width: { base: 270 }, breakpoint: 'sm', collapsed: { mobile: !opened } }}>
       <AppShell.Header>
-        <Header
-          opened={opened}
-          toggle={toggle}
-          toggleColorScheme={toggleColorScheme}
-          showNavAndSearch={true}
-        />
+        <Header toggleColorScheme={toggleColorScheme} showNavAndSearch={true} />
       </AppShell.Header>
       <AppShell.Navbar>
         <Navbar />

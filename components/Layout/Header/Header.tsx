@@ -5,22 +5,25 @@ import { IconSunMoon } from '@tabler/icons-react'
 import SearchBar from '@/components/Common/SearchBar/SearchBar'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import useSidebarStore from '../useSidebarStore'
 
 interface HeaderProps {
-  opened: boolean
   showNavAndSearch: boolean
-  toggle: () => void
   toggleColorScheme: () => void
 }
 
 const Header = (props: HeaderProps) => {
   const router = useRouter()
+  const { opened, toggle } = useSidebarStore((state) => ({
+    opened: state.opened,
+    toggle: state.toggle,
+  }))
 
   return (
     <>
       <Group ml={15} h="100%" gap="xs">
         {props.showNavAndSearch && (
-          <Burger opened={props.opened} onClick={props.toggle} hiddenFrom="sm" size="sm" />
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
         )}
         <ActionIcon
           variant="transparent"
