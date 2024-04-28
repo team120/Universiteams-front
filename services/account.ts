@@ -10,12 +10,7 @@ const prefix = `${Env.backendAPI}/auth`
 
 export const Account = {
   Authenticate: async (values: Login, type: LoginRegisterType) => {
-    try {
-      const url = `${prefix}/${type}`
-      await axios.post<CurrentUserInfo>(url, values, { withCredentials: true })
-    } catch (error) {
-      console.log(error)
-      throw error as AxiosError<ErrorResponse>
-    }
+    const url = `${prefix}/${type}`
+    await axios.post<CurrentUserInfo>(url, values, { withCredentials: true })
   },
 }

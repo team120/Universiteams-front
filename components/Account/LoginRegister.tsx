@@ -54,12 +54,9 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
       router.push('/')
     } catch (error) {
       const defaultErrorMsg = 'Ocurrió un error inesperado'
-      if (error instanceof AxiosError) {
-        const message = error?.message || defaultErrorMsg
-        setServerErrors([message])
-      }
-
-      setServerErrors([defaultErrorMsg])
+      const message = ((error as AxiosError)?.response?.data as { message: any })?.message
+      const errors = Array.isArray(message) ? message : [message || defaultErrorMsg]
+      setServerErrors(errors)
     }
   }
 
