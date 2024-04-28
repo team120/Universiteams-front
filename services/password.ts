@@ -29,17 +29,14 @@ export const requirements: IRequirement[] = [
 export const getPasswordStrength = (password: string) => {
   let strengthAccumulator = 0
 
-  for (const requirement of requirements) {
-    if (requirement.validate(password)) {
-      strengthAccumulator++
-    }
-  }
+  requirements.forEach((requirement) => {
+    if (requirement.validate(password)) strengthAccumulator++
+  })
 
-  return strengthAccumulator
+  return strengthAccumulator * (100 / requirements.length)
 }
 
 export const getStrengthColorAndPhrase = (strength: number) => {
-  const strengthPercentage = strength * (100 / requirements.length)
   const colors = ['red.8', 'orange.6', 'yellow.6', 'blue.6', 'green.6']
   const phrases = [
     'Inadecuado',
@@ -55,16 +52,15 @@ export const getStrengthColorAndPhrase = (strength: number) => {
     phrase: phrases[index],
   }))
   const strengthColorAndPhrase = colorAndPhraseByPercentage.filter(
-    (req) => req.percentage >= strengthPercentage
+    (e) => e.percentage >= strength
   )[0]
 
   return strengthColorAndPhrase
 }
 
 export const passwordValidation = (value: string): string | null => {
-  const newLocal = getPasswordStrength(value)
-  console.log('password strength', newLocal)
-  if (newLocal < 3) return 'La contraseña debe cumplir al menos 4 de las 5 pautas contiguas'
+  if (getPasswordStrength(value) < 3 * (100 / requirements.length))
+    return 'La contraseña debe cumplir al menos 4 de las 5 pautas contiguas'
 
   return null
 }

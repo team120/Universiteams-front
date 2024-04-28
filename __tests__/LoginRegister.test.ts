@@ -22,13 +22,13 @@ describe('getPasswordStrength', () => {
 describe('getStrengthColorAndPhrase', () => {
   it.each`
     strength | phrase                     | percentage | color
-    ${0}     | ${'Inadecuado'}            | ${20}      | ${'red'}
-    ${11}    | ${'Inadecuado'}            | ${20}      | ${'red'}
-    ${25}    | ${'Fácilmente Vulnerable'} | ${40}      | ${'orange'}
-    ${48}    | ${'Aún No Suficiente'}     | ${60}      | ${'yellow'}
-    ${79}    | ${'Aceptable'}             | ${80}      | ${'blue'}
-    ${81}    | ${'Altamente Seguro'}      | ${100}     | ${'green'}
-    ${100}   | ${'Altamente Seguro'}      | ${100}     | ${'green'}
+    ${0}     | ${'Inadecuado'}            | ${20}      | ${'red.8'}
+    ${11}    | ${'Inadecuado'}            | ${20}      | ${'red.8'}
+    ${25}    | ${'Fácilmente Vulnerable'} | ${40}      | ${'orange.6'}
+    ${48}    | ${'Aún No Suficiente'}     | ${60}      | ${'yellow.6'}
+    ${79}    | ${'Aceptable'}             | ${80}      | ${'blue.6'}
+    ${81}    | ${'Altamente Seguro'}      | ${100}     | ${'green.6'}
+    ${100}   | ${'Altamente Seguro'}      | ${100}     | ${'green.6'}
   `(
     "when password strength is '$strength' should return '$percentage' as percentage in '$color' color and '$phrase' as feedback phrase",
     ({ strength, phrase, percentage, color }) => {
