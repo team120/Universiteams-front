@@ -11,6 +11,9 @@ import '@/styles/globals.scss'
 import Theme from './theme'
 import Layout from '@/components/Layout/Layout'
 import { Notifications } from '@mantine/notifications'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 const App = ({ children }: { children: React.ReactNode }) => {
   // Detect the user's theme preference (dark or light)
@@ -27,15 +30,17 @@ const App = ({ children }: { children: React.ReactNode }) => {
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <MantineProvider
-          theme={Theme}
-          colorSchemeManager={colorSchemeManager}
-          defaultColorScheme="dark">
-          <Layout>
-            {children}
-            <Notifications />
-          </Layout>
-        </MantineProvider>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider
+            theme={Theme}
+            colorSchemeManager={colorSchemeManager}
+            defaultColorScheme="dark">
+            <Layout>
+              {children}
+              <Notifications />
+            </Layout>
+          </MantineProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )
