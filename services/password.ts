@@ -59,7 +59,7 @@ export const getStrengthColorAndPhrase = (strength: number) => {
 }
 
 export const passwordValidation = (value: string): string | null => {
-  if (getPasswordStrength(value) < 3 * (100 / requirements.length))
+  if (getPasswordStrength(value) < 4 * (100 / requirements.length))
     return 'La contraseña debe cumplir al menos 4 de las 5 pautas contiguas'
 
   return null
