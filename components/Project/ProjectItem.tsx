@@ -175,7 +175,7 @@ const ProjectItem = (props: ProjectItemProps) => {
       key={project.id}
       mx={'3%'}
       mb={'0.5rem'}
-      p="lg"
+      p="md"
       radius="md"
       style={{
         display: 'flex',
@@ -184,35 +184,33 @@ const ProjectItem = (props: ProjectItemProps) => {
         borderColor: 'gray',
       }}>
       <div style={{ width: '100%' }}>
-        <Card.Section>
-          <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
-            {project.name}
+        <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
+          {project.name}
+        </Text>
+        <Group gap={'1rem'} style={{ marginBottom: 'xs' }}>
+          <Text style={{ fontWeight: 500 }}>
+            {project.type} | {Dates.formatDate(project.creationDate)}
+            {project.endDate ? ` - ${Dates.formatDate(project.endDate)}` : ''}
           </Text>
-          <Group gap={'1rem'} style={{ marginBottom: 'xs' }}>
-            <Text style={{ fontWeight: 500 }}>
-              {project.type} | {Dates.formatDate(project.creationDate)}
-              {project.endDate ? ` - ${Dates.formatDate(project.endDate)}` : ''}
-            </Text>
-            {project.researchDepartments.map((department) => (
-              <Badge
-                key={department.id}
-                color="pink.6"
-                variant="light"
-                component="button"
-                style={{ cursor: 'pointer' }}
-                onClick={() =>
-                  handleDepartmentBadgeClick(
-                    department.facility.institution.id,
-                    department.facility.id,
-                    department.id
-                  )
-                }>
-                {department.facility.institution.abbreviation} | {department.facility.abbreviation}{' '}
-                | {department.name}
-              </Badge>
-            ))}
-          </Group>
-        </Card.Section>
+          {project.researchDepartments.map((department) => (
+            <Badge
+              key={department.id}
+              color="pink.6"
+              variant="light"
+              component="button"
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                handleDepartmentBadgeClick(
+                  department.facility.institution.id,
+                  department.facility.id,
+                  department.id
+                )
+              }>
+              {department.facility.institution.abbreviation} | {department.facility.abbreviation} |{' '}
+              {department.name}
+            </Badge>
+          ))}
+        </Group>
 
         <Chip.Group>
           <Group gap={'0.5rem'} mt={'1rem'}>
