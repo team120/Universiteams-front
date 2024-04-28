@@ -12,7 +12,6 @@ import {
 } from '@/services/password'
 import PasswordStrength from './PasswordStrength'
 import Requirement from './Requirement'
-import Theme from '../../src/app/theme'
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react'
 
 const parseJwt = (token: string) => {

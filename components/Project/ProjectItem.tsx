@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ActionIcon, Badge, Card, Chip, Flex, Group, Text, useMantineTheme } from '@mantine/core'
+import { ActionIcon, Badge, Card, Chip, Flex, Group, Text } from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import Project, { RequestState } from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'

@@ -16,7 +16,6 @@ import {
 } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Requirement from './Requirement'
-import Theme from '../../src/app/theme'
 
 const ForgotPassword = () => {
   const router = useRouter()

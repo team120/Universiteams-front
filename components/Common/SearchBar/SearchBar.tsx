@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CloseButton, TextInput, useMantineTheme } from '@mantine/core'
+import { CloseButton, TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 
 import { Url } from '@/services/url'

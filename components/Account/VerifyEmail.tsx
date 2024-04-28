@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Loader, Card, Text, Button, Alert, Anchor, Box, Center } from '@mantine/core'
+import { Loader, Text, Alert, Anchor, Box, Center } from '@mantine/core'
 import axios from 'axios'
-import Theme from '../../src/app/theme'
-import { useMediaQuery } from '@mantine/hooks'
 import { IconAlertCircle, IconArrowLeft, IconInfoCircle } from '@tabler/icons-react'
 
 const VerifyEmail = () => {
