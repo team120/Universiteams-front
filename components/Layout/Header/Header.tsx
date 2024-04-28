@@ -30,13 +30,7 @@ const Header = (props: HeaderProps) => {
           color="blue.4"
           onClick={() => router.push('/')}
           aria-label="Universiteams Icon">
-          <Image
-            src="/favicon.ico"
-            alt="Project favicon"
-            width={32}
-            height={32}
-            layout="responsive"
-          />
+          <Image src="/favicon.ico" alt="Project favicon" width={32} height={32} />
         </ActionIcon>
         <ActionIcon
           variant="filled"
