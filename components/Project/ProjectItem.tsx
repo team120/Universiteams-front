@@ -171,8 +171,8 @@ const ProjectItem = (props: ProjectItemProps) => {
   return (
     <Card
       key={project.id}
-      mx='md'
-      mb='0.5rem'
+      mx="md"
+      mb="0.5rem"
       p="md"
       radius="md"
       style={{
