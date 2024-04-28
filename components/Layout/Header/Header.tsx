@@ -4,6 +4,7 @@ import { IconSunMoon } from '@tabler/icons-react'
 
 import SearchBar from '@/components/Common/SearchBar/SearchBar'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 interface HeaderProps {
   opened: boolean
@@ -26,7 +27,13 @@ const Header = (props: HeaderProps) => {
           color="blue.4"
           onClick={() => router.push('/')}
           aria-label="Universiteams Icon">
-          <img src="/favicon.ico" alt="Project favicon" style={{ width: '100%', height: '100%' }} />{' '}
+          <Image
+            src="/favicon.ico"
+            alt="Project favicon"
+            width={32}
+            height={32}
+            layout="responsive"
+          />
         </ActionIcon>
         <ActionIcon
           variant="filled"
