@@ -9,7 +9,6 @@ import Navbar from './Navbar/Navbar'
 
 interface Layout {
   children: React.ReactNode
-  pageProps?: any
 }
 
 const Layout = (props: Layout) => {

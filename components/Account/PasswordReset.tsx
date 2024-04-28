@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Text, Card, Loader, Alert, Anchor, Box, Center } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { PasswordInput } from '@mantine/core'
 import {
@@ -71,8 +71,8 @@ function PasswordReset() {
       if (res.status === 200) {
         setIsSuccess(true)
       }
-    } catch (error: any) {
-      if (error.response && error.response.status === 400) {
+    } catch (error) {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
         setServerErrors([error.response.data.message])
       } else {
         console.error(error)

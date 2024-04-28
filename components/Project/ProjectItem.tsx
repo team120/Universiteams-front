@@ -112,13 +112,7 @@ const ProjectItem = (props: ProjectItemProps) => {
       'facility',
       facilityId.toString()
     )
-    modifiedSearchQuery = Url.setUrlParam(
-      router,
-      pathname,
-      modifiedSearchQuery,
-      'department',
-      departmentId.toString()
-    )
+    Url.setUrlParam(router, pathname, modifiedSearchQuery, 'department', departmentId.toString())
   }
 
   const handleLeaderTagClick = (userId: number) => {
@@ -129,7 +123,7 @@ const ProjectItem = (props: ProjectItemProps) => {
     let icon = null
     let ariaLabel = ''
     let color = 'gray'
-    let handlerFunc = (_: number) => console.log('No handler function defined')
+    let handlerFunc = ({}: number) => console.log('No handler function defined')
 
     switch (requestState) {
       case undefined:

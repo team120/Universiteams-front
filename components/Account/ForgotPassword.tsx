@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import {
   Paper,
   Title,
@@ -40,8 +40,8 @@ const ForgotPassword = () => {
       if (res.status === 200) {
         setIsSuccess(true)
       }
-    } catch (error: any) {
-      if (error.response && error.response.status === 400) {
+    } catch (error) {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
         setServerErrors([error.response.data.message])
       } else {
         console.error(error)

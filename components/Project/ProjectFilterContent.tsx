@@ -7,7 +7,6 @@ import {
   ActionIcon,
   Group,
   Switch,
-  ComboboxItem,
   MultiSelect,
 } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
@@ -65,23 +64,23 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleSortByChange = (value: string | null, _: ComboboxItem) => {
+  const handleSortByChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'sortBy', value)
   }
 
-  const handleUniversityChange = (value: string | null, _: ComboboxItem) => {
+  const handleUniversityChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'university', value)
   }
 
-  const handleFacilityChange = (value: string | null, _: ComboboxItem) => {
+  const handleFacilityChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'facility', value)
   }
 
-  const handleDepartmentChange = (value: string | null, _: ComboboxItem) => {
+  const handleDepartmentChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'department', value)
   }
 
-  const handleUserChange = (value: string | null, _: ComboboxItem) => {
+  const handleUserChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'user', value)
   }
 
@@ -89,7 +88,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     Url.replaceArrayInUrl(router, pathname, searchQuery, 'interest', value)
   }
 
-  const handleTypeChange = (value: string | null, op: ComboboxItem) => {
+  const handleTypeChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'type', value)
   }
 

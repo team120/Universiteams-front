@@ -12,7 +12,7 @@ import Theme from './theme'
 import Layout from '@/components/Layout/Layout'
 import { Notifications } from '@mantine/notifications'
 
-const App = ({ children }: any) => {
+const App = ({ children }: { children: React.ReactNode }) => {
   // Detect the user's theme preference (dark or light)
   const colorSchemeManager = localStorageColorSchemeManager({ key: 'mantine-color-scheme' })
 
