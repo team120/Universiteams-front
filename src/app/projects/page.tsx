@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { NextPage } from 'next'
 
 import { Projects } from '@/services/projects'
@@ -21,11 +21,6 @@ import { useQuery } from '@tanstack/react-query'
 const ProjectsPage: NextPage = () => {
   const projectsPerPage = 5
   const [currentPage, setCurrentPage] = useState(1)
-  const [institutions, setInstitutions] = useState<SelectItem[]>()
-  const [facility, setFacilities] = useState<SelectItem[]>()
-  const [departments, setDepartments] = useState<SelectItem[]>()
-  const [interests, setInterests] = useState<SelectItem[]>()
-  const [users, setUsers] = useState<SelectItem[]>()
 
   const sortAttributes: SelectItem[] = [
     { attribute: 'name', displayName: 'nombre' },
@@ -106,54 +101,54 @@ const ProjectsPage: NextPage = () => {
       }),
   })
 
-  useEffect(() => {
+  const users = useMemo(() => {
     if (usersQuery.data) {
-      const usersSelectItems: SelectItem[] = usersQuery.data.map((user) => ({
+      return usersQuery.data.map((user) => ({
         attribute: user.id.toString(),
         displayName: `${user.firstName} ${user.lastName}`,
       }))
-      setUsers(usersSelectItems)
     }
+    return []
   }, [usersQuery.data])
 
-  useEffect(() => {
+  const facilities = useMemo(() => {
     if (facilitiesQuery.data) {
-      const facilitiesSelectItems: SelectItem[] = facilitiesQuery.data.map((facility) => ({
+      return facilitiesQuery.data.map((facility) => ({
         attribute: facility.id.toString(),
         displayName: facility.name,
       }))
-      setFacilities(facilitiesSelectItems)
     }
+    return []
   }, [facilitiesQuery.data])
 
-  useEffect(() => {
+  const departments = useMemo(() => {
     if (departmentsQuery.data) {
-      const departmentsSelectItems: SelectItem[] = departmentsQuery.data.map((department) => ({
+      return departmentsQuery.data.map((department) => ({
         attribute: department.id.toString(),
         displayName: department.name,
       }))
-      setDepartments(departmentsSelectItems)
     }
+    return []
   }, [departmentsQuery.data])
 
-  useEffect(() => {
+  const institutions = useMemo(() => {
     if (institutionsQuery.data) {
-      const institutionsSelectItems: SelectItem[] = institutionsQuery.data.map((institution) => ({
+      return institutionsQuery.data.map((institution) => ({
         attribute: institution.id.toString(),
         displayName: institution.name,
       }))
-      setInstitutions(institutionsSelectItems)
     }
+    return []
   }, [institutionsQuery.data])
 
-  useEffect(() => {
+  const interests = useMemo(() => {
     if (interestsQuery.data) {
-      const interestsSelectItems: SelectItem[] = interestsQuery.data.map((interest) => ({
+      return interestsQuery.data.map((interest) => ({
         attribute: interest.id.toString(),
         displayName: interest.name,
       }))
-      setInterests(interestsSelectItems)
     }
+    return []
   }, [interestsQuery.data])
 
   const totalPages = projectsQuery.data?.projectCount
@@ -167,11 +162,11 @@ const ProjectsPage: NextPage = () => {
         content={
           <ProjectFilterContent
             sortAttributes={sortAttributes}
-            institutions={institutions ?? []}
-            facilities={facility ?? []}
-            departments={departments ?? []}
-            interests={interests ?? []}
-            users={users ?? []}
+            institutions={institutions}
+            facilities={facilities}
+            departments={departments}
+            interests={interests}
+            users={users}
           />
         }>
         <ProjectsList projects={projectsQuery.data?.projects} />
