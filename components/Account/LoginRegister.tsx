@@ -31,7 +31,7 @@ import { useForm } from '@mantine/form'
 import { useMediaQuery, useToggle } from '@mantine/hooks'
 import Requirement from './Requirement'
 import Theme from '../../src/app/theme'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 interface LoginRegisterProps {
   initialType: LoginRegisterType
@@ -41,10 +41,12 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
   const router = useRouter()
   const [type, toggleType] = useToggle<LoginRegisterType>(getInitialToggleTypes(initialType))
   const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
+  const queryClient = useQueryClient()
 
   const { mutate: authenticate, error } = useMutation({
     mutationFn: (values: Login) => Account.Authenticate(values, type),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] })
       router.push('/')
     },
   })

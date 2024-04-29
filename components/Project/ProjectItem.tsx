@@ -5,7 +5,7 @@ import Project, { RequestState } from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Projects } from '@/services/projects'
 import {
   IconHeart,
@@ -15,6 +15,7 @@ import {
   IconUserPlus,
 } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
+import { CurrentUserQueryOptions, CurrentUserService } from '../../services/currentUser'
 
 interface ProjectItemProps {
   project?: Project
@@ -28,16 +29,37 @@ const ProjectItem = (props: ProjectItemProps) => {
   const pathname = usePathname()
   const queryClient = useQueryClient()
 
+  const { data: currentUser } = useQuery(CurrentUserQueryOptions.currentUser())
+
+  const verifyEmailNotification = {
+    title: 'Verifica tu correo electrónico',
+    message: 'Debes verificar tu correo electrónico para poder solicitar inscripciones',
+    color: 'red',
+  }
+
   const favoriteMutation = useMutation({
-    mutationFn: () =>
-      project?.isFavorite ? Projects.unfavorite(project!.id) : Projects.favorite(project!.id),
+    mutationFn: async () => {
+      if (currentUser?.isEmailVerified === false) {
+        notifications.show(verifyEmailNotification)
+        return Promise.reject('Email not verified')
+      }
+
+      return project?.isFavorite ? Projects.unfavorite(project!.id) : Projects.favorite(project!.id)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] })
     },
   })
 
   const enrollmentRequestMutation = useMutation({
-    mutationFn: () => Projects.requestEnrollment(project!.id),
+    mutationFn: async () => {
+      if (currentUser?.isEmailVerified === false) {
+        notifications.show(verifyEmailNotification)
+        return Promise.reject('Email not verified')
+      }
+
+      return Projects.requestEnrollment(project!.id)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] })
       notifications.show({

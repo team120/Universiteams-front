@@ -13,7 +13,7 @@ import {
   IconTerminal2,
   IconUserCircle,
 } from '@tabler/icons-react'
-import { CurrentUserService } from '../../../services/currentUser'
+import { CurrentUserQueryOptions, CurrentUserService } from '../../../services/currentUser'
 import { RequestState } from '../../../entities/Project'
 import { useQuery } from '@tanstack/react-query'
 
@@ -23,10 +23,7 @@ const mockAppVersion = 'v1.0.0'
 const iconSize = 40
 
 const Navbar = () => {
-  const { data: currentUser } = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: CurrentUserService.fetchUserInfo,
-  })
+  const { data: currentUser } = useQuery(CurrentUserQueryOptions.currentUser())
 
   return (
     <>
