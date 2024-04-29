@@ -6,13 +6,8 @@ const prefix = `${Env.backendAPI}/users`
 
 export const Users = {
   getUsers: async () => {
-    try {
-      const url = `${prefix}`
-      const result = await axios.get<User[]>(url)
-      return result.data
-    } catch (error) {
-      console.log(error)
-      return
-    }
+    const url = `${prefix}`
+    const result = await axios.get<User[]>(url)
+    return result.data
   },
 }

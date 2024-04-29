@@ -27,76 +27,45 @@ export interface GetProjectsInput {
 export const Projects = {
   // Find all projects
   async getProjects(params?: GetProjectsInput): Promise<ProjectsResult | undefined> {
-    try {
-      const url = `${prefix}`
-        .concat(params ? '?' : '')
-        .concat(params?.generalSearchTerm ? `generalSearch=${params.generalSearchTerm}&` : '')
-        .concat(params?.institutionId ? `institutionId=${params.institutionId}&` : '')
-        .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
-        .concat(
-          params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : ''
-        )
-        .concat(
-          params?.interestIds && params?.interestIds.length > 0
-            ? params.interestIds.map((id) => `interestIds=${id}&`).join('')
-            : ''
-        )
-        .concat(params?.userId ? `userId=${params.userId}&` : '')
-        .concat(params?.type ? `type=${params.type}&` : '')
-        .concat(params?.requestState ? `requestState=${params.requestState}&` : '')
-        .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
-        .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
-        .concat(params?.isFavorite ? `isFavorite=${params.isFavorite}&` : '')
-        .concat(
-          params?.sortBy
-            ? `sortBy=${params.sortBy}&inAscendingOrder=${params?.inAscendingOrder ?? true}&`
-            : ''
-        )
-        .concat(params?.limit ? `limit=${params.limit}&` : '')
-        .concat(params?.offset ? `offset=${params.offset}&` : '')
+    const url = `${prefix}`
+      .concat(params ? '?' : '')
+      .concat(params?.generalSearchTerm ? `generalSearch=${params.generalSearchTerm}&` : '')
+      .concat(params?.institutionId ? `institutionId=${params.institutionId}&` : '')
+      .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
+      .concat(
+        params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : ''
+      )
+      .concat(
+        params?.interestIds && params?.interestIds.length > 0
+          ? params.interestIds.map((id) => `interestIds=${id}&`).join('')
+          : ''
+      )
+      .concat(params?.userId ? `userId=${params.userId}&` : '')
+      .concat(params?.type ? `type=${params.type}&` : '')
+      .concat(params?.requestState ? `requestState=${params.requestState}&` : '')
+      .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
+      .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
+      .concat(params?.isFavorite ? `isFavorite=${params.isFavorite}&` : '')
+      .concat(
+        params?.sortBy
+          ? `sortBy=${params.sortBy}&inAscendingOrder=${params?.inAscendingOrder ?? true}&`
+          : ''
+      )
+      .concat(params?.limit ? `limit=${params.limit}&` : '')
+      .concat(params?.offset ? `offset=${params.offset}&` : '')
 
-      console.log(url)
-      const result = await axios.get<ProjectsResult>(url)
-      return result.data
-    } catch (error) {
-      console.log(error)
-      return
-    }
+    console.log(url)
+    const result = await axios.get<ProjectsResult>(url)
+    return result.data
   },
 
-  async favorite(id: number): Promise<boolean> {
-    try {
-      await axios.post(`${prefix}/favorite/${id}`)
-      return true
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.error(
-          `Failed to favorite project with ID ${id}:`,
-          error.response?.data || error.message
-        )
-      } else {
-        console.error(`An unknown error occurred while favoriteing project with ID ${id}:`, error)
-      }
-      return false
-    }
+  async favorite(id: number): Promise<void> {
+    await axios.post(`${prefix}/favorite/${id}`)
   },
 
   // Unfavorite a project
-  async unfavorite(id: number): Promise<boolean> {
-    try {
-      await axios.delete(`${prefix}/favorite/${id}`)
-      return true
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.error(
-          `Failed to unfavorite project with ID ${id}:`,
-          error.response?.data || error.message
-        )
-      } else {
-        console.error(`An unknown error occurred while unfavoriteing project with ID ${id}:`, error)
-      }
-      return false
-    }
+  async unfavorite(id: number): Promise<void> {
+    await axios.delete(`${prefix}/favorite/${id}`)
   },
 
   async requestEnrollment(id: number): Promise<void> {

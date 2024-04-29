@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { NextPage } from 'next'
 
-import { GetProjectsInput, Projects } from '@/services/projects'
-import ProjectsResult from '@/entities/ProjectsResult'
+import { Projects } from '@/services/projects'
 import SelectItem from '@/entities/HelpTypes/SelectItem'
 
 import Filter from '@/components/Filter'
@@ -17,13 +16,10 @@ import { Interests } from '@/services/interests'
 import { Users } from '@/services/user'
 import { Center, Pagination } from '@mantine/core'
 import { RequestState } from '../../../entities/Project'
+import { useQuery } from '@tanstack/react-query'
 
 const ProjectsPage: NextPage = () => {
-  const [projectsResult, setProjectsResult] = useState<ProjectsResult>()
   const projectsPerPage = 5
-  const totalPages = projectsResult?.projectCount
-    ? Math.ceil(projectsResult?.projectCount / projectsPerPage)
-    : 1
   const [currentPage, setCurrentPage] = useState(1)
   const [institutions, setInstitutions] = useState<SelectItem[]>()
   const [facility, setFacilities] = useState<SelectItem[]>()
@@ -38,140 +34,136 @@ const ProjectsPage: NextPage = () => {
 
   const searchQuery = useSearchParams()
 
-  const getUsers = async () => {
-    const users = await Users.getUsers()
-    const usersSelectItems: SelectItem[] = []
+  const usersQuery = useQuery({
+    queryKey: ['users'],
+    queryFn: Users.getUsers,
+  })
 
-    if (users) {
-      users.forEach((user) => {
-        usersSelectItems.push({
-          attribute: user.id.toString(),
-          displayName: `${user.firstName} ${user.lastName}`,
-        } as SelectItem)
-      })
+  const facilitiesQuery = useQuery({
+    queryKey: ['facilities', searchQuery.get('university')],
+    queryFn: () =>
+      Facilities.getFacilities({ institutionId: parseInt(searchQuery.get('university')!) }),
+    enabled: !!searchQuery.get('university'),
+  })
+
+  const departmentsQuery = useQuery({
+    queryKey: ['departments', searchQuery.get('facility')],
+    queryFn: () =>
+      ResearchDepartments.getResearchDepartments({
+        facilityId: parseInt(searchQuery.get('facility')!),
+      }),
+    enabled: !!searchQuery.get('facility'),
+  })
+
+  const institutionsQuery = useQuery({
+    queryKey: ['institutions'],
+    queryFn: Institutions.getInstitutions,
+  })
+
+  const interestsQuery = useQuery({
+    queryKey: ['interests'],
+    queryFn: Interests.getInterests,
+  })
+
+  const projectsQuery = useQuery({
+    queryKey: ['projects', searchQuery, currentPage],
+    queryFn: () =>
+      Projects.getProjects({
+        generalSearchTerm: searchQuery.get('generalSearch') || undefined,
+        institutionId: searchQuery.get('university')
+          ? parseInt(searchQuery.get('university')!)
+          : undefined,
+        facilityId: searchQuery.get('facility')
+          ? parseInt(searchQuery.get('facility')!)
+          : undefined,
+        researchDepartmentId: searchQuery.get('department')
+          ? parseInt(searchQuery.get('department')!)
+          : undefined,
+        interestIds: searchQuery.getAll('interest').map((id) => parseInt(id)),
+        userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')!) : undefined,
+        type: searchQuery.get('type') || undefined,
+        requestState: (searchQuery.get('requestState') as RequestState) || undefined,
+        isDown:
+          searchQuery.get('isDown') === 'true'
+            ? true
+            : searchQuery.get('isDown') === 'false'
+            ? false
+            : undefined,
+        isFavorite:
+          searchQuery.get('isFavorite') === undefined
+            ? undefined
+            : searchQuery.get('isFavorite') === 'true',
+        dateFrom: searchQuery.get('dateFrom') ? new Date(searchQuery.get('dateFrom')!) : undefined,
+        sortBy: searchQuery.get('sortBy') || undefined,
+        inAscendingOrder:
+          searchQuery.get('inAscendingOrder') === 'true'
+            ? true
+            : searchQuery.get('inAscendingOrder') === 'false'
+            ? false
+            : undefined,
+        offset: (currentPage - 1) * projectsPerPage,
+        limit: projectsPerPage,
+      }),
+  })
+
+  useEffect(() => {
+    if (usersQuery.data) {
+      const usersSelectItems: SelectItem[] = usersQuery.data.map((user) => ({
+        attribute: user.id.toString(),
+        displayName: `${user.firstName} ${user.lastName}`,
+      }))
       setUsers(usersSelectItems)
     }
-  }
+  }, [usersQuery.data])
 
-  const getFacilities = async (institutionId: number) => {
-    const facilities = await Facilities.getFacilities({ institutionId: institutionId })
-    const facilitiesSelectItems: SelectItem[] = []
-
-    if (facilities) {
-      facilities.forEach((facility) => {
-        facilitiesSelectItems.push({
-          attribute: facility.id.toString(),
-          displayName: facility.name,
-        } as SelectItem)
-      })
+  useEffect(() => {
+    if (facilitiesQuery.data) {
+      const facilitiesSelectItems: SelectItem[] = facilitiesQuery.data.map((facility) => ({
+        attribute: facility.id.toString(),
+        displayName: facility.name,
+      }))
       setFacilities(facilitiesSelectItems)
     }
-  }
+  }, [facilitiesQuery.data])
 
-  const getDepartments = async (facilityId: number) => {
-    const departments = await ResearchDepartments.getResearchDepartments({ facilityId: facilityId })
-    const departmentsSelectItems: SelectItem[] = []
-
-    if (departments) {
-      departments.forEach((department) => {
-        departmentsSelectItems.push({
-          attribute: department.id.toString(),
-          displayName: department.name,
-        } as SelectItem)
-      })
+  useEffect(() => {
+    if (departmentsQuery.data) {
+      const departmentsSelectItems: SelectItem[] = departmentsQuery.data.map((department) => ({
+        attribute: department.id.toString(),
+        displayName: department.name,
+      }))
       setDepartments(departmentsSelectItems)
     }
-  }
+  }, [departmentsQuery.data])
 
-  const getInstitutions = async () => {
-    const institutions = await Institutions.getInstitutions()
-    const institutionsSelectItems: SelectItem[] = []
-
-    if (institutions) {
-      institutions.forEach((institution) => {
-        institutionsSelectItems.push({
-          attribute: institution.id.toString(),
-          displayName: institution.name,
-        } as SelectItem)
-      })
+  useEffect(() => {
+    if (institutionsQuery.data) {
+      const institutionsSelectItems: SelectItem[] = institutionsQuery.data.map((institution) => ({
+        attribute: institution.id.toString(),
+        displayName: institution.name,
+      }))
       setInstitutions(institutionsSelectItems)
     }
-  }
+  }, [institutionsQuery.data])
 
-  const getInterests = async () => {
-    const interests = await Interests.getInterests()
-    const interestsSelectItems: SelectItem[] = []
-
-    if (interests) {
-      interests.forEach((interest) => {
-        interestsSelectItems.push({
-          attribute: interest.id.toString(),
-          displayName: interest.name,
-        } as SelectItem)
-      })
+  useEffect(() => {
+    if (interestsQuery.data) {
+      const interestsSelectItems: SelectItem[] = interestsQuery.data.map((interest) => ({
+        attribute: interest.id.toString(),
+        displayName: interest.name,
+      }))
+      setInterests(interestsSelectItems)
     }
-    setInterests(interestsSelectItems)
-  }
+  }, [interestsQuery.data])
 
-  useEffect(() => {
-    const selectedInstitution = searchQuery.get('university')
-    const selectedFacility = searchQuery.get('facility')
-
-    Promise.all([
-      getInstitutions(),
-      selectedInstitution ? getFacilities(parseInt(selectedInstitution)) : Promise.resolve(),
-      selectedFacility ? getDepartments(parseInt(selectedFacility)) : Promise.resolve(),
-      getInterests(),
-      getUsers(),
-    ])
-  }, [searchQuery])
-
-  const getProjects = async (params: GetProjectsInput) => {
-    const result = await Projects.getProjects(params)
-    setProjectsResult(result)
-  }
-
-  useEffect(() => {
-    getProjects({
-      generalSearchTerm: searchQuery.get('generalSearch') || undefined,
-      institutionId: searchQuery.get('university')
-        ? parseInt(searchQuery.get('university')!)
-        : undefined,
-      facilityId: searchQuery.get('facility') ? parseInt(searchQuery.get('facility')!) : undefined,
-      researchDepartmentId: searchQuery.get('department')
-        ? parseInt(searchQuery.get('department')!)
-        : undefined,
-      interestIds: searchQuery.getAll('interest').map((id) => parseInt(id)),
-      userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')!) : undefined,
-      type: searchQuery.get('type') || undefined,
-      requestState: (searchQuery.get('requestState') as RequestState) || undefined,
-      isDown:
-        searchQuery.get('isDown') === 'true'
-          ? true
-          : searchQuery.get('isDown') === 'false'
-          ? false
-          : undefined,
-      isFavorite:
-        searchQuery.get('isFavorite') === undefined
-          ? undefined
-          : searchQuery.get('isFavorite') === 'true',
-      dateFrom: searchQuery.get('dateFrom') ? new Date(searchQuery.get('dateFrom')!) : undefined,
-      sortBy: searchQuery.get('sortBy') || undefined,
-      inAscendingOrder:
-        searchQuery.get('inAscendingOrder') === 'true'
-          ? true
-          : searchQuery.get('inAscendingOrder') === 'false'
-          ? false
-          : undefined,
-      offset: (currentPage - 1) * projectsPerPage,
-      limit: projectsPerPage,
-    })
-  }, [searchQuery, currentPage ?? 1])
+  const totalPages = projectsQuery.data?.projectCount
+    ? Math.ceil(projectsQuery.data.projectCount / projectsPerPage)
+    : 1
 
   return (
     <>
       <Filter
-        counter={projectsResult?.projectCount ?? 0}
+        counter={projectsQuery.data?.projectCount ?? 0}
         content={
           <ProjectFilterContent
             sortAttributes={sortAttributes}
@@ -182,7 +174,7 @@ const ProjectsPage: NextPage = () => {
             users={users ?? []}
           />
         }>
-        <ProjectsList projects={projectsResult?.projects} />
+        <ProjectsList projects={projectsQuery.data?.projects} />
         {totalPages > 1 && (
           <Center>
             <Pagination

@@ -10,15 +10,10 @@ const prefix = `${Env.backendAPI}/auth`
 
 export const CurrentUserService = {
   async fetchUserInfo(): Promise<CurrentUserInfo | null> {
-    try {
-      const response = await axios.get<CurrentUserInfo>(`${prefix}/me`, {
-        withCredentials: true,
-      })
+    const response = await axios.get<CurrentUserInfo>(`${prefix}/me`, {
+      withCredentials: true,
+    })
 
-      return response.data
-    } catch (error) {
-      console.error('Error fetching user info:', error)
-      return null
-    }
+    return response.data
   },
 }

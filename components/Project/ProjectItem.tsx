@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ActionIcon, Badge, Card, Chip, Flex, Group, Text } from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import Project, { RequestState } from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Projects } from '@/services/projects'
 import {
   IconHeart,
@@ -22,74 +23,59 @@ interface ProjectItemProps {
 const ProjectItem = (props: ProjectItemProps) => {
   const project = props.project
 
-  const [isFavorite, setIsFavorite] = useState(project?.isFavorite)
-  const [favoriteCount, setFavoriteCount] = useState(project?.favoriteCount)
-
-  const [requestState, setRequestState] = useState(
-    project?.requestState == null ? undefined : project.requestState
-  )
-
   const searchQuery = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+  const queryClient = useQueryClient()
+
+  const favoriteMutation = useMutation({
+    mutationFn: () =>
+      project?.isFavorite ? Projects.unfavorite(project!.id) : Projects.favorite(project!.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+    },
+  })
+
+  const enrollmentRequestMutation = useMutation({
+    mutationFn: () => Projects.requestEnrollment(project!.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+      notifications.show({
+        title: 'Solicitud de inscripción enviada',
+        message: 'Espera a que el líder del proyecto acepte tu solicitud',
+      })
+    },
+  })
+
+  const cancelEnrollmentMutation = useMutation({
+    mutationFn: () => Projects.cancelEnrollment(project!.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+      notifications.show({
+        title: 'Solicitud de inscripción cancelada',
+        message: 'Tu solicitud de inscripción ha sido cancelada',
+      })
+    },
+  })
 
   const handleInterestTagClick = (interestId: number) => {
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
   }
 
-  const handleFavoriteClick = async (projectId: number) => {
-    if (isFavorite) {
-      const result = await Projects.unfavorite(projectId)
-      if (result) {
-        setIsFavorite(false)
-        favoriteCount !== undefined && setFavoriteCount(favoriteCount - 1)
-      }
-    } else {
-      const result = await Projects.favorite(projectId)
-      if (result) {
-        setIsFavorite(true)
-        favoriteCount !== undefined && setFavoriteCount(favoriteCount + 1)
-      }
-    }
+  const handleFavoriteClick = () => {
+    favoriteMutation.mutate()
   }
 
-  const handleEnrollmentRequestClick = async (projectId: number) => {
-    try {
-      await Projects.requestEnrollment(projectId)
-      setRequestState(RequestState.Pending)
-      notifications.show({
-        title: 'Solicitud de inscripcion enviada',
-        message: 'Espera a que el líder del proyecto acepte tu solicitud',
-      })
-    } catch (error) {
-      console.error(error)
-    }
+  const handleEnrollmentRequestClick = () => {
+    enrollmentRequestMutation.mutate()
   }
 
-  const handleEnrollmentRequestCancelClick = async (projectId: number) => {
-    try {
-      await Projects.cancelEnrollment(projectId)
-      setRequestState(undefined)
-      notifications.show({
-        title: 'Solicitud de inscripcion cancelada',
-        message: 'Tu solicitud de inscripción ha sido cancelada',
-      })
-    } catch (error) {
-      console.error(error)
-    }
+  const handleEnrollmentRequestCancelClick = () => {
+    cancelEnrollmentMutation.mutate()
   }
 
-  const handleEnrollmentCancelClick = async (projectId: number) => {
-    try {
-      await Projects.cancelEnrollment(projectId)
-      setRequestState(undefined)
-      notifications.show({
-        title: 'Inscripción cancelada',
-        message: 'Tu inscripción en el proyecto ha sido cancelada',
-      })
-    } catch (error) {
-      console.error(error)
-    }
+  const handleEnrollmentCancelClick = () => {
+    cancelEnrollmentMutation.mutate()
   }
 
   const handleDepartmentBadgeClick = (
@@ -119,14 +105,14 @@ const ProjectItem = (props: ProjectItemProps) => {
     Url.setUrlParam(router, pathname, searchQuery, 'user', userId.toString())
   }
 
-  const renderActionIcon = (requestState: RequestState | undefined, projectId: number) => {
+  const renderActionIcon = (requestState: RequestState | undefined | null) => {
     let icon = null
     let ariaLabel = ''
     let color = 'gray'
-    let handlerFunc = ({}: number) => console.log('No handler function defined')
+    let handlerFunc = () => console.log('No handler function defined')
 
     switch (requestState) {
-      case undefined:
+      case undefined || null:
         icon = <IconUserPlus />
         ariaLabel = 'Solicitar inscripción'
         handlerFunc = handleEnrollmentRequestClick
@@ -151,7 +137,7 @@ const ProjectItem = (props: ProjectItemProps) => {
       <ActionIcon
         variant="transparent"
         aria-label={ariaLabel}
-        onClick={() => handlerFunc(projectId)}
+        onClick={handlerFunc}
         size="lg"
         color={color}>
         {icon}
@@ -232,17 +218,17 @@ const ProjectItem = (props: ProjectItemProps) => {
         </Chip.Group>
 
         <Flex justify="flex-end" align="center">
-          {renderActionIcon(requestState, project.id)}
+          {renderActionIcon(project.requestState)}
 
           <ActionIcon
             variant="transparent"
             aria-label="Guardar en marcadores"
-            onClick={() => handleFavoriteClick(project.id)}
+            onClick={handleFavoriteClick}
             size="lg"
-            color={isFavorite ? 'blue' : 'gray'}>
-            {isFavorite ? <IconHeartFilled /> : <IconHeart />}
+            color={project.isFavorite ? 'blue' : 'gray'}>
+            {project.isFavorite ? <IconHeartFilled /> : <IconHeart />}
           </ActionIcon>
-          <Text size="sm">{favoriteCount}</Text>
+          <Text size="sm">{project.favoriteCount}</Text>
         </Flex>
       </div>
     </Card>
