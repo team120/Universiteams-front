@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { AxiosError } from 'axios'
 
@@ -31,6 +31,7 @@ import { useForm } from '@mantine/form'
 import { useMediaQuery, useToggle } from '@mantine/hooks'
 import Requirement from './Requirement'
 import Theme from '../../src/app/theme'
+import { useMutation } from '@tanstack/react-query'
 
 interface LoginRegisterProps {
   initialType: LoginRegisterType
@@ -39,26 +40,27 @@ interface LoginRegisterProps {
 const LoginRegister = ({ initialType }: LoginRegisterProps) => {
   const router = useRouter()
   const [type, toggleType] = useToggle<LoginRegisterType>(getInitialToggleTypes(initialType))
-  const [serverErrors, setServerErrors] = useState<string[]>([])
   const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
+
+  const { mutate: authenticate, error } = useMutation({
+    mutationFn: (values: Login) => Account.Authenticate(values, type),
+    onSuccess: () => {
+      router.push('/')
+    },
+  })
+
+  const serverErrors = useMemo(() => {
+    if (!error) return []
+
+    const defaultErrorMsg = 'Ocurrió un error inesperado'
+    const message = ((error as AxiosError)?.response?.data as { message: string | string[] })
+      ?.message
+    return Array.isArray(message) ? message : [message || defaultErrorMsg]
+  }, [error])
 
   const handleForgotPasswordClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
     router.push('/account/forgotPassword')
-  }
-
-  const handleSubmit = async (values: Login) => {
-    try {
-      await Account.Authenticate(values, type)
-      setServerErrors([])
-      router.push('/')
-    } catch (error) {
-      const defaultErrorMsg = 'Ocurrió un error inesperado'
-      const message = ((error as AxiosError)?.response?.data as { message: string | string[] })
-        ?.message
-      const errors = Array.isArray(message) ? message : [message || defaultErrorMsg]
-      setServerErrors(errors)
-    }
   }
 
   const validateName = (value: string) => {
@@ -95,10 +97,6 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
     },
   })
 
-  useEffect(() => {
-    setServerErrors([])
-  }, [type])
-
   const strength = useMemo(() => getPasswordStrength(form.values.password), [form.values.password])
   const strengthColorAndPhrase = useMemo(() => getStrengthColorAndPhrase(strength), [strength])
 
@@ -133,7 +131,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
           <Requirement key={index} meets={false} label={error} />
         ))}
 
-        <form onSubmit={form.onSubmit(handleSubmit)}>
+        <form onSubmit={form.onSubmit((values) => authenticate(values))}>
           {type === 'register' && (
             <>
               <TextInput
