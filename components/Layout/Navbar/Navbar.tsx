@@ -24,7 +24,7 @@ const iconSize = 40
 
 const Navbar = () => {
   const { data: currentUser } = useQuery({
-    queryKey: [CurrentUserService.fetchUserInfo.name],
+    queryKey: ['currentUser'],
     queryFn: CurrentUserService.fetchUserInfo,
   })
 
