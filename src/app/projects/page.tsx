@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { NextPage } from 'next'
 
-import { Projects } from '@/services/projects'
+import { GetProjectsInput, Projects } from '@/services/projects'
 import SelectItem from '@/entities/HelpTypes/SelectItem'
 
 import Filter from '@/components/Filter'
@@ -65,7 +65,26 @@ const ProjectsPage: NextPage = () => {
   })
 
   const projectsQuery = useQuery({
-    queryKey: ['projects', searchQuery, currentPage, projectsPerPage],
+    queryKey: [
+      'projects',
+      {
+        generalSearch: searchQuery.get('generalSearch'),
+        university: searchQuery.get('university'),
+        facility: searchQuery.get('facility'),
+        department: searchQuery.get('department'),
+        interests: searchQuery.getAll('interest'),
+        user: searchQuery.get('user'),
+        type: searchQuery.get('type'),
+        requestState: searchQuery.get('requestState'),
+        isDown: searchQuery.get('isDown'),
+        isFavorite: searchQuery.get('isFavorite'),
+        dateFrom: searchQuery.get('dateFrom'),
+        sortBy: searchQuery.get('sortBy'),
+        inAscendingOrder: searchQuery.get('inAscendingOrder'),
+      } as { [K in keyof GetProjectsInput]: string | string[] | undefined },
+      currentPage,
+      projectsPerPage,
+    ],
     queryFn: () =>
       Projects.getProjects({
         generalSearchTerm: searchQuery.get('generalSearch') || undefined,
