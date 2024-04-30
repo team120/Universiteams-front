@@ -20,4 +20,8 @@ export const Account = {
     const url = `${prefix}/reset-password`
     await axios.post(url, values)
   },
+  verifyEmail: async (verificationToken: string) => {
+    const url = `${prefix}/verify-email`
+    await axios.post(url, { verificationToken }, { withCredentials: true })
+  },
 }
