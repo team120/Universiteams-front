@@ -33,14 +33,16 @@ const ProjectItem = (props: ProjectItemProps) => {
 
   const verifyEmailNotification = {
     title: 'Verifica tu correo electrónico',
-    message: 'Debes verificar tu correo electrónico para poder solicitar inscripciones',
     color: 'red',
   }
 
   const favoriteMutation = useMutation({
     mutationFn: async () => {
       if (currentUser?.isEmailVerified === false) {
-        notifications.show(verifyEmailNotification)
+        notifications.show({
+          ...verifyEmailNotification,
+          message: 'Debes verificar tu correo electrónico para poder guardar proyectos',
+        })
         return Promise.reject('Email not verified')
       }
 
@@ -54,7 +56,10 @@ const ProjectItem = (props: ProjectItemProps) => {
   const enrollmentRequestMutation = useMutation({
     mutationFn: async () => {
       if (currentUser?.isEmailVerified === false) {
-        notifications.show(verifyEmailNotification)
+        notifications.show({
+          ...verifyEmailNotification,
+          message: 'Debes verificar tu correo electrónico para poder solicitar inscripciones',
+        })
         return Promise.reject('Email not verified')
       }
 
