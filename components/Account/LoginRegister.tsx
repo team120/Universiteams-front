@@ -32,6 +32,7 @@ import { useMediaQuery, useToggle } from '@mantine/hooks'
 import Requirement from './Requirement'
 import Theme from '../../src/app/theme'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { CurrentUserQueryOptions } from '../../services/currentUser'
 
 interface LoginRegisterProps {
   initialType: LoginRegisterType
@@ -44,9 +45,9 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
   const queryClient = useQueryClient()
 
   const { mutate: authenticate, error } = useMutation({
-    mutationFn: (values: Login) => Account.Authenticate(values, type),
+    mutationFn: (values: Login) => Account.authenticate(values, type),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentUser'] })
+      queryClient.invalidateQueries({ queryKey: CurrentUserQueryOptions.currentUser().queryKey })
       router.push('/')
     },
   })

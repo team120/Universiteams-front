@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import axios, { AxiosError } from 'axios'
+
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import {
   Paper,
   Title,
@@ -16,12 +18,29 @@ import {
 } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Requirement from './Requirement'
+import { Account } from '@/services/account'
 
 const ForgotPassword = () => {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
-  const [serverErrors, setServerErrors] = useState<string[]>([])
+
+  const { mutate: resetPassword, error } = useMutation({
+    mutationFn: (email: string) => Account.forgotPassword(email),
+    onSuccess: () => {
+      setIsSuccess(true)
+    },
+  })
+
+  const serverErrors = useMemo(() => {
+    if (error instanceof AxiosError && error.response && error.response.status === 400) {
+      return [error.response.data.message]
+    } else if (error) {
+      console.error(error)
+      return ['Ocurrió un error inesperado']
+    }
+    return []
+  }, [error])
 
   const handleGoBackToLoginClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
@@ -32,22 +51,9 @@ const ForgotPassword = () => {
     setIsSuccess(false)
   }
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const url = 'http://api.localhost/auth/forgot-password'
-    try {
-      const res = await axios.post(url, { email }, { withCredentials: true })
-      if (res.status === 200) {
-        setIsSuccess(true)
-      }
-    } catch (error) {
-      if (error instanceof AxiosError && error.response && error.response.status === 400) {
-        setServerErrors([error.response.data.message])
-      } else {
-        console.error(error)
-        setServerErrors(['Ocurrió un error inesperado'])
-      }
-    }
+    resetPassword(email)
   }
 
   return (
@@ -74,10 +80,9 @@ const ForgotPassword = () => {
           Ingresa tu correo electrónico para obtener un enlace de restablecimiento
         </Text>
       </Stack>
-
       <form onSubmit={handleSubmit}>
         <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-          {serverErrors?.length > 0 && (
+          {serverErrors.length > 0 && (
             <>
               {serverErrors.map((error, index) => (
                 <Requirement key={index} meets={false} label={error} />
