@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { NextPage } from 'next'
 
 import { Projects } from '@/services/projects'
@@ -28,6 +28,10 @@ const ProjectsPage: NextPage = () => {
   ]
 
   const searchQuery = useSearchParams()
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery])
 
   const usersQuery = useQuery({
     queryKey: ['users'],
