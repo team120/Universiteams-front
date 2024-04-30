@@ -75,7 +75,7 @@ const ForgotPassword = () => {
         </div>
       )}
       <Stack align="center">
-        <Title>¿Olvidaste tu contraseña?</Title>
+        <Title ta="center">¿Olvidaste tu contraseña?</Title>
         <Text c="dimmed.6" fz="sm" ta="center">
           Ingresa tu correo electrónico para obtener un enlace de restablecimiento
         </Text>
