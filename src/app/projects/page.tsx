@@ -61,7 +61,7 @@ const ProjectsPage: NextPage = () => {
   })
 
   const projectsQuery = useQuery({
-    queryKey: ['projects', searchQuery, currentPage],
+    queryKey: ['projects', searchQuery, currentPage, projectsPerPage],
     queryFn: () =>
       Projects.getProjects({
         generalSearchTerm: searchQuery.get('generalSearch') || undefined,

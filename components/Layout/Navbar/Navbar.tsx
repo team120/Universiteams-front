@@ -13,7 +13,7 @@ import {
   IconTerminal2,
   IconUserCircle,
 } from '@tabler/icons-react'
-import { CurrentUserQueryOptions, CurrentUserService } from '../../../services/currentUser'
+import { CurrentUserQueryOptions } from '../../../services/currentUser'
 import { RequestState } from '../../../entities/Project'
 import { useQuery } from '@tanstack/react-query'
 

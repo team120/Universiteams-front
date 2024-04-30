@@ -15,7 +15,7 @@ import {
   IconUserPlus,
 } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
-import { CurrentUserQueryOptions, CurrentUserService } from '../../services/currentUser'
+import { CurrentUserQueryOptions } from '../../services/currentUser'
 
 interface ProjectItemProps {
   project?: Project
