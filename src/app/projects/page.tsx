@@ -16,7 +16,7 @@ import { Interests } from '@/services/interests'
 import { Users } from '@/services/user'
 import { Center, Pagination } from '@mantine/core'
 import { RequestState } from '../../../entities/Project'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 const ProjectsPage: NextPage = () => {
   const projectsPerPage = 5
@@ -99,6 +99,7 @@ const ProjectsPage: NextPage = () => {
         offset: (currentPage - 1) * projectsPerPage,
         limit: projectsPerPage,
       }),
+    placeholderData: keepPreviousData,
   })
 
   const users = useMemo(() => {
