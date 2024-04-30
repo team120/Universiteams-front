@@ -12,9 +12,7 @@ const prefix = `${Env.backendAPI}/auth`
 
 export const CurrentUserService = {
   async fetchUserInfo(): Promise<CurrentUserInfo | null> {
-    const response = await axios.get<CurrentUserInfo>(`${prefix}/me`, {
-      withCredentials: true,
-    })
+    const response = await axios.get<CurrentUserInfo>(`${prefix}/me`)
 
     return response.data
   },

@@ -10,11 +10,11 @@ const prefix = `${Env.backendAPI}/auth`
 export const Account = {
   authenticate: async (values: Login, type: LoginRegisterType) => {
     const url = `${prefix}/${type}`
-    await axios.post<CurrentUserInfo>(url, values, { withCredentials: true })
+    await axios.post<CurrentUserInfo>(url, values)
   },
   forgotPassword: async (email: string) => {
     const url = `${prefix}/forgot-password`
-    await axios.post(url, { email }, { withCredentials: true })
+    await axios.post(url, { email })
   },
   resetPassword: async (values: ResetPassword) => {
     const url = `${prefix}/reset-password`
@@ -22,6 +22,6 @@ export const Account = {
   },
   verifyEmail: async (verificationToken: string) => {
     const url = `${prefix}/verify-email`
-    await axios.post(url, { verificationToken }, { withCredentials: true })
+    await axios.post(url, { verificationToken })
   },
 }
