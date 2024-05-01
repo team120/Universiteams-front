@@ -1,5 +1,5 @@
 import React from 'react'
-import { Textarea, Button } from '@mantine/core'
+import { Textarea, Button, LoadingOverlay } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { EnrollmentRequest } from '../../entities/HelpTypes/EnrollmentRequest'
@@ -35,6 +35,11 @@ export const EnrollmentRequestModal = (props: EnrollmentRequestProps): React.JSX
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
+      <LoadingOverlay
+        visible={enrollmentRequestMutation.isPending}
+        zIndex={1000}
+        overlayProps={{ radius: 'sm', blur: 2 }}
+      />
       <Textarea
         label="Puedes ingresar una nota al admin o lider del proyecto (opcional)"
         description="Puedes indicar tus motivaciones, habilidades, disponibilidad, etc."
@@ -43,7 +48,7 @@ export const EnrollmentRequestModal = (props: EnrollmentRequestProps): React.JSX
         resize="vertical"
         {...form.getInputProps('message')}
       />
-      <Button type="submit" fullWidth mt="md" loading={enrollmentRequestMutation.isPending}>
+      <Button type="submit" fullWidth mt="md">
         Enviar
       </Button>
     </form>
