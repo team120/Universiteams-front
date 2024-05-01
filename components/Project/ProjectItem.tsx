@@ -16,26 +16,12 @@ import {
 } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
 import { CurrentUserQueryOptions } from '../../services/currentUser'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { modals } from '@mantine/modals'
+import { EnrollmentRequestModal } from '../Enrollment/EnrollmentRequest'
+import { NotLoggedError } from '../Account/NotLoggedError'
 
 interface ProjectItemProps {
   project?: Project
-}
-
-const LoginErrorMessage = (router: AppRouterInstance, action: string): React.ReactNode => {
-  return (
-    <>
-      Inicia sesión o crea una cuenta para {action}.{' '}
-      <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault()
-          router.push('/account/login')
-        }}>
-        Iniciar sesión
-      </a>
-    </>
-  )
 }
 
 const ProjectItem = (props: ProjectItemProps) => {
@@ -61,7 +47,7 @@ const ProjectItem = (props: ProjectItemProps) => {
         notifications.show({
           title: 'Debes iniciar sesión para guardar proyectos',
           color: 'red',
-          message: LoginErrorMessage(router, 'guardar proyectos'),
+          message: <NotLoggedError action="guardar proyectos" />,
         })
 
         return Promise.reject('User not logged in')
@@ -80,37 +66,6 @@ const ProjectItem = (props: ProjectItemProps) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] })
-    },
-  })
-
-  const enrollmentRequestMutation = useMutation({
-    mutationFn: async () => {
-      if (errorCurrentUser || !currentUser) {
-        notifications.show({
-          title: 'Debes iniciar sesión para solicitar inscripciones',
-          color: 'red',
-          message: LoginErrorMessage(router, 'solicitar inscripciones'),
-        })
-
-        return Promise.reject('User not logged in')
-      }
-
-      if (currentUser?.isEmailVerified === false) {
-        notifications.show({
-          ...verifyEmailNotification,
-          message: 'Debes verificar tu correo electrónico para poder solicitar inscripciones',
-        })
-        return Promise.reject('Email not verified')
-      }
-
-      return Projects.requestEnrollment(project!.id)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] })
-      notifications.show({
-        title: 'Solicitud de inscripción enviada',
-        message: 'Espera a que el líder del proyecto acepte tu solicitud',
-      })
     },
   })
 
@@ -134,7 +89,30 @@ const ProjectItem = (props: ProjectItemProps) => {
   }
 
   const handleEnrollmentRequestClick = () => {
-    enrollmentRequestMutation.mutate()
+    if (errorCurrentUser || !currentUser) {
+      notifications.show({
+        title: 'Debes iniciar sesión para solicitar inscripciones',
+        color: 'red',
+        message: <NotLoggedError action="solicitar inscripciones" />,
+      })
+
+      return
+    }
+
+    if (currentUser?.isEmailVerified === false) {
+      notifications.show({
+        ...verifyEmailNotification,
+        message: 'Debes verificar tu correo electrónico para poder solicitar inscripciones',
+      })
+
+      return
+    }
+
+    modals.open({
+      title: 'Solicitar inscripción',
+      centered: true,
+      children: <EnrollmentRequestModal projectId={project!.id} />,
+    })
   }
 
   const handleEnrollmentRequestCancelClick = () => {

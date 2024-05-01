@@ -3,6 +3,7 @@ import Env from 'utils/config/Env'
 
 import ProjectsResult from '@/entities/ProjectsResult'
 import { RequestState } from '../entities/Project'
+import { EnrollmentRequest } from '../entities/HelpTypes/EnrollmentRequest'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -68,8 +69,8 @@ export const Projects = {
     await axios.delete(`${prefix}/favorite/${id}`)
   },
 
-  async requestEnrollment(id: number): Promise<void> {
-    await axios.post(`${prefix}/enroll-request/${id}`)
+  async requestEnrollment(id: number, enrollmentRequest: EnrollmentRequest): Promise<void> {
+    await axios.post(`${prefix}/enroll-request/${id}`, enrollmentRequest)
   },
 
   async cancelEnrollment(id: number): Promise<void> {
