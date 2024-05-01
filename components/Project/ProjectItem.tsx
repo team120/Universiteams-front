@@ -29,7 +29,9 @@ const ProjectItem = (props: ProjectItemProps) => {
   const pathname = usePathname()
   const queryClient = useQueryClient()
 
-  const { data: currentUser } = useQuery(CurrentUserQueryOptions.currentUser())
+  const { data: currentUser, error: errorCurrentUser } = useQuery(
+    CurrentUserQueryOptions.currentUser()
+  )
 
   const verifyEmailNotification = {
     title: 'Verifica tu correo electrónico',
@@ -38,11 +40,22 @@ const ProjectItem = (props: ProjectItemProps) => {
 
   const favoriteMutation = useMutation({
     mutationFn: async () => {
+      if (errorCurrentUser || !currentUser) {
+        notifications.show({
+          title: 'Debes iniciar sesión para guardar proyectos',
+          color: 'red',
+          message: 'Inicia sesión o crea una cuenta para guardar proyectos',
+        })
+
+        return Promise.reject('User not logged in')
+      }
+
       if (currentUser?.isEmailVerified === false) {
         notifications.show({
           ...verifyEmailNotification,
           message: 'Debes verificar tu correo electrónico para poder guardar proyectos',
         })
+
         return Promise.reject('Email not verified')
       }
 
@@ -55,6 +68,16 @@ const ProjectItem = (props: ProjectItemProps) => {
 
   const enrollmentRequestMutation = useMutation({
     mutationFn: async () => {
+      if (errorCurrentUser || !currentUser) {
+        notifications.show({
+          title: 'Debes iniciar sesión para solicitar inscripciones',
+          color: 'red',
+          message: 'Inicia sesión o crea una cuenta para solicitar inscripciones',
+        })
+
+        return Promise.reject('User not logged in')
+      }
+
       if (currentUser?.isEmailVerified === false) {
         notifications.show({
           ...verifyEmailNotification,
@@ -139,7 +162,8 @@ const ProjectItem = (props: ProjectItemProps) => {
     let handlerFunc = () => console.log('No handler function defined')
 
     switch (requestState) {
-      case undefined || null:
+      case undefined:
+      case null:
         icon = <IconUserPlus />
         ariaLabel = 'Solicitar inscripción'
         handlerFunc = handleEnrollmentRequestClick
