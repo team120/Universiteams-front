@@ -16,9 +16,26 @@ import {
 } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
 import { CurrentUserQueryOptions } from '../../services/currentUser'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 interface ProjectItemProps {
   project?: Project
+}
+
+const LoginErrorMessage = (router: AppRouterInstance, action: string): React.ReactNode => {
+  return (
+    <>
+      Inicia sesión o crea una cuenta para {action}.{' '}
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault()
+          router.push('/account/login')
+        }}>
+        Iniciar sesión
+      </a>
+    </>
+  )
 }
 
 const ProjectItem = (props: ProjectItemProps) => {
@@ -44,7 +61,7 @@ const ProjectItem = (props: ProjectItemProps) => {
         notifications.show({
           title: 'Debes iniciar sesión para guardar proyectos',
           color: 'red',
-          message: 'Inicia sesión o crea una cuenta para guardar proyectos',
+          message: LoginErrorMessage(router, 'guardar proyectos'),
         })
 
         return Promise.reject('User not logged in')
@@ -72,7 +89,7 @@ const ProjectItem = (props: ProjectItemProps) => {
         notifications.show({
           title: 'Debes iniciar sesión para solicitar inscripciones',
           color: 'red',
-          message: 'Inicia sesión o crea una cuenta para solicitar inscripciones',
+          message: LoginErrorMessage(router, 'solicitar inscripciones'),
         })
 
         return Promise.reject('User not logged in')
