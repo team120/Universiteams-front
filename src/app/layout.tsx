@@ -12,6 +12,7 @@ import Theme from './theme'
 import Layout from '@/components/Layout/Layout'
 import { Notifications } from '@mantine/notifications'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ModalsProvider } from '@mantine/modals'
 
 const queryClient = new QueryClient()
 
@@ -35,10 +36,12 @@ const App = ({ children }: { children: React.ReactNode }) => {
             theme={Theme}
             colorSchemeManager={colorSchemeManager}
             defaultColorScheme="dark">
-            <Layout>
-              {children}
-              <Notifications />
-            </Layout>
+            <ModalsProvider>
+              <Layout>
+                {children}
+                <Notifications />
+              </Layout>
+            </ModalsProvider>
           </MantineProvider>
         </QueryClientProvider>
       </body>
