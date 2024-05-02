@@ -1,6 +1,6 @@
 import React from 'react'
 import { ActionIcon, Popover, Center } from '@mantine/core'
-import { IconUserPlus, IconSend, IconTrash, IconUserCheck } from '@tabler/icons-react'
+import { IconUserPlus, IconSend, IconTrash, IconUserCheck, IconUserOff } from '@tabler/icons-react'
 import { RequestState } from '../../entities/Project'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
@@ -63,6 +63,19 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, pr
     cancelEnrollmentRequestMutation.mutate()
   }
 
+  const handleEnrollmentRejectedClick = () => {
+    modals.open({
+      title: 'Solicitud rechazada',
+      centered: true,
+      children: (
+        <Center>
+          <IconUserOff size="xl" />
+          <p>Has sido rechazado en tu solicitud de inscripción</p>
+        </Center>
+      ),
+    })
+  }
+
   const handleUnenrollClick = () => {
     modals.open({
       title: 'Desinscribirse del proyecto',
@@ -83,6 +96,17 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, pr
           size="lg"
           color="gray">
           <IconUserPlus />
+        </ActionIcon>
+      )
+    case RequestState.Rejected:
+      return (
+        <ActionIcon
+          variant="transparent"
+          aria-label="Has sido rechazado"
+          onClick={handleEnrollmentRejectedClick}
+          size="lg"
+          color="gray">
+          <IconUserOff />
         </ActionIcon>
       )
     case RequestState.Pending:
