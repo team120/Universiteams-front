@@ -4,6 +4,7 @@ import Env from 'utils/config/Env'
 import ProjectsResult from '@/entities/ProjectsResult'
 import { RequestState } from '../entities/Project'
 import { EnrollmentRequest } from '../entities/HelpTypes/EnrollmentRequest'
+import { keepPreviousData } from '@tanstack/react-query'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -64,7 +65,6 @@ export const Projects = {
     await axios.post(`${prefix}/favorite/${id}`)
   },
 
-  // Unfavorite a project
   async unfavorite(id: number): Promise<void> {
     await axios.delete(`${prefix}/favorite/${id}`)
   },
@@ -80,4 +80,14 @@ export const Projects = {
   async unenroll(id: number, unenrollOptions: Unenroll): Promise<void> {
     await axios.put(`${prefix}/unenroll/${id}`, unenrollOptions)
   },
+}
+
+export const ProjectsQueryKey = 'projects'
+
+export const ProjectQueryOptions = {
+  projects: (currentPage: number, projectsPerPage: number, params?: GetProjectsInput) => ({
+    queryKey: [ProjectsQueryKey, params, currentPage, projectsPerPage],
+    queryFn: () => Projects.getProjects(params),
+    placeholderData: keepPreviousData,
+  }),
 }

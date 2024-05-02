@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { NextPage } from 'next'
 
-import { GetProjectsInput, Projects } from '@/services/projects'
+import { ProjectQueryOptions } from '@/services/projects'
 import SelectItem from '@/entities/HelpTypes/SelectItem'
 
 import Filter from '@/components/Filter'
@@ -16,7 +16,7 @@ import { Interests } from '@/services/interests'
 import { Users } from '@/services/user'
 import { Center, Pagination } from '@mantine/core'
 import { RequestState } from '../../../entities/Project'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 const ProjectsPage: NextPage = () => {
   const projectsPerPage = 5
@@ -64,66 +64,42 @@ const ProjectsPage: NextPage = () => {
     queryFn: Interests.getInterests,
   })
 
-  const projectsQuery = useQuery({
-    queryKey: [
-      'projects',
-      {
-        generalSearch: searchQuery.get('generalSearch'),
-        university: searchQuery.get('university'),
-        facility: searchQuery.get('facility'),
-        department: searchQuery.get('department'),
-        interests: searchQuery.getAll('interest'),
-        user: searchQuery.get('user'),
-        type: searchQuery.get('type'),
-        requestState: searchQuery.get('requestState'),
-        isDown: searchQuery.get('isDown'),
-        isFavorite: searchQuery.get('isFavorite'),
-        dateFrom: searchQuery.get('dateFrom'),
-        sortBy: searchQuery.get('sortBy'),
-        inAscendingOrder: searchQuery.get('inAscendingOrder'),
-      } as { [K in keyof GetProjectsInput]: string | string[] | undefined },
-      currentPage,
-      projectsPerPage,
-    ],
-    queryFn: () =>
-      Projects.getProjects({
-        generalSearchTerm: searchQuery.get('generalSearch') || undefined,
-        institutionId: searchQuery.get('university')
-          ? parseInt(searchQuery.get('university')!)
+  const projectsQuery = useQuery(
+    ProjectQueryOptions.projects(currentPage, projectsPerPage, {
+      generalSearchTerm: searchQuery.get('generalSearch') || undefined,
+      institutionId: searchQuery.get('university')
+        ? parseInt(searchQuery.get('university')!)
+        : undefined,
+      facilityId: searchQuery.get('facility') ? parseInt(searchQuery.get('facility')!) : undefined,
+      researchDepartmentId: searchQuery.get('department')
+        ? parseInt(searchQuery.get('department')!)
+        : undefined,
+      interestIds: searchQuery.getAll('interest').map((id) => parseInt(id)),
+      userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')!) : undefined,
+      type: searchQuery.get('type') || undefined,
+      requestState: (searchQuery.get('requestState') as RequestState) || undefined,
+      isDown:
+        searchQuery.get('isDown') === 'true'
+          ? true
+          : searchQuery.get('isDown') === 'false'
+          ? false
           : undefined,
-        facilityId: searchQuery.get('facility')
-          ? parseInt(searchQuery.get('facility')!)
+      isFavorite:
+        searchQuery.get('isFavorite') === undefined
+          ? undefined
+          : searchQuery.get('isFavorite') === 'true',
+      dateFrom: searchQuery.get('dateFrom') ? new Date(searchQuery.get('dateFrom')!) : undefined,
+      sortBy: searchQuery.get('sortBy') || undefined,
+      inAscendingOrder:
+        searchQuery.get('inAscendingOrder') === 'true'
+          ? true
+          : searchQuery.get('inAscendingOrder') === 'false'
+          ? false
           : undefined,
-        researchDepartmentId: searchQuery.get('department')
-          ? parseInt(searchQuery.get('department')!)
-          : undefined,
-        interestIds: searchQuery.getAll('interest').map((id) => parseInt(id)),
-        userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')!) : undefined,
-        type: searchQuery.get('type') || undefined,
-        requestState: (searchQuery.get('requestState') as RequestState) || undefined,
-        isDown:
-          searchQuery.get('isDown') === 'true'
-            ? true
-            : searchQuery.get('isDown') === 'false'
-            ? false
-            : undefined,
-        isFavorite:
-          searchQuery.get('isFavorite') === undefined
-            ? undefined
-            : searchQuery.get('isFavorite') === 'true',
-        dateFrom: searchQuery.get('dateFrom') ? new Date(searchQuery.get('dateFrom')!) : undefined,
-        sortBy: searchQuery.get('sortBy') || undefined,
-        inAscendingOrder:
-          searchQuery.get('inAscendingOrder') === 'true'
-            ? true
-            : searchQuery.get('inAscendingOrder') === 'false'
-            ? false
-            : undefined,
-        offset: (currentPage - 1) * projectsPerPage,
-        limit: projectsPerPage,
-      }),
-    placeholderData: keepPreviousData,
-  })
+      offset: (currentPage - 1) * projectsPerPage,
+      limit: projectsPerPage,
+    })
+  )
 
   const users = useMemo(() => {
     if (usersQuery.data) {
