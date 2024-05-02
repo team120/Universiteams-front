@@ -20,6 +20,7 @@ interface Project {
   isDown: boolean
   isFavorite?: boolean
   requestState?: RequestState
+  requesterMessage?: string
   researchDepartments: ResearchDepartment[]
   interests: Interest[]
   enrollments: Enrollment[]

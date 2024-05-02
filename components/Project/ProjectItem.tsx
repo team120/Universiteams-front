@@ -163,7 +163,11 @@ const ProjectItem = (props: ProjectItemProps) => {
         </Chip.Group>
 
         <Flex justify="flex-end" align="center">
-          <EnrollmentButton projectId={project.id} requestState={project.requestState} />
+          <EnrollmentButton
+            projectId={project.id}
+            requestState={project.requestState}
+            requesterMessage={project.requesterMessage}
+          />
 
           <ActionIcon
             variant="transparent"

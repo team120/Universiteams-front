@@ -1,6 +1,14 @@
 import React from 'react'
-import { ActionIcon, Popover, Center } from '@mantine/core'
-import { IconUserPlus, IconSend, IconTrash, IconUserCheck, IconUserOff } from '@tabler/icons-react'
+import { ActionIcon, Center, Menu, Blockquote } from '@mantine/core'
+import {
+  IconUserPlus,
+  IconSend,
+  IconTrash,
+  IconUserCheck,
+  IconUserOff,
+  IconEye,
+  IconInfoCircle,
+} from '@tabler/icons-react'
 import { RequestState } from '../../entities/Project'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
@@ -15,9 +23,14 @@ import { UnenrollModal } from './Unenroll'
 interface ActionIconComponentProps {
   projectId: number
   requestState?: RequestState | null
+  requesterMessage?: string
 }
 
-const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, projectId }) => {
+const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
+  requestState,
+  requesterMessage,
+  projectId,
+}) => {
   const queryClient = useQueryClient()
 
   const { data: currentUser, error: errorCurrentUser } = useQuery(
@@ -59,6 +72,18 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, pr
     })
   }
 
+  const handleViewRequestClick = () => {
+    modals.open({
+      title: 'Solicitud de inscripción',
+      centered: true,
+      children: (
+        <Blockquote color="blue" cite={currentUser?.user} icon={<IconInfoCircle />} mt="xs">
+          {requesterMessage}
+        </Blockquote>
+      ),
+    })
+  }
+
   const handleEnrollmentRequestCancelClick = () => {
     cancelEnrollmentRequestMutation.mutate()
   }
@@ -69,7 +94,6 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, pr
       centered: true,
       children: (
         <Center>
-          <IconUserOff size="xl" />
           <p>Has sido rechazado en tu solicitud de inscripción</p>
         </Center>
       ),
@@ -111,22 +135,29 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, pr
       )
     case RequestState.Pending:
       return (
-        <Popover position="bottom" offset={0}>
-          <Popover.Target>
+        <Menu position="bottom" offset={0}>
+          <Menu.Target>
             <ActionIcon
               variant="transparent"
-              aria-label="Cancelar solicitud de inscripción"
+              aria-label="Opciones de solicitud"
               size="lg"
               color="blue">
               <IconSend />
             </ActionIcon>
-          </Popover.Target>
-          <Popover.Dropdown>
-            <Center style={{ cursor: 'pointer' }} onClick={handleEnrollmentRequestCancelClick}>
-              <IconTrash /> Cancelar solicitud
-            </Center>
-          </Popover.Dropdown>
-        </Popover>
+          </Menu.Target>
+          <Menu.Dropdown>
+            {requesterMessage && (
+              <Menu.Item leftSection={<IconEye size={14} />} onClick={handleViewRequestClick}>
+                Ver solicitud
+              </Menu.Item>
+            )}
+            <Menu.Item
+              leftSection={<IconTrash size={14} />}
+              onClick={handleEnrollmentRequestCancelClick}>
+              Cancelar solicitud
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       )
     case RequestState.Accepted:
       return (
