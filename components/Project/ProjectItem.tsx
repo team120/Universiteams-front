@@ -6,7 +6,7 @@ import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Projects } from '@/services/projects'
+import { Projects, ProjectsQueryKey } from '@/services/projects'
 import { IconHeart, IconHeartFilled } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
 import { CurrentUserQueryOptions } from '../../services/currentUser'
@@ -51,7 +51,7 @@ const ProjectItem = (props: ProjectItemProps) => {
       return project?.isFavorite ? Projects.unfavorite(project!.id) : Projects.favorite(project!.id)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] })
+      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
     },
   })
 

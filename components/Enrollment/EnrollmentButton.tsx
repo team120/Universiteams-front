@@ -13,7 +13,7 @@ import { RequestState } from '../../entities/Project'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Projects } from '../../services/projects'
+import { ProjectsQueryKey, Projects } from '../../services/projects'
 import { NotLoggedError } from '../Account/NotLoggedError'
 import { EnrollmentRequestModal } from './EnrollmentRequest'
 import { CurrentUserQueryOptions } from '../../services/currentUser'
@@ -40,7 +40,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
   const cancelEnrollmentRequestMutation = useMutation({
     mutationFn: () => Projects.cancelEnrollmentRequest(projectId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] })
+      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
       notifications.show({
         title: 'Solicitud de inscripción cancelada',
         message: 'Tu solicitud de inscripción ha sido cancelada',

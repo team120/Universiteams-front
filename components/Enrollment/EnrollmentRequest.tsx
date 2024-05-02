@@ -4,7 +4,7 @@ import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { EnrollmentRequest } from '../../entities/HelpTypes/EnrollmentRequest'
 import { notifications } from '@mantine/notifications'
-import { Projects } from '../../services/projects'
+import { Projects, ProjectsQueryKey } from '../../services/projects'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 
 interface EnrollmentRequestProps {
@@ -20,7 +20,7 @@ export const EnrollmentRequestModal = (props: EnrollmentRequestProps): React.JSX
       return Projects.requestEnrollment(props.projectId, enrollmentRequest)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] })
+      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
       notifications.show({
         title: 'Solicitud de inscripción enviada',
         message: 'Espera a que el líder del proyecto acepte tu solicitud',

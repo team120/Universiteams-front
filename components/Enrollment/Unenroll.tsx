@@ -4,7 +4,7 @@ import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
-import { Projects } from '../../services/projects'
+import { Projects, ProjectsQueryKey } from '../../services/projects'
 
 interface EnrollmentCancelProps {
   projectId: number
@@ -19,7 +19,7 @@ export const UnenrollModal = (props: EnrollmentCancelProps): React.JSX.Element =
       return Projects.unenroll(props.projectId, unenrollOptions)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] })
+      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
       notifications.show({
         title: 'Desinscripción ejecutada',
         message: 'Te has dado de baja del proyecto correctamente',
