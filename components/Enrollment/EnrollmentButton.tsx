@@ -10,6 +10,7 @@ import { NotLoggedError } from '../Account/NotLoggedError'
 import { EnrollmentRequestModal } from './EnrollmentRequest'
 import { CurrentUserQueryOptions } from '../../services/currentUser'
 import { verifyEmailNotification as verifyEmailErrorNotification } from '../Account/VerifyEmailNotification'
+import { UnenrollModal } from './Unenroll'
 
 interface ActionIconComponentProps {
   projectId: number
@@ -23,8 +24,8 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, pr
     CurrentUserQueryOptions.currentUser()
   )
 
-  const cancelEnrollmentMutation = useMutation({
-    mutationFn: () => Projects.cancelEnrollment(projectId),
+  const cancelEnrollmentRequestMutation = useMutation({
+    mutationFn: () => Projects.cancelEnrollmentRequest(projectId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] })
       notifications.show({
@@ -59,14 +60,19 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, pr
   }
 
   const handleEnrollmentRequestCancelClick = () => {
-    cancelEnrollmentMutation.mutate()
+    cancelEnrollmentRequestMutation.mutate()
   }
 
-  const handleEnrollmentCancelClick = () => {
-    cancelEnrollmentMutation.mutate()
+  const handleUnenrollClick = () => {
+    modals.open({
+      title: 'Desinscribirse del proyecto',
+      centered: true,
+      children: <UnenrollModal projectId={projectId} />,
+    })
   }
 
   switch (requestState) {
+    case RequestState.Unenrolled:
     case undefined:
     case null:
       return (
@@ -79,7 +85,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, pr
           <IconUserPlus />
         </ActionIcon>
       )
-    case 'Pending':
+    case RequestState.Pending:
       return (
         <Popover position="bottom" offset={0}>
           <Popover.Target>
@@ -98,12 +104,12 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({ requestState, pr
           </Popover.Dropdown>
         </Popover>
       )
-    case 'Accepted':
+    case RequestState.Accepted:
       return (
         <ActionIcon
           variant="transparent"
           aria-label="Cancelar inscripción"
-          onClick={handleEnrollmentCancelClick}
+          onClick={handleUnenrollClick}
           size="lg"
           color="blue">
           <IconUserCheck />

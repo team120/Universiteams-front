@@ -41,7 +41,7 @@ export const EnrollmentRequestModal = (props: EnrollmentRequestProps): React.JSX
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <Textarea
-        label="Puedes ingresar una nota al admin o lider del proyecto (opcional)"
+        label="[Opcional] Envía un mensaje al líder o admin del proyecto"
         description="Puedes indicar tus motivaciones, habilidades, disponibilidad, etc."
         placeholder="Escribe aquí tu mensaje"
         data-autofocus
@@ -49,7 +49,7 @@ export const EnrollmentRequestModal = (props: EnrollmentRequestProps): React.JSX
         {...form.getInputProps('message')}
       />
       <Button type="submit" fullWidth mt="md">
-        Enviar
+        Solicitar
       </Button>
     </form>
   )

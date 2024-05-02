@@ -6,6 +6,7 @@ export enum RequestState {
   Pending = 'Pending',
   Accepted = 'Accepted',
   Rejected = 'Rejected',
+  Unenrolled = 'Unenrolled',
 }
 
 interface Project {
