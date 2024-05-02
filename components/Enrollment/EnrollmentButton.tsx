@@ -129,7 +129,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
           aria-label="Has sido rechazado"
           onClick={handleEnrollmentRejectedClick}
           size="lg"
-          color="gray">
+          color="red">
           <IconUserOff />
         </ActionIcon>
       )
