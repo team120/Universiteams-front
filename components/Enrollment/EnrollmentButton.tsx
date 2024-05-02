@@ -152,7 +152,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
               </Menu.Item>
             )}
             <Menu.Item
-              leftSection={<IconTrash size={14} />}
+              leftSection={<IconTrash color="red" size={14} />}
               onClick={handleEnrollmentRequestCancelClick}>
               Cancelar solicitud
             </Menu.Item>
