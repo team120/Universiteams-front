@@ -32,7 +32,7 @@ const Navbar = () => {
           <NavbarItem
             text={currentUser.user}
             textSecondLine={currentUser.email}
-            link="perfil"
+            link="/perfil"
             icon={<IconUserCircle size={iconSize} />}
           />
         </AppShell.Section>
@@ -40,7 +40,7 @@ const Navbar = () => {
         <AppShell.Section>
           <NavbarItem
             text="Iniciar Sesión"
-            link="account/login"
+            link="/account/login"
             icon={<IconUserCircle size={iconSize} />}
           />
         </AppShell.Section>
@@ -50,22 +50,22 @@ const Navbar = () => {
         {currentUser && (
           <NavbarItem
             text="Mis Proyectos"
-            link={`projects?requestState=${RequestState.Accepted}`}
+            link={`/projects?requestState=${RequestState.Accepted}`}
             icon={<IconBulb size={iconSize} />}
           />
         )}
         {currentUser && (
           <NavbarItem
             text="Mis Solicitudes"
-            link={`projects?requestState=${RequestState.Pending}`}
+            link={`/projects?requestState=${RequestState.Pending}`}
             icon={<IconSend size={iconSize} />}
           />
         )}
-        <NavbarItem text="Proyectos" link="projects" icon={<IconFolders size={iconSize} />} />
+        <NavbarItem text="Proyectos" link="/projects" icon={<IconFolders size={iconSize} />} />
         {currentUser && (
           <NavbarItem
             text="Proyectos Favoritos"
-            link="projects?isFavorite=true"
+            link="/projects?isFavorite=true"
             icon={<IconFolderHeart size={iconSize} />}
           />
         )}
@@ -74,12 +74,12 @@ const Navbar = () => {
       <AppShell.Section grow component={ScrollArea}>
         <NavbarItem
           text="Sobre Nosotros"
-          link="about"
+          link="/about"
           icon={<IconBuildingCommunity size={iconSize} />}
         />
         <NavbarItem
           text="Términos y Condiciones"
-          link="terminos"
+          link="/terminos"
           icon={<IconFileDescription size={iconSize} />}
         />
         <NavbarItem text="Compartir Aplicación" icon={<IconShare size={iconSize} />} />
