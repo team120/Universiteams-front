@@ -30,6 +30,14 @@ export const EnrollmentRequestRevision = (props: EnrollmentRequestRevisionProps)
       })
       modals.closeAll()
     },
+    onError: (error) => {
+      console.error('Enrollment request failed:', error)
+      notifications.show({
+        title: 'Error al actualizar la solicitud de inscripción',
+        message: 'Por favor, inténtalo de nuevo más tarde',
+        color: 'red',
+      })
+    },
   })
 
   const handleSubmit = (values: typeof form.values) => {
