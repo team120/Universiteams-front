@@ -1,17 +1,18 @@
 import React from 'react'
-import { Textarea, Button, LoadingOverlay } from '@mantine/core'
+import { Button, LoadingOverlay, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { EnrollmentRequest } from '../../entities/HelpTypes/EnrollmentRequest'
 import { notifications } from '@mantine/notifications'
 import { Projects, ProjectsQueryKey } from '../../services/projects'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
+import TextEditor from '../Common/TextEditor/TextEditor'
 
 interface EnrollmentRequestProps {
   projectId: number
 }
 
-export const EnrollmentRequestModal = (props: EnrollmentRequestProps): React.JSX.Element => {
+export const EnrollmentRequestCreate = (props: EnrollmentRequestProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 
@@ -40,14 +41,9 @@ export const EnrollmentRequestModal = (props: EnrollmentRequestProps): React.JSX
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
-      <Textarea
-        label="[Opcional] Envía un mensaje al líder o admin del proyecto"
-        description="Puedes indicar tus motivaciones, habilidades, disponibilidad, etc."
-        placeholder="Escribe aquí tu mensaje"
-        data-autofocus
-        resize="vertical"
-        {...form.getInputProps('message')}
-      />
+      <Text size="lg">[Opcional] Envía un mensaje al líder o admin del proyecto</Text>
+      <Text size="sm">Puedes indicar tus motivaciones, habilidades, disponibilidad, etc.</Text>
+      <TextEditor onChange={(content) => form.setValues({ message: content })} />
       <Button type="submit" fullWidth mt="md">
         Solicitar
       </Button>
