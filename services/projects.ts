@@ -2,9 +2,9 @@ import axios, { AxiosError } from 'axios'
 import Env from 'utils/config/Env'
 
 import ProjectsResult from '@/entities/ProjectsResult'
-import { RequestState } from '../entities/Project'
+import Project, { RequestState } from '../entities/Project'
 import { EnrollmentRequest } from '../entities/HelpTypes/EnrollmentRequest'
-import { keepPreviousData } from '@tanstack/react-query'
+import { UseMutationOptions, keepPreviousData, queryOptions } from '@tanstack/react-query'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -61,6 +61,11 @@ export const Projects = {
     return result.data
   },
 
+  async getProject(id: number): Promise<Project | undefined> {
+    const result = await axios.get<Project>(`${prefix}/${id}`)
+    return result.data
+  },
+
   async favorite(id: number): Promise<void> {
     await axios.post(`${prefix}/favorite/${id}`)
   },
@@ -89,9 +94,10 @@ export const Projects = {
 export const ProjectsQueryKey = 'projects'
 
 export const ProjectQueryOptions = {
-  projects: (currentPage: number, projectsPerPage: number, params?: GetProjectsInput) => ({
-    queryKey: [ProjectsQueryKey, params, currentPage, projectsPerPage],
-    queryFn: () => Projects.getProjects(params),
-    placeholderData: keepPreviousData,
-  }),
+  projects: (currentPage: number, projectsPerPage: number, params?: GetProjectsInput) =>
+    queryOptions({
+      queryKey: [ProjectsQueryKey, params, currentPage, projectsPerPage],
+      queryFn: () => Projects.getProjects(params),
+      placeholderData: keepPreviousData,
+    }),
 }

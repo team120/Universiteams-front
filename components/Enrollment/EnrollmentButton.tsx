@@ -48,7 +48,9 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     },
   })
 
-  const handleEnrollmentRequestClick = () => {
+  const handleEnrollmentRequestClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+
     if (errorCurrentUser || !currentUser) {
       notifications.show({
         title: 'Debes iniciar sesión para solicitar inscripciones',
@@ -72,7 +74,9 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     })
   }
 
-  const handleViewRequestClick = () => {
+  const handleViewRequestClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+
     modals.open({
       title: 'Solicitud de inscripción',
       centered: true,
@@ -80,11 +84,15 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     })
   }
 
-  const handleEnrollmentRequestCancelClick = () => {
+  const handleEnrollmentRequestCancelClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+
     cancelEnrollmentRequestMutation.mutate()
   }
 
-  const handleEnrollmentRejectedClick = () => {
+  const handleEnrollmentRejectedClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+
     modals.open({
       title: 'Solicitud rechazada',
       centered: true,
@@ -96,7 +104,9 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     })
   }
 
-  const handleUnenrollClick = () => {
+  const handleUnenrollClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+
     modals.open({
       title: 'Desinscribirse del proyecto',
       centered: true,
@@ -137,7 +147,8 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
               variant="transparent"
               aria-label="Opciones de solicitud"
               size="lg"
-              color="blue">
+              color="blue"
+              onClick={(event) => event.stopPropagation()}>
               <IconSend />
             </ActionIcon>
           </Menu.Target>

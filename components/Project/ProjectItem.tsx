@@ -1,5 +1,14 @@
 import React from 'react'
-import { ActionIcon, Badge, Card, Chip, Flex, Group, Text } from '@mantine/core'
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  Chip,
+  Flex,
+  Group,
+  Text,
+  useMantineColorScheme,
+} from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import Project from '@/entities/Project'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
@@ -13,6 +22,7 @@ import { CurrentUserQueryOptions } from '../../services/currentUser'
 import { NotLoggedError } from '../Account/NotLoggedError'
 import EnrollmentButton from '../Enrollment/EnrollmentButton'
 import { verifyEmailNotification } from '../Account/VerifyEmailNotification'
+import styles from './ProjectItem.module.css'
 
 interface ProjectItemProps {
   project?: Project
@@ -25,6 +35,7 @@ const ProjectItem = (props: ProjectItemProps) => {
   const router = useRouter()
   const pathname = usePathname()
   const queryClient = useQueryClient()
+  const { colorScheme } = useMantineColorScheme()
 
   const { data: currentUser, error: errorCurrentUser } = useQuery(
     CurrentUserQueryOptions.currentUser()
@@ -55,19 +66,23 @@ const ProjectItem = (props: ProjectItemProps) => {
     },
   })
 
-  const handleInterestTagClick = (interestId: number) => {
+  const handleInterestTagClick = (interestId: number, event: React.MouseEvent) => {
+    event.stopPropagation()
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
   }
 
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
     favoriteMutation.mutate()
   }
 
   const handleDepartmentBadgeClick = (
     institutionId: number,
     facilityId: number,
-    departmentId: number
+    departmentId: number,
+    event: React.MouseEvent
   ) => {
+    event.stopPropagation()
     let modifiedSearchQuery = searchQuery
     modifiedSearchQuery = Url.setUrlParam(
       router,
@@ -86,7 +101,8 @@ const ProjectItem = (props: ProjectItemProps) => {
     Url.setUrlParam(router, pathname, modifiedSearchQuery, 'department', departmentId.toString())
   }
 
-  const handleLeaderTagClick = (userId: number) => {
+  const handleLeaderTagClick = (userId: number, event: React.MouseEvent) => {
+    event.stopPropagation()
     Url.setUrlParam(router, pathname, searchQuery, 'user', userId.toString())
   }
 
@@ -100,12 +116,8 @@ const ProjectItem = (props: ProjectItemProps) => {
       mb="0.5rem"
       p="md"
       radius="md"
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        borderStyle: 'solid',
-        borderColor: 'gray',
-      }}>
+      onClick={() => router.push(`/projects/${project.id}`)}
+      className={`${styles.card} ${colorScheme == 'dark' ? styles.cardDark : styles.cardLight}`}>
       <div style={{ width: '100%' }}>
         <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
           {project.name}
@@ -122,11 +134,12 @@ const ProjectItem = (props: ProjectItemProps) => {
               variant="light"
               component="button"
               style={{ cursor: 'pointer' }}
-              onClick={() =>
+              onClick={(event) =>
                 handleDepartmentBadgeClick(
                   department.facility.institution.id,
                   department.facility.id,
-                  department.id
+                  department.id,
+                  event
                 )
               }>
               {department.facility.institution.abbreviation} | {department.facility.abbreviation} |{' '}
@@ -143,7 +156,7 @@ const ProjectItem = (props: ProjectItemProps) => {
                 color="violet.6"
                 size="lg"
                 style={{ cursor: 'pointer' }}
-                onClick={() => handleLeaderTagClick(project.enrollments[0].user.id)}>
+                onClick={(event) => handleLeaderTagClick(project.enrollments[0].user.id, event)}>
                 {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}, +
                 {project.userCount} personas
               </Badge>
@@ -155,7 +168,7 @@ const ProjectItem = (props: ProjectItemProps) => {
                 color="blue.6"
                 size="lg"
                 style={{ cursor: 'pointer' }}
-                onClick={() => handleInterestTagClick(interest.id)}>
+                onClick={(event) => handleInterestTagClick(interest.id, event)}>
                 {interest.name}
               </Badge>
             ))}
@@ -172,7 +185,7 @@ const ProjectItem = (props: ProjectItemProps) => {
           <ActionIcon
             variant="transparent"
             aria-label="Guardar en marcadores"
-            onClick={handleFavoriteClick}
+            onClick={(event) => handleFavoriteClick(event)}
             size="lg"
             color={project.isFavorite ? 'blue' : 'gray'}>
             {project.isFavorite ? <IconHeartFilled /> : <IconHeart />}
