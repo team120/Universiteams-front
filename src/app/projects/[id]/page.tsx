@@ -166,18 +166,15 @@ const ProjectDetailsPage = ({ params }: ProjectDetailsParams) => {
             withBorder
             style={{ cursor: 'pointer' }}
             onClick={() => handleMemberClick(enrollment.user.id)}>
-            <Group>
-              <div>
-                <Text size="lg" w={500}>
-                  {enrollment.user.firstName} {enrollment.user.lastName}
-                </Text>
-                <Text size="sm" c="dimmed">
-                  {enrollment.role}
-                </Text>
-              </div>
+            <Group justify="space-between" gap="xs">
+              <Text size="lg" w={500}>
+                {enrollment.user.firstName} {enrollment.user.lastName}
+              </Text>
+              <Badge variant="outline" color="blue.6" size="sm" radius="xs">
+                {enrollment.role}
+              </Badge>
             </Group>
-
-            <Group mt="xs">
+            <Group mt="xs" gap="xs">
               {enrollment.user.userAffiliations.map((affiliation) => (
                 <Badge
                   key={affiliation.id}
@@ -196,6 +193,23 @@ const ProjectDetailsPage = ({ params }: ProjectDetailsParams) => {
                   {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
                   {affiliation.researchDepartment.facility.abbreviation} |{' '}
                   {affiliation.researchDepartment.name}
+                </Badge>
+              ))}
+            </Group>
+
+            <Group mt="xs" gap="xs">
+              {enrollment.user.interests.map((interest) => (
+                <Badge
+                  variant="dot"
+                  key={interest.id}
+                  color="blue.6"
+                  size="lg"
+                  style={{ cursor: 'pointer' }}
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    handleInterestTagClick(interest.id)
+                  }}>
+                  {interest.name}
                 </Badge>
               ))}
             </Group>
