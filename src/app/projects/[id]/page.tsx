@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Alert, ActionIcon, Badge, Card, Chip, Flex, Group, Text, Divider } from '@mantine/core'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Projects, ProjectsQueryKey } from '../../../../services/projects'
@@ -12,7 +12,7 @@ import { verifyEmailNotification } from '../../../../components/Account/VerifyEm
 import { CurrentUserQueryOptions } from '../../../../services/currentUser'
 import { useRouter } from 'next/navigation'
 import SkeletonFull from '../../../../components/Loader/SkeletonFull'
-import DOMPurify from 'dompurify'
+import sanitizeHtml from 'sanitize-html'
 
 interface ProjectDetailsParams {
   params: { id: number }
@@ -28,7 +28,10 @@ const ProjectDetailsPage = ({ params }: ProjectDetailsParams) => {
     queryFn: () => Projects.getProject(params.id),
   })
 
-  const sanitizedDescription = DOMPurify.sanitize(project?.description ?? '')
+  const sanitizedDescription = useMemo(
+    () => sanitizeHtml(project?.description ?? ''),
+    [project?.description]
+  )
 
   const queryClient = useQueryClient()
 
