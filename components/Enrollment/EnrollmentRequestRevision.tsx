@@ -7,7 +7,7 @@ import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 import { EnrollmentRequest } from '../../entities/HelpTypes/EnrollmentRequest'
 import { Projects, ProjectsQueryKey } from '../../services/projects'
-import DOMPurify from 'dompurify'
+import sanitizeHtml from 'sanitize-html'
 
 interface EnrollmentRequestRevisionProps {
   projectId: number
@@ -41,7 +41,7 @@ export const EnrollmentRequestRevision = (props: EnrollmentRequestRevisionProps)
   })
 
   const handleSubmit = (values: typeof form.values) => {
-    const sanitizedMessage = DOMPurify.sanitize(values.message)
+    const sanitizedMessage = sanitizeHtml(values.message)
     enrollmentRequestUpdateMutation.mutate({ message: sanitizedMessage })
   }
 
