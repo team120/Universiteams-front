@@ -1,9 +1,9 @@
 'use client'
 import React, { useMemo } from 'react'
-import { Alert, ActionIcon, Badge, Card, Chip, Flex, Group, Text, Divider } from '@mantine/core'
+import { Alert, ActionIcon, Badge, Card, Chip, Flex, Group, Text, Accordion } from '@mantine/core'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Projects, ProjectsQueryKey } from '../../../../services/projects'
-import { IconHeartFilled, IconHeart } from '@tabler/icons-react'
+import { IconHeartFilled, IconHeart, IconUsersGroup, IconSend } from '@tabler/icons-react'
 import EnrollmentButton from '../../../../components/Enrollment/EnrollmentButton'
 import Dates from '../../../../utils/string/Dates'
 import { notifications } from '@mantine/notifications'
@@ -159,65 +159,76 @@ const ProjectDetailsPage = ({ params }: ProjectDetailsParams) => {
           <Text size="sm">{project.favoriteCount}</Text>
         </Flex>
 
-        <Divider my="md" />
-
-        {project.enrollments.map((enrollment) => (
-          <Card
-            key={enrollment.id}
-            p="md"
-            mt="md"
-            withBorder
-            style={{ cursor: 'pointer' }}
-            onClick={() => handleMemberClick(enrollment.user.id)}>
-            <Group justify="space-between" gap="xs">
-              <Text size="lg" w={500}>
-                {enrollment.user.firstName} {enrollment.user.lastName}
-              </Text>
-              <Badge variant="outline" color="blue.6" size="sm" radius="xs">
-                {enrollment.role}
-              </Badge>
-            </Group>
-            <Group mt="xs" gap="xs">
-              {enrollment.user.userAffiliations.map((affiliation) => (
-                <Badge
-                  key={affiliation.id}
-                  color="pink.6"
-                  variant="light"
-                  component="button"
+        <Accordion defaultValue="Apples">
+          <Accordion.Item key="members" value="members">
+            <Accordion.Control icon={<IconUsersGroup />}>Miembros</Accordion.Control>
+            <Accordion.Panel>
+              {project.enrollments.map((enrollment) => (
+                <Card
+                  key={enrollment.id}
+                  p="md"
+                  mt="md"
+                  withBorder
                   style={{ cursor: 'pointer' }}
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    handleDepartmentBadgeClick(
-                      affiliation.researchDepartment.facility.institution.id,
-                      affiliation.researchDepartment.facility.id,
-                      affiliation.researchDepartment.id
-                    )
-                  }}>
-                  {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
-                  {affiliation.researchDepartment.facility.abbreviation} |{' '}
-                  {affiliation.researchDepartment.name}
-                </Badge>
-              ))}
-            </Group>
+                  onClick={() => handleMemberClick(enrollment.user.id)}>
+                  <Group justify="space-between" gap="xs">
+                    <Text size="lg" w={500}>
+                      {enrollment.user.firstName} {enrollment.user.lastName}
+                    </Text>
+                    <Badge variant="outline" color="blue.6" size="sm" radius="xs">
+                      {enrollment.role}
+                    </Badge>
+                  </Group>
+                  <Group mt="xs" gap="xs">
+                    {enrollment.user.userAffiliations.map((affiliation) => (
+                      <Badge
+                        key={affiliation.id}
+                        color="pink.6"
+                        variant="light"
+                        component="button"
+                        style={{ cursor: 'pointer' }}
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          handleDepartmentBadgeClick(
+                            affiliation.researchDepartment.facility.institution.id,
+                            affiliation.researchDepartment.facility.id,
+                            affiliation.researchDepartment.id
+                          )
+                        }}>
+                        {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
+                        {affiliation.researchDepartment.facility.abbreviation} |{' '}
+                        {affiliation.researchDepartment.name}
+                      </Badge>
+                    ))}
+                  </Group>
 
-            <Group mt="xs" gap="xs">
-              {enrollment.user.interests.map((interest) => (
-                <Badge
-                  variant="dot"
-                  key={interest.id}
-                  color="blue.6"
-                  size="lg"
-                  style={{ cursor: 'pointer' }}
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    handleInterestTagClick(interest.id)
-                  }}>
-                  {interest.name}
-                </Badge>
+                  <Group mt="xs" gap="xs">
+                    {enrollment.user.interests.map((interest) => (
+                      <Badge
+                        variant="dot"
+                        key={interest.id}
+                        color="blue.6"
+                        size="lg"
+                        style={{ cursor: 'pointer' }}
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          handleInterestTagClick(interest.id)
+                        }}>
+                        {interest.name}
+                      </Badge>
+                    ))}
+                  </Group>
+                </Card>
               ))}
-            </Group>
-          </Card>
-        ))}
+            </Accordion.Panel>
+          </Accordion.Item>
+          <Accordion.Item key="requests" value="requests">
+            <Accordion.Control icon={<IconSend />}>Solicitudes</Accordion.Control>
+            <Accordion.Panel>
+              <Text>100 Solicitudes</Text>
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
       </Card>
     </>
   )
