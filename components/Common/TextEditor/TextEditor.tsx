@@ -8,7 +8,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import Superscript from '@tiptap/extension-superscript'
 import SubScript from '@tiptap/extension-subscript'
 import Placeholder from '@tiptap/extension-placeholder'
-import DOMPurify from 'dompurify'
+import sanitizeHtml from 'sanitize-html'
 
 const labels: RichTextEditorLabels = {
   // Etiquetas de controles
@@ -71,7 +71,7 @@ interface TextEditorProps {
 }
 
 const TextEditor = (props: TextEditorProps) => {
-  const sanitizedContent = useMemo(() => DOMPurify.sanitize(props.content ?? ''), [props.content])
+  const sanitizedContent = useMemo(() => sanitizeHtml(props.content ?? ''), [props.content])
 
   const editor = useEditor({
     extensions: [
