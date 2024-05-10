@@ -2,9 +2,10 @@ import axios, { AxiosError } from 'axios'
 import Env from 'utils/config/Env'
 
 import ProjectsResult from '@/entities/ProjectsResult'
-import Project, { RequestState } from '../entities/Project'
+import ProjectInList, { RequestState } from '../entities/ProjectInList'
 import { EnrollmentRequest } from '../entities/HelpTypes/EnrollmentRequest'
 import { UseMutationOptions, keepPreviousData, queryOptions } from '@tanstack/react-query'
+import Project from '../entities/Project'
 
 const prefix = `${Env.backendAPI}/projects`
 

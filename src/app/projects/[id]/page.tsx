@@ -12,6 +12,7 @@ import { verifyEmailNotification } from '../../../../components/Account/VerifyEm
 import { CurrentUserQueryOptions } from '../../../../services/currentUser'
 import { useRouter } from 'next/navigation'
 import SkeletonFull from '../../../../components/Loader/SkeletonFull'
+import DOMPurify from 'dompurify'
 
 interface ProjectDetailsParams {
   params: { id: number }
@@ -26,6 +27,8 @@ const ProjectDetailsPage = ({ params }: ProjectDetailsParams) => {
     queryKey: [ProjectsQueryKey, params.id],
     queryFn: () => Projects.getProject(params.id),
   })
+
+  const sanitizedDescription = DOMPurify.sanitize(project?.description ?? '')
 
   const queryClient = useQueryClient()
 
@@ -132,6 +135,8 @@ const ProjectDetailsPage = ({ params }: ProjectDetailsParams) => {
             ))}
           </Group>
         </Chip.Group>
+
+        <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
 
         <Flex justify="flex-end" align="center">
           <EnrollmentButton
