@@ -10,7 +10,7 @@ import {
   useMantineColorScheme,
 } from '@mantine/core'
 import Dates from 'utils/string/Dates'
-import Project from '@/entities/Project'
+import ProjectInList from '@/entities/ProjectInList'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
@@ -25,7 +25,7 @@ import { verifyEmailNotification } from '../Account/VerifyEmailNotification'
 import styles from './ProjectItem.module.css'
 
 interface ProjectItemProps {
-  project?: Project
+  project?: ProjectInList
 }
 
 const ProjectItem = (props: ProjectItemProps) => {

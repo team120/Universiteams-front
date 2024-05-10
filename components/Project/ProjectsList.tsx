@@ -3,13 +3,13 @@ import { List } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 
 import Theme from 'src/app/theme'
-import Project from '@/entities/Project'
+import ProjectInList from '@/entities/Project'
 import ProjectItem from './ProjectItem'
 import SkeletonFull from '../Loader/SkeletonFull'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 
 interface ProjectsListProps {
-  projects?: Project[]
+  projects?: ProjectInList[]
 }
 
 const ProjectsList = ({ projects }: ProjectsListProps) => {

@@ -14,7 +14,7 @@ import {
   IconUserCircle,
 } from '@tabler/icons-react'
 import { CurrentUserQueryOptions } from '../../../services/currentUser'
-import { RequestState } from '../../../entities/Project'
+import { RequestState } from '../../../entities/ProjectInList'
 import { useQuery } from '@tanstack/react-query'
 
 const mockAppVersion = 'v1.0.0'

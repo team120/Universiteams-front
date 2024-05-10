@@ -15,7 +15,7 @@ import { ResearchDepartments } from '@/services/departments'
 import { Interests } from '@/services/interests'
 import { Users } from '@/services/user'
 import { Center, Pagination } from '@mantine/core'
-import { RequestState } from '../../../entities/Project'
+import { RequestState } from '../../../entities/ProjectInList'
 import { useQuery } from '@tanstack/react-query'
 
 const ProjectsPage: NextPage = () => {

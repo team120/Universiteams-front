@@ -8,7 +8,7 @@ import {
   IconUserOff,
   IconPencil,
 } from '@tabler/icons-react'
-import { RequestState } from '../../entities/Project'
+import { RequestState } from '../../entities/ProjectInList'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
