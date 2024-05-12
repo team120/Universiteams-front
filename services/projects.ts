@@ -68,27 +68,27 @@ export const Projects = {
   },
 
   async favorite(id: number): Promise<void> {
-    await axios.post(`${prefix}/favorite/${id}`)
+    await axios.post(`${prefix}/${id}/favorite`)
   },
 
   async unfavorite(id: number): Promise<void> {
-    await axios.delete(`${prefix}/favorite/${id}`)
+    await axios.delete(`${prefix}/${id}/favorite`)
   },
 
   async requestEnrollment(id: number, enrollmentRequest: EnrollmentRequest): Promise<void> {
-    await axios.post(`${prefix}/enroll-request/${id}`, enrollmentRequest)
+    await axios.post(`${prefix}/${id}/enroll-request`, enrollmentRequest)
   },
 
   async updateEnrollmentRequest(id: number, enrollmentRequest: EnrollmentRequest): Promise<void> {
-    await axios.put(`${prefix}/enroll-request/${id}`, enrollmentRequest)
+    await axios.put(`${prefix}/${id}/enroll-request`, enrollmentRequest)
   },
 
   async cancelEnrollmentRequest(id: number): Promise<void> {
-    await axios.delete(`${prefix}/enroll-request/${id}`)
+    await axios.delete(`${prefix}/${id}/enroll-request`)
   },
 
   async unenroll(id: number, unenrollOptions: Unenroll): Promise<void> {
-    await axios.put(`${prefix}/unenroll/${id}`, unenrollOptions)
+    await axios.put(`${prefix}/${id}/unenroll`, unenrollOptions)
   },
 }
 
