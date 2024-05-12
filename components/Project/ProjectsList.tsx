@@ -3,7 +3,7 @@ import { List } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 
 import Theme from 'src/app/theme'
-import ProjectInList from '@/entities/Project'
+import ProjectInList from '@/entities/ProjectInList'
 import ProjectItem from './ProjectItem'
 import SkeletonFull from '../Loader/SkeletonFull'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
