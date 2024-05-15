@@ -5,7 +5,7 @@ import { useForm } from '@mantine/form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
-import { EnrollmentRequest } from '../../entities/HelpTypes/EnrollmentRequest'
+import { EnrollmentRequestInput } from '../../entities/HelpTypes/EnrollmentRequestInput'
 import { Projects, ProjectsQueryKey } from '../../services/projects'
 import sanitizeHtml from 'sanitize-html'
 
@@ -19,7 +19,7 @@ export const EnrollmentRequestRevision = (props: EnrollmentRequestRevisionProps)
   const queryClient = useQueryClient()
 
   const enrollmentRequestUpdateMutation = useMutation({
-    mutationFn: async (enrollmentRequest: EnrollmentRequest) => {
+    mutationFn: async (enrollmentRequest: EnrollmentRequestInput) => {
       return Projects.updateEnrollmentRequest(props.projectId, enrollmentRequest)
     },
     onSuccess: () => {

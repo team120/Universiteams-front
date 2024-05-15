@@ -24,6 +24,7 @@ import { useRouter } from 'next/navigation'
 import SkeletonFull from '../../components/Loader/SkeletonFull'
 import sanitizeHtml from 'sanitize-html'
 import styles from './ProjectsDetails.module.css'
+import { Loader } from 'tabler-icons-react'
 
 interface ProjectDetailsParams {
   id: number
@@ -51,6 +52,15 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   const { data: currentUser, error: errorCurrentUser } = useQuery(
     CurrentUserQueryOptions.currentUser()
   )
+
+  const {
+    data: enrollmentRequests,
+    error: errorEnrollmentRequests,
+    isLoading: isLoadingEnrollmentRequests,
+  } = useQuery({
+    queryKey: ['enrollmentRequests', props.id],
+    queryFn: () => Projects.getEnrollmentRequests(props.id),
+  })
 
   const favoriteMutation = useMutation({
     mutationFn: async () => {
@@ -174,12 +184,33 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
 
         <Tabs defaultValue="members">
           <Tabs.List>
-            <Tabs.Tab value="members" leftSection={<IconUsersGroup />}>
+            <Tabs.Tab
+              value="members"
+              leftSection={<IconUsersGroup />}
+              rightSection={
+                <Badge color="blue" variant="filled">
+                  {project.userCount}
+                </Badge>
+              }>
               Miembros
             </Tabs.Tab>
-            <Tabs.Tab value="requests" leftSection={<IconSend />}>
-              Solicitudes
-            </Tabs.Tab>
+            {isLoadingEnrollmentRequests && (
+              <Tabs.Tab value="requests">
+                <Loader />
+              </Tabs.Tab>
+            )}
+            {!isLoadingEnrollmentRequests && !errorEnrollmentRequests && enrollmentRequests && (
+              <Tabs.Tab
+                value="requests"
+                leftSection={<IconSend />}
+                rightSection={
+                  <Badge color="blue" variant="filled">
+                    {enrollmentRequests.requestEnrollmentCount}
+                  </Badge>
+                }>
+                Solicitudes
+              </Tabs.Tab>
+            )}
           </Tabs.List>
 
           <Tabs.Panel value="members">
@@ -244,7 +275,65 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
             ))}
           </Tabs.Panel>
 
-          <Tabs.Panel value="requests">10 Solcitudes</Tabs.Panel>
+          {!errorEnrollmentRequests && enrollmentRequests && (
+            <Tabs.Panel value="requests">
+              {enrollmentRequests.enrollmentRequests.map((request) => (
+                <Card
+                  key={request.id}
+                  p="md"
+                  mt="md"
+                  withBorder
+                  className={`${styles.memberCard} ${
+                    colorScheme == 'dark' ? styles.memberCardDark : styles.memberCardLight
+                  }`}
+                  onClick={() => handleMemberClick(request.user.id)}>
+                  <Text size="lg" w={500}>
+                    {request.user.firstName} {request.user.lastName}
+                  </Text>
+
+                  <Group mt="xs" gap="xs">
+                    {request.user.userAffiliations.map((affiliation) => (
+                      <Badge
+                        key={affiliation.id}
+                        color="pink.6"
+                        variant="light"
+                        component="button"
+                        style={{ cursor: 'pointer' }}
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          handleDepartmentBadgeClick(
+                            affiliation.researchDepartment.facility.institution.id,
+                            affiliation.researchDepartment.facility.id,
+                            affiliation.researchDepartment.id
+                          )
+                        }}>
+                        {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
+                        {affiliation.researchDepartment.facility.abbreviation} |{' '}
+                        {affiliation.researchDepartment.name}
+                      </Badge>
+                    ))}
+                  </Group>
+
+                  <Group mt="xs" gap="xs">
+                    {request.user.interests.map((interest) => (
+                      <Badge
+                        variant="dot"
+                        key={interest.id}
+                        color="blue.6"
+                        size="lg"
+                        style={{ cursor: 'pointer' }}
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          handleInterestTagClick(interest.id)
+                        }}>
+                        {interest.name}
+                      </Badge>
+                    ))}
+                  </Group>
+                </Card>
+              ))}
+            </Tabs.Panel>
+          )}
         </Tabs>
       </Card>
     </>

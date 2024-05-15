@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, LoadingOverlay, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
-import { EnrollmentRequest } from '../../entities/HelpTypes/EnrollmentRequest'
+import { EnrollmentRequestInput } from '../../entities/HelpTypes/EnrollmentRequestInput'
 import { notifications } from '@mantine/notifications'
 import { Projects, ProjectsQueryKey } from '../../services/projects'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
@@ -17,7 +17,7 @@ export const EnrollmentRequestCreate = (props: EnrollmentRequestProps): React.JS
   const queryClient = useQueryClient()
 
   const enrollmentRequestMutation = useMutation({
-    mutationFn: async (enrollmentRequest: EnrollmentRequest) => {
+    mutationFn: async (enrollmentRequest: EnrollmentRequestInput) => {
       return Projects.requestEnrollment(props.projectId, enrollmentRequest)
     },
     onSuccess: () => {
