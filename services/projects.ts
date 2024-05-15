@@ -3,9 +3,11 @@ import Env from 'utils/config/Env'
 
 import ProjectsResult from '@/entities/ProjectsResult'
 import ProjectInList, { RequestState } from '../entities/ProjectInList'
-import { EnrollmentRequest } from '../entities/HelpTypes/EnrollmentRequest'
+import { EnrollmentRequestInput } from '../entities/HelpTypes/EnrollmentRequestInput'
 import { UseMutationOptions, keepPreviousData, queryOptions } from '@tanstack/react-query'
 import Project from '../entities/Project'
+import { get } from 'http'
+import { EnrollmentRequestsShow } from '../entities/HelpTypes/EnrollmentRequestsShow'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -68,27 +70,35 @@ export const Projects = {
   },
 
   async favorite(id: number): Promise<void> {
-    await axios.post(`${prefix}/favorite/${id}`)
+    await axios.post(`${prefix}/${id}/favorite`)
   },
 
   async unfavorite(id: number): Promise<void> {
-    await axios.delete(`${prefix}/favorite/${id}`)
+    await axios.delete(`${prefix}/${id}/favorite`)
   },
 
-  async requestEnrollment(id: number, enrollmentRequest: EnrollmentRequest): Promise<void> {
-    await axios.post(`${prefix}/enroll-request/${id}`, enrollmentRequest)
+  async requestEnrollment(id: number, enrollmentRequest: EnrollmentRequestInput): Promise<void> {
+    await axios.post(`${prefix}/${id}/enroll-request`, enrollmentRequest)
   },
 
-  async updateEnrollmentRequest(id: number, enrollmentRequest: EnrollmentRequest): Promise<void> {
-    await axios.put(`${prefix}/enroll-request/${id}`, enrollmentRequest)
+  async updateEnrollmentRequest(
+    id: number,
+    enrollmentRequest: EnrollmentRequestInput
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enroll-request`, enrollmentRequest)
   },
 
   async cancelEnrollmentRequest(id: number): Promise<void> {
-    await axios.delete(`${prefix}/enroll-request/${id}`)
+    await axios.delete(`${prefix}/${id}/enroll-request`)
+  },
+
+  async getEnrollmentRequests(id: number): Promise<EnrollmentRequestsShow> {
+    const result = await axios.get<EnrollmentRequestsShow>(`${prefix}/${id}/enroll-requests`)
+    return result.data
   },
 
   async unenroll(id: number, unenrollOptions: Unenroll): Promise<void> {
-    await axios.put(`${prefix}/unenroll/${id}`, unenrollOptions)
+    await axios.put(`${prefix}/${id}/unenroll`, unenrollOptions)
   },
 }
 
