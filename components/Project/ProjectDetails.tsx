@@ -10,6 +10,7 @@ import {
   Text,
   Tabs,
   useMantineColorScheme,
+  Loader,
 } from '@mantine/core'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Projects, ProjectsQueryKey } from '../../services/projects'
@@ -24,7 +25,6 @@ import { useRouter } from 'next/navigation'
 import SkeletonFull from '../../components/Loader/SkeletonFull'
 import sanitizeHtml from 'sanitize-html'
 import styles from './ProjectsDetails.module.css'
-import { Loader } from 'tabler-icons-react'
 
 interface ProjectDetailsParams {
   id: number
@@ -196,7 +196,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
             </Tabs.Tab>
             {isLoadingEnrollmentRequests && (
               <Tabs.Tab value="requests">
-                <Loader />
+                <Loader type="dots" />
               </Tabs.Tab>
             )}
             {!isLoadingEnrollmentRequests && !errorEnrollmentRequests && enrollmentRequests && (
@@ -330,6 +330,10 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
                       </Badge>
                     ))}
                   </Group>
+
+                  <div
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(request.requesterMessage) }}
+                  />
                 </Card>
               ))}
             </Tabs.Panel>
