@@ -1,13 +1,13 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import Env from 'utils/config/Env'
 
 import ProjectsResult from '@/entities/ProjectsResult'
-import ProjectInList, { RequestState } from '../entities/ProjectInList'
+import { RequestState } from '../entities/ProjectInList'
 import { EnrollmentRequestInput } from '../entities/HelpTypes/EnrollmentRequestInput'
-import { UseMutationOptions, keepPreviousData, queryOptions } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 import Project from '../entities/Project'
-import { get } from 'http'
 import { EnrollmentRequestsShow } from '../entities/HelpTypes/EnrollmentRequestsShow'
+import { EnrollmentRequestReject } from '../entities/HelpTypes/EnrollmentRequestReject'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -99,6 +99,18 @@ export const Projects = {
 
   async unenroll(id: number, unenrollOptions: Unenroll): Promise<void> {
     await axios.put(`${prefix}/${id}/unenroll`, unenrollOptions)
+  },
+
+  async approveEnrollmentRequest(id: number, userId: number): Promise<void> {
+    await axios.put(`${prefix}/${id}/enroll-requests/${userId}/approve`)
+  },
+
+  async rejectEnrollmentRequest(
+    id: number,
+    userId: number,
+    rejectOptions: EnrollmentRequestReject
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enroll-requests/${userId}/reject`, rejectOptions)
   },
 }
 

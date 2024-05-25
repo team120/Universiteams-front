@@ -14,7 +14,15 @@ import {
 } from '@mantine/core'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Projects, ProjectsQueryKey } from '../../services/projects'
-import { IconHeartFilled, IconHeart, IconUsersGroup, IconSend } from '@tabler/icons-react'
+import {
+  IconHeartFilled,
+  IconHeart,
+  IconUsersGroup,
+  IconSend,
+  IconX,
+  IconCheck,
+  IconBubbleText,
+} from '@tabler/icons-react'
 import EnrollmentButton from '../../components/Enrollment/EnrollmentButton'
 import Dates from '../../utils/string/Dates'
 import { notifications } from '@mantine/notifications'
@@ -25,6 +33,9 @@ import { useRouter } from 'next/navigation'
 import SkeletonFull from '../../components/Loader/SkeletonFull'
 import sanitizeHtml from 'sanitize-html'
 import styles from './ProjectsDetails.module.css'
+import { modals } from '@mantine/modals'
+import { EnrollmentRequestShow } from '../../entities/HelpTypes/EnrollmentRequestShow'
+import { EnrollmentRequestRejectForm } from '../Enrollment/EnrollmentRequestReject'
 
 interface ProjectDetailsParams {
   id: number
@@ -60,6 +71,26 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   } = useQuery({
     queryKey: ['enrollmentRequests', props.id],
     queryFn: () => Projects.getEnrollmentRequests(props.id),
+  })
+
+  const approveEnrollmentRequestMutation = useMutation({
+    mutationFn: async (userId: number) => Projects.approveEnrollmentRequest(props.id, userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['enrollmentRequests', props.id] })
+      notifications.show({
+        title: 'Solicitud de inscripción aprobada',
+        message: 'El usuario ahora es miembro del proyecto',
+        color: 'blue',
+      })
+    },
+    onError: (error) => {
+      console.error(error)
+      notifications.show({
+        title: 'Error al aprobar la solicitud de inscripció',
+        message: 'Por favor, inténtalo de nuevo más tarde',
+        color: 'red',
+      })
+    },
   })
 
   const favoriteMutation = useMutation({
@@ -109,6 +140,30 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
 
   const handleMemberClick = (userId: number) => {
     router.push(`/projects?user=${userId}`)
+  }
+
+  const handleViewRequestClick = (request: EnrollmentRequestShow) => {
+    modals.open({
+      title: `Mensaje de ${request.user.firstName} ${request.user.lastName}`,
+      centered: true,
+      children: (
+        <>
+          <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(request.requesterMessage) }} />
+        </>
+      ),
+    })
+  }
+
+  const handleAcceptRequestClick = (request: EnrollmentRequestShow) => {
+    approveEnrollmentRequestMutation.mutate(request.user.id)
+  }
+
+  const handleRejectRequestClick = (request: EnrollmentRequestShow) => {
+    modals.open({
+      title: `Rechazar solicitud de ${request.user.firstName} ${request.user.lastName}`,
+      centered: true,
+      children: <EnrollmentRequestRejectForm projectId={props.id} request={request} />,
+    })
   }
 
   if (isLoading) return <SkeletonFull />
@@ -278,15 +333,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
           {!errorEnrollmentRequests && enrollmentRequests && (
             <Tabs.Panel value="requests">
               {enrollmentRequests.enrollmentRequests.map((request) => (
-                <Card
-                  key={request.id}
-                  p="md"
-                  mt="md"
-                  withBorder
-                  className={`${styles.memberCard} ${
-                    colorScheme == 'dark' ? styles.memberCardDark : styles.memberCardLight
-                  }`}
-                  onClick={() => handleMemberClick(request.user.id)}>
+                <Card key={request.id} p="md" mt="md" withBorder>
                   <Text size="lg" w={500}>
                     {request.user.firstName} {request.user.lastName}
                   </Text>
@@ -331,9 +378,32 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
                     ))}
                   </Group>
 
-                  <div
-                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(request.requesterMessage) }}
-                  />
+                  <Group justify="flex-end" mt="xs">
+                    <ActionIcon
+                      aria-label="Rechazar solicitud"
+                      size="lg"
+                      color="red"
+                      onClick={() => handleRejectRequestClick(request)}>
+                      <IconX />
+                    </ActionIcon>
+                    <ActionIcon
+                      aria-label="Aceptar solicitud"
+                      size="lg"
+                      color="green"
+                      loading={approveEnrollmentRequestMutation.isPending}
+                      onClick={() => handleAcceptRequestClick(request)}>
+                      <IconCheck />
+                    </ActionIcon>
+                    {request.requesterMessage && (
+                      <ActionIcon
+                        aria-label="Ver solicitud"
+                        size="lg"
+                        color="gray"
+                        onClick={() => handleViewRequestClick(request)}>
+                        <IconBubbleText />
+                      </ActionIcon>
+                    )}
+                  </Group>
                 </Card>
               ))}
             </Tabs.Panel>
