@@ -157,8 +157,8 @@ const ProjectItem = (props: ProjectItemProps) => {
                 size="lg"
                 style={{ cursor: 'pointer' }}
                 onClick={(event) => handleLeaderTagClick(project.enrollments[0].user.id, event)}>
-                {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}, +
-                {project.userCount} personas
+                {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}
+                {project.userCount > 1 ? `, +${project.userCount - 1} personas` : ''}
               </Badge>
             )}
             {project.interests.map((interest) => (
