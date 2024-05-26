@@ -77,7 +77,7 @@ const ProjectsPage: NextPage = () => {
       interestIds: searchQuery.getAll('interest').map((id) => parseInt(id)),
       userId: searchQuery.get('user') ? parseInt(searchQuery.get('user')!) : undefined,
       type: searchQuery.get('type') || undefined,
-      requestState: (searchQuery.get('requestState') as RequestState) || undefined,
+      requestStates: searchQuery.getAll('requestState').map((state) => state as RequestState),
       isDown:
         searchQuery.get('isDown') === 'true'
           ? true

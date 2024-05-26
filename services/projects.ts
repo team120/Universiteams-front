@@ -19,7 +19,7 @@ export interface GetProjectsInput {
   interestIds?: number[]
   userId?: number
   type?: string
-  requestState?: RequestState
+  requestStates?: RequestState[]
   dateFrom?: Date
   isDown?: boolean
   isFavorite?: boolean
@@ -47,7 +47,11 @@ export const Projects = {
       )
       .concat(params?.userId ? `userId=${params.userId}&` : '')
       .concat(params?.type ? `type=${params.type}&` : '')
-      .concat(params?.requestState ? `requestState=${params.requestState}&` : '')
+      .concat(
+        params?.requestStates && params.requestStates.length > 0
+          ? params.requestStates.map((state) => `requestStates=${state}&`).join('')
+          : ''
+      )
       .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
       .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
       .concat(params?.isFavorite ? `isFavorite=${params.isFavorite}&` : '')
