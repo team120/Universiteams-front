@@ -57,7 +57,7 @@ const Navbar = () => {
         {currentUser && (
           <NavbarItem
             text="Mis Solicitudes"
-            link={`/projects?requestState=${RequestState.Pending}`}
+            link={`/projects?requestState=${RequestState.Pending}&requestState=${RequestState.Rejected}`}
             icon={<IconSend size={iconSize} />}
           />
         )}
