@@ -7,6 +7,7 @@ import { notifications } from '@mantine/notifications'
 import { Projects, ProjectsQueryKey } from '../../services/projects'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import TextEditor from '../Common/TextEditor/TextEditor'
+import sanitizeHtml from 'sanitize-html'
 
 interface EnrollmentRequestProps {
   projectId: number
@@ -39,7 +40,8 @@ export const EnrollmentRequestCreate = (props: EnrollmentRequestProps): React.JS
   })
 
   const handleSubmit = (values: typeof form.values) => {
-    enrollmentRequestMutation.mutate({ message: values.message })
+    const sanitizedMessage = sanitizeHtml(values.message)
+    enrollmentRequestMutation.mutate({ message: sanitizedMessage })
   }
 
   return (
