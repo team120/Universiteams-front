@@ -6,8 +6,9 @@ import { Projects } from '../../services/projects'
 import TextEditor from '../Common/TextEditor/TextEditor'
 import { EnrollmentRequestReject } from '../../entities/HelpTypes/EnrollmentRequestReject'
 import { EnrollmentRequestShow } from '../../entities/HelpTypes/EnrollmentRequestShow'
-import { Button, Text } from '@mantine/core'
+import { Button, LoadingOverlay, Text } from '@mantine/core'
 import { modals } from '@mantine/modals'
+import sanitizeHtml from 'sanitize-html'
 
 interface EnrollmentRequestProps {
   projectId: number
@@ -41,28 +42,28 @@ export const EnrollmentRequestRejectForm = (props: EnrollmentRequestProps): Reac
   })
 
   const handleSubmit = (values: typeof form.values) => {
+    const sanitizedMessage = sanitizeHtml(values.message)
     rejectEnrollmentRequestMutation.mutate({
       userId: props.request.user.id,
       rejectOptions: {
-        message: values.message,
+        message: sanitizedMessage,
       },
     })
   }
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
+      <LoadingOverlay
+        visible={rejectEnrollmentRequestMutation.isPending}
+        zIndex={1000}
+        overlayProps={{ radius: 'sm', blur: 2 }}
+      />
       <Text style={{ marginBottom: '1rem' }}>
         [Opcional] ¿Por qué deseas rechazar la solicitud de inscripción de{' '}
         {props.request.user.firstName} {props.request.user.lastName}?
       </Text>
       <TextEditor onChange={(content) => form.setValues({ message: content })} />
-      <Button
-        type="submit"
-        fullWidth
-        mt="md"
-        aria-label="Rechazar solicitud"
-        color="red"
-        loading={rejectEnrollmentRequestMutation.isPending}>
+      <Button type="submit" fullWidth mt="md" aria-label="Rechazar solicitud" color="red">
         Rechazar
       </Button>
     </form>
