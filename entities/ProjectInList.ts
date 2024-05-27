@@ -21,6 +21,7 @@ interface ProjectInList {
   isFavorite?: boolean
   requestState?: RequestState
   requesterMessage?: string
+  adminMessage?: string
   researchDepartments: ResearchDepartment[]
   interests: Interest[]
   enrollments: Enrollment[]

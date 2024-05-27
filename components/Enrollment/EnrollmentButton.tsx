@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActionIcon, Center, Menu } from '@mantine/core'
+import { ActionIcon, Menu } from '@mantine/core'
 import {
   IconUserPlus,
   IconSend,
@@ -19,16 +19,19 @@ import { CurrentUserQueryOptions } from '../../services/currentUser'
 import { verifyEmailNotification as verifyEmailErrorNotification } from '../Account/VerifyEmailNotification'
 import { UnenrollModal } from './Unenroll'
 import { EnrollmentRequestRevision } from './EnrollmentRequestRevision'
+import { EnrollmentRequestRejected } from './EnrollmentRequestRejected'
 
 interface ActionIconComponentProps {
   projectId: number
   requestState?: RequestState | null
   requesterMessage?: string
+  adminMessage?: string
 }
 
 const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
   requestState,
   requesterMessage,
+  adminMessage,
   projectId,
 }) => {
   const queryClient = useQueryClient()
@@ -97,9 +100,11 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
       title: 'Solicitud rechazada',
       centered: true,
       children: (
-        <Center>
-          <p>Has sido rechazado en tu solicitud de inscripción</p>
-        </Center>
+        <EnrollmentRequestRejected
+          projectId={projectId}
+          adminMessage={adminMessage}
+          requesterMessage={requesterMessage}
+        />
       ),
     })
   }

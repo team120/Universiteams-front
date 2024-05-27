@@ -7,6 +7,7 @@ import TextEditor from '../Common/TextEditor/TextEditor'
 import { EnrollmentRequestReject } from '../../entities/HelpTypes/EnrollmentRequestReject'
 import { EnrollmentRequestShow } from '../../entities/HelpTypes/EnrollmentRequestShow'
 import { Button, Text } from '@mantine/core'
+import { modals } from '@mantine/modals'
 
 interface EnrollmentRequestProps {
   projectId: number
@@ -27,6 +28,7 @@ export const EnrollmentRequestRejectForm = (props: EnrollmentRequestProps): Reac
         message: 'El usuario sera notificado de la decisión',
         color: 'blue',
       })
+      modals.closeAll()
     },
     onError: (error) => {
       console.error(error)

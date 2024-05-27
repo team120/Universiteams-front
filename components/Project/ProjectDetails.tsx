@@ -224,6 +224,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
             projectId={project.id}
             requestState={project.requestState}
             requesterMessage={project.requesterMessage}
+            adminMessage={project.adminMessage}
           />
 
           <ActionIcon
