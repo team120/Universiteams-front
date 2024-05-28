@@ -1,10 +1,11 @@
 import React from 'react'
-import { LoadingOverlay, Textarea, Button } from '@mantine/core'
+import { LoadingOverlay, Button, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { Projects, ProjectsQueryKey } from '../../services/projects'
+import TextEditor from '../Common/TextEditor/TextEditor'
 
 interface EnrollmentCancelProps {
   projectId: number
@@ -39,14 +40,14 @@ export const UnenrollModal = (props: EnrollmentCancelProps): React.JSX.Element =
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
-      <Textarea
-        label="[Opcional] Indica el motivo de tu desinscripción"
-        description="Puedes indicar porque te quieres desinscribir, sugerencias, etc."
-        placeholder="Escribe aquí tu mensaje"
-        data-autofocus
-        resize="vertical"
-        {...form.getInputProps('message')}
-      />
+
+      <Text>[Opcional] Indica el motivo de tu desinscripción</Text>
+      <Text size="sm" c="gray">
+        Puedes indicar porque te quieres desinscribir, sugerencias, etc.
+      </Text>
+
+      <TextEditor onChange={(content) => form.setValues({ message: content })} />
+
       <Button type="submit" fullWidth mt="md" color="red">
         Darse de baja
       </Button>
