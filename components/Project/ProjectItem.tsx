@@ -14,6 +14,7 @@ import { NotLoggedError } from '../Account/NotLoggedError'
 import EnrollmentButton from '../Enrollment/EnrollmentButton'
 import { verifyEmailNotification } from '../Account/VerifyEmailNotification'
 import styles from './ProjectItem.module.css'
+import { ProjectDetailsTabs } from './ProjectDetails'
 
 interface ProjectItemProps {
   project?: ProjectInList
@@ -172,6 +173,10 @@ const ProjectItem = (props: ProjectItemProps) => {
               <ActionIcon
                 variant="transparent"
                 aria-label="Solicitudes de inscripción"
+                onClick={(event) => {
+                  event.stopPropagation()
+                  router.push(`/projects/${project.id}?activeTab=${ProjectDetailsTabs.Requests}`)
+                }}
                 size="lg"
                 color="blue">
                 <IconBell />

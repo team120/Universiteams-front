@@ -29,7 +29,7 @@ import { notifications } from '@mantine/notifications'
 import { NotLoggedError } from '../../components/Account/NotLoggedError'
 import { verifyEmailNotification } from '../../components/Account/VerifyEmailNotification'
 import { CurrentUserQueryOptions } from '../../services/currentUser'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import SkeletonFull from '../../components/Loader/SkeletonFull'
 import sanitizeHtml from 'sanitize-html'
 import styles from './ProjectsDetails.module.css'
@@ -39,6 +39,11 @@ import { EnrollmentRequestRejectForm } from '../Enrollment/EnrollmentRequestReje
 
 interface ProjectDetailsParams {
   id: number
+}
+
+export enum ProjectDetailsTabs {
+  Members = 'members',
+  Requests = 'requests',
 }
 
 const ProjectDetails = (props: ProjectDetailsParams) => {
@@ -123,6 +128,8 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   }
 
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const handleInterestTagClick = (interestId: number) => {
     router.push(`/projects?interest=${interestId}`)
@@ -238,10 +245,12 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
           <Text size="sm">{project.favoriteCount}</Text>
         </Flex>
 
-        <Tabs defaultValue="members">
+        <Tabs
+          value={searchParams.get('activeTab') ?? ProjectDetailsTabs.Members}
+          onChange={(value) => router.push(`${pathname}?activeTab=${value}`)}>
           <Tabs.List>
             <Tabs.Tab
-              value="members"
+              value={ProjectDetailsTabs.Members}
               leftSection={<IconUsersGroup />}
               rightSection={
                 <Badge color="blue" variant="filled">
@@ -251,13 +260,13 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
               Miembros
             </Tabs.Tab>
             {isLoadingEnrollmentRequests && (
-              <Tabs.Tab value="requests">
+              <Tabs.Tab value={ProjectDetailsTabs.Requests}>
                 <Loader type="dots" />
               </Tabs.Tab>
             )}
             {!isLoadingEnrollmentRequests && !errorEnrollmentRequests && enrollmentRequests && (
               <Tabs.Tab
-                value="requests"
+                value={ProjectDetailsTabs.Requests}
                 leftSection={<IconSend />}
                 rightSection={
                   <Badge color="blue" variant="filled">
@@ -269,7 +278,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
             )}
           </Tabs.List>
 
-          <Tabs.Panel value="members">
+          <Tabs.Panel value={ProjectDetailsTabs.Members}>
             {project.enrollments.map((enrollment) => (
               <Card
                 key={enrollment.id}
@@ -332,7 +341,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
           </Tabs.Panel>
 
           {!errorEnrollmentRequests && enrollmentRequests && (
-            <Tabs.Panel value="requests">
+            <Tabs.Panel value={ProjectDetailsTabs.Requests}>
               {enrollmentRequests.enrollmentRequests.map((request) => (
                 <Card key={request.id} p="md" mt="md" withBorder>
                   <Text size="lg" w={500}>
