@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-  ActionIcon,
-  Badge,
-  Card,
-  Chip,
-  Flex,
-  Group,
-  Text,
-  useMantineColorScheme,
-} from '@mantine/core'
+import { ActionIcon, Badge, Card, Chip, Group, Text, useMantineColorScheme } from '@mantine/core'
 import Dates from 'utils/string/Dates'
 import ProjectInList from '@/entities/ProjectInList'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
@@ -16,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Url } from '@/services/url'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Projects, ProjectsQueryKey } from '@/services/projects'
-import { IconHeart, IconHeartFilled } from '@tabler/icons-react'
+import { IconBell, IconHeart, IconHeartFilled } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
 import { CurrentUserQueryOptions } from '../../services/currentUser'
 import { NotLoggedError } from '../Account/NotLoggedError'
@@ -175,7 +166,20 @@ const ProjectItem = (props: ProjectItemProps) => {
           </Group>
         </Chip.Group>
 
-        <Flex justify="flex-end" align="center">
+        <Group justify="flex-end" align="center" gap="xs">
+          {project.requestEnrollmentCount != null && project.requestEnrollmentCount > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Solicitudes de inscripción"
+                size="lg"
+                color="blue">
+                <IconBell />
+              </ActionIcon>
+              <Text size="sm">{project.requestEnrollmentCount}</Text>
+            </div>
+          )}
+
           <EnrollmentButton
             projectId={project.id}
             requestState={project.requestState}
@@ -183,16 +187,18 @@ const ProjectItem = (props: ProjectItemProps) => {
             adminMessage={project.adminMessage}
           />
 
-          <ActionIcon
-            variant="transparent"
-            aria-label="Guardar en marcadores"
-            onClick={(event) => handleFavoriteClick(event)}
-            size="lg"
-            color={project.isFavorite ? 'blue' : 'gray'}>
-            {project.isFavorite ? <IconHeartFilled /> : <IconHeart />}
-          </ActionIcon>
-          <Text size="sm">{project.favoriteCount}</Text>
-        </Flex>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <ActionIcon
+              variant="transparent"
+              aria-label="Guardar en marcadores"
+              onClick={(event) => handleFavoriteClick(event)}
+              size="lg"
+              color={project.isFavorite ? 'blue' : 'gray'}>
+              {project.isFavorite ? <IconHeartFilled /> : <IconHeart />}
+            </ActionIcon>
+            <Text size="sm">{project.favoriteCount}</Text>
+          </div>
+        </Group>
       </div>
     </Card>
   )
