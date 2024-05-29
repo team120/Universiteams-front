@@ -14,7 +14,7 @@ import {
   IconUserCircle,
 } from '@tabler/icons-react'
 import { CurrentUserQueryOptions } from '../../../services/currentUser'
-import { RequestState } from '../../../entities/ProjectInList'
+import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
 import { useQuery } from '@tanstack/react-query'
 
 const mockAppVersion = 'v1.0.0'
@@ -50,7 +50,7 @@ const Navbar = () => {
         {currentUser && (
           <NavbarItem
             text="Mis Proyectos"
-            link={`/projects?requestState=${RequestState.Accepted}`}
+            link={`/projects?requestState=${RequestState.Accepted}&sortBy=${ProjectSortAttribute.RequestEnrollmentCount}&inAscendingOrder=false`}
             icon={<IconBulb size={iconSize} />}
           />
         )}

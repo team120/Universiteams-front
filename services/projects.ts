@@ -2,7 +2,7 @@ import axios from 'axios'
 import Env from 'utils/config/Env'
 
 import ProjectsResult from '@/entities/ProjectsResult'
-import { RequestState } from '../entities/ProjectInList'
+import { ProjectSortAttribute, RequestState } from '../entities/ProjectInList'
 import { EnrollmentRequestInput } from '../entities/HelpTypes/EnrollmentRequestInput'
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 import Project from '../entities/Project'
@@ -23,7 +23,7 @@ export interface GetProjectsInput {
   dateFrom?: Date
   isDown?: boolean
   isFavorite?: boolean
-  sortBy?: string
+  sortBy?: ProjectSortAttribute
   inAscendingOrder?: boolean
   limit?: number
   offset?: number

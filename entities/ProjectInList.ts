@@ -2,6 +2,12 @@ import Enrollment from './Enrollment'
 import Interest from './Interest'
 import ResearchDepartment from './ResearchDepartment'
 
+export enum ProjectSortAttribute {
+  Name = 'name',
+  CreationDate = 'creationDate',
+  RequestEnrollmentCount = 'requestEnrollmentCount',
+}
+
 export enum RequestState {
   Pending = 'Pending',
   Accepted = 'Accepted',

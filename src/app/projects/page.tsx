@@ -15,7 +15,7 @@ import { ResearchDepartments } from '@/services/departments'
 import { Interests } from '@/services/interests'
 import { Users } from '@/services/user'
 import { Center, Pagination } from '@mantine/core'
-import { RequestState } from '../../../entities/ProjectInList'
+import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
 import { useQuery } from '@tanstack/react-query'
 
 const ProjectsPage: NextPage = () => {
@@ -23,8 +23,9 @@ const ProjectsPage: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   const sortAttributes: SelectItem[] = [
-    { attribute: 'name', displayName: 'nombre' },
-    { attribute: 'creationDate', displayName: 'fecha creación' },
+    { attribute: ProjectSortAttribute.Name, displayName: 'nombre' },
+    { attribute: ProjectSortAttribute.CreationDate, displayName: 'fecha creación' },
+    { attribute: ProjectSortAttribute.RequestEnrollmentCount, displayName: 'solicitudes' },
   ]
 
   const searchQuery = useSearchParams()
@@ -89,7 +90,7 @@ const ProjectsPage: NextPage = () => {
           ? undefined
           : searchQuery.get('isFavorite') === 'true',
       dateFrom: searchQuery.get('dateFrom') ? new Date(searchQuery.get('dateFrom')!) : undefined,
-      sortBy: searchQuery.get('sortBy') || undefined,
+      sortBy: (searchQuery.get('sortBy') as ProjectSortAttribute) || undefined,
       inAscendingOrder:
         searchQuery.get('inAscendingOrder') === 'true'
           ? true
