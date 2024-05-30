@@ -3,7 +3,6 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { NextPage } from 'next'
 
 import { ProjectQueryOptions } from '@/services/projects'
-import SelectItem from '@/entities/HelpTypes/SelectItem'
 
 import Filter from '@/components/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
@@ -17,16 +16,26 @@ import { Users } from '@/services/user'
 import { Center, Pagination } from '@mantine/core'
 import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
 import { useQuery } from '@tanstack/react-query'
+import { CurrentUserQueryOptions } from '../../../services/currentUser'
 
 const ProjectsPage: NextPage = () => {
   const projectsPerPage = 5
   const [currentPage, setCurrentPage] = useState(1)
 
-  const sortAttributes: SelectItem[] = [
-    { attribute: ProjectSortAttribute.Name, displayName: 'nombre' },
-    { attribute: ProjectSortAttribute.CreationDate, displayName: 'fecha creación' },
-    { attribute: ProjectSortAttribute.RequestEnrollmentCount, displayName: 'solicitudes' },
-  ]
+  const { data: currentUser, error: errorCurrentUser } = useQuery(
+    CurrentUserQueryOptions.currentUser()
+  )
+
+  const sortAttributes = useMemo(
+    () => [
+      { attribute: ProjectSortAttribute.Name, displayName: 'nombre' },
+      { attribute: ProjectSortAttribute.CreationDate, displayName: 'fecha creación' },
+      ...(errorCurrentUser === null && currentUser !== undefined
+        ? [{ attribute: ProjectSortAttribute.RequestEnrollmentCount, displayName: 'solicitudes' }]
+        : []),
+    ],
+    [errorCurrentUser, currentUser]
+  )
 
   const searchQuery = useSearchParams()
 
