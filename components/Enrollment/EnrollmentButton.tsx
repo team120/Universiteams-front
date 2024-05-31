@@ -7,6 +7,7 @@ import {
   IconUserCheck,
   IconUserOff,
   IconPencil,
+  IconEye,
 } from '@tabler/icons-react'
 import { RequestState } from '../../entities/ProjectInList'
 import { modals } from '@mantine/modals'
@@ -20,6 +21,7 @@ import { verifyEmailNotification as verifyEmailErrorNotification } from '../Acco
 import { UnenrollModal } from './Unenroll'
 import { EnrollmentRequestRevision } from './EnrollmentRequestRevision'
 import { EnrollmentRequestRejected } from './EnrollmentRequestRejected'
+import sanitize from 'sanitize-html'
 
 interface ActionIconComponentProps {
   projectId: number
@@ -84,6 +86,16 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
       title: 'Solicitud de inscripción',
       centered: true,
       children: <EnrollmentRequestRevision content={requesterMessage} projectId={projectId} />,
+    })
+  }
+
+  const handleViewAdminMessageClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+
+    modals.open({
+      title: 'Mensaje del administrador',
+      centered: true,
+      children: <div dangerouslySetInnerHTML={{ __html: sanitize(adminMessage ?? '') }} />,
     })
   }
 
@@ -173,14 +185,30 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
       )
     case RequestState.Accepted:
       return (
-        <ActionIcon
-          variant="transparent"
-          aria-label="Cancelar inscripción"
-          onClick={handleUnenrollClick}
-          size="lg"
-          color="blue">
-          <IconUserCheck />
-        </ActionIcon>
+        <Menu position="bottom" offset={0}>
+          <Menu.Target>
+            <ActionIcon
+              variant="transparent"
+              aria-label="Ver opciones de inscripción"
+              size="lg"
+              color="blue"
+              onClick={(event) => event.stopPropagation()}>
+              <IconUserCheck />
+            </ActionIcon>
+          </Menu.Target>
+          <Menu.Dropdown>
+            {adminMessage && (
+              <Menu.Item leftSection={<IconEye size={14} />} onClick={handleViewAdminMessageClick}>
+                Ver mensaje del administrador
+              </Menu.Item>
+            )}
+            <Menu.Item
+              leftSection={<IconTrash color="red" size={14} />}
+              onClick={handleUnenrollClick}>
+              Cancelar inscripción
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       )
     default:
       return <></>
