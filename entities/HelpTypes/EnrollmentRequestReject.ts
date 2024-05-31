@@ -1,3 +1,3 @@
-export interface EnrollmentRequestReject {
+export interface EnrollmentRequestAdmin {
   message?: string
 }

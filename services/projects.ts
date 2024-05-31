@@ -7,7 +7,7 @@ import { EnrollmentRequestInput } from '../entities/HelpTypes/EnrollmentRequestI
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 import Project from '../entities/Project'
 import { EnrollmentRequestsShow } from '../entities/HelpTypes/EnrollmentRequestsShow'
-import { EnrollmentRequestReject } from '../entities/HelpTypes/EnrollmentRequestReject'
+import { EnrollmentRequestAdmin as EnrollmentRequestAdmin } from '../entities/HelpTypes/EnrollmentRequestReject'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -105,16 +105,20 @@ export const Projects = {
     await axios.put(`${prefix}/${id}/unenroll`, unenrollOptions)
   },
 
-  async approveEnrollmentRequest(id: number, userId: number): Promise<void> {
-    await axios.put(`${prefix}/${id}/enroll-requests/${userId}/approve`)
+  async approveEnrollmentRequest(
+    id: number,
+    userId: number,
+    adminOptions: EnrollmentRequestAdmin
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enroll-requests/${userId}/approve`, adminOptions)
   },
 
   async rejectEnrollmentRequest(
     id: number,
     userId: number,
-    rejectOptions: EnrollmentRequestReject
+    adminOptions: EnrollmentRequestAdmin
   ): Promise<void> {
-    await axios.put(`${prefix}/${id}/enroll-requests/${userId}/reject`, rejectOptions)
+    await axios.put(`${prefix}/${id}/enroll-requests/${userId}/reject`, adminOptions)
   },
 }
 

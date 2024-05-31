@@ -35,7 +35,7 @@ import sanitizeHtml from 'sanitize-html'
 import styles from './ProjectsDetails.module.css'
 import { modals } from '@mantine/modals'
 import { EnrollmentRequestShow } from '../../entities/HelpTypes/EnrollmentRequestShow'
-import { EnrollmentRequestRejectForm } from '../Enrollment/EnrollmentRequestReject'
+import { EnrollmentRequestRejectForm } from '../Enrollment/EnrollmentRequestAdmin'
 
 interface ProjectDetailsParams {
   id: number
@@ -76,26 +76,6 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   } = useQuery({
     queryKey: ['enrollmentRequests', props.id],
     queryFn: () => Projects.getEnrollmentRequests(props.id),
-  })
-
-  const approveEnrollmentRequestMutation = useMutation({
-    mutationFn: async (userId: number) => Projects.approveEnrollmentRequest(props.id, userId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['enrollmentRequests', props.id] })
-      notifications.show({
-        title: 'Solicitud de inscripción aprobada',
-        message: 'El usuario ahora es miembro del proyecto',
-        color: 'blue',
-      })
-    },
-    onError: (error) => {
-      console.error(error)
-      notifications.show({
-        title: 'Error al aprobar la solicitud de inscripció',
-        message: 'Por favor, inténtalo de nuevo más tarde',
-        color: 'red',
-      })
-    },
   })
 
   const favoriteMutation = useMutation({
@@ -162,14 +142,22 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   }
 
   const handleAcceptRequestClick = (request: EnrollmentRequestShow) => {
-    approveEnrollmentRequestMutation.mutate(request.user.id)
+    modals.open({
+      title: `Aceptar solicitud de ${request.user.firstName} ${request.user.lastName}`,
+      centered: true,
+      children: (
+        <EnrollmentRequestRejectForm projectId={props.id} request={request} action="approve" />
+      ),
+    })
   }
 
   const handleRejectRequestClick = (request: EnrollmentRequestShow) => {
     modals.open({
       title: `Rechazar solicitud de ${request.user.firstName} ${request.user.lastName}`,
       centered: true,
-      children: <EnrollmentRequestRejectForm projectId={props.id} request={request} />,
+      children: (
+        <EnrollmentRequestRejectForm projectId={props.id} request={request} action="reject" />
+      ),
     })
   }
 
@@ -400,7 +388,6 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
                       aria-label="Aceptar solicitud"
                       size="lg"
                       color="green"
-                      loading={approveEnrollmentRequestMutation.isPending}
                       onClick={() => handleAcceptRequestClick(request)}>
                       <IconCheck />
                     </ActionIcon>
