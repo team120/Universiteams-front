@@ -12,7 +12,7 @@ import {
   Loader,
 } from '@mantine/core'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Projects, ProjectsQueryKey } from '../../services/projects'
+import { EnrollmentRequestsQueryKey, Projects, ProjectsQueryKey } from '../../services/projects'
 import {
   IconHeartFilled,
   IconHeart,
@@ -71,7 +71,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     error: errorEnrollmentRequests,
     isLoading: isLoadingEnrollmentRequests,
   } = useQuery({
-    queryKey: ['enrollmentRequests', props.id],
+    queryKey: [EnrollmentRequestsQueryKey, props.id],
     queryFn: () => Projects.getEnrollmentRequests(props.id),
   })
 
@@ -240,18 +240,14 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
               }>
               Miembros
             </Tabs.Tab>
-            {isLoadingEnrollmentRequests && (
-              <Tabs.Tab value={ProjectDetailsTabs.Requests}>
-                <Loader type="dots" />
-              </Tabs.Tab>
-            )}
-            {!isLoadingEnrollmentRequests && !errorEnrollmentRequests && enrollmentRequests && (
+
+            {project.requestEnrollmentCount !== undefined && (
               <Tabs.Tab
                 value={ProjectDetailsTabs.Requests}
                 leftSection={<IconSend />}
                 rightSection={
                   <Badge color="blue" variant="filled">
-                    {enrollmentRequests.requestEnrollmentCount}
+                    {project.requestEnrollmentCount}
                   </Badge>
                 }>
                 Solicitudes
@@ -260,84 +256,94 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
           </Tabs.List>
 
           <Tabs.Panel value={ProjectDetailsTabs.Members}>
-            <EnrollmentList enrollments={project.enrollments} />
+            <EnrollmentList
+              projectId={props.id}
+              enrollments={project.enrollments}
+              isAdmin={project.requestEnrollmentCount !== undefined}
+            />
           </Tabs.Panel>
 
           {!errorEnrollmentRequests && enrollmentRequests && (
             <Tabs.Panel value={ProjectDetailsTabs.Requests}>
-              {enrollmentRequests.enrollmentRequests.map((request) => (
-                <Card key={request.id} p="md" mt="md" withBorder>
-                  <Text size="lg" w={500}>
-                    {request.user.firstName} {request.user.lastName}
-                  </Text>
+              {isLoadingEnrollmentRequests && (
+                <Tabs.Tab value={ProjectDetailsTabs.Requests}>
+                  <Loader type="dots" />
+                </Tabs.Tab>
+              )}
+              {!isLoadingEnrollmentRequests &&
+                enrollmentRequests.enrollmentRequests.map((request) => (
+                  <Card key={request.id} p="md" mt="md" withBorder>
+                    <Text size="lg" w={500}>
+                      {request.user.firstName} {request.user.lastName}
+                    </Text>
 
-                  <Group mt="xs" gap="xs">
-                    {request.user.userAffiliations.map((affiliation) => (
-                      <Badge
-                        key={affiliation.id}
-                        color="pink.6"
-                        variant="light"
-                        component="button"
-                        style={{ cursor: 'pointer' }}
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          handleDepartmentBadgeClick(
-                            affiliation.researchDepartment.facility.institution.id,
-                            affiliation.researchDepartment.facility.id,
-                            affiliation.researchDepartment.id
-                          )
-                        }}>
-                        {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
-                        {affiliation.researchDepartment.facility.abbreviation} |{' '}
-                        {affiliation.researchDepartment.name}
-                      </Badge>
-                    ))}
-                  </Group>
+                    <Group mt="xs" gap="xs">
+                      {request.user.userAffiliations.map((affiliation) => (
+                        <Badge
+                          key={affiliation.id}
+                          color="pink.6"
+                          variant="light"
+                          component="button"
+                          style={{ cursor: 'pointer' }}
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            handleDepartmentBadgeClick(
+                              affiliation.researchDepartment.facility.institution.id,
+                              affiliation.researchDepartment.facility.id,
+                              affiliation.researchDepartment.id
+                            )
+                          }}>
+                          {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
+                          {affiliation.researchDepartment.facility.abbreviation} |{' '}
+                          {affiliation.researchDepartment.name}
+                        </Badge>
+                      ))}
+                    </Group>
 
-                  <Group mt="xs" gap="xs">
-                    {request.user.interests.map((interest) => (
-                      <Badge
-                        variant="dot"
-                        key={interest.id}
-                        color="blue.6"
-                        size="lg"
-                        style={{ cursor: 'pointer' }}
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          handleInterestTagClick(interest.id)
-                        }}>
-                        {interest.name}
-                      </Badge>
-                    ))}
-                  </Group>
+                    <Group mt="xs" gap="xs">
+                      {request.user.interests.map((interest) => (
+                        <Badge
+                          variant="dot"
+                          key={interest.id}
+                          color="blue.6"
+                          size="lg"
+                          style={{ cursor: 'pointer' }}
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            handleInterestTagClick(interest.id)
+                          }}>
+                          {interest.name}
+                        </Badge>
+                      ))}
+                    </Group>
 
-                  <Group justify="flex-end" mt="xs">
-                    <ActionIcon
-                      aria-label="Rechazar solicitud"
-                      size="lg"
-                      color="red"
-                      onClick={() => handleRejectRequestClick(request)}>
-                      <IconX />
-                    </ActionIcon>
-                    <ActionIcon
-                      aria-label="Aceptar solicitud"
-                      size="lg"
-                      color="green"
-                      onClick={() => handleAcceptRequestClick(request)}>
-                      <IconCheck />
-                    </ActionIcon>
-                    {request.requesterMessage && (
+                    <Group justify="flex-end" mt="xs">
                       <ActionIcon
-                        aria-label="Ver solicitud"
+                        aria-label="Rechazar solicitud"
                         size="lg"
-                        color="gray"
-                        onClick={() => handleViewRequestClick(request)}>
-                        <IconBubbleText />
+                        color="red"
+                        onClick={() => handleRejectRequestClick(request)}>
+                        <IconX />
                       </ActionIcon>
-                    )}
-                  </Group>
-                </Card>
-              ))}
+                      <ActionIcon
+                        aria-label="Aceptar solicitud"
+                        size="lg"
+                        color="green"
+                        onClick={() => handleAcceptRequestClick(request)}>
+                        <IconCheck />
+                      </ActionIcon>
+                      {request.requesterMessage && (
+                        <ActionIcon
+                          aria-label="Ver solicitud"
+                          size="lg"
+                          color="gray"
+                          onClick={() => handleViewRequestClick(request)}>
+                          <IconBubbleText />
+                        </ActionIcon>
+                      )}
+                    </Group>
+                  </Card>
+                ))}
             </Tabs.Panel>
           )}
         </Tabs>

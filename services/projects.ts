@@ -132,3 +132,5 @@ export const ProjectQueryOptions = {
       placeholderData: keepPreviousData,
     }),
 }
+
+export const EnrollmentRequestsQueryKey = 'enrollmentRequests'
