@@ -120,6 +120,14 @@ export const Projects = {
   ): Promise<void> {
     await axios.put(`${prefix}/${id}/enroll-requests/${userId}/reject`, adminOptions)
   },
+
+  async revokeEnrollment(
+    id: number,
+    userId: number,
+    adminOptions: EnrollmentRequestAdmin
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enrollments/${userId}/kick`, adminOptions)
+  },
 }
 
 export const ProjectsQueryKey = 'projects'

@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
-import { Projects } from '../../services/projects'
+import { EnrollmentRequestsQueryKey, Projects } from '../../services/projects'
 import TextEditor from '../Common/TextEditor/TextEditor'
 import { EnrollmentRequestAdmin } from '../../entities/HelpTypes/EnrollmentRequestReject'
 import { EnrollmentRequestShow } from '../../entities/HelpTypes/EnrollmentRequestShow'
@@ -29,7 +29,7 @@ export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React
     mutationFn: async (params: AdminMutation) =>
       Projects.approveEnrollmentRequest(props.projectId, params.userId, params.adminOptions),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['enrollmentRequests', props.projectId] })
+      queryClient.invalidateQueries({ queryKey: [EnrollmentRequestsQueryKey, props.projectId] })
       notifications.show({
         title: 'Solicitud de inscripción aprobada',
         message: 'El usuario ahora es miembro del proyecto',
@@ -51,7 +51,7 @@ export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React
     mutationFn: async (params: AdminMutation) =>
       Projects.rejectEnrollmentRequest(props.projectId, params.userId, params.adminOptions),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['enrollmentRequests', props.projectId] })
+      queryClient.invalidateQueries({ queryKey: [EnrollmentRequestsQueryKey, props.projectId] })
       notifications.show({
         title: 'Solicitud de inscripción rechazada',
         message: 'El usuario sera notificado de la decisión',

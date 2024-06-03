@@ -1,15 +1,31 @@
 import React from 'react'
-import { Badge, Card, Group, Text, useMantineColorScheme } from '@mantine/core'
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  Group,
+  Menu,
+  Text,
+  rem,
+  useMantineColorScheme,
+} from '@mantine/core'
 import styles from './EnrollmentList.module.css'
 import Enrollment from '../../entities/Enrollment'
 import { useRouter } from 'next/navigation'
+import { IconDots, IconHierarchy3, IconTrash } from '@tabler/icons-react'
+import { modals } from '@mantine/modals'
+import { EnrollmentRevoke } from './EnrollmentRevoke'
 
 interface EnrollmentListProps {
+  projectId: number
   enrollments: Enrollment[]
+  isAdmin: boolean
 }
 
 export const EnrollmentList: React.FC<EnrollmentListProps> = ({
+  projectId,
   enrollments,
+  isAdmin,
 }: EnrollmentListProps) => {
   const { colorScheme } = useMantineColorScheme()
   const router = useRouter()
@@ -30,6 +46,14 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
 
   const handleInterestTagClick = (interestId: number) => {
     router.push(`/projects?interest=${interestId}`)
+  }
+
+  const handleRevokeEnrollment = (enrollment: Enrollment) => {
+    modals.open({
+      title: 'Revocar inscripción',
+      centered: true,
+      children: <EnrollmentRevoke projectId={projectId} enrollment={enrollment} />,
+    })
   }
 
   return (
@@ -91,6 +115,40 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
               </Badge>
             ))}
           </Group>
+
+          {isAdmin && (
+            <Group mt="sm" justify="flex-end">
+              <Menu shadow="md" width={200}>
+                <Menu.Target>
+                  <ActionIcon
+                    variant="transparent"
+                    aria-label="Eliminar inscripción"
+                    size="lg"
+                    color="gray"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      console.log('Eliminar inscripción')
+                    }}>
+                    <IconDots />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      handleRevokeEnrollment(enrollment)
+                    }}
+                    leftSection={<IconTrash color="red" width={rem(14)} height={rem(14)} />}>
+                    Revocar inscripción
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={<IconHierarchy3 color="gray" width={rem(14)} height={rem(14)} />}>
+                    Cambiar rol
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Group>
+          )}
         </Card>
       ))}
     </>
