@@ -9,7 +9,6 @@ import {
   Group,
   Text,
   Tabs,
-  useMantineColorScheme,
   Loader,
 } from '@mantine/core'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -32,10 +31,10 @@ import { CurrentUserQueryOptions } from '../../services/currentUser'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import SkeletonFull from '../../components/Loader/SkeletonFull'
 import sanitizeHtml from 'sanitize-html'
-import styles from './ProjectsDetails.module.css'
 import { modals } from '@mantine/modals'
 import { EnrollmentRequestShow } from '../../entities/HelpTypes/EnrollmentRequestShow'
 import { EnrollmentRequestRejectForm } from '../Enrollment/EnrollmentRequestAdmin'
+import { EnrollmentList } from '../Enrollment/EnrollmentList'
 
 interface ProjectDetailsParams {
   id: number
@@ -47,8 +46,6 @@ export enum ProjectDetailsTabs {
 }
 
 const ProjectDetails = (props: ProjectDetailsParams) => {
-  const { colorScheme } = useMantineColorScheme()
-
   const {
     data: project,
     error,
@@ -123,10 +120,6 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     router.push(
       `/projects?university=${institutionId}&facility=${facilityId}&department=${departmentId}`
     )
-  }
-
-  const handleMemberClick = (userId: number) => {
-    router.push(`/projects?user=${userId}`)
   }
 
   const handleViewRequestClick = (request: EnrollmentRequestShow) => {
@@ -267,65 +260,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
           </Tabs.List>
 
           <Tabs.Panel value={ProjectDetailsTabs.Members}>
-            {project.enrollments.map((enrollment) => (
-              <Card
-                key={enrollment.id}
-                p="md"
-                mt="md"
-                withBorder
-                className={`${styles.memberCard} ${
-                  colorScheme == 'dark' ? styles.memberCardDark : styles.memberCardLight
-                }`}
-                onClick={() => handleMemberClick(enrollment.user.id)}>
-                <Group justify="space-between" gap="xs">
-                  <Text size="lg" w={500}>
-                    {enrollment.user.firstName} {enrollment.user.lastName}
-                  </Text>
-                  <Badge variant="outline" color="blue.6" size="sm" radius="xs">
-                    {enrollment.role}
-                  </Badge>
-                </Group>
-                <Group mt="xs" gap="xs">
-                  {enrollment.user.userAffiliations.map((affiliation) => (
-                    <Badge
-                      key={affiliation.id}
-                      color="pink.6"
-                      variant="light"
-                      component="button"
-                      style={{ cursor: 'pointer' }}
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        handleDepartmentBadgeClick(
-                          affiliation.researchDepartment.facility.institution.id,
-                          affiliation.researchDepartment.facility.id,
-                          affiliation.researchDepartment.id
-                        )
-                      }}>
-                      {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
-                      {affiliation.researchDepartment.facility.abbreviation} |{' '}
-                      {affiliation.researchDepartment.name}
-                    </Badge>
-                  ))}
-                </Group>
-
-                <Group mt="xs" gap="xs">
-                  {enrollment.user.interests.map((interest) => (
-                    <Badge
-                      variant="dot"
-                      key={interest.id}
-                      color="blue.6"
-                      size="lg"
-                      style={{ cursor: 'pointer' }}
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        handleInterestTagClick(interest.id)
-                      }}>
-                      {interest.name}
-                    </Badge>
-                  ))}
-                </Group>
-              </Card>
-            ))}
+            <EnrollmentList enrollments={project.enrollments} />
           </Tabs.Panel>
 
           {!errorEnrollmentRequests && enrollmentRequests && (
