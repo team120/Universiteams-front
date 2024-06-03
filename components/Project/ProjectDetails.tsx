@@ -33,7 +33,7 @@ import SkeletonFull from '../../components/Loader/SkeletonFull'
 import sanitizeHtml from 'sanitize-html'
 import { modals } from '@mantine/modals'
 import { EnrollmentRequestShow } from '../../entities/HelpTypes/EnrollmentRequestShow'
-import { EnrollmentRequestRejectForm } from '../Enrollment/EnrollmentRequestAdmin'
+import { EnrollmentRequestAdminForm } from '../Enrollment/EnrollmentRequestAdmin'
 import { EnrollmentList } from '../Enrollment/EnrollmentList'
 
 interface ProjectDetailsParams {
@@ -139,7 +139,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
       title: `Aceptar solicitud de ${request.user.firstName} ${request.user.lastName}`,
       centered: true,
       children: (
-        <EnrollmentRequestRejectForm projectId={props.id} request={request} action="approve" />
+        <EnrollmentRequestAdminForm projectId={props.id} request={request} action="approve" />
       ),
     })
   }
@@ -149,7 +149,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
       title: `Rechazar solicitud de ${request.user.firstName} ${request.user.lastName}`,
       centered: true,
       children: (
-        <EnrollmentRequestRejectForm projectId={props.id} request={request} action="reject" />
+        <EnrollmentRequestAdminForm projectId={props.id} request={request} action="reject" />
       ),
     })
   }

@@ -21,7 +21,7 @@ interface EnrollmentRequestProps {
   action: 'approve' | 'reject'
 }
 
-export const EnrollmentRequestRejectForm = (props: EnrollmentRequestProps): React.JSX.Element => {
+export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 
