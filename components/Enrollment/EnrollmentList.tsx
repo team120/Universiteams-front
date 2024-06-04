@@ -15,6 +15,9 @@ import { useRouter } from 'next/navigation'
 import { IconDots, IconHierarchy3, IconTrash } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 import { EnrollmentRevoke } from './EnrollmentRevoke'
+import { EnrollmentChangeRoleForm } from './EnrollmentChangeRole'
+import { useQuery } from '@tanstack/react-query'
+import { CurrentUserQueryOptions } from '../../services/currentUser'
 
 interface EnrollmentListProps {
   projectId: number
@@ -29,6 +32,8 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
 }: EnrollmentListProps) => {
   const { colorScheme } = useMantineColorScheme()
   const router = useRouter()
+
+  const { data: currentUser } = useQuery(CurrentUserQueryOptions.currentUser())
 
   const handleMemberClick = (userId: number) => {
     router.push(`/projects?user=${userId}`)
@@ -53,6 +58,20 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
       title: 'Revocar inscripción',
       centered: true,
       children: <EnrollmentRevoke projectId={projectId} enrollment={enrollment} />,
+    })
+  }
+
+  const handleChangeRole = (enrollment: Enrollment) => {
+    modals.open({
+      title: 'Cambiar rol',
+      centered: true,
+      children: (
+        <EnrollmentChangeRoleForm
+          projectId={projectId}
+          currentRole={enrollment.role}
+          enrollment={enrollment}
+        />
+      ),
     })
   }
 
@@ -116,18 +135,17 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
             ))}
           </Group>
 
-          {isAdmin && (
+          {isAdmin && currentUser?.id !== enrollment.user.id && (
             <Group mt="sm" justify="flex-end">
               <Menu shadow="md" width={200}>
                 <Menu.Target>
                   <ActionIcon
                     variant="transparent"
-                    aria-label="Eliminar inscripción"
+                    aria-label="Ver opciones para esta inscripción"
                     size="lg"
                     color="gray"
                     onClick={(event) => {
                       event.stopPropagation()
-                      console.log('Eliminar inscripción')
                     }}>
                     <IconDots />
                   </ActionIcon>
@@ -142,6 +160,10 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
                     Revocar inscripción
                   </Menu.Item>
                   <Menu.Item
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      handleChangeRole(enrollment)
+                    }}
                     leftSection={<IconHierarchy3 color="gray" width={rem(14)} height={rem(14)} />}>
                     Cambiar rol
                   </Menu.Item>

@@ -3,6 +3,7 @@ import Env from '../utils/config/Env'
 import { QueryOptions, queryOptions } from '@tanstack/react-query'
 
 export interface CurrentUserInfo {
+  id: number
   user: string
   email: string
   isEmailVerified: boolean

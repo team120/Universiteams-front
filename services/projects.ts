@@ -8,6 +8,7 @@ import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 import Project from '../entities/Project'
 import { EnrollmentRequestsShow } from '../entities/HelpTypes/EnrollmentRequestsShow'
 import { EnrollmentRequestAdmin as EnrollmentRequestAdmin } from '../entities/HelpTypes/EnrollmentRequestReject'
+import { EnrollmentChangeRole } from '../entities/HelpTypes/EnrollmentChangeRole'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -127,6 +128,14 @@ export const Projects = {
     adminOptions: EnrollmentRequestAdmin
   ): Promise<void> {
     await axios.put(`${prefix}/${id}/enrollments/${userId}/kick`, adminOptions)
+  },
+
+  async changeEnrollmentRole(
+    id: number,
+    userId: number,
+    changeRoleOptions: EnrollmentChangeRole
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enrollments/${userId}/change-role`, changeRoleOptions)
   },
 }
 
