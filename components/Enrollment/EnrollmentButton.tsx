@@ -22,6 +22,7 @@ import { UnenrollModal } from './Unenroll'
 import { EnrollmentRequestRevision } from './EnrollmentRequestRevision'
 import { EnrollmentRequestRejected } from './EnrollmentRequestRejected'
 import sanitize from 'sanitize-html'
+import { EnrollmentRevoked } from './EnrollmentRevoked'
 
 interface ActionIconComponentProps {
   projectId: number
@@ -121,6 +122,16 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     })
   }
 
+  const handleEnrollmentRevokedClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+
+    modals.open({
+      title: 'Inscripción revocada',
+      centered: true,
+      children: <EnrollmentRevoked projectId={projectId} adminMessage={adminMessage} />,
+    })
+  }
+
   const handleUnenrollClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
@@ -151,6 +162,17 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
           variant="transparent"
           aria-label="Has sido rechazado"
           onClick={handleEnrollmentRejectedClick}
+          size="lg"
+          color="red">
+          <IconUserOff />
+        </ActionIcon>
+      )
+    case RequestState.Kicked:
+      return (
+        <ActionIcon
+          variant="transparent"
+          aria-label="Has sido expulsado"
+          onClick={handleEnrollmentRevokedClick}
           size="lg"
           color="red">
           <IconUserOff />

@@ -13,6 +13,7 @@ export enum RequestState {
   Accepted = 'Accepted',
   Rejected = 'Rejected',
   Unenrolled = 'Unenrolled',
+  Kicked = 'Kicked',
 }
 
 interface ProjectInList {

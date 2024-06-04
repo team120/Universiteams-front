@@ -50,7 +50,7 @@ const Navbar = () => {
         {currentUser && (
           <NavbarItem
             text="Mis Proyectos"
-            link={`/projects?requestState=${RequestState.Accepted}&sortBy=${ProjectSortAttribute.RequestEnrollmentCount}&inAscendingOrder=false`}
+            link={`/projects?requestState=${RequestState.Accepted}&requestState=${RequestState.Kicked}&sortBy=${ProjectSortAttribute.RequestEnrollmentCount}&inAscendingOrder=false`}
             icon={<IconBulb size={iconSize} />}
           />
         )}

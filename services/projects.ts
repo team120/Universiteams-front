@@ -103,7 +103,11 @@ export const Projects = {
   },
 
   async unenroll(id: number, unenrollOptions: Unenroll): Promise<void> {
-    await axios.put(`${prefix}/${id}/unenroll`, unenrollOptions)
+    await axios.put(`${prefix}/${id}/enrollment/unenroll`, unenrollOptions)
+  },
+
+  async ackKick(id: number): Promise<void> {
+    await axios.delete(`${prefix}/${id}/enrollment`)
   },
 
   async approveEnrollmentRequest(
