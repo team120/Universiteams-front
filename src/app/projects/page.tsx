@@ -10,8 +10,8 @@ import ProjectsList from '@/components/Project/ProjectsList'
 import { useSearchParams } from 'next/navigation'
 import { Institutions } from '@/services/institutions'
 import { Facilities } from '@/services/facilities'
-import { ResearchDepartments } from '@/services/departments'
-import { Interests } from '@/services/interests'
+import { DepartmentQueryKey, ResearchDepartments } from '@/services/departments'
+import { InterestQueryKey, Interests } from '@/services/interests'
 import { Users } from '@/services/user'
 import { Center, Pagination } from '@mantine/core'
 import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
@@ -56,7 +56,7 @@ const ProjectsPage: NextPage = () => {
   })
 
   const departmentsQuery = useQuery({
-    queryKey: ['departments', searchQuery.get('facility')],
+    queryKey: [DepartmentQueryKey, searchQuery.get('facility')],
     queryFn: () =>
       ResearchDepartments.getResearchDepartments({
         facilityId: parseInt(searchQuery.get('facility')!),
@@ -70,7 +70,7 @@ const ProjectsPage: NextPage = () => {
   })
 
   const interestsQuery = useQuery({
-    queryKey: ['interests'],
+    queryKey: [InterestQueryKey],
     queryFn: Interests.getInterests,
   })
 

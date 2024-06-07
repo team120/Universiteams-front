@@ -7,10 +7,19 @@ import { ResetPassword } from '../entities/HelpTypes/ResetPassword'
 
 const prefix = `${Env.backendAPI}/auth`
 
+export interface RegisterProfile {
+  interestsIds: number[]
+  researchDepartmentsIds: number[]
+}
+
 export const Account = {
   authenticate: async (values: Login, type: LoginRegisterType) => {
     const url = `${prefix}/${type}`
     await axios.post<CurrentUserInfo>(url, values)
+  },
+  registerProfile: async (values: RegisterProfile) => {
+    const url = `${prefix}/register-profile`
+    await axios.post(url, values)
   },
   forgotPassword: async (email: string) => {
     const url = `${prefix}/forgot-password`
