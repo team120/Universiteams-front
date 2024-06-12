@@ -8,8 +8,8 @@ import { ResetPassword } from '../entities/HelpTypes/ResetPassword'
 const prefix = `${Env.backendAPI}/auth`
 
 export interface RegisterProfile {
-  interestsIds: number[]
-  researchDepartmentsIds: number[]
+  interestsIds: string[]
+  researchDepartmentsIds: string[]
 }
 
 export const Account = {

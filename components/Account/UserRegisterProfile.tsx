@@ -104,7 +104,12 @@ const UserRegisterProfile = () => {
                   <Text size="sm" mb="sm">
                     Intereses
                   </Text>
-                  <MultiSelectCreatable possibleValues={interests} placeholder="Ej. Domotica" />
+                  <MultiSelectCreatable
+                    possibleValues={interests}
+                    placeholder="Ej. Domotica"
+                    value={form.values.interestsIds}
+                    onChange={(newValue) => form.setFieldValue('interestsIds', newValue)}
+                  />{' '}
                 </div>
 
                 <div>
@@ -114,6 +119,8 @@ const UserRegisterProfile = () => {
                   <MultiSelectCreatable
                     possibleValues={departments}
                     placeholder='Ej. "Departamento de Ingeniería en Sistemas"'
+                    value={form.values.researchDepartmentsIds}
+                    onChange={(newValue) => form.setFieldValue('researchDepartmentsIds', newValue)}
                   />
                 </div>
               </Stack>
