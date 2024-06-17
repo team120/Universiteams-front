@@ -15,9 +15,16 @@ import SelectItem from '../../../entities/HelpTypes/SelectItem'
 interface MultiSelectCreatableProps {
   possibleValues: SelectItem[]
   placeholder?: string
+  value?: SelectItem[]
+  onChange?: (value: SelectItem[]) => void
 }
 
-const MultiSelectCreatable = ({ possibleValues, placeholder }: MultiSelectCreatableProps) => {
+const MultiSelectCreatable = ({
+  possibleValues,
+  placeholder,
+  value: propValue,
+  onChange,
+}: MultiSelectCreatableProps) => {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
@@ -25,41 +32,56 @@ const MultiSelectCreatable = ({ possibleValues, placeholder }: MultiSelectCreata
 
   const [search, setSearch] = useState('')
   const [data, setData] = useState(possibleValues)
-  const [value, setValue] = useState<string[]>([])
+  const [value, setValue] = useState<SelectItem[]>(propValue || [])
 
-  const exactOptionMatch = data.some((item) => item.displayName === search)
+  const exactOptionMatch = data.some((item) => item.label === search)
 
-  const handleValueSelect = (val: string) => {
+  const handleValueSelect = (attribute: string) => {
     setSearch('')
 
-    if (val === '$create') {
-      setData((current) => [...current, { attribute: search, displayName: search }])
-      setValue((current) => [...current, search])
+    if (attribute === '$create') {
+      setData((current) => [...current, { value: search, label: search }])
+      setValue((current) => [...current, { value: search, label: search }])
+      onChange && onChange([...value, { value: search, label: search }])
     } else {
-      setValue((current) =>
-        current.includes(val) ? current.filter((v) => v !== val) : [...current, val]
-      )
+      const matchingDisplayName = data.find((item) => item.value === attribute)?.label || ''
+      const newValue =
+        value.find((v) => v.value === attribute) !== undefined
+          ? value.filter((v) => v.value !== attribute)
+          : [
+              ...value,
+              {
+                value: attribute,
+                label: matchingDisplayName,
+              },
+            ]
+      setValue(() => newValue)
+      onChange && onChange(newValue)
     }
   }
 
-  const handleValueRemove = (val: string) => setValue((current) => current.filter((v) => v !== val))
+  const handleValueRemove = (val: SelectItem) => {
+    const newValue = value.filter((v) => v.value !== val.value)
+    setValue(() => newValue)
+    onChange && onChange(newValue)
+  }
 
   const values = value.map((item) => (
-    <Pill key={item} withRemoveButton onRemove={() => handleValueRemove(item)}>
-      {item}
+    <Pill key={item.value} withRemoveButton onRemove={() => handleValueRemove(item)}>
+      {item.label}
     </Pill>
   ))
 
   const options = data
-    .filter((item) => item.displayName.toLowerCase().includes(search.trim().toLowerCase()))
+    .filter((item) => item.label.toLowerCase().includes(search.trim().toLowerCase()))
     .map((item) => (
       <Combobox.Option
-        value={item.displayName}
-        key={item.attribute}
-        active={value.includes(item.displayName)}>
+        value={item.value}
+        key={item.value}
+        active={value.find((v) => v.value === item.value) !== undefined}>
         <Group gap="sm">
-          {value.includes(item.displayName) ? <CheckIcon size={12} /> : null}
-          <span>{item.displayName}</span>
+          {value.find((v) => v.value === item.value) !== undefined ? <CheckIcon size={12} /> : null}
+          <span>{item.label}</span>
         </Group>
       </Combobox.Option>
     ))

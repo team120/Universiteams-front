@@ -1,6 +1,16 @@
 import React, { useMemo } from 'react'
 
-import { Anchor, Button, Center, Container, Loader, Paper, Stack, Text } from '@mantine/core'
+import {
+  Anchor,
+  Button,
+  Center,
+  Container,
+  Loader,
+  MultiSelect,
+  Paper,
+  Stack,
+  Text,
+} from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { Account, RegisterProfile } from '../../services/account'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -31,8 +41,8 @@ const UserRegisterProfile = () => {
   const departments: SelectItem[] = useMemo(
     () =>
       departmentsQuery.data?.map((department) => ({
-        attribute: department.id.toString(),
-        displayName: `${department.facility.institution.abbreviation} ${department.facility.abbreviation} ${department.name}`,
+        value: department.id.toString(),
+        label: `${department.facility.institution.abbreviation} ${department.facility.abbreviation} ${department.name}`,
       })) ?? [],
     [departmentsQuery.data]
   )
@@ -44,8 +54,8 @@ const UserRegisterProfile = () => {
   const interests: SelectItem[] = useMemo(
     () =>
       interestsQuery.data?.map((interest) => ({
-        attribute: interest.id.toString(),
-        displayName: interest.name,
+        value: interest.id.toString(),
+        label: interest.name,
       })) ?? [],
     [interestsQuery.data]
   )
@@ -107,8 +117,12 @@ const UserRegisterProfile = () => {
                   <MultiSelectCreatable
                     possibleValues={interests}
                     placeholder="Ej. Domotica"
-                    value={form.values.interestsIds}
-                    onChange={(newValue) => form.setFieldValue('interestsIds', newValue)}
+                    onChange={(newValue) =>
+                      form.setFieldValue(
+                        'interestsIds',
+                        newValue.map((v) => Number(v.value))
+                      )
+                    }
                   />{' '}
                 </div>
 
@@ -116,11 +130,24 @@ const UserRegisterProfile = () => {
                   <Text size="sm" mb="sm">
                     Departamentos
                   </Text>
-                  <MultiSelectCreatable
-                    possibleValues={departments}
-                    placeholder='Ej. "Departamento de Ingeniería en Sistemas"'
-                    value={form.values.researchDepartmentsIds}
-                    onChange={(newValue) => form.setFieldValue('researchDepartmentsIds', newValue)}
+
+                  <MultiSelect
+                    placeholder={
+                      form.values.researchDepartmentsIds.length === 0
+                        ? 'Ej. "Departamento de Ingeniería en Sistemas"'
+                        : ''
+                    }
+                    data={departments}
+                    searchable
+                    clearable
+                    limit={20}
+                    nothingFoundMessage="No se encontraron departamentos"
+                    onChange={(newValue) =>
+                      form.setFieldValue(
+                        'researchDepartmentsIds',
+                        newValue.map((v) => Number(v))
+                      )
+                    }
                   />
                 </div>
               </Stack>
