@@ -36,22 +36,22 @@ const MultiSelectCreatable = ({
 
   const exactOptionMatch = data.some((item) => item.label === search)
 
-  const handleValueSelect = (attribute: string) => {
+  const handleValueSelect = (selectedValue: string) => {
     setSearch('')
 
-    if (attribute === '$create') {
+    if (selectedValue === '$create') {
       setData((current) => [...current, { value: search, label: search }])
       setValue((current) => [...current, { value: search, label: search }])
       onChange && onChange([...value, { value: search, label: search }])
     } else {
-      const matchingDisplayName = data.find((item) => item.value === attribute)?.label || ''
+      const matchingDisplayName = data.find((item) => item.value === selectedValue)?.label || ''
       const newValue =
-        value.find((v) => v.value === attribute) !== undefined
-          ? value.filter((v) => v.value !== attribute)
+        value.find((v) => v.value === selectedValue) !== undefined
+          ? value.filter((v) => v.value !== selectedValue)
           : [
               ...value,
               {
-                value: attribute,
+                value: selectedValue,
                 label: matchingDisplayName,
               },
             ]
