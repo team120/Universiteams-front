@@ -28,10 +28,10 @@ const ProjectsPage: NextPage = () => {
 
   const sortAttributes = useMemo(
     () => [
-      { attribute: ProjectSortAttribute.Name, displayName: 'nombre' },
-      { attribute: ProjectSortAttribute.CreationDate, displayName: 'fecha creación' },
+      { value: ProjectSortAttribute.Name, label: 'nombre' },
+      { value: ProjectSortAttribute.CreationDate, label: 'fecha creación' },
       ...(errorCurrentUser === null && currentUser !== undefined
-        ? [{ attribute: ProjectSortAttribute.RequestEnrollmentCount, displayName: 'solicitudes' }]
+        ? [{ value: ProjectSortAttribute.RequestEnrollmentCount, label: 'solicitudes' }]
         : []),
     ],
     [errorCurrentUser, currentUser]
@@ -114,8 +114,8 @@ const ProjectsPage: NextPage = () => {
   const users = useMemo(() => {
     if (usersQuery.data) {
       return usersQuery.data.map((user) => ({
-        attribute: user.id.toString(),
-        displayName: `${user.firstName} ${user.lastName}`,
+        value: user.id.toString(),
+        label: `${user.firstName} ${user.lastName}`,
       }))
     }
     return []
@@ -124,8 +124,8 @@ const ProjectsPage: NextPage = () => {
   const facilities = useMemo(() => {
     if (facilitiesQuery.data) {
       return facilitiesQuery.data.map((facility) => ({
-        attribute: facility.id.toString(),
-        displayName: facility.name,
+        value: facility.id.toString(),
+        label: facility.name,
       }))
     }
     return []
@@ -134,8 +134,8 @@ const ProjectsPage: NextPage = () => {
   const departments = useMemo(() => {
     if (departmentsQuery.data) {
       return departmentsQuery.data.map((department) => ({
-        attribute: department.id.toString(),
-        displayName: department.name,
+        value: department.id.toString(),
+        label: department.name,
       }))
     }
     return []
@@ -144,8 +144,8 @@ const ProjectsPage: NextPage = () => {
   const institutions = useMemo(() => {
     if (institutionsQuery.data) {
       return institutionsQuery.data.map((institution) => ({
-        attribute: institution.id.toString(),
-        displayName: institution.name,
+        value: institution.id.toString(),
+        label: institution.name,
       }))
     }
     return []
@@ -154,8 +154,8 @@ const ProjectsPage: NextPage = () => {
   const interests = useMemo(() => {
     if (interestsQuery.data) {
       return interestsQuery.data.map((interest) => ({
-        attribute: interest.id.toString(),
-        displayName: interest.name,
+        value: interest.id.toString(),
+        label: interest.name,
       }))
     }
     return []
