@@ -1,8 +1,14 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import Env from 'utils/config/Env'
 
 import ProjectsResult from '@/entities/ProjectsResult'
-import { off } from 'process'
+import { ProjectSortAttribute, RequestState } from '../entities/ProjectInList'
+import { EnrollmentRequestInput } from '../entities/HelpTypes/EnrollmentRequestInput'
+import { keepPreviousData, queryOptions } from '@tanstack/react-query'
+import Project from '../entities/Project'
+import { EnrollmentRequestsShow } from '../entities/HelpTypes/EnrollmentRequestsShow'
+import { EnrollmentRequestAdmin as EnrollmentRequestAdmin } from '../entities/HelpTypes/EnrollmentRequestReject'
+import { EnrollmentChangeRole } from '../entities/HelpTypes/EnrollmentChangeRole'
 
 const prefix = `${Env.backendAPI}/projects`
 
@@ -14,10 +20,11 @@ export interface GetProjectsInput {
   interestIds?: number[]
   userId?: number
   type?: string
+  requestStates?: RequestState[]
   dateFrom?: Date
   isDown?: boolean
   isFavorite?: boolean
-  sortBy?: string
+  sortBy?: ProjectSortAttribute
   inAscendingOrder?: boolean
   limit?: number
   offset?: number
@@ -26,74 +33,125 @@ export interface GetProjectsInput {
 export const Projects = {
   // Find all projects
   async getProjects(params?: GetProjectsInput): Promise<ProjectsResult | undefined> {
-    try {
-      const url = `${prefix}`
-        .concat(params ? '?' : '')
-        .concat(params?.generalSearchTerm ? `generalSearch=${params.generalSearchTerm}&` : '')
-        .concat(params?.institutionId ? `institutionId=${params.institutionId}&` : '')
-        .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
-        .concat(
-          params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : ''
-        )
-        .concat(
-          params?.interestIds && params?.interestIds.length > 0
-            ? params.interestIds.map((id) => `interestIds=${id}&`).join('')
-            : ''
-        )
-        .concat(params?.userId ? `userId=${params.userId}&` : '')
-        .concat(params?.type ? `type=${params.type}&` : '')
-        .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
-        .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
-        .concat(params?.isFavorite ? `isFavorite=${params.isFavorite}&` : '')
-        .concat(
-          params?.sortBy
-            ? `sortBy=${params.sortBy}&inAscendingOrder=${params?.inAscendingOrder ?? true}&`
-            : ''
-        )
-        .concat(params?.limit ? `limit=${params.limit}&` : '')
-        .concat(params?.offset ? `offset=${params.offset}&` : '')
+    const url = `${prefix}`
+      .concat(params ? '?' : '')
+      .concat(params?.generalSearchTerm ? `generalSearch=${params.generalSearchTerm}&` : '')
+      .concat(params?.institutionId ? `institutionId=${params.institutionId}&` : '')
+      .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
+      .concat(
+        params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : ''
+      )
+      .concat(
+        params?.interestIds && params?.interestIds.length > 0
+          ? params.interestIds.map((id) => `interestIds=${id}&`).join('')
+          : ''
+      )
+      .concat(params?.userId ? `userId=${params.userId}&` : '')
+      .concat(params?.type ? `type=${params.type}&` : '')
+      .concat(
+        params?.requestStates && params.requestStates.length > 0
+          ? params.requestStates.map((state) => `requestStates=${state}&`).join('')
+          : ''
+      )
+      .concat(params?.dateFrom ? `dateFrom=${params.dateFrom.toISOString()}&` : '')
+      .concat(params?.isDown ? `isDown=${params.isDown}&` : '')
+      .concat(params?.isFavorite ? `isFavorite=${params.isFavorite}&` : '')
+      .concat(
+        params?.sortBy
+          ? `sortBy=${params.sortBy}&inAscendingOrder=${params?.inAscendingOrder ?? true}&`
+          : ''
+      )
+      .concat(params?.limit ? `limit=${params.limit}&` : '')
+      .concat(params?.offset ? `offset=${params.offset}&` : '')
 
-      console.log(url)
-      const result = await axios.get<ProjectsResult>(url)
-      return result.data
-    } catch (error) {
-      console.log(error)
-      return
-    }
+    console.log(url)
+    const result = await axios.get<ProjectsResult>(url)
+    return result.data
   },
 
-  async favorite(id: number): Promise<boolean> {
-    try {
-      await axios.post(`${prefix}/favorite/${id}`)
-      return true
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.error(
-          `Failed to favorite project with ID ${id}:`,
-          error.response?.data || error.message
-        )
-      } else {
-        console.error(`An unknown error occurred while favoriteing project with ID ${id}:`, error)
-      }
-      return false
-    }
+  async getProject(id: number): Promise<Project | undefined> {
+    const result = await axios.get<Project>(`${prefix}/${id}`)
+    return result.data
   },
 
-  // Unfavorite a project
-  async unfavorite(id: number): Promise<boolean> {
-    try {
-      await axios.delete(`${prefix}/favorite/${id}`)
-      return true
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.error(
-          `Failed to unfavorite project with ID ${id}:`,
-          error.response?.data || error.message
-        )
-      } else {
-        console.error(`An unknown error occurred while unfavoriteing project with ID ${id}:`, error)
-      }
-      return false
-    }
+  async favorite(id: number): Promise<void> {
+    await axios.post(`${prefix}/${id}/favorite`)
+  },
+
+  async unfavorite(id: number): Promise<void> {
+    await axios.delete(`${prefix}/${id}/favorite`)
+  },
+
+  async requestEnrollment(id: number, enrollmentRequest: EnrollmentRequestInput): Promise<void> {
+    await axios.post(`${prefix}/${id}/enroll-request`, enrollmentRequest)
+  },
+
+  async updateEnrollmentRequest(
+    id: number,
+    enrollmentRequest: EnrollmentRequestInput
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enroll-request`, enrollmentRequest)
+  },
+
+  async cancelEnrollmentRequest(id: number): Promise<void> {
+    await axios.delete(`${prefix}/${id}/enroll-request`)
+  },
+
+  async getEnrollmentRequests(id: number): Promise<EnrollmentRequestsShow> {
+    const result = await axios.get<EnrollmentRequestsShow>(`${prefix}/${id}/enroll-requests`)
+    return result.data
+  },
+
+  async unenroll(id: number, unenrollOptions: Unenroll): Promise<void> {
+    await axios.put(`${prefix}/${id}/enrollment/unenroll`, unenrollOptions)
+  },
+
+  async ackKick(id: number): Promise<void> {
+    await axios.delete(`${prefix}/${id}/enrollment`)
+  },
+
+  async approveEnrollmentRequest(
+    id: number,
+    userId: number,
+    adminOptions: EnrollmentRequestAdmin
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enroll-requests/${userId}/approve`, adminOptions)
+  },
+
+  async rejectEnrollmentRequest(
+    id: number,
+    userId: number,
+    adminOptions: EnrollmentRequestAdmin
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enroll-requests/${userId}/reject`, adminOptions)
+  },
+
+  async revokeEnrollment(
+    id: number,
+    userId: number,
+    adminOptions: EnrollmentRequestAdmin
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enrollments/${userId}/kick`, adminOptions)
+  },
+
+  async changeEnrollmentRole(
+    id: number,
+    userId: number,
+    changeRoleOptions: EnrollmentChangeRole
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/enrollments/${userId}/change-role`, changeRoleOptions)
   },
 }
+
+export const ProjectsQueryKey = 'projects'
+
+export const ProjectQueryOptions = {
+  projects: (currentPage: number, projectsPerPage: number, params?: GetProjectsInput) =>
+    queryOptions({
+      queryKey: [ProjectsQueryKey, params, currentPage, projectsPerPage],
+      queryFn: () => Projects.getProjects(params),
+      placeholderData: keepPreviousData,
+    }),
+}
+
+export const EnrollmentRequestsQueryKey = 'enrollmentRequests'

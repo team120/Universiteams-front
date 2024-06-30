@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { AppShell, Divider, ScrollArea } from '@mantine/core'
 import NavbarItem from './NavbarItem'
 import {
   IconAlertCircle,
   IconBuildingCommunity,
+  IconBulb,
   IconFileDescription,
   IconFolderHeart,
   IconFolders,
-  IconHome,
+  IconSend,
   IconShare,
-  IconStar,
   IconTerminal2,
   IconUserCircle,
 } from '@tabler/icons-react'
-import { CurrentUserInfo, CurrentUserService } from '../../../services/currentUser'
+import { CurrentUserQueryOptions } from '../../../services/currentUser'
+import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
+import { useQuery } from '@tanstack/react-query'
 
 const mockAppVersion = 'v1.0.0'
 
@@ -21,16 +23,7 @@ const mockAppVersion = 'v1.0.0'
 const iconSize = 40
 
 const Navbar = () => {
-  const [currentUser, setCurrentUser] = useState<CurrentUserInfo | null>(null)
-
-  const fetchCurrentUser = async () => {
-    const user = await CurrentUserService.fetchUserInfo()
-    setCurrentUser(user)
-  }
-
-  useEffect(() => {
-    fetchCurrentUser()
-  }, [])
+  const { data: currentUser } = useQuery(CurrentUserQueryOptions.currentUser())
 
   return (
     <>
@@ -39,7 +32,7 @@ const Navbar = () => {
           <NavbarItem
             text={currentUser.user}
             textSecondLine={currentUser.email}
-            link="perfil"
+            link="/perfil"
             icon={<IconUserCircle size={iconSize} />}
           />
         </AppShell.Section>
@@ -47,26 +40,32 @@ const Navbar = () => {
         <AppShell.Section>
           <NavbarItem
             text="Iniciar Sesión"
-            link="account/login"
+            link="/account/login"
             icon={<IconUserCircle size={iconSize} />}
           />
         </AppShell.Section>
       )}
       <Divider />
       <AppShell.Section>
-        <NavbarItem text="UPM Feed" link="feed" icon={<IconHome size={iconSize} />} />
+        {currentUser && (
+          <NavbarItem
+            text="Mis Proyectos"
+            link={`/projects?requestState=${RequestState.Accepted}&requestState=${RequestState.Kicked}&sortBy=${ProjectSortAttribute.RequestEnrollmentCount}&inAscendingOrder=false`}
+            icon={<IconBulb size={iconSize} />}
+          />
+        )}
         {currentUser && (
           <NavbarItem
             text="Mis Solicitudes"
-            link="solicitudes"
-            icon={<IconStar size={iconSize} />}
+            link={`/projects?requestState=${RequestState.Pending}&requestState=${RequestState.Rejected}`}
+            icon={<IconSend size={iconSize} />}
           />
         )}
-        <NavbarItem text="Proyectos" link="projects" icon={<IconFolders size={iconSize} />} />
+        <NavbarItem text="Proyectos" link="/projects" icon={<IconFolders size={iconSize} />} />
         {currentUser && (
           <NavbarItem
             text="Proyectos Favoritos"
-            link="projects?isFavorite=true"
+            link="/projects?isFavorite=true"
             icon={<IconFolderHeart size={iconSize} />}
           />
         )}
@@ -75,12 +74,12 @@ const Navbar = () => {
       <AppShell.Section grow component={ScrollArea}>
         <NavbarItem
           text="Sobre Nosotros"
-          link="about"
+          link="/about"
           icon={<IconBuildingCommunity size={iconSize} />}
         />
         <NavbarItem
           text="Términos y Condiciones"
-          link="terminos"
+          link="/terminos"
           icon={<IconFileDescription size={iconSize} />}
         />
         <NavbarItem text="Compartir Aplicación" icon={<IconShare size={iconSize} />} />

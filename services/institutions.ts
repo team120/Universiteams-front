@@ -7,13 +7,8 @@ const prefix = `${Env.backendAPI}/institutions`
 
 export const Institutions = {
   getInstitutions: async (): Promise<Institution[] | undefined> => {
-    try {
-      const url = `${prefix}/`
-      const result = await axios.get<Institution[]>(url)
-      return result.data
-    } catch (error) {
-      console.log(error)
-      return
-    }
+    const url = `${prefix}/`
+    const result = await axios.get<Institution[]>(url)
+    return result.data
   },
 }

@@ -1,24 +1,28 @@
 import axios from 'axios'
 import Env from '../utils/config/Env'
+import { QueryOptions, queryOptions } from '@tanstack/react-query'
 
 export interface CurrentUserInfo {
+  id: number
   user: string
   email: string
+  isEmailVerified: boolean
 }
 
 const prefix = `${Env.backendAPI}/auth`
 
 export const CurrentUserService = {
   async fetchUserInfo(): Promise<CurrentUserInfo | null> {
-    try {
-      const response = await axios.get<CurrentUserInfo>(`${prefix}/me`, {
-        withCredentials: true,
-      })
+    const response = await axios.get<CurrentUserInfo>(`${prefix}/me`)
 
-      return response.data
-    } catch (error) {
-      console.error('Error fetching user info:', error)
-      return null
-    }
+    return response.data
   },
+}
+
+export const CurrentUserQueryOptions = {
+  currentUser: () =>
+    queryOptions({
+      queryKey: ['currentUser'],
+      queryFn: CurrentUserService.fetchUserInfo,
+    }),
 }

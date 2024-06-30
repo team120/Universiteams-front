@@ -20,10 +20,10 @@ const ErrorGeneric = (props: ErrorProps) => {
         UNIVERSITEAMS
       </Text>
       <Text size={'6rem'}>Error</Text>
-      <Text my={'2rem'} pt={'2rem'} style={{ borderTop: `1px solid ${Theme.colors?.orange?.[4]}` }}>
+      <Text my={'2rem'} pt={'2rem'} style={{ borderTop: `1px solid $'orange.4'` }}>
         Ha ocurrido un problema en la pantalla anterior
       </Text>
-      <Button mb={20} color={Theme.colors?.orange?.[4]} onClick={() => props.reset()}>
+      <Button mb={20} color="orange.4" onClick={() => props.reset()}>
         Intentar nuevamente
       </Button>
       <Link href="/">

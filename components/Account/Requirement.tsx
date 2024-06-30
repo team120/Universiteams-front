@@ -1,16 +1,21 @@
 import React from 'react'
-import { Box, Center, Text } from '@mantine/core'
-import { Check, X } from 'tabler-icons-react'
-import Theme from '../../src/app/theme'
+import { Flex, Text, useMantineTheme } from '@mantine/core'
+import { IconCheck, IconX } from '@tabler/icons-react'
 
 const Requirement = ({ meets, label }: { meets: boolean; label: string }) => {
+  const theme = useMantineTheme()
+
   return (
-    <Text c={meets ? Theme.colors?.teal?.[6] : Theme.colors?.red?.[6]} mt={5} size="sm">
-      <Center inline>
-        {meets ? <Check size={14} /> : <X size={14} />}
-        <Box ml={7}>{label}</Box>
-      </Center>
-    </Text>
+    <Flex align="center" mt={5}>
+      {meets ? (
+        <IconCheck size={14} color={theme.colors.teal[6]} />
+      ) : (
+        <IconX size={14} color={theme.colors.red[8]} />
+      )}
+      <Text ml={7} size="sm" c={meets ? 'teal.6' : 'red.8'}>
+        {label}
+      </Text>
+    </Flex>
   )
 }
 

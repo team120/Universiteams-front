@@ -1,38 +1,40 @@
 import React from 'react'
 import { ActionIcon, Burger, Center, Container, Group } from '@mantine/core'
-import { IconSchool, IconSunMoon } from '@tabler/icons-react'
+import { IconSunMoon } from '@tabler/icons-react'
 
-import Theme from 'src/app/theme'
 import SearchBar from '@/components/Common/SearchBar/SearchBar'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import useSidebarStore from '../useSidebarStore'
 
 interface HeaderProps {
-  opened: boolean
   showNavAndSearch: boolean
-  toggle: () => void
   toggleColorScheme: () => void
 }
 
 const Header = (props: HeaderProps) => {
   const router = useRouter()
+  const { opened, toggle } = useSidebarStore((state) => ({
+    opened: state.opened,
+    toggle: state.toggle,
+  }))
 
   return (
     <>
-      <Group ml={15} h="100%">
+      <Group ml={15} h="100%" gap="xs">
         {props.showNavAndSearch && (
-          <Burger mr={15} opened={props.opened} onClick={props.toggle} hiddenFrom="sm" size="sm" />
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
         )}
         <ActionIcon
           variant="transparent"
-          color={Theme.colors?.blue?.[4]}
-          mr={Theme.spacing?.xs}
+          color="blue.4"
           onClick={() => router.push('/')}
           aria-label="Universiteams Icon">
-          <img src="/favicon.ico" alt="Project favicon" style={{ width: '100%', height: '100%' }} />{' '}
+          <Image src="/favicon.ico" alt="Project favicon" width={32} height={32} />
         </ActionIcon>
         <ActionIcon
           variant="filled"
-          color={Theme.colors?.orange?.[4]}
+          color="orange.4"
           aria-label="Toggle dark/light theme"
           onClick={props.toggleColorScheme}>
           <IconSunMoon style={{ width: '70%', height: '70%' }} stroke={1.5} />

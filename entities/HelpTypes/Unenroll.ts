@@ -1,0 +1,3 @@
+interface Unenroll {
+  message?: string
+}

@@ -5,12 +5,19 @@ import axios from 'axios'
 import { MantineProvider, localStorageColorSchemeManager } from '@mantine/core'
 import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
+import '@mantine/notifications/styles.css'
+import '@mantine/tiptap/styles.css'
 import '@/styles/globals.scss'
 
 import Theme from './theme'
 import Layout from '@/components/Layout/Layout'
+import { Notifications } from '@mantine/notifications'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ModalsProvider } from '@mantine/modals'
 
-const App = ({ children, pageProps }: any) => {
+const queryClient = new QueryClient()
+
+const App = ({ children }: { children: React.ReactNode }) => {
   // Detect the user's theme preference (dark or light)
   const colorSchemeManager = localStorageColorSchemeManager({ key: 'mantine-color-scheme' })
 
@@ -25,15 +32,19 @@ const App = ({ children, pageProps }: any) => {
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <MantineProvider
-          theme={Theme}
-          colorSchemeManager={colorSchemeManager}
-          defaultColorScheme="dark">
-          <Layout>
-            {children}
-            {/* <Component {...pageProps} /> */}
-          </Layout>
-        </MantineProvider>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider
+            theme={Theme}
+            colorSchemeManager={colorSchemeManager}
+            defaultColorScheme="dark">
+            <ModalsProvider>
+              <Layout>
+                {children}
+                <Notifications />
+              </Layout>
+            </ModalsProvider>
+          </MantineProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )

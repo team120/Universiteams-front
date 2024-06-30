@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { AxiosError } from 'axios'
 
@@ -19,8 +19,6 @@ import {
   Anchor,
   Box,
   Button,
-  Center,
-  Checkbox,
   Container,
   Group,
   Paper,
@@ -33,6 +31,8 @@ import { useForm } from '@mantine/form'
 import { useMediaQuery, useToggle } from '@mantine/hooks'
 import Requirement from './Requirement'
 import Theme from '../../src/app/theme'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { CurrentUserQueryOptions } from '../../services/currentUser'
 
 interface LoginRegisterProps {
   initialType: LoginRegisterType
@@ -41,28 +41,29 @@ interface LoginRegisterProps {
 const LoginRegister = ({ initialType }: LoginRegisterProps) => {
   const router = useRouter()
   const [type, toggleType] = useToggle<LoginRegisterType>(getInitialToggleTypes(initialType))
-  const [serverErrors, setServerErrors] = useState<string[]>([])
-  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
+  const queryClient = useQueryClient()
+
+  const { mutate: authenticate, error } = useMutation({
+    mutationFn: (values: Login) => Account.authenticate(values, type),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CurrentUserQueryOptions.currentUser().queryKey })
+      router.push('/')
+    },
+  })
+
+  const serverErrors = useMemo(() => {
+    if (!error) return []
+
+    const defaultErrorMsg = 'Ocurrió un error inesperado'
+    const message = ((error as AxiosError)?.response?.data as { message: string | string[] })
+      ?.message
+    return Array.isArray(message) ? message : [message || defaultErrorMsg]
+  }, [error])
 
   const handleForgotPasswordClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
     router.push('/account/forgotPassword')
-  }
-
-  const handleSubmit = async (values: Login) => {
-    try {
-      await Account.Authenticate(values, type)
-      setServerErrors([])
-      router.push('/')
-    } catch (error) {
-      const defaultErrorMsg = 'Ocurrió un error inesperado'
-      if (error instanceof AxiosError) {
-        const message = error?.message || defaultErrorMsg
-        setServerErrors([message])
-      }
-
-      setServerErrors([defaultErrorMsg])
-    }
   }
 
   const validateName = (value: string) => {
@@ -72,12 +73,13 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
     return null
   }
 
-  const form = useForm<Login>({
+  const form = useForm({
     initialValues: {
       firstName: '',
       lastName: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
 
     validate: {
@@ -89,19 +91,21 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
 
         return passwordValidation(value)
       },
+      confirmPassword: (value) => {
+        if (type !== 'register') return null
+        if (value !== form.values.password) return 'Las contraseñas no coinciden'
+
+        return null
+      },
     },
   })
 
-  useEffect(() => {
-    setServerErrors([])
-  }, [type])
-
-  const strength = getPasswordStrength(form.values.password)
-  const strengthColorAndPhrase = getStrengthColorAndPhrase(strength)
+  const strength = useMemo(() => getPasswordStrength(form.values.password), [form.values.password])
+  const strengthColorAndPhrase = useMemo(() => getStrengthColorAndPhrase(strength), [strength])
 
   return (
     <Container size={420} my={40}>
-      <Box ml={isMobile ? Theme.spacing?.sm : 0}>
+      <Box ml={isMobile ? 'xs' : 0}>
         <Title
           style={{
             align: 'center',
@@ -110,7 +114,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
           }}>
           ¡Bienvenido a Universiteams!
         </Title>
-        <Text style={{ align: 'center' }} c={Theme.colors?.dimmed?.[6]} size="sm" mt={5}>
+        <Text style={{ align: 'center' }} c="dimmed.6" size="sm" mt={5}>
           {type === 'register' ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?'}{' '}
           <Anchor<'a'>
             href="#"
@@ -130,7 +134,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
           <Requirement key={index} meets={false} label={error} />
         ))}
 
-        <form onSubmit={form.onSubmit(handleSubmit)}>
+        <form onSubmit={form.onSubmit((values) => authenticate(values))}>
           {type === 'register' && (
             <>
               <TextInput
@@ -158,7 +162,6 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
             label="Contraseña"
             placeholder="Tu contraseña"
             required
-            mt="xs"
             {...form.getInputProps('password')}
           />
           {type === 'register' && strength > 0 && (
@@ -170,14 +173,16 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
               formValue={form.values.password}
             />
           )}
+          {type === 'register' && (
+            <PasswordInput
+              label="Confirmar contraseña"
+              placeholder="Tu contraseña"
+              required
+              {...form.getInputProps('confirmPassword')}
+            />
+          )}
 
-          <Group justify="space-between" mt={Theme.spacing?.xs} mb={Theme.spacing?.xs}>
-            <Center inline>
-              <Checkbox />
-              <Text size="sm" ml={5}>
-                Recuérdame
-              </Text>
-            </Center>
+          <Group justify="space-between" mt="xs" mb="xs">
             {type === 'login' && (
               <Anchor<'a'> onClick={handleForgotPasswordClick} href="#" size="sm">
                 ¿Olvidaste tu contraseña?

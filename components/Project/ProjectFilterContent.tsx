@@ -1,17 +1,6 @@
 import React, { ChangeEvent, useEffect } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import {
-  Select,
-  Stack,
-  Grid,
-  ActionIcon,
-  Group,
-  Switch,
-  ComboboxItem,
-  MultiSelect,
-  Center,
-  Text,
-} from '@mantine/core'
+import { Select, Stack, Grid, ActionIcon, Group, Switch, MultiSelect } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
@@ -67,23 +56,23 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleSortByChange = (value: string | null, _: ComboboxItem) => {
+  const handleSortByChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'sortBy', value)
   }
 
-  const handleUniversityChange = (value: string | null, _: ComboboxItem) => {
+  const handleUniversityChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'university', value)
   }
 
-  const handleFacilityChange = (value: string | null, _: ComboboxItem) => {
+  const handleFacilityChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'facility', value)
   }
 
-  const handleDepartmentChange = (value: string | null, _: ComboboxItem) => {
+  const handleDepartmentChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'department', value)
   }
 
-  const handleUserChange = (value: string | null, _: ComboboxItem) => {
+  const handleUserChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'user', value)
   }
 
@@ -91,7 +80,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     Url.replaceArrayInUrl(router, pathname, searchQuery, 'interest', value)
   }
 
-  const handleTypeChange = (value: string | null, op: ComboboxItem) => {
+  const handleTypeChange = (value: string | null) => {
     Url.setUrlParam(router, pathname, searchQuery, 'type', value)
   }
 
@@ -119,12 +108,12 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     router.push(`${pathname}`)
   }
 
-  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   return (
     <>
       <form>
-        <Stack ml={isMobile ? Theme.spacing?.xs : 0} mr={isMobile ? Theme.spacing?.xs : 0}>
+        <Stack gap="xs" ml={isMobile ? 'xs' : 0} mr={isMobile ? 'xs' : 0}>
           <Grid align="flex-end">
             <Grid.Col span="auto">
               <Select
@@ -141,7 +130,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
                 onChange={handleSortByChange}
               />
             </Grid.Col>
-            <Grid.Col span={1}>
+            <Grid.Col span={2}>
               <ActionIcon variant="transparent" onClick={handleOrderChange}>
                 {form.values.inAscendingOrder ? <IconArrowUp /> : <IconArrowDown />}
               </ActionIcon>
@@ -221,18 +210,18 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
           <Select
             label="Tipo"
             placeholder='Ej: "Formal"'
-            data={['', 'Formal', 'No Formal']}
+            data={['', 'Formal', 'Informal']}
             clearable
             value={form.values.type}
             onChange={handleTypeChange}
           />
 
-          <Group mt={Theme.spacing?.xs} mb={Theme.spacing?.xs}>
-            <Switch checked={form.values.isDown} onChange={handleIsDownChange} />
-            <Text size="sm" ml={6}>
-              Descontinuados
-            </Text>
-          </Group>
+          <Switch
+            checked={form.values.isDown}
+            onChange={handleIsDownChange}
+            label="Descontinuados"
+            mt="xs"
+          />
 
           <DateInput
             label="Creados desde"
@@ -242,7 +231,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             onChange={handleDateInputChange}
           />
 
-          <Group grow mt={Theme.spacing?.sm}>
+          <Group grow mt="xs">
             <ActionIcon color="red" onClick={reset}>
               <IconTrash />
             </ActionIcon>

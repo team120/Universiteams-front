@@ -37,7 +37,7 @@ export const getPasswordStrength = (password: string) => {
 }
 
 export const getStrengthColorAndPhrase = (strength: number) => {
-  const colors = ['red', 'orange', 'yellow', 'blue', 'green']
+  const colors = ['red.8', 'orange.6', 'yellow.6', 'blue.6', 'green.6']
   const phrases = [
     'Inadecuado',
     'Fácilmente Vulnerable',
@@ -46,7 +46,7 @@ export const getStrengthColorAndPhrase = (strength: number) => {
     'Altamente Seguro',
   ]
 
-  const colorAndPhraseByPercentage = requirements.map((undefined, index) => ({
+  const colorAndPhraseByPercentage = requirements.map((_, index) => ({
     percentage: (index + 1) * (100 / requirements.length),
     color: colors[index],
     phrase: phrases[index],
@@ -59,7 +59,7 @@ export const getStrengthColorAndPhrase = (strength: number) => {
 }
 
 export const passwordValidation = (value: string): string | null => {
-  if (getPasswordStrength(value) < 3)
+  if (getPasswordStrength(value) < 4 * (100 / requirements.length))
     return 'La contraseña debe cumplir al menos 4 de las 5 pautas contiguas'
 
   return null

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState, MouseEvent } from 'react'
 import { Button, Text, Card, Loader, Alert, Anchor, Box, Center } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import axios from 'axios'
+import { AxiosError } from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { PasswordInput } from '@mantine/core'
 import {
@@ -12,8 +12,11 @@ import {
 } from '@/services/password'
 import PasswordStrength from './PasswordStrength'
 import Requirement from './Requirement'
-import Theme from '../../src/app/theme'
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Account } from '@/services/account'
+import { CurrentUserQueryOptions } from '../../services/currentUser'
+import { EmailTokenPayload } from '../../entities/HelpTypes/EmailTokenPayload'
 
 const parseJwt = (token: string) => {
   if (!token) {
@@ -24,19 +27,11 @@ const parseJwt = (token: string) => {
   return JSON.parse(window.atob(base64))
 }
 
-interface EmailTokenPayload {
-  id: string
-  email: string
-  user: string
-}
-
 function PasswordReset() {
-  const [serverErrors, setServerErrors] = useState<string[]>([])
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [emailTokenPayload, setEmailTokenPayload] = useState<EmailTokenPayload | null>(null)
   const router = useRouter()
   const query = useSearchParams()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     const token = query.get('token') as string
@@ -45,6 +40,30 @@ function PasswordReset() {
       setEmailTokenPayload(decodedToken)
     }
   }, [query.get('token')])
+
+  const {
+    mutate: resetPassword,
+    isPending,
+    isSuccess,
+    error,
+  } = useMutation({
+    mutationFn: (values: typeof form.values) =>
+      Account.resetPassword({ ...values, verificationToken: query.get('token') as string }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CurrentUserQueryOptions.currentUser().queryKey })
+      form.reset()
+    },
+  })
+
+  const serverErrors = useMemo(() => {
+    if (error instanceof AxiosError && error.response && error.response.status === 400) {
+      return [error.response.data.message]
+    } else if (error) {
+      console.error(error)
+      return ['Ocurrió un error inesperado']
+    }
+    return []
+  }, [error])
 
   const validateConfirmPassword = (confirmPassword: string, password: string): string | null => {
     if (confirmPassword !== password) return 'Las contraseñas no coinciden'
@@ -63,32 +82,15 @@ function PasswordReset() {
     },
   })
 
-  const handleSubmit = async (values: typeof form.values) => {
-    setIsLoading(true)
-    const url = 'http://api.localhost/auth/reset-password'
-    const token = query.get('token') as string
-    try {
-      const res = await axios.post(url, { ...values, verificationToken: token })
-      if (res.status === 200) {
-        setIsSuccess(true)
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 400) {
-        setServerErrors([error.response.data.message])
-      } else {
-        console.error(error)
-        setServerErrors(['Ocurrió un error inesperado'])
-      }
-    } finally {
-      setIsLoading(false)
-    }
+  const handleSubmit = (values: typeof form.values) => {
+    resetPassword(values)
   }
 
   const handleGoHomeClick = () => {
     router.push('/')
   }
 
-  const handleGoBackToLoginClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleGoBackToLoginClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
     router.push('/account/login')
   }
@@ -96,17 +98,13 @@ function PasswordReset() {
   const strength = getPasswordStrength(form.values.password)
   const strengthColorAndPhrase = getStrengthColorAndPhrase(strength)
 
-  if (isLoading) return <Loader />
+  if (isPending) return <Loader />
 
   if (!emailTokenPayload)
     return (
       <>
-        <Alert
-          variant="light"
-          color={Theme.colors?.red?.[6]}
-          title="Error"
-          icon={<IconAlertCircle />}>
-          <Text size="lg" style={{ weight: 500 }} mb={Theme.spacing?.xs}>
+        <Alert variant="light" color="red.6" title="Error" icon={<IconAlertCircle />}>
+          <Text size="lg" style={{ weight: 500 }} mb="xs">
             Token inválido o expirado
           </Text>
           <Anchor size="md" onClick={handleGoBackToLoginClick}>
@@ -141,7 +139,7 @@ function PasswordReset() {
               : `Cambiar contraseña para @${emailTokenPayload?.user}`}
           </Text>
           {isSuccess ? (
-            <Button variant="outline" color={Theme.colors?.blue?.[6]} onClick={handleGoHomeClick}>
+            <Button variant="outline" color="blue.6" onClick={handleGoHomeClick}>
               Ir a la página de inicio
             </Button>
           ) : (
@@ -172,7 +170,7 @@ function PasswordReset() {
                 {...form.getInputProps('confirmPassword')}
                 style={{ marginBottom: '1rem' }}
               />
-              <Button type="submit" color={Theme.colors?.blue?.[6]} style={{ marginTop: '1rem' }}>
+              <Button type="submit" color="blue.6" style={{ marginTop: '1rem' }}>
                 Restablecer contraseña
               </Button>
             </form>

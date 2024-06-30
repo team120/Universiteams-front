@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CloseButton, TextInput, useMantineTheme } from '@mantine/core'
+import { CloseButton, TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 
 import { Url } from '@/services/url'
@@ -15,7 +15,7 @@ const SearchBar = () => {
   const [generalSearch, setGeneralSearch] = useState('')
   const [debouncedGeneralSearch] = useDebouncedValue(generalSearch, 400)
 
-  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   const searchNowButton = () => {
     Url.setUrlParam(router, pathname, searchQuery, 'generalSearch', generalSearch)
@@ -30,7 +30,7 @@ const SearchBar = () => {
       <TextInput
         placeholder="Buscar..."
         style={{
-          width: isMobile ? '60vw' : '55vw',
+          width: isMobile ? '55vw' : '55vw',
         }}
         value={generalSearch}
         onChange={(event) => setGeneralSearch(event.currentTarget.value)}

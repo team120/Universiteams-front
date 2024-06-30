@@ -1,19 +1,19 @@
 import React from 'react'
 import { AppShell, useComputedColorScheme, useMantineColorScheme } from '@mantine/core'
-import { useDisclosure, useHotkeys } from '@mantine/hooks'
+import { useHotkeys } from '@mantine/hooks'
 import { usePathname } from 'next/navigation'
 
 import Constants from '../../utils/string/Constants'
 import Header from './Header/Header'
 import Navbar from './Navbar/Navbar'
+import useSidebarStore from './useSidebarStore'
 
 interface Layout {
   children: React.ReactNode
-  pageProps?: any
 }
 
 const Layout = (props: Layout) => {
-  const [opened, { toggle }] = useDisclosure()
+  const opened = useSidebarStore((state) => state.opened)
   const pathName = usePathname()
 
   // Change between theme preferences
@@ -29,12 +29,7 @@ const Layout = (props: Layout) => {
     return (
       <AppShell header={{ height: 60 }}>
         <AppShell.Header>
-          <Header
-            opened={false}
-            toggle={toggle}
-            toggleColorScheme={toggleColorScheme}
-            showNavAndSearch={false}
-          />
+          <Header toggleColorScheme={toggleColorScheme} showNavAndSearch={false} />
         </AppShell.Header>
         <AppShell.Main>{props.children}</AppShell.Main>
       </AppShell>
@@ -47,14 +42,9 @@ const Layout = (props: Layout) => {
       header={{ height: 60 }}
       navbar={{ width: { base: 270 }, breakpoint: 'sm', collapsed: { mobile: !opened } }}>
       <AppShell.Header>
-        <Header
-          opened={opened}
-          toggle={toggle}
-          toggleColorScheme={toggleColorScheme}
-          showNavAndSearch={true}
-        />
+        <Header toggleColorScheme={toggleColorScheme} showNavAndSearch={true} />
       </AppShell.Header>
-      <AppShell.Navbar p="md">
+      <AppShell.Navbar>
         <Navbar />
       </AppShell.Navbar>
       <AppShell.Main>{props.children}</AppShell.Main>

@@ -11,7 +11,7 @@ interface FilterProps {
 }
 
 const Filter = (props: FilterProps) => {
-  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
   const [opened, setOpened] = useState(false)
 
   useEffect(() => {
@@ -29,14 +29,14 @@ const Filter = (props: FilterProps) => {
   const resultsCounter = <Text>{props.counter} Resultados</Text>
   return (
     <>
-      <Group justify={isMobile ? 'flex-end' : 'flex-start'}>
+      <Group justify={isMobile ? 'flex-end' : 'flex-start'} gap="xs">
         {isMobile && resultsCounter}
         <ActionIcon
           variant="transparent"
           aria-label="Filter"
           size="lg"
           onClick={() => toggle()}
-          ml={!isMobile ? Theme.spacing?.xs : 0}>
+          ml={!isMobile ? 'xs' : 0}>
           <IconFilter style={{ width: '70%', height: '70%' }} />
         </ActionIcon>
         {!isMobile && resultsCounter}
@@ -63,7 +63,8 @@ const Filter = (props: FilterProps) => {
         <Flex direction="row-reverse">
           <div
             style={{
-              width: opened ? '250px' : '0',
+              minWidth: opened ? '210px' : '0',
+              maxWidth: opened ? '294px' : '0',
               padding: opened ? '1rem' : '0',
               overflow: 'hidden',
               transition: 'width 0.3s ease, padding 0.3s ease',

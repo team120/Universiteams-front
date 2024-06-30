@@ -1,8 +1,8 @@
-import Project from './Project'
+import ProjectInList from './ProjectInList'
 
 // Projects with complementary info
 interface ProjectsResult {
-  projects: Project[]
+  projects: ProjectInList[]
   suggestedSearchTerms?: string[]
   projectCount: number
 }

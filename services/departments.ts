@@ -12,16 +12,11 @@ export const ResearchDepartments = {
   getResearchDepartments: async (
     params: FindDepartmentsDto
   ): Promise<ResearchDepartment[] | undefined> => {
-    try {
-      const url = `${prefix}`
-        .concat(params ? '?' : '')
-        .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
+    const url = `${prefix}`
+      .concat(params ? '?' : '')
+      .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
 
-      const result = await axios.get<ResearchDepartment[]>(url)
-      return result.data
-    } catch (error) {
-      console.log(error)
-      return
-    }
+    const result = await axios.get<ResearchDepartment[]>(url)
+    return result.data
   },
 }
