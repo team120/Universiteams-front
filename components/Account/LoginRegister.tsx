@@ -48,7 +48,14 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
     mutationFn: (values: Login) => Account.authenticate(values, type),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CurrentUserQueryOptions.currentUser().queryKey })
-      router.push('/')
+      switch (type) {
+        case 'login':
+          router.push('/')
+          break
+        case 'register':
+          router.push('/account/register-profile')
+          break
+      }
     },
   })
 
