@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 
 import {
+  Alert,
   Anchor,
   Button,
   Center,
@@ -20,16 +21,27 @@ import { notifications } from '@mantine/notifications'
 import { DepartmentQueryKey, ResearchDepartments } from '../../services/departments'
 import { InterestQueryKey, Interests } from '../../services/interests'
 import SelectItem from '../../entities/HelpTypes/SelectItem'
+import { CurrentUserQueryOptions } from '../../services/currentUser'
+import { IconExclamationCircle } from '@tabler/icons-react'
 
-const UserRegisterProfile = () => {
+type UserProfileForm = {
+  interests: SelectItem[]
+  researchDepartmentsIds: number[]
+}
+
+const UserProfile = () => {
   const router = useRouter()
 
-  const form = useForm<RegisterProfile>({
+  const form = useForm<UserProfileForm>({
     initialValues: {
-      interestsIds: [],
+      interests: [],
       researchDepartmentsIds: [],
     },
   })
+
+  const { data: currentUser, isLoading: isLoadingCurrentUser } = useQuery(
+    CurrentUserQueryOptions.currentUser()
+  )
 
   const departmentsQuery = useQuery({
     queryKey: [DepartmentQueryKey],
@@ -37,6 +49,7 @@ const UserRegisterProfile = () => {
       ResearchDepartments.getResearchDepartments({
         relations: ['facility', 'facility.institution'],
       }),
+    enabled: currentUser !== undefined,
   })
   const departments: SelectItem[] = useMemo(
     () =>
@@ -50,6 +63,7 @@ const UserRegisterProfile = () => {
   const interestsQuery = useQuery({
     queryKey: [InterestQueryKey],
     queryFn: Interests.getInterests,
+    enabled: currentUser !== undefined,
   })
   const interests: SelectItem[] = useMemo(
     () =>
@@ -80,9 +94,23 @@ const UserRegisterProfile = () => {
     },
   })
 
-  const handleSubmit = (values: RegisterProfile) => {
-    console.log(values)
-    registerProfileMutation.mutate(values)
+  const handleSubmit = (values: UserProfileForm) => {
+    const interestsIds: number[] = []
+    const interestsToCreate: string[] = []
+    for (const interest of values.interests) {
+      if (interest.value) {
+        interestsIds.push(Number(interest.value))
+        continue
+      }
+
+      interestsToCreate.push(interest.label)
+    }
+
+    registerProfileMutation.mutate({
+      interestsIds: interestsIds,
+      interestsToCreate: interestsToCreate,
+      researchDepartmentsIds: values.researchDepartmentsIds,
+    })
   }
 
   const handleCompleteLaterClick = () => {
@@ -92,6 +120,36 @@ const UserRegisterProfile = () => {
       color: 'blue',
     })
     router.push('/')
+  }
+
+  if (isLoadingCurrentUser) {
+    return (
+      <Container size="xs" my={40}>
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+          <Center>
+            <Loader variant="dots" />
+          </Center>
+        </Paper>
+      </Container>
+    )
+  }
+
+  if (currentUser === undefined) {
+    return (
+      <Container size="xs" my={40}>
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+          <Center>
+            <Alert
+              variant="light"
+              color="red"
+              title="No autorizado"
+              icon={<IconExclamationCircle />}>
+              Debes estar autenticado para completar tu perfil.
+            </Alert>
+          </Center>
+        </Paper>
+      </Container>
+    )
   }
 
   return (
@@ -117,12 +175,7 @@ const UserRegisterProfile = () => {
                   <MultiSelectCreatable
                     possibleValues={interests}
                     placeholder="Ej. Domotica"
-                    onChange={(newValue) =>
-                      form.setFieldValue(
-                        'interestsIds',
-                        newValue.map((v) => Number(v.value))
-                      )
-                    }
+                    onChange={(newValue) => form.setFieldValue('interestsIds', newValue)}
                   />{' '}
                 </div>
 
@@ -169,4 +222,4 @@ const UserRegisterProfile = () => {
   )
 }
 
-export default UserRegisterProfile
+export default UserProfile

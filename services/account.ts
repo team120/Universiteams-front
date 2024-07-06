@@ -9,6 +9,7 @@ const prefix = `${Env.backendAPI}/auth`
 
 export interface RegisterProfile {
   interestsIds: number[]
+  interestsToCreate?: string[]
   researchDepartmentsIds: number[]
 }
 
@@ -18,7 +19,7 @@ export const Account = {
     await axios.post<CurrentUserInfo>(url, values)
   },
   registerProfile: async (values: RegisterProfile) => {
-    const url = `${prefix}/register-profile`
+    const url = `${prefix}/profile`
     await axios.post(url, values)
   },
   forgotPassword: async (email: string) => {

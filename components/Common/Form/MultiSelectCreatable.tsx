@@ -12,13 +12,33 @@ import {
 } from '@mantine/core'
 import SelectItem from '../../../entities/HelpTypes/SelectItem'
 
+/**
+ * MultiSelectCreatableProps interface represents the props for the MultiSelectCreatable component.
+ */
 interface MultiSelectCreatableProps {
+  /**
+   * An array of possible values for the multi-select.
+   */
   possibleValues: SelectItem[]
+  /**
+   * The placeholder text for the multi-select input field.
+   */
   placeholder?: string
+  /**
+   * The current selected values for the multi-select.
+   */
   value?: SelectItem[]
-  onChange?: (value: SelectItem[]) => void
+  /**
+   * A callback function that is called when the selected values change.
+   * That into account that the value is an array of SelectItem.
+   * If an item has an empty value, it means that the user created a new option.
+   */
+  onChange?: (newValue: SelectItem[]) => void
 }
 
+/**
+ * MultiSelectCreatable component is a multi-select input field that allows the user to create new options.
+ */
 const MultiSelectCreatable = ({
   possibleValues,
   placeholder,
