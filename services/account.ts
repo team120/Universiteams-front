@@ -4,13 +4,21 @@ import Login from '@/entities/HelpTypes/Login'
 import LoginRegisterType from '@/entities/HelpTypes/LoginRegisterType'
 import { CurrentUserInfo } from './currentUser'
 import { ResetPassword } from '../entities/HelpTypes/ResetPassword'
+import Interest from '../entities/Interest'
+import UserAffiliation from '../entities/UserAffiliation'
 
 const prefix = `${Env.backendAPI}/auth`
 
-export interface RegisterProfile {
+export interface ProfileInputDto {
   interestsIds: number[]
   interestsToCreate?: string[]
   researchDepartmentsIds: number[]
+}
+
+export interface ProfileOutputDto {
+  id: number
+  interests: Interest[]
+  userAffiliations: UserAffiliation[]
 }
 
 export const Account = {
@@ -18,9 +26,14 @@ export const Account = {
     const url = `${prefix}/${type}`
     await axios.post<CurrentUserInfo>(url, values)
   },
-  registerProfile: async (values: RegisterProfile) => {
+  saveProfile: async (values: ProfileInputDto) => {
     const url = `${prefix}/profile`
-    await axios.post(url, values)
+    await axios.put(url, values)
+  },
+  getProfile: async () => {
+    const url = `${prefix}/profile`
+    const { data } = await axios.get<ProfileOutputDto>(url)
+    return data
   },
   forgotPassword: async (email: string) => {
     const url = `${prefix}/forgot-password`

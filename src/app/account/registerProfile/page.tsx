@@ -1,9 +1,9 @@
 'use client'
 import React from 'react'
-import UserProfile from '../../../../components/Account/UserRegisterProfile'
+import RegisterProfile from '../../../../components/Account/RegisterProfile'
 
-const ProfilePage = () => {
-  return <UserProfile />
+const RegisterProfilePage = () => {
+  return <RegisterProfile />
 }
 
-export default ProfilePage
+export default RegisterProfilePage

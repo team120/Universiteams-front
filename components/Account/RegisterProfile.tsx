@@ -13,7 +13,7 @@ import {
   Text,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { Account, RegisterProfile } from '../../services/account'
+import { Account, ProfileInputDto as UserRegisterDto } from '../../services/account'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import MultiSelectCreatable from '../Common/Form/MultiSelectCreatable'
@@ -29,7 +29,7 @@ type UserProfileForm = {
   researchDepartmentsIds: number[]
 }
 
-const UserProfile = () => {
+const RegisterProfile = () => {
   const router = useRouter()
 
   const form = useForm<UserProfileForm>({
@@ -75,7 +75,7 @@ const UserProfile = () => {
   )
 
   const registerProfileMutation = useMutation({
-    mutationFn: (values: RegisterProfile) => Account.registerProfile(values),
+    mutationFn: (values: UserRegisterDto) => Account.saveProfile(values),
     onSuccess: () => {
       notifications.show({
         title: 'Perfil completado',
@@ -222,4 +222,4 @@ const UserProfile = () => {
   )
 }
 
-export default UserProfile
+export default RegisterProfile
