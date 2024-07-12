@@ -112,8 +112,8 @@ const ProjectsPage: NextPage = () => {
   )
 
   const users = useMemo(() => {
-    if (usersQuery.data) {
-      return usersQuery.data.map((user) => ({
+    if (usersQuery.data?.users) {
+      return usersQuery.data.users.map((user) => ({
         value: user.id.toString(),
         label: `${user.firstName} ${user.lastName}`,
       }))
