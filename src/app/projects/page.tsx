@@ -4,7 +4,7 @@ import { NextPage } from 'next'
 
 import { ProjectQueryOptions } from '@/services/projects'
 
-import Filter from '@/components/Filter'
+import Filter from '@/components/Common/Filter/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
 import ProjectsList from '@/components/Project/ProjectsList'
 import { useSearchParams } from 'next/navigation'
