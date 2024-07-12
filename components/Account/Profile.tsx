@@ -71,7 +71,7 @@ const Profile = () => {
       ResearchDepartments.getResearchDepartments({
         relations: ['facility', 'facility.institution'],
       }),
-    enabled: userProfileErr !== null,
+    enabled: userProfileErr === null,
   })
   const departments: SelectItem[] = useMemo(
     () =>
@@ -85,7 +85,7 @@ const Profile = () => {
   const interestsQuery = useQuery({
     queryKey: [InterestQueryKey],
     queryFn: Interests.getInterests,
-    enabled: userProfileErr !== null,
+    enabled: userProfileErr === null,
   })
   const interests: SelectItem[] = useMemo(
     () =>
@@ -147,7 +147,7 @@ const Profile = () => {
     )
   }
 
-  if (userProfileErr !== null && (userProfileErr as AxiosError).status === 401) {
+  if (userProfileErr !== null && (userProfileErr as AxiosError).response?.status === 401) {
     return (
       <Container size="xs" my={40}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
@@ -165,68 +165,71 @@ const Profile = () => {
     )
   }
 
-  return (
-    <Container size="xs" my={40}>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        {departmentsQuery.isLoading && interestsQuery.isLoading && (
+  if (departmentsQuery.isLoading || interestsQuery.isLoading) {
+    return (
+      <Container size="xs" my={40}>
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <Center>
             <Loader variant="dots" />
           </Center>
-        )}
-        {!departmentsQuery.isLoading && !interestsQuery.isLoading && (
-          <>
-            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-              <Text size="lg" w={500} mb="lg">
-                Edita tu perfil
+        </Paper>
+      </Container>
+    )
+  }
+
+  return (
+    <Container size="xs" my={40}>
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+          <Text size="lg" w={500} mb="lg">
+            Edita tu perfil
+          </Text>
+
+          <Stack gap="lg">
+            <div>
+              <Text size="sm" mb="sm">
+                Intereses
+              </Text>
+              <MultiSelectCreatable
+                possibleValues={interests}
+                placeholder="Ej. Domotica"
+                value={currentInterests}
+                onChange={(newValue) => form.setFieldValue('interestsIds', newValue)}
+              />{' '}
+            </div>
+
+            <div>
+              <Text size="sm" mb="sm">
+                Departamentos
               </Text>
 
-              <Stack gap="lg">
-                <div>
-                  <Text size="sm" mb="sm">
-                    Intereses
-                  </Text>
-                  <MultiSelectCreatable
-                    possibleValues={interests}
-                    placeholder="Ej. Domotica"
-                    value={currentInterests}
-                    onChange={(newValue) => form.setFieldValue('interestsIds', newValue)}
-                  />{' '}
-                </div>
+              <MultiSelect
+                placeholder={
+                  form.values.researchDepartmentsIds.length === 0 &&
+                  currentDepartments?.length === 0
+                    ? 'Ej. "Departamento de Ingeniería en Sistemas"'
+                    : ''
+                }
+                value={currentDepartments?.map((department) => department.value)}
+                data={departments}
+                searchable
+                clearable
+                limit={20}
+                nothingFoundMessage="No se encontraron departamentos"
+                onChange={(newValue) =>
+                  form.setFieldValue(
+                    'researchDepartmentsIds',
+                    newValue.map((v) => Number(v))
+                  )
+                }
+              />
+            </div>
+          </Stack>
 
-                <div>
-                  <Text size="sm" mb="sm">
-                    Departamentos
-                  </Text>
-
-                  <MultiSelect
-                    placeholder={
-                      form.values.researchDepartmentsIds.length === 0 &&
-                      currentDepartments?.length === 0
-                        ? 'Ej. "Departamento de Ingeniería en Sistemas"'
-                        : ''
-                    }
-                    value={currentDepartments?.map((department) => department.value)}
-                    data={departments}
-                    searchable
-                    clearable
-                    limit={20}
-                    nothingFoundMessage="No se encontraron departamentos"
-                    onChange={(newValue) =>
-                      form.setFieldValue(
-                        'researchDepartmentsIds',
-                        newValue.map((v) => Number(v))
-                      )
-                    }
-                  />
-                </div>
-              </Stack>
-
-              <Button mt="lg" fullWidth type="submit">
-                Guardar
-              </Button>
-            </form>
-          </>
-        )}
+          <Button mt="lg" fullWidth type="submit">
+            Guardar
+          </Button>
+        </form>
       </Paper>
     </Container>
   )
