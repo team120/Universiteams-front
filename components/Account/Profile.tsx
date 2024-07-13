@@ -157,7 +157,7 @@ const Profile = () => {
               color="red"
               title="No autorizado"
               icon={<IconExclamationCircle />}>
-              Debes estar autenticado para completar tu perfil.
+              Debes estar autenticado para completar tu perfil
             </Alert>
           </Center>
         </Paper>
