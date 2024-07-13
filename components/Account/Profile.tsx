@@ -165,6 +165,20 @@ const Profile = () => {
     )
   }
 
+  if (userProfileErr !== null) {
+    return (
+      <Container size="xs" my={40}>
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+          <Center>
+            <Alert variant="light" color="red" title="Error" icon={<IconExclamationCircle />}>
+              No se pudo cargar tu perfil
+            </Alert>
+          </Center>
+        </Paper>
+      </Container>
+    )
+  }
+
   if (departmentsQuery.isLoading || interestsQuery.isLoading) {
     return (
       <Container size="xs" my={40}>
