@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import {
   Alert,
@@ -56,6 +56,13 @@ const Profile = () => {
     [userProfile]
   )
 
+  console.log(currentInterests)
+  useEffect(() => {
+    if (currentInterests) {
+      form.setFieldValue('interests', currentInterests)
+    }
+  }, [currentInterests])
+
   const currentDepartments: SelectItem[] | undefined = useMemo(
     () =>
       userProfile?.userAffiliations.map((affiliation) => ({
@@ -64,6 +71,15 @@ const Profile = () => {
       })),
     [userProfile]
   )
+
+  useEffect(() => {
+    if (currentDepartments) {
+      form.setFieldValue(
+        'researchDepartmentsIds',
+        currentDepartments.map((dept) => Number(dept.value))
+      )
+    }
+  }, [currentDepartments])
 
   const departmentsQuery = useQuery({
     queryKey: [DepartmentQueryKey],
@@ -207,8 +223,7 @@ const Profile = () => {
               <MultiSelectCreatable
                 possibleValues={interests}
                 placeholder="Ej. Domotica"
-                value={currentInterests}
-                onChange={(newValue) => form.setFieldValue('interestsIds', newValue)}
+                {...form.getInputProps('interests')}
               />{' '}
             </div>
 
@@ -224,7 +239,9 @@ const Profile = () => {
                     ? 'Ej. "Departamento de Ingeniería en Sistemas"'
                     : ''
                 }
-                value={currentDepartments?.map((department) => department.value)}
+                value={form.values.researchDepartmentsIds.map((department) =>
+                  department.toString()
+                )}
                 data={departments}
                 searchable
                 clearable

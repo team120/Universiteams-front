@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import {
   CheckIcon,
@@ -34,6 +34,12 @@ interface MultiSelectCreatableProps {
    * If an item has an empty value, it means that the user created a new option.
    */
   onChange?: (newValue: SelectItem[]) => void
+
+  /**
+   * The message to show when no options are found
+   * @default 'Nothing found'
+   */
+  nothingFoundMessage?: string
 }
 
 /**
@@ -44,6 +50,7 @@ const MultiSelectCreatable = ({
   placeholder,
   value: propValue,
   onChange,
+  nothingFoundMessage = 'Nothing found',
 }: MultiSelectCreatableProps) => {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -53,6 +60,10 @@ const MultiSelectCreatable = ({
   const [search, setSearch] = useState('')
   const [data, setData] = useState(possibleValues)
   const [value, setValue] = useState<SelectItem[]>(propValue || [])
+
+  useEffect(() => {
+    setValue(propValue || [])
+  }, [propValue])
 
   const exactOptionMatch = data.some((item) => item.label === search)
 
@@ -156,7 +167,7 @@ const MultiSelectCreatable = ({
             )}
 
             {exactOptionMatch && search.trim().length > 0 && options.length === 0 && (
-              <Combobox.Empty>Nothing found</Combobox.Empty>
+              <Combobox.Empty>{nothingFoundMessage}</Combobox.Empty>
             )}
           </ScrollArea.Autosize>
         </Combobox.Options>
