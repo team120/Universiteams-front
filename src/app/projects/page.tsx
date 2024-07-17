@@ -1,22 +1,23 @@
 'use client'
 import React, { useState, useMemo, useEffect } from 'react'
 import { NextPage } from 'next'
+import { useSearchParams } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+import { Center, Pagination } from '@mantine/core'
 
+import { CurrentUserQueryOptions } from '@/services/currentUser'
+import { Facilities } from '@/services/facilities'
+import { Institutions } from '@/services/institutions'
+import { Interests } from '@/services/interests'
 import { ProjectQueryOptions } from '@/services/projects'
+import { ResearchDepartments } from '@/services/departments'
+import { Users } from '@/services/users'
 
 import Filter from '@/components/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
 import ProjectsList from '@/components/Project/ProjectsList'
-import { useSearchParams } from 'next/navigation'
-import { Institutions } from '@/services/institutions'
-import { Facilities } from '@/services/facilities'
-import { ResearchDepartments } from '@/services/departments'
-import { Interests } from '@/services/interests'
-import { Users } from '@/services/user'
-import { Center, Pagination } from '@mantine/core'
-import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
-import { useQuery } from '@tanstack/react-query'
-import { CurrentUserQueryOptions } from '../../../services/currentUser'
+import User from '@/entities/User'
+import { ProjectSortAttribute, RequestState } from '@/entities/ProjectInList'
 
 const ProjectsPage: NextPage = () => {
   const projectsPerPage = 5
@@ -45,7 +46,7 @@ const ProjectsPage: NextPage = () => {
 
   const usersQuery = useQuery({
     queryKey: ['users'],
-    queryFn: Users.getUsers,
+    queryFn: () => Users.getUsers,
   })
 
   const facilitiesQuery = useQuery({
@@ -112,8 +113,8 @@ const ProjectsPage: NextPage = () => {
   )
 
   const users = useMemo(() => {
-    if (usersQuery.data) {
-      return usersQuery.data.map((user) => ({
+    if (Array.isArray(usersQuery.data)) {
+      return usersQuery.data.map((user: User) => ({
         attribute: user.id.toString(),
         displayName: `${user.firstName} ${user.lastName}`,
       }))
