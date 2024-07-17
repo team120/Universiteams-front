@@ -1,16 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 
-import {
-  Alert,
-  Button,
-  Center,
-  Container,
-  Loader,
-  MultiSelect,
-  Paper,
-  Stack,
-  Text,
-} from '@mantine/core'
+import { Alert, Button, Center, Container, Loader, Paper, Stack, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { Account, ProfileInputDto as UserRegisterDto } from '../../services/account'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -22,6 +12,7 @@ import { InterestQueryKey, Interests } from '../../services/interests'
 import SelectItem from '../../entities/HelpTypes/SelectItem'
 import { IconExclamationCircle } from '@tabler/icons-react'
 import { AxiosError } from 'axios'
+import DepartmentMultiSelect from '../Department/DepartmentMultiSelect'
 
 type ProfileForm = {
   interests: SelectItem[]
@@ -56,7 +47,6 @@ const Profile = () => {
     [userProfile]
   )
 
-  console.log(currentInterests)
   useEffect(() => {
     if (currentInterests) {
       form.setFieldValue('interests', currentInterests)
@@ -89,14 +79,6 @@ const Profile = () => {
       }),
     enabled: userProfileErr === null,
   })
-  const departments: SelectItem[] = useMemo(
-    () =>
-      departmentsQuery.data?.map((department) => ({
-        value: department.id.toString(),
-        label: `${department.facility.institution.abbreviation} ${department.facility.abbreviation} ${department.name}`,
-      })) ?? [],
-    [departmentsQuery.data]
-  )
 
   const interestsQuery = useQuery({
     queryKey: [InterestQueryKey],
@@ -131,6 +113,13 @@ const Profile = () => {
       })
     },
   })
+
+  const handleDepartmentsChange = (departments: string[]) => {
+    form.setFieldValue(
+      'researchDepartmentsIds',
+      departments.map((dept) => Number(dept))
+    )
+  }
 
   const handleSubmit = (values: ProfileForm) => {
     const interestsIds: number[] = []
@@ -232,27 +221,10 @@ const Profile = () => {
                 Departamentos
               </Text>
 
-              <MultiSelect
-                placeholder={
-                  form.values.researchDepartmentsIds.length === 0 &&
-                  currentDepartments?.length === 0
-                    ? 'Ej. "Departamento de Ingeniería en Sistemas"'
-                    : ''
-                }
-                value={form.values.researchDepartmentsIds.map((department) =>
-                  department.toString()
-                )}
-                data={departments}
-                searchable
-                clearable
-                limit={20}
-                nothingFoundMessage="No se encontraron departamentos"
-                onChange={(newValue) =>
-                  form.setFieldValue(
-                    'researchDepartmentsIds',
-                    newValue.map((v) => Number(v))
-                  )
-                }
+              <DepartmentMultiSelect
+                userAffiliations={userProfile?.userAffiliations}
+                possibleDepartments={departmentsQuery.data}
+                onChange={handleDepartmentsChange}
               />
             </div>
           </Stack>
