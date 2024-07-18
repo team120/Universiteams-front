@@ -2,7 +2,11 @@ import React, { useEffect, useMemo } from 'react'
 
 import { Alert, Button, Center, Container, Loader, Paper, Stack, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { Account, ProfileInputDto as UserRegisterDto } from '../../services/account'
+import {
+  Account,
+  ResearchDepartmentInput,
+  ProfileInputDto as UserRegisterDto,
+} from '../../services/account'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import MultiSelectCreatable from '../Common/Form/MultiSelectCreatable'
@@ -13,10 +17,11 @@ import SelectItem from '../../entities/HelpTypes/SelectItem'
 import { IconExclamationCircle } from '@tabler/icons-react'
 import { AxiosError } from 'axios'
 import DepartmentMultiSelect from '../Department/DepartmentMultiSelect'
+import { UserAffiliationType } from '../../entities/UserAffiliation'
 
 type ProfileForm = {
   interests: SelectItem[]
-  researchDepartmentsIds: number[]
+  researchDepartments: ResearchDepartmentInput[]
 }
 
 const Profile = () => {
@@ -25,7 +30,7 @@ const Profile = () => {
   const form = useForm<ProfileForm>({
     initialValues: {
       interests: [],
-      researchDepartmentsIds: [],
+      researchDepartments: [],
     },
   })
 
@@ -116,8 +121,15 @@ const Profile = () => {
 
   const handleDepartmentsChange = (departments: string[]) => {
     form.setFieldValue(
-      'researchDepartmentsIds',
-      departments.map((dept) => Number(dept))
+      'researchDepartments',
+      departments.map((dept) => {
+        const [currentType, departmentId] = dept.split(':')
+
+        return {
+          id: Number(departmentId),
+          currentType: currentType as UserAffiliationType,
+        }
+      })
     )
   }
 
@@ -133,10 +145,16 @@ const Profile = () => {
       interestsToCreate.push(interest.label)
     }
 
+    console.log({
+      interestsIds: interestsIds,
+      interestsToCreate: interestsToCreate,
+      researchDepartments: values.researchDepartments,
+    })
+
     registerProfileMutation.mutate({
       interestsIds: interestsIds,
       interestsToCreate: interestsToCreate,
-      researchDepartmentsIds: values.researchDepartmentsIds,
+      researchDepartments: values.researchDepartments,
     })
   }
 

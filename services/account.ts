@@ -5,14 +5,19 @@ import LoginRegisterType from '@/entities/HelpTypes/LoginRegisterType'
 import { CurrentUserInfo } from './currentUser'
 import { ResetPassword } from '../entities/HelpTypes/ResetPassword'
 import Interest from '../entities/Interest'
-import UserAffiliation from '../entities/UserAffiliation'
+import UserAffiliation, { UserAffiliationType } from '../entities/UserAffiliation'
 
 const prefix = `${Env.backendAPI}/auth`
+
+export interface ResearchDepartmentInput {
+  id: number
+  currentType: UserAffiliationType
+}
 
 export interface ProfileInputDto {
   interestsIds: number[]
   interestsToCreate?: string[]
-  researchDepartmentsIds: number[]
+  researchDepartments: ResearchDepartmentInput[]
 }
 
 export interface ProfileOutputDto {

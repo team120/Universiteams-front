@@ -39,7 +39,7 @@ const DepartmentMultiSelect = ({
 
   const [data, setData] = useState<SelectItem[]>(
     userAffiliations?.map((affiliation) => ({
-      value: affiliation.researchDepartment.id.toString(),
+      value: `${affiliation.currentType}:${affiliation.researchDepartment.id.toString()}`,
       label: `[${translateUserAffiliationType(affiliation.currentType)}] ${
         affiliation.researchDepartment.facility.institution.abbreviation
       } ${affiliation.researchDepartment.facility.abbreviation} ${
@@ -83,12 +83,13 @@ const DepartmentMultiSelect = ({
       return
     }
 
-    const updatedValue = [...value, newDepartment]
+    const newTuple = `${newType}:${newDepartment}`
+    const updatedValue = [...value, newTuple]
     setValue(updatedValue)
     setData((current) => [
       ...current,
       {
-        value: newDepartment,
+        value: newTuple,
         label: `[${translateUserAffiliationType(newType as UserAffiliationType)}] ${
           selectedDepartmentLabel?.facility.institution.abbreviation
         } ${selectedDepartmentLabel?.facility.abbreviation} ${selectedDepartmentLabel?.name}`,
