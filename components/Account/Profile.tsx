@@ -137,8 +137,9 @@ const Profile = () => {
     const interestsIds: number[] = []
     const interestsToCreate: string[] = []
     for (const interest of values.interests) {
-      if (interest.value) {
-        interestsIds.push(Number(interest.value))
+      const parsedValue = parseInt(interest.value, 10)
+      if (!isNaN(parsedValue)) {
+        interestsIds.push(parsedValue)
         continue
       }
 
