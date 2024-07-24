@@ -43,38 +43,29 @@ const Profile = () => {
     queryFn: () => Account.getProfile(),
   })
 
-  const currentInterests: SelectItem[] | undefined = useMemo(
-    () =>
-      userProfile?.interests.map((interest) => ({
-        value: interest.id.toString(),
-        label: interest.name,
-      })),
-    [userProfile]
-  )
-
   useEffect(() => {
-    if (currentInterests) {
-      form.setFieldValue('interests', currentInterests)
-    }
-  }, [currentInterests])
-
-  const currentDepartments: SelectItem[] | undefined = useMemo(
-    () =>
-      userProfile?.userAffiliations.map((affiliation) => ({
-        value: affiliation.researchDepartment.id.toString(),
-        label: affiliation.researchDepartment.name,
-      })),
-    [userProfile]
-  )
-
-  useEffect(() => {
-    if (currentDepartments) {
+    if (userProfile?.interests) {
       form.setFieldValue(
-        'researchDepartmentsIds',
-        currentDepartments.map((dept) => Number(dept.value))
+        'interests',
+        userProfile?.interests.map((interest) => ({
+          value: interest.id.toString(),
+          label: interest.name,
+        }))
       )
     }
-  }, [currentDepartments])
+  }, [userProfile?.interests])
+
+  useEffect(() => {
+    if (userProfile?.userAffiliations) {
+      form.setFieldValue(
+        'researchDepartments',
+        userProfile?.userAffiliations.map((dept) => ({
+          id: dept.researchDepartment.id,
+          currentType: dept.currentType,
+        }))
+      )
+    }
+  }, [userProfile?.userAffiliations])
 
   const departmentsQuery = useQuery({
     queryKey: [DepartmentQueryKey],
