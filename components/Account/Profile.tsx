@@ -7,8 +7,7 @@ import {
   ResearchDepartmentInput,
   ProfileInputDto as UserRegisterDto,
 } from '../../services/account'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import MultiSelectCreatable from '../Common/Form/MultiSelectCreatable'
 import { notifications } from '@mantine/notifications'
 import { DepartmentQueryKey, ResearchDepartments } from '../../services/departments'
@@ -24,9 +23,9 @@ type ProfileForm = {
   researchDepartments: ResearchDepartmentInput[]
 }
 
-const Profile = () => {
-  const router = useRouter()
+const profileQueryKey = 'profile'
 
+const Profile = () => {
   const form = useForm<ProfileForm>({
     initialValues: {
       interests: [],
@@ -39,7 +38,7 @@ const Profile = () => {
     error: userProfileErr,
     isLoading: isLoadingUserProfile,
   } = useQuery({
-    queryKey: ['profile'],
+    queryKey: [profileQueryKey],
     queryFn: () => Account.getProfile(),
   })
 
@@ -90,15 +89,16 @@ const Profile = () => {
     [interestsQuery.data]
   )
 
+  const queryClient = useQueryClient()
   const registerProfileMutation = useMutation({
     mutationFn: (values: UserRegisterDto) => Account.saveProfile(values),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [profileQueryKey] })
       notifications.show({
         title: 'Perfil completado',
         message: 'Tu perfil ha sido completado con éxito.',
         color: 'green',
       })
-      router.push('/')
     },
     onError: (error) => {
       console.error(error)
@@ -222,7 +222,8 @@ const Profile = () => {
               <MultiSelectCreatable
                 possibleValues={interests}
                 placeholder="Ej. Domotica"
-                {...form.getInputProps('interests')}
+                value={form.values.interests}
+                onChange={(value) => form.setFieldValue('interests', value)}
               />{' '}
             </div>
 
