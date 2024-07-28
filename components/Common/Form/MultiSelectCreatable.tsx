@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useState } from 'react'
 import {
   CheckIcon,
@@ -11,6 +11,7 @@ import {
   useCombobox,
 } from '@mantine/core'
 import SelectItem from '../../../entities/HelpTypes/SelectItem'
+import { useUncontrolled } from '@mantine/hooks'
 
 /**
  * MultiSelectCreatableProps interface represents the props for the MultiSelectCreatable component.
@@ -48,7 +49,7 @@ interface MultiSelectCreatableProps {
 const MultiSelectCreatable = ({
   possibleValues,
   placeholder,
-  value: propValue,
+  value,
   onChange,
   nothingFoundMessage = 'Nothing found',
 }: MultiSelectCreatableProps) => {
@@ -59,11 +60,10 @@ const MultiSelectCreatable = ({
 
   const [search, setSearch] = useState('')
   const [data, setData] = useState(possibleValues)
-  const [value, setValue] = useState<SelectItem[]>(propValue || [])
-
-  useEffect(() => {
-    setValue(propValue || [])
-  }, [propValue])
+  const [_value, setValue] = useUncontrolled({
+    value: value,
+    onChange,
+  })
 
   const exactOptionMatch = data.some((item) => item.label === search)
 
@@ -72,32 +72,32 @@ const MultiSelectCreatable = ({
 
     if (selectedValue === '$create') {
       setData((current) => [...current, { value: search, label: search }])
-      setValue((current) => [...current, { value: search, label: search }])
-      onChange && onChange([...value, { value: search, label: search }])
+      setValue([..._value, { value: search, label: search }])
+      onChange && onChange([..._value, { value: search, label: search }])
     } else {
       const matchingDisplayName = data.find((item) => item.value === selectedValue)?.label || ''
       const newValue =
-        value.find((v) => v.value === selectedValue) !== undefined
-          ? value.filter((v) => v.value !== selectedValue)
+        _value.find((v) => v.value === selectedValue) !== undefined
+          ? _value.filter((v) => v.value !== selectedValue)
           : [
-              ...value,
+              ..._value,
               {
                 value: selectedValue,
                 label: matchingDisplayName,
               },
             ]
-      setValue(() => newValue)
+      setValue(newValue)
       onChange && onChange(newValue)
     }
   }
 
   const handleValueRemove = (val: SelectItem) => {
-    const newValue = value.filter((v) => v.value !== val.value)
-    setValue(() => newValue)
+    const newValue = _value.filter((v) => v.value !== val.value)
+    setValue(newValue)
     onChange && onChange(newValue)
   }
 
-  const values = value.map((item) => (
+  const values = _value.map((item) => (
     <Pill key={item.value} withRemoveButton onRemove={() => handleValueRemove(item)}>
       {item.label}
     </Pill>
@@ -109,9 +109,11 @@ const MultiSelectCreatable = ({
       <Combobox.Option
         value={item.value}
         key={item.value}
-        active={value.find((v) => v.value === item.value) !== undefined}>
+        active={_value.find((v) => v.value === item.value) !== undefined}>
         <Group gap="sm">
-          {value.find((v) => v.value === item.value) !== undefined ? <CheckIcon size={12} /> : null}
+          {_value.find((v) => v.value === item.value) !== undefined ? (
+            <CheckIcon size={12} />
+          ) : null}
           <span>{item.label}</span>
         </Group>
       </Combobox.Option>
@@ -123,7 +125,7 @@ const MultiSelectCreatable = ({
         <PillsInput
           onClick={() => combobox.openDropdown()}
           rightSection={
-            value.length !== 0 && (
+            _value.length !== 0 && (
               <CloseButton
                 size="sm"
                 onMouseDown={(event) => event.preventDefault()}
@@ -140,7 +142,7 @@ const MultiSelectCreatable = ({
                 onFocus={() => combobox.openDropdown()}
                 onBlur={() => combobox.closeDropdown()}
                 value={search}
-                placeholder={value.length === 0 ? placeholder : ''}
+                placeholder={_value.length === 0 ? placeholder : ''}
                 onChange={(event) => {
                   combobox.updateSelectedOptionIndex()
                   setSearch(event.currentTarget.value)
@@ -148,7 +150,7 @@ const MultiSelectCreatable = ({
                 onKeyDown={(event) => {
                   if (event.key === 'Backspace' && search.length === 0) {
                     event.preventDefault()
-                    handleValueRemove(value[value.length - 1])
+                    handleValueRemove(_value[_value.length - 1])
                   }
                 }}
               />
