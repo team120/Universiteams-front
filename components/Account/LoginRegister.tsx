@@ -64,7 +64,7 @@ const LoginRegister = ({ initialType }: LoginRegisterProps) => {
           router.push('/')
           break
         case 'register':
-          router.push('/account/registerProfile')
+          router.push('/account/profile')
           break
       }
     },
