@@ -103,7 +103,7 @@ const DepartmentMultiSelect = ({
   return (
     <Card withBorder>
       <MultiSelect
-        placeholder={value.length === 0 ? 'Ej. "[Student] UTN FRRo Ingeniería Civil"' : ''}
+        placeholder={value.length === 0 ? 'Agrega un departamento con tu rol' : ''}
         value={value}
         data={data}
         searchable
