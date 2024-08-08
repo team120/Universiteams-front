@@ -100,7 +100,7 @@ const DepartmentMultiSelect = ({
     onChange(updatedValue)
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  const handleEnterKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       event.preventDefault()
     }
@@ -120,7 +120,7 @@ const DepartmentMultiSelect = ({
           setValue(newValue)
           onChange(newValue)
         }}
-        onKeyDown={handleKeyDown}
+        onKeyDown={handleEnterKeyDown}
       />
 
       <Group
@@ -140,6 +140,7 @@ const DepartmentMultiSelect = ({
           onChange={(value) => setNewDepartment(value)}
           searchable
           clearable
+          onKeyDown={handleEnterKeyDown}
         />
 
         <Select
@@ -151,7 +152,7 @@ const DepartmentMultiSelect = ({
           value={newType}
           onChange={(value) => setNewType(value)}
           clearable
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleEnterKeyDown}
         />
 
         {isMobile ? (
