@@ -100,6 +100,12 @@ const DepartmentMultiSelect = ({
     onChange(updatedValue)
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+    }
+  }
+
   return (
     <Card withBorder>
       <MultiSelect
@@ -114,6 +120,7 @@ const DepartmentMultiSelect = ({
           setValue(newValue)
           onChange(newValue)
         }}
+        onKeyDown={handleKeyDown}
       />
 
       <Group
@@ -144,6 +151,7 @@ const DepartmentMultiSelect = ({
           value={newType}
           onChange={(value) => setNewType(value)}
           clearable
+          onKeyDown={handleKeyDown}
         />
 
         {isMobile ? (
