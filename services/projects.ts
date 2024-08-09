@@ -64,7 +64,6 @@ export const Projects = {
       .concat(params?.limit ? `limit=${params.limit}&` : '')
       .concat(params?.offset ? `offset=${params.offset}&` : '')
 
-    console.log(url)
     const result = await axios.get<ProjectsResult>(url)
     return result.data
   },
