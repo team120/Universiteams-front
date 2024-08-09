@@ -8,6 +8,7 @@ import { IconArrowUp, IconArrowDown, IconTrash } from '@tabler/icons-react'
 import SelectItem from '@/entities/HelpTypes/SelectItem'
 import Theme from 'src/app/theme'
 import { Url } from '@/services/url'
+import { Order } from '../../services/projects'
 
 interface ProjectFilterContentProps {
   sortAttributes: SelectItem[]
@@ -23,7 +24,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     initialValues: {
       generalSearch: '',
       sortBy: '',
-      inAscendingOrder: true,
+      order: '' as Order,
       university: '',
       facility: '',
       department: '',
@@ -41,7 +42,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     form.setValues({
       generalSearch: searchQuery.get('generalSearch') ?? '',
       sortBy: searchQuery.get('sortBy') ?? '',
-      inAscendingOrder: searchQuery.get('inAscendingOrder') !== 'false',
+      order: (searchQuery.get('order') as Order) ?? '',
       university: searchQuery.get('university') ?? '',
       facility: searchQuery.get('facility') ?? '',
       department: searchQuery.get('department') ?? '',
@@ -99,8 +100,8 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
   }
 
   const handleOrderChange = () => {
-    const value = !form.values.inAscendingOrder
-    Url.setUrlParam(router, pathname, searchQuery, 'inAscendingOrder', value.toString())
+    const value = form.values.order === Order.ASC ? Order.DESC : Order.ASC
+    Url.setUrlParam(router, pathname, searchQuery, 'order', value)
   }
 
   const reset = () => {
@@ -133,7 +134,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             </Grid.Col>
             <Grid.Col span={2}>
               <ActionIcon variant="transparent" onClick={handleOrderChange}>
-                {form.values.inAscendingOrder ? <IconArrowUp /> : <IconArrowDown />}
+                {form.values.order === Order.ASC ? <IconArrowUp /> : <IconArrowDown />}
               </ActionIcon>
             </Grid.Col>
           </Grid>
