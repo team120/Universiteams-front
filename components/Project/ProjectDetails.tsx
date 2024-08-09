@@ -241,25 +241,29 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
               Miembros
             </Tabs.Tab>
 
-            {project.requestEnrollmentCount !== undefined && (
-              <Tabs.Tab
-                value={ProjectDetailsTabs.Requests}
-                leftSection={<IconSend />}
-                rightSection={
-                  <Badge color="blue" variant="filled">
-                    {project.requestEnrollmentCount}
-                  </Badge>
-                }>
-                Solicitudes
-              </Tabs.Tab>
-            )}
+            {project.requestEnrollmentCount !== undefined &&
+              project.requestEnrollmentCount !== null && (
+                <Tabs.Tab
+                  value={ProjectDetailsTabs.Requests}
+                  leftSection={<IconSend />}
+                  rightSection={
+                    <Badge color="blue" variant="filled">
+                      {project.requestEnrollmentCount}
+                    </Badge>
+                  }>
+                  Solicitudes
+                </Tabs.Tab>
+              )}
           </Tabs.List>
 
           <Tabs.Panel value={ProjectDetailsTabs.Members}>
             <EnrollmentList
               projectId={props.id}
               enrollments={project.enrollments}
-              isAdmin={project.requestEnrollmentCount !== undefined}
+              isAdmin={
+                project.requestEnrollmentCount !== undefined &&
+                project.requestEnrollmentCount !== null
+              }
             />
           </Tabs.Panel>
 
