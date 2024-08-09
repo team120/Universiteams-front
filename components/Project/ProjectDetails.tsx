@@ -286,7 +286,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
                     <Group mt="xs" gap="xs">
                       {request.user.userAffiliations.map((affiliation) => (
                         <Badge
-                          key={affiliation.id}
+                          key={`${request.user.id}:${affiliation.researchDepartment.id}`}
                           color="pink.6"
                           variant="light"
                           component="button"
