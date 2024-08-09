@@ -126,6 +126,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
                   }))
                 )}
                 clearable
+                searchable
                 value={form.values.sortBy}
                 onChange={handleSortByChange}
               />
@@ -147,6 +148,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
               }))
             )}
             clearable
+            searchable
             value={form.values.university}
             onChange={handleUniversityChange}
           />
@@ -161,6 +163,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
               }))
             )}
             clearable
+            searchable
             value={form.values.facility}
             onChange={handleFacilityChange}
           />
@@ -175,6 +178,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
               }))
             )}
             clearable
+            searchable
             value={form.values.department}
             onChange={handleDepartmentChange}
           />
@@ -189,6 +193,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
               }))
             )}
             clearable
+            searchable
             value={form.values.user}
             onChange={handleUserChange}
           />
@@ -203,6 +208,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
               }))
             )}
             clearable
+            searchable
             value={form.values.interests}
             onChange={handleInterestsChange}
           />
@@ -212,6 +218,7 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             placeholder='Ej: "Formal"'
             data={['', 'Formal', 'Informal']}
             clearable
+            searchable
             value={form.values.type}
             onChange={handleTypeChange}
           />
