@@ -35,7 +35,7 @@ const DepartmentMultiSelect = ({
   possibleDepartments,
   onChange,
 }: DepartmentMultiSelectProps) => {
-  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
+  const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.md})`)
 
   const [data, setData] = useState<SelectItem[]>(
     userAffiliations?.map((affiliation) => ({
