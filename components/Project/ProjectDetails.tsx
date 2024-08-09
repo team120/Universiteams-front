@@ -73,6 +73,8 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   } = useQuery({
     queryKey: [EnrollmentRequestsQueryKey, props.id],
     queryFn: () => Projects.getEnrollmentRequests(props.id),
+    enabled:
+      project?.requestEnrollmentCount !== undefined && project?.requestEnrollmentCount !== null,
   })
 
   const favoriteMutation = useMutation({
