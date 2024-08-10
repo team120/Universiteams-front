@@ -10,14 +10,15 @@ import UserItem from './UserItem'
 
 interface UserListProps {
   //users?: UserInList[]
-  users?: any // Fix type
+  users?: User[]
 }
 
-const UsersList = ({ users }: UserListProps) => {
+const UserList = ({ users }: UserListProps) => {
   const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   if (!users) return <SkeletonFull />
   if (users.length == 0) return <InfoMessage text="No hay usuarios para mostrar" type="info" />
+  console.log(users)
 
   return (
     <Suspense fallback={<SkeletonFull />}>
@@ -28,4 +29,4 @@ const UsersList = ({ users }: UserListProps) => {
   )
 }
 
-export default UsersList
+export default UserList
