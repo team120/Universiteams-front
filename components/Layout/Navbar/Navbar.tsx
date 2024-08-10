@@ -12,6 +12,7 @@ import {
   IconShare,
   IconTerminal2,
   IconUserCircle,
+  IconUsers,
 } from '@tabler/icons-react'
 import { CurrentUserQueryOptions } from '../../../services/currentUser'
 import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
@@ -68,6 +69,9 @@ const Navbar = () => {
             link="/projects?isFavorite=true"
             icon={<IconFolderHeart size={iconSize} />}
           />
+        )}
+        {currentUser && (
+          <NavbarItem text="Usuarios" link="/users" icon={<IconUsers size={iconSize} />} />
         )}
       </AppShell.Section>
       <Divider />
