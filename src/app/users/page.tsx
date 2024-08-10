@@ -39,7 +39,7 @@ const UsersPage: NextPage = () => {
 
   const usersQuery = useQuery({
     queryKey: ['users'],
-    queryFn: () => Users.getUsers,
+    queryFn: async () => await Users.getUsers(),
   })
 
   const interestsQuery = useQuery({
@@ -76,7 +76,7 @@ const UsersPage: NextPage = () => {
       <Filter
         counter={0}
         content={<UserFilterContent sortAttributes={sortAttributes} interests={interests} />}>
-        <UserList users={usersQuery.data} />
+        {<UserList users={usersQuery?.data} />}
         {totalPages > 1 && (
           <Center>
             <Pagination
