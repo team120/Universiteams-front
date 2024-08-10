@@ -9,7 +9,9 @@ export enum UserAffiliationType {
 }
 
 interface UserAffiliation {
-  user: User
+  id?: number
+  user?: User
+  departmentalId?: string
   researchDepartment: ResearchDepartment
   currentType: UserAffiliationType
 }
