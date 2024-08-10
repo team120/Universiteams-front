@@ -22,9 +22,7 @@ const UsersList = ({ users }: UserListProps) => {
   return (
     <Suspense fallback={<SkeletonFull />}>
       <List ml={!isMobile ? 'xs' : 0}>
-        {users.map((user: User) => (
-          <UserItem key={user.id} user={user} />
-        ))}
+        {Array.isArray(users) && users.map((user: User) => <UserItem key={user.id} user={user} />)}
       </List>
     </Suspense>
   )

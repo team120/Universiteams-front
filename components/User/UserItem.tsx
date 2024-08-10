@@ -2,7 +2,7 @@ import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Badge, Card, Chip, Group, Text, useMantineColorScheme } from '@mantine/core'
-import styles from './ProjectItem.module.css'
+import styles from './UserItem.module.css'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Url } from '@/services/url'
