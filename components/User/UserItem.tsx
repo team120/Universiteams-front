@@ -41,7 +41,7 @@ const UserItem = (props: UserItemProps) => {
       mb="0.5rem"
       p="md"
       radius="md"
-      onClick={() => router.push(`/projects/${user.id}`)}
+      onClick={() => router.push(`/users/${user.id}`)}
       className={`${styles.card} ${colorScheme == 'dark' ? styles.cardDark : styles.cardLight}`}>
       <div style={{ width: '100%' }}>
         <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
