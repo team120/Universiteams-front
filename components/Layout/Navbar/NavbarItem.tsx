@@ -27,7 +27,6 @@ const NavbarItem = ({ text, textSecondLine, link, icon, small = false }: INavbar
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    maxWidth: isMobile ? '100%' : '190px',
     display: 'block',
   }
 
@@ -43,7 +42,7 @@ const NavbarItem = ({ text, textSecondLine, link, icon, small = false }: INavbar
         role="button"
         tabIndex={0}>
         <Box style={{ flexShrink: 0 }}>{icon && icon}</Box>
-        <Box>
+        <Box style={{ flex: 1, minWidth: 0 }}>
           <Text style={truncateTextStyle}>{text}</Text>
           {textSecondLine && (
             <Text size="sm" style={truncateTextStyle}>
