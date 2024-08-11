@@ -1,7 +1,7 @@
 import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Badge, Card, Chip, Group, Text, useMantineColorScheme } from '@mantine/core'
+import { Badge, Card, Chip, Flex, Group, Text, useMantineColorScheme } from '@mantine/core'
 import styles from './UserItem.module.css'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
@@ -9,9 +9,9 @@ import { Url } from '@/services/url'
 
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import User from '@/entities/User'
+import { IconUser } from '@tabler/icons-react'
 
 interface UserItemProps {
-  // user?: UserInList
   user?: User
 }
 
@@ -44,13 +44,15 @@ const UserItem = (props: UserItemProps) => {
       onClick={() => router.push(`/users/${user.id}`)}
       className={`${styles.card} ${colorScheme == 'dark' ? styles.cardDark : styles.cardLight}`}>
       <div style={{ width: '100%' }}>
-        <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
-          {user.firstName} {user.lastName}
-        </Text>
+        <Flex direction={'row'} align={'center'} gap={10}>
+          <IconUser size={20} />
+          <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
+            {user.firstName} {user.lastName}
+          </Text>
+        </Flex>
 
         <Chip.Group>
           <Group gap={'0.5rem'} mt={'1rem'}>
-            {/* To-Do: Enrollments & more info */}
             {user.interests.map((interest) => (
               <Badge
                 variant="dot"
