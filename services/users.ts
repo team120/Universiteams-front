@@ -4,6 +4,7 @@ import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 
 import { EnrollmentRequestsShow } from '@/entities/HelpTypes/EnrollmentRequestsShow'
 import User from '@/entities/User'
+import UsersResult from '@/entities/UsersResult'
 import { UserSortAttribute } from '@/entities/UserInList'
 
 const prefix = `${Env.backendAPI}/users`
@@ -24,7 +25,7 @@ export const Users = {
   getUsers: async (params?: GetUsersInput) => {
     const url = `${prefix}`
     // To-do: use params to filter the results (general search and/or filters)
-    const result = await axios.get<User[]>(url)
+    const result = await axios.get<UsersResult>(url)
     return result.data
   },
 
