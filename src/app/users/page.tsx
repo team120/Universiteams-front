@@ -16,7 +16,7 @@ import UserList from '@/components/User/UserList'
 import { UserSortAttribute } from '@/entities/UserInList'
 
 const UsersPage: NextPage = () => {
-  const usersPerPage = 10
+  const usersPerPage = 5
   const [currentPage, setCurrentPage] = useState(1)
 
   const { data: currentUser, error: errorCurrentUser } = useQuery(
@@ -39,7 +39,7 @@ const UsersPage: NextPage = () => {
 
   const usersQuery = useQuery({
     queryKey: ['users'],
-    queryFn: async () => await Users.getUsers(),
+    queryFn: () => Users.getUsers(),
   })
 
   const interestsQuery = useQuery({
@@ -67,16 +67,16 @@ const UsersPage: NextPage = () => {
     return []
   }, [interestsQuery.data])
 
-  const totalPages = Array.isArray(usersQuery?.data)
-    ? Math.ceil(usersQuery.data.length / usersPerPage)
+  const totalPages = usersQuery?.data?.usersCount
+    ? Math.ceil(usersQuery.data.usersCount / usersPerPage) + 1
     : 1
 
   return (
     <>
       <Filter
-        counter={0}
+        counter={usersQuery?.data?.usersCount ?? 0}
         content={<UserFilterContent sortAttributes={sortAttributes} interests={interests} />}>
-        {<UserList users={usersQuery?.data} />}
+        {<UserList users={usersQuery?.data?.users} />}
         {totalPages > 1 && (
           <Center>
             <Pagination

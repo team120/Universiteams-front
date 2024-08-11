@@ -9,7 +9,6 @@ import User from '@/entities/User'
 import UserItem from './UserItem'
 
 interface UserListProps {
-  //users?: UserInList[]
   users?: User[]
 }
 
@@ -17,8 +16,7 @@ const UserList = ({ users }: UserListProps) => {
   const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   if (!users) return <SkeletonFull />
-  if (users.length == 0) return <InfoMessage text="No hay usuarios para mostrar" type="info" />
-  console.log(users)
+  if (users.length === 0) return <InfoMessage text="No hay usuarios para mostrar" type="info" />
 
   return (
     <Suspense fallback={<SkeletonFull />}>
