@@ -1,11 +1,9 @@
 import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Badge, Card, Chip, Flex, Group, Text, useMantineColorScheme } from '@mantine/core'
 import { IconUser } from '@tabler/icons-react'
 import styles from './UserItem.module.css'
 
-import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Url } from '@/services/url'
 
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
@@ -22,12 +20,7 @@ const UserItem = (props: UserItemProps) => {
   const searchQuery = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
-  const queryClient = useQueryClient()
   const { colorScheme } = useMantineColorScheme()
-
-  const { data: currentUser, error: errorCurrentUser } = useQuery(
-    CurrentUserQueryOptions.currentUser()
-  )
 
   const handleInterestTagClick = (interestId: number, event: React.MouseEvent) => {
     event.stopPropagation()

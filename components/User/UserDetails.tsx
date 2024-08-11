@@ -1,14 +1,12 @@
 import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Alert, Badge, Card, Chip, Flex, Group, Loader, Tabs, Text } from '@mantine/core'
 
-import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Users } from '@/services/users'
 
 import SkeletonFull from '@/components/Loader/SkeletonFull'
-import { IconFolders, IconMail, IconSend, IconUser } from '@tabler/icons-react'
-import { EnrollmentList } from '../Enrollment/EnrollmentList'
+import { IconFolders, IconMail, IconSend } from '@tabler/icons-react'
 import { EnrollmentRequestShow } from '@/entities/HelpTypes/EnrollmentRequestShow'
 import UserAffiliation from '@/entities/UserAffiliation'
 import Interest from '@/entities/Interest'

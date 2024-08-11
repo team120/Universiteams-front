@@ -36,11 +36,6 @@ const UsersPage: NextPage = () => {
     setCurrentPage(1)
   }, [searchQuery])
 
-  const usersQuery1 = useQuery({
-    queryKey: ['users'],
-    queryFn: (params: any) => Users.getUsers(params),
-  })
-
   const userParams: GetUsersInput = {
     interestIds: searchQuery.getAll('interest').map((id: string) => +id),
     sortBy: searchQuery.get('sortBy') as UserSortAttribute | undefined,
