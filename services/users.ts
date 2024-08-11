@@ -10,10 +10,7 @@ import { UserSortAttribute } from '@/entities/UserInList'
 const prefix = `${Env.backendAPI}/users`
 
 export interface GetUsersInput {
-  generalSearchTerm?: string
-  // firstName, lastName, email
   interestIds?: number[]
-  userId?: number
   sortBy?: UserSortAttribute
   inAscendingOrder?: boolean
   limit?: number
@@ -23,8 +20,19 @@ export interface GetUsersInput {
 export const Users = {
   // Find all users
   getUsers: async (params?: GetUsersInput) => {
-    const url = `${prefix}`
-    // To-do: use params to filter the results (general search and/or filters)
+    const url = prefix
+      .concat(params ? '?' : '')
+      .concat(
+        params?.interestIds && params?.interestIds.length > 0
+          ? params.interestIds.map((id: number) => `interestIds=${id}&`).join('')
+          : ''
+      )
+      .concat(params?.sortBy ? `sortBy=${params.sortBy}&` : '')
+      .concat(params?.inAscendingOrder ? `inAscendingOrder=${params.inAscendingOrder}&` : '')
+      .concat(params?.limit ? `limit=${params.limit}&` : '')
+      .concat(params?.offset ? `offset=${params.offset}&` : '')
+
+    console.log(url)
     const result = await axios.get<UsersResult>(url)
     return result.data
   },

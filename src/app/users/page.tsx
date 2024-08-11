@@ -2,15 +2,14 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { NextPage } from 'next'
 import { useSearchParams } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
 import { Center, Pagination } from '@mantine/core'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Interests } from '@/services/interests'
-import { Users } from '@/services/users'
+import { GetUsersInput, Users } from '@/services/users'
 
 import Filter from '@/components/Filter'
-import User from '@/entities/User'
 import UserFilterContent from '@/components/User/UserFilterContent'
 import UserList from '@/components/User/UserList'
 import { UserSortAttribute } from '@/entities/UserInList'
@@ -37,25 +36,36 @@ const UsersPage: NextPage = () => {
     setCurrentPage(1)
   }, [searchQuery])
 
-  const usersQuery = useQuery({
+  const usersQuery1 = useQuery({
     queryKey: ['users'],
-    queryFn: () => Users.getUsers(),
+    queryFn: (params: any) => Users.getUsers(params),
   })
+
+  const userParams: GetUsersInput = {
+    interestIds: searchQuery.getAll('interest').map((id: string) => +id),
+    sortBy: searchQuery.get('sortBy') as UserSortAttribute | undefined,
+    inAscendingOrder:
+      searchQuery.get('inAscendingOrder') === 'true'
+        ? true
+        : searchQuery.get('inAscendingOrder') === 'false'
+        ? false
+        : undefined,
+    offset: (currentPage - 1) * usersPerPage,
+    limit: usersPerPage,
+  }
+
+  const usersQuery = useQuery(
+    queryOptions({
+      queryKey: ['users', userParams, currentPage, usersPerPage],
+      queryFn: () => Users.getUsers(userParams),
+      placeholderData: keepPreviousData,
+    })
+  )
 
   const interestsQuery = useQuery({
     queryKey: ['interests'],
     queryFn: Interests.getInterests,
   })
-
-  const users = useMemo(() => {
-    if (Array.isArray(usersQuery.data)) {
-      return usersQuery.data.map((user: User) => ({
-        attribute: user.id.toString(),
-        displayName: `${user.firstName} ${user.lastName}`,
-      }))
-    }
-    return []
-  }, [usersQuery.data])
 
   const interests = useMemo(() => {
     if (interestsQuery.data) {
@@ -68,7 +78,7 @@ const UsersPage: NextPage = () => {
   }, [interestsQuery.data])
 
   const totalPages = usersQuery?.data?.usersCount
-    ? Math.ceil(usersQuery.data.usersCount / usersPerPage) + 1
+    ? Math.ceil(usersQuery.data.usersCount / usersPerPage)
     : 1
 
   return (
