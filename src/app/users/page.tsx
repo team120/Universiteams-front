@@ -9,7 +9,8 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Interests } from '@/services/interests'
 import { GetUsersInput, Users } from '@/services/users'
 
-import Filter from '@/components/Filter'
+import Filter from '@/components/Common/Filter/Filter'
+import Interest from '@/entities/Interest'
 import UserFilterContent from '@/components/User/UserFilterContent'
 import UserList from '@/components/User/UserList'
 import { UserSortAttribute } from '@/entities/UserInList'
@@ -24,8 +25,8 @@ const UsersPage: NextPage = () => {
 
   const sortAttributes = useMemo(
     () => [
-      { attribute: UserSortAttribute.FirstName, displayName: 'nombre' },
-      { attribute: UserSortAttribute.LastName, displayName: 'apellido' },
+      { value: UserSortAttribute.FirstName, label: 'nombre' },
+      { value: UserSortAttribute.LastName, label: 'apellido' },
     ],
     [errorCurrentUser, currentUser]
   )
@@ -64,9 +65,9 @@ const UsersPage: NextPage = () => {
 
   const interests = useMemo(() => {
     if (interestsQuery.data) {
-      return interestsQuery.data.map((interest) => ({
-        attribute: interest.id.toString(),
-        displayName: interest.name,
+      return interestsQuery.data.map((interest: Interest) => ({
+        value: interest.id.toString(),
+        label: interest.name,
       }))
     }
     return []

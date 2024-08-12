@@ -109,8 +109,8 @@ const ProjectsPage: NextPage = () => {
   const users = useMemo(() => {
     if (Array.isArray(usersQuery.data)) {
       return usersQuery.data.map((user) => ({
-        attribute: user.id.toString(),
-        displayName: `${user.firstName} ${user.lastName}`,
+        value: user.id.toString(),
+        label: `${user.firstName} ${user.lastName}`,
       }))
     }
     return []

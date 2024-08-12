@@ -69,11 +69,12 @@ const UserFilterContent = (props: UserFilterContentProps) => {
                 placeholder='Ej: "nombre"'
                 data={[{ value: '', label: '' }].concat(
                   props.sortAttributes.map((attr) => ({
-                    value: attr.attribute,
-                    label: attr.displayName,
+                    value: attr.value,
+                    label: attr.label,
                   }))
                 )}
                 clearable
+                searchable
                 value={form.values.sortBy}
                 onChange={handleSortByChange}
               />
@@ -90,11 +91,12 @@ const UserFilterContent = (props: UserFilterContentProps) => {
             placeholder={form.values.interests.length === 0 ? 'Ej: "Inteligencia Artificial"' : ''}
             data={[{ value: '', label: '' }].concat(
               props.interests.map((attr) => ({
-                value: attr.attribute,
-                label: attr.displayName,
+                value: attr.value,
+                label: attr.label,
               }))
             )}
             clearable
+            searchable
             value={form.values.interests}
             onChange={handleInterestsChange}
           />
