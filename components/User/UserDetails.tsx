@@ -1,15 +1,19 @@
 import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { Alert, Badge, Card, Chip, Flex, Group, Loader, Tabs, Text } from '@mantine/core'
+import { Alert, Badge, Card, Flex, Group, Tabs, Text } from '@mantine/core'
+import { useMantineColorScheme } from '@mantine/core'
 
 import { Users } from '@/services/users'
+import { IconBulb, IconFolders, IconMail, IconSchool } from '@tabler/icons-react'
 
+import styles from '@/components/Enrollment/EnrollmentList.module.css'
 import SkeletonFull from '@/components/Loader/SkeletonFull'
-import { IconFolders, IconMail, IconSend } from '@tabler/icons-react'
-import { EnrollmentRequestShow } from '@/entities/HelpTypes/EnrollmentRequestShow'
 import UserAffiliation from '@/entities/UserAffiliation'
 import Interest from '@/entities/Interest'
+import Enrollment from '@/entities/Enrollment'
+import Dates from 'utils/string/Dates'
+import ResearchDepartment from '@/entities/ResearchDepartment'
 
 interface UserDetailsParams {
   id: number
@@ -17,7 +21,6 @@ interface UserDetailsParams {
 
 export enum UserDetailsTabs {
   Projects = 'projects',
-  Requests = 'requests',
 }
 
 const UserDetails = (props: UserDetailsParams) => {
@@ -30,19 +33,12 @@ const UserDetails = (props: UserDetailsParams) => {
     queryFn: () => Users.getUser(props.id),
   })
 
+  const { colorScheme } = useMantineColorScheme()
+
   // No mutations --- Current used not needed now
   // const { data: currentUser, error: errorCurrentUser } = useQuery(
   //   CurrentUserQueryOptions.currentUser()
   // )
-
-  const {
-    data: enrollmentRequests,
-    error: errorEnrollmentRequests,
-    isLoading: isLoadingEnrollmentRequests,
-  } = useQuery({
-    queryKey: ['enrollments', props.id],
-    queryFn: () => Users.getEnrollmentRequests(props.id),
-  })
 
   const router = useRouter()
   const pathname = usePathname()
@@ -54,6 +50,10 @@ const UserDetails = (props: UserDetailsParams) => {
   }
 
   // Handle method in projects endpoint
+  const handleProjectClick = (projectId: number) => {
+    router.push(`/projects/${projectId}`)
+  }
+
   const handleDepartmentBadgeClick = (
     institutionId: number,
     facilityId: number,
@@ -85,10 +85,35 @@ const UserDetails = (props: UserDetailsParams) => {
             {user.email}
           </Text>
         </Flex>
-
-        <Chip.Group>
-          <Group gap={'0.5rem'} my={'1rem'}>
-            {user.interests.map((interest) => (
+        <Group mt={'1rem'}>
+          <IconSchool size={25} />
+          <Flex direction={'row'} gap={'0.5rem'} mt={'0.5rem'}>
+            {user.userAffiliations.map((affiliation: UserAffiliation) => (
+              <Badge
+                key={affiliation.id}
+                color="pink.6"
+                variant="light"
+                component="button"
+                style={{ cursor: 'pointer' }}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  handleDepartmentBadgeClick(
+                    affiliation.researchDepartment.facility.institution.id,
+                    affiliation.researchDepartment.facility.id,
+                    affiliation.researchDepartment.id
+                  )
+                }}>
+                {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
+                {affiliation.researchDepartment.facility.abbreviation} |{' '}
+                {affiliation.researchDepartment.name}
+              </Badge>
+            ))}
+          </Flex>
+        </Group>
+        <Group my={'1rem'}>
+          <IconBulb size={25} />
+          <Group gap={'0.5rem'} mt={'0.5rem'}>
+            {user.interests.map((interest: Interest) => (
               <Badge
                 variant="dot"
                 key={interest.id}
@@ -100,7 +125,7 @@ const UserDetails = (props: UserDetailsParams) => {
               </Badge>
             ))}
           </Group>
-        </Chip.Group>
+        </Group>
 
         <Tabs
           value={searchParams.get('activeTab') ?? UserDetailsTabs.Projects}
@@ -111,92 +136,66 @@ const UserDetails = (props: UserDetailsParams) => {
               leftSection={<IconFolders />}
               rightSection={
                 <Badge color="blue" variant="filled">
-                  {/* user.enrollmentCount --- To-do: count user's active projects */}
-                  99
+                  {Array.isArray(user.enrollments) ? user.enrollments.length : 0}
                 </Badge>
               }>
               Proyectos
             </Tabs.Tab>
-
-            {/* !user.requestEnrollmentCount && ( --- To-do: set user's requests */}
-            {true && (
-              <Tabs.Tab
-                value={UserDetailsTabs.Requests}
-                leftSection={<IconSend />}
-                rightSection={
-                  <Badge color="blue" variant="filled">
-                    {/* user.requestEnrollmentCount --- To-do: count user's requests */}
-                    99
-                  </Badge>
-                }>
-                Solicitudes
-              </Tabs.Tab>
-            )}
           </Tabs.List>
 
-          {/*
           <Tabs.Panel value={UserDetailsTabs.Projects}>
-            <EnrollmentList projectId={props.id} enrollments={user.enrollments} isAdmin={!user.requestEnrollmentCount} />
+            {Array.isArray(user.enrollments) &&
+              user.enrollments.map((enrollment: Enrollment) => (
+                <Card
+                  key={enrollment.id}
+                  p="md"
+                  mt="md"
+                  withBorder
+                  className={`${styles.memberCard} ${
+                    colorScheme == 'dark' ? styles.memberCardDark : styles.memberCardLight
+                  }`}
+                  onClick={() => handleProjectClick(enrollment.project.id)}>
+                  <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
+                    {enrollment.project.name}
+                  </Text>
+                  <Group justify="space-between" gap="xs">
+                    <Group gap={'1rem'} style={{ marginBottom: 'xs' }}>
+                      <Text style={{ fontWeight: 500 }}>
+                        {enrollment.project.type} |{' '}
+                        {Dates.formatDate(enrollment.project.creationDate)}
+                        {enrollment.project.endDate
+                          ? ` - ${Dates.formatDate(enrollment.project.endDate)}`
+                          : ''}
+                      </Text>
+                      {Array.isArray(enrollment.project.researchDepartments) &&
+                        enrollment.project.researchDepartments.map(
+                          (department: ResearchDepartment) => (
+                            <Badge
+                              key={department.id}
+                              color="pink.6"
+                              variant="light"
+                              component="button"
+                              style={{ cursor: 'pointer' }}
+                              onClick={() =>
+                                handleDepartmentBadgeClick(
+                                  department.facility.institution.id,
+                                  department.facility.id,
+                                  department.id
+                                )
+                              }>
+                              {department.facility.institution.abbreviation} |{' '}
+                              {department.facility.abbreviation} | {department.name}
+                            </Badge>
+                          )
+                        )}
+                    </Group>
+                    <Badge variant="outline" color="blue.6" size="sm" radius="xs">
+                      {enrollment.role}
+                    </Badge>
+                  </Group>
+                </Card>
+              ))}
           </Tabs.Panel>
-          */}
-
-          {!errorEnrollmentRequests && enrollmentRequests && (
-            <Tabs.Panel value={UserDetailsTabs.Requests}>
-              {isLoadingEnrollmentRequests ? (
-                <Tabs.Tab value={UserDetailsTabs.Requests}>
-                  <Loader type="dots" />
-                </Tabs.Tab>
-              ) : (
-                enrollmentRequests.enrollmentRequests.map((request: EnrollmentRequestShow) => (
-                  <Card key={request.id} p="md" mt="md" withBorder>
-                    <Text size="lg" w={500}>
-                      {request.user.firstName} {request.user.lastName}
-                    </Text>
-
-                    <Group mt="xs" gap="xs">
-                      {request.user.userAffiliations.map((affiliation: UserAffiliation) => (
-                        <Badge
-                          key={affiliation.id}
-                          color="pink.6"
-                          variant="light"
-                          component="button"
-                          style={{ cursor: 'pointer' }}
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            handleDepartmentBadgeClick(
-                              affiliation.researchDepartment.facility.institution.id,
-                              affiliation.researchDepartment.facility.id,
-                              affiliation.researchDepartment.id
-                            )
-                          }}>
-                          {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
-                          {affiliation.researchDepartment.facility.abbreviation} |{' '}
-                          {affiliation.researchDepartment.name}
-                        </Badge>
-                      ))}
-                    </Group>
-
-                    <Group mt="xs" gap="xs">
-                      {request.user.interests.map((interest: Interest) => (
-                        <Badge
-                          variant="dot"
-                          key={interest.id}
-                          color="blue.6"
-                          size="lg"
-                          style={{ cursor: 'pointer' }}
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            handleInterestTagClick(interest.id)
-                          }}>
-                          {interest.name}
-                        </Badge>
-                      ))}
-                    </Group>
-                  </Card>
-                ))
-              )}
-            </Tabs.Panel>
-          )}
         </Tabs>
       </Card>
     </>
