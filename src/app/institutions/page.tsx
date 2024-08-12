@@ -183,6 +183,12 @@ const InstitutionAdminPage: NextPage = () => {
   const table = useMantineReactTable({
     columns,
     data: institutionsQuery.data ?? [],
+    enableColumnPinning: true,
+    initialState: {
+      columnPinning: {
+        left: ['mrt-row-actions'],
+      },
+    },
     createDisplayMode: 'modal',
     editDisplayMode: 'modal',
     enableEditing: true,
