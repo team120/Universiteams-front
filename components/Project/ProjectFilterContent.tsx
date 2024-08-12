@@ -4,11 +4,13 @@ import { Select, Stack, Grid, ActionIcon, Group, Switch, MultiSelect } from '@ma
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
+
 import { IconArrowUp, IconArrowDown, IconTrash } from '@tabler/icons-react'
-import SelectItem from '@/entities/HelpTypes/SelectItem'
 import Theme from 'src/app/theme'
+
+import { Order } from '@/entities/HelpTypes/Order'
+import SelectItem from '@/entities/HelpTypes/SelectItem'
 import { Url } from '@/services/url'
-import { Order } from '../../services/projects'
 
 interface ProjectFilterContentProps {
   sortAttributes: SelectItem[]

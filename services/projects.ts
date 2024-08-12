@@ -6,16 +6,12 @@ import { EnrollmentChangeRole } from '@/entities/HelpTypes/EnrollmentChangeRole'
 import { EnrollmentRequestAdmin } from '@/entities/HelpTypes/EnrollmentRequestReject'
 import { EnrollmentRequestInput } from '../entities/HelpTypes/EnrollmentRequestInput'
 import { EnrollmentRequestsShow } from '@/entities/HelpTypes/EnrollmentRequestsShow'
+import { Order } from '@/entities/HelpTypes/Order'
 import Project from '@/entities/Project'
 import ProjectsResult from '@/entities/ProjectsResult'
 import { ProjectSortAttribute, RequestState } from '@/entities/ProjectInList'
 
 const prefix = `${Env.backendAPI}/projects`
-
-export enum Order {
-  ASC = 'ASC',
-  DESC = 'DESC',
-}
 
 export interface GetProjectsInput {
   generalSearchTerm?: string
