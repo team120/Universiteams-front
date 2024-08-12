@@ -85,49 +85,53 @@ const UserDetails = (props: UserDetailsParams) => {
             {user.email}
           </Text>
         </Flex>
-        <Group mt={'1rem'}>
-          <IconSchool size={25} />
-          <Flex direction={'row'} gap={'0.5rem'} mt={'0.5rem'}>
-            {user.userAffiliations.map((affiliation: UserAffiliation) => (
-              <Badge
-                key={affiliation.id}
-                color="pink.6"
-                variant="light"
-                component="button"
-                style={{ cursor: 'pointer' }}
-                onClick={(event) => {
-                  event.stopPropagation()
-                  handleDepartmentBadgeClick(
-                    affiliation.researchDepartment.facility.institution.id,
-                    affiliation.researchDepartment.facility.id,
-                    affiliation.researchDepartment.id
-                  )
-                }}>
-                {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
-                {affiliation.researchDepartment.facility.abbreviation} |{' '}
-                {affiliation.researchDepartment.name}
-              </Badge>
-            ))}
-          </Flex>
-        </Group>
-        <Group my={'1rem'}>
-          <IconBulb size={25} />
-          <Group gap={'0.5rem'} mt={'0.5rem'}>
-            {user.interests.map((interest: Interest) => (
-              <Badge
-                variant="dot"
-                key={interest.id}
-                color="blue.6"
-                size="lg"
-                style={{ cursor: 'pointer' }}
-                onClick={() => handleInterestTagClick(interest.id)}>
-                {interest.name}
-              </Badge>
-            ))}
+        {Array.isArray(user.userAffiliations) && user.userAffiliations.length > 0 && (
+          <Group mt={'1rem'}>
+            <IconSchool size={25} />
+            <Flex direction={'row'} gap={'0.5rem'} mt={'0.5rem'}>
+              {user.userAffiliations.map((affiliation: UserAffiliation) => (
+                <Badge
+                  key={affiliation.id}
+                  color="pink.6"
+                  variant="light"
+                  component="button"
+                  style={{ cursor: 'pointer' }}
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    handleDepartmentBadgeClick(
+                      affiliation.researchDepartment.facility.institution.id,
+                      affiliation.researchDepartment.facility.id,
+                      affiliation.researchDepartment.id
+                    )
+                  }}>
+                  {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
+                  {affiliation.researchDepartment.facility.abbreviation} |{' '}
+                  {affiliation.researchDepartment.name}
+                </Badge>
+              ))}
+            </Flex>
           </Group>
-        </Group>
-
+        )}
+        {Array.isArray(user.userAffiliations) && user.userAffiliations.length > 0 && (
+          <Group mt={'1rem'}>
+            <IconBulb size={25} />
+            <Group gap={'0.5rem'} mt={'0.5rem'}>
+              {user.interests.map((interest: Interest) => (
+                <Badge
+                  variant="dot"
+                  key={interest.id}
+                  color="blue.6"
+                  size="lg"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleInterestTagClick(interest.id)}>
+                  {interest.name}
+                </Badge>
+              ))}
+            </Group>
+          </Group>
+        )}
         <Tabs
+          mt={'2rem'}
           value={searchParams.get('activeTab') ?? UserDetailsTabs.Projects}
           onChange={(value) => router.push(`${pathname}?activeTab=${value}`)}>
           <Tabs.List>
