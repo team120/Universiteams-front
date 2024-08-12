@@ -49,19 +49,19 @@ const UserDetails = (props: UserDetailsParams) => {
     router.push(`/users?interest=${interestId}`)
   }
 
-  // Handle method in projects endpoint
-  const handleProjectClick = (projectId: number) => {
-    router.push(`/projects/${projectId}`)
-  }
-
   const handleDepartmentBadgeClick = (
     institutionId: number,
     facilityId: number,
     departmentId: number
   ) => {
     router.push(
-      `/projects?university=${institutionId}&facility=${facilityId}&department=${departmentId}`
+      `/users?university=${institutionId}&facility=${facilityId}&department=${departmentId}`
     )
+  }
+
+  // Handle method in projects endpoint
+  const handleProjectClick = (projectId: number) => {
+    router.push(`/projects/${projectId}`)
   }
 
   if (isLoading) return <SkeletonFull />
