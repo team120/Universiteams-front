@@ -1,4 +1,4 @@
-import ResearchDepartment from './ResearchDepartment'
+import ResearchDepartment from '@/entities/ResearchDepartment'
 import User from './User'
 
 export enum UserAffiliationType {

@@ -8,8 +8,8 @@ import { Url } from '@/services/url'
 
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import Interest from '@/entities/Interest'
-import User from '@/entities/User'
-import UserAffiliation from '@/entities/UserAffiliation'
+import User from '@/entities/User/User'
+import UserAffiliation from '@/entities/User/UserAffiliation'
 import { UserDetailsTabs } from './UserDetails'
 
 interface UserItemProps {

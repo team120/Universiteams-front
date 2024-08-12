@@ -9,9 +9,9 @@ import { IconBulb, IconFolders, IconSchool } from '@tabler/icons-react'
 
 import styles from '@/components/Enrollment/EnrollmentList.module.css'
 import SkeletonFull from '@/components/Loader/SkeletonFull'
-import UserAffiliation from '@/entities/UserAffiliation'
+import UserAffiliation from '@/entities/User/UserAffiliation'
 import Interest from '@/entities/Interest'
-import Enrollment from '@/entities/Enrollment'
+import Enrollment from '@/entities/Enrollment/Enrollment'
 import Dates from 'utils/string/Dates'
 import ResearchDepartment from '@/entities/ResearchDepartment'
 

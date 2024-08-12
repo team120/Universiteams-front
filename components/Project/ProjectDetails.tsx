@@ -29,7 +29,7 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { EnrollmentRequestsQueryKey, Projects, ProjectsQueryKey } from '@/services/projects'
 
 import Dates from '../../utils/string/Dates'
-import { EnrollmentRequestShow } from '@/entities/HelpTypes/EnrollmentRequestShow'
+import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
 import sanitizeHtml from 'sanitize-html'
 
 import EnrollmentButton from '@/components/Enrollment/EnrollmentButton'

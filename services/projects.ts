@@ -2,14 +2,14 @@ import axios from 'axios'
 import Env from 'utils/config/Env'
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 
-import { EnrollmentChangeRole } from '@/entities/HelpTypes/EnrollmentChangeRole'
-import { EnrollmentRequestAdmin } from '@/entities/HelpTypes/EnrollmentRequestReject'
-import { EnrollmentRequestInput } from '../entities/HelpTypes/EnrollmentRequestInput'
-import { EnrollmentRequestsShow } from '@/entities/HelpTypes/EnrollmentRequestsShow'
+import { EnrollmentChangeRole } from '@/entities/Enrollment/EnrollmentChangeRole'
+import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestReject'
+import { EnrollmentRequestInput } from '../entities/Enrollment/EnrollmentRequestInput'
+import { EnrollmentRequestsShow } from '@/entities/Enrollment/EnrollmentRequestsShow'
 import { Order } from '@/entities/HelpTypes/Order'
-import Project from '@/entities/Project'
-import ProjectsResult from '@/entities/ProjectsResult'
-import { ProjectSortAttribute, RequestState } from '@/entities/ProjectInList'
+import Project from '@/entities/Project/Project'
+import ProjectsResult from '@/entities/Project/ProjectsResult'
+import { ProjectSortAttribute, RequestState } from '@/entities/Project/ProjectInList'
 
 const prefix = `${Env.backendAPI}/projects`
 

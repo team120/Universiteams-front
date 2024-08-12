@@ -1,12 +1,8 @@
-import Enrollment from './Enrollment'
-import Interest from './Interest'
+import Enrollment from '@/entities/Enrollment/Enrollment'
+import Interest from '@/entities/Interest'
 import UserAffiliation from './UserAffiliation'
 
-export enum UserSortAttribute {
-  LastName = 'lastName',
-}
-
-interface UserInList {
+interface User {
   id: number
   firstName: string
   lastName: string
@@ -16,4 +12,4 @@ interface UserInList {
   enrollments: Enrollment[]
 }
 
-export default UserInList
+export default User

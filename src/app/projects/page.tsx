@@ -17,7 +17,7 @@ import Filter from '@/components/Common/Filter/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
 import ProjectsList from '@/components/Project/ProjectsList'
 import { Order } from '@/entities/HelpTypes/Order'
-import { ProjectSortAttribute, RequestState } from '@/entities/ProjectInList'
+import { ProjectSortAttribute, RequestState } from '@/entities/Project/ProjectInList'
 
 const ProjectsPage: NextPage = () => {
   const projectsPerPage = 5

@@ -1,11 +1,9 @@
 import axios from 'axios'
 import Env from 'utils/config/Env'
-import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 
-import { EnrollmentRequestsShow } from '@/entities/HelpTypes/EnrollmentRequestsShow'
-import User from '@/entities/User'
-import UsersResult from '@/entities/UsersResult'
-import { UserSortAttribute } from '@/entities/UserInList'
+import User from '@/entities/User/User'
+import UsersResult from '@/entities/User/UsersResult'
+import { UserSortAttribute } from '@/entities/User/UserInList'
 import { Order } from '@/entities/HelpTypes/Order'
 
 const prefix = `${Env.backendAPI}/users`
