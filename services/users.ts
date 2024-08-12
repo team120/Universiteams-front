@@ -6,13 +6,17 @@ import { EnrollmentRequestsShow } from '@/entities/HelpTypes/EnrollmentRequestsS
 import User from '@/entities/User'
 import UsersResult from '@/entities/UsersResult'
 import { UserSortAttribute } from '@/entities/UserInList'
+import { Order } from '@/entities/HelpTypes/Order'
 
 const prefix = `${Env.backendAPI}/users`
 
 export interface GetUsersInput {
   interestIds?: number[]
+  institutionId?: number
+  facilityId?: number
+  researchDepartmentId?: number
   sortBy?: UserSortAttribute
-  inAscendingOrder?: boolean
+  order?: Order
   limit?: number
   offset?: number
 }
@@ -27,8 +31,13 @@ export const Users = {
           ? params.interestIds.map((id: number) => `interestIds=${id}&`).join('')
           : ''
       )
+      .concat(params?.institutionId ? `institutionId=${params.institutionId}&` : '')
+      .concat(params?.facilityId ? `facilityId=${params.facilityId}&` : '')
+      .concat(
+        params?.researchDepartmentId ? `researchDepartmentId=${params.researchDepartmentId}&` : ''
+      )
       .concat(params?.sortBy ? `sortBy=${params.sortBy}&` : '')
-      .concat(params?.inAscendingOrder ? `inAscendingOrder=${params.inAscendingOrder}&` : '')
+      .concat(params?.order ? `order=${params.order}&` : '')
       .concat(params?.limit ? `limit=${params.limit}&` : '')
       .concat(params?.offset ? `offset=${params.offset}&` : '')
 

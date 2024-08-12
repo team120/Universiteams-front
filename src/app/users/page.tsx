@@ -6,6 +6,9 @@ import { keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
 import { Center, Pagination } from '@mantine/core'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
+import { DepartmentQueryKey, ResearchDepartments } from '@/services/departments'
+import { Facilities } from '@/services/facilities'
+import { Institutions } from '@/services/institutions'
 import { Interests } from '@/services/interests'
 import { GetUsersInput, Users } from '@/services/users'
 
@@ -14,6 +17,10 @@ import Interest from '@/entities/Interest'
 import UserFilterContent from '@/components/User/UserFilterContent'
 import UserList from '@/components/User/UserList'
 import { UserSortAttribute } from '@/entities/UserInList'
+import Facility from '@/entities/Facility'
+import ResearchDepartment from '@/entities/ResearchDepartment'
+import Institution from '@/entities/Institution'
+import { Order } from '@/entities/HelpTypes/Order'
 
 const UsersPage: NextPage = () => {
   const usersPerPage = 5
@@ -37,15 +44,38 @@ const UsersPage: NextPage = () => {
     setCurrentPage(1)
   }, [searchQuery])
 
+  const facilitiesQuery = useQuery({
+    queryKey: ['facilities', searchQuery.get('university')],
+    queryFn: () =>
+      Facilities.getFacilities({ institutionId: parseInt(searchQuery.get('university')!) }),
+    enabled: !!searchQuery.get('university'),
+  })
+
+  const departmentsQuery = useQuery({
+    queryKey: [DepartmentQueryKey, searchQuery.get('facility')],
+    queryFn: () =>
+      ResearchDepartments.getResearchDepartments({
+        facilityId: parseInt(searchQuery.get('facility')!),
+      }),
+    enabled: !!searchQuery.get('facility'),
+  })
+
+  const institutionsQuery = useQuery({
+    queryKey: ['institutions'],
+    queryFn: Institutions.getInstitutions,
+  })
+
   const userParams: GetUsersInput = {
     interestIds: searchQuery.getAll('interest').map((id: string) => +id),
+    institutionId: searchQuery.get('university')
+      ? parseInt(searchQuery.get('university')!)
+      : undefined,
+    facilityId: searchQuery.get('facility') ? parseInt(searchQuery.get('facility')!) : undefined,
+    researchDepartmentId: searchQuery.get('department')
+      ? parseInt(searchQuery.get('department')!)
+      : undefined,
     sortBy: searchQuery.get('sortBy') as UserSortAttribute | undefined,
-    inAscendingOrder:
-      searchQuery.get('inAscendingOrder') === 'true'
-        ? true
-        : searchQuery.get('inAscendingOrder') === 'false'
-        ? false
-        : undefined,
+    order: (searchQuery.get('order') as Order) || undefined,
     offset: (currentPage - 1) * usersPerPage,
     limit: usersPerPage,
   }
@@ -73,6 +103,36 @@ const UsersPage: NextPage = () => {
     return []
   }, [interestsQuery.data])
 
+  const facilities = useMemo(() => {
+    if (facilitiesQuery.data) {
+      return facilitiesQuery.data.map((facility: Facility) => ({
+        value: facility.id.toString(),
+        label: facility.name,
+      }))
+    }
+    return []
+  }, [facilitiesQuery.data])
+
+  const departments = useMemo(() => {
+    if (departmentsQuery.data) {
+      return departmentsQuery.data.map((department: ResearchDepartment) => ({
+        value: department.id.toString(),
+        label: department.name,
+      }))
+    }
+    return []
+  }, [departmentsQuery.data])
+
+  const institutions = useMemo(() => {
+    if (institutionsQuery.data) {
+      return institutionsQuery.data.map((institution: Institution) => ({
+        value: institution.id.toString(),
+        label: institution.name,
+      }))
+    }
+    return []
+  }, [institutionsQuery.data])
+
   const totalPages = usersQuery?.data?.usersCount
     ? Math.ceil(usersQuery.data.usersCount / usersPerPage)
     : 1
@@ -81,7 +141,15 @@ const UsersPage: NextPage = () => {
     <>
       <Filter
         counter={usersQuery?.data?.usersCount ?? 0}
-        content={<UserFilterContent sortAttributes={sortAttributes} interests={interests} />}>
+        content={
+          <UserFilterContent
+            sortAttributes={sortAttributes}
+            interests={interests}
+            institutions={institutions}
+            facilities={facilities}
+            departments={departments}
+          />
+        }>
         {<UserList users={usersQuery?.data?.users} />}
         {totalPages > 1 && (
           <Center>

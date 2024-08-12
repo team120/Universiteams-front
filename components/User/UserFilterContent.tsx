@@ -3,15 +3,20 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Select, Stack, Grid, ActionIcon, Group, MultiSelect } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
+
 import { IconArrowUp, IconArrowDown, IconTrash } from '@tabler/icons-react'
 import Theme from 'src/app/theme'
 
-import { Url } from '@/services/url'
+import { Order } from '@/entities/HelpTypes/Order'
 import SelectItem from '@/entities/HelpTypes/SelectItem'
+import { Url } from '@/services/url'
 
 interface UserFilterContentProps {
   sortAttributes: SelectItem[]
   interests: SelectItem[]
+  institutions: SelectItem[]
+  facilities: SelectItem[]
+  departments: SelectItem[]
 }
 
 const UserFilterContent = (props: UserFilterContentProps) => {
@@ -19,8 +24,11 @@ const UserFilterContent = (props: UserFilterContentProps) => {
     initialValues: {
       generalSearch: '',
       sortBy: '',
-      inAscendingOrder: true,
+      order: '' as Order,
       interests: [] as string[],
+      university: '',
+      facility: '',
+      department: '',
     },
   })
 
@@ -30,8 +38,11 @@ const UserFilterContent = (props: UserFilterContentProps) => {
     form.setValues({
       generalSearch: searchQuery.get('generalSearch') ?? '',
       sortBy: searchQuery.get('sortBy') ?? '',
-      inAscendingOrder: searchQuery.get('inAscendingOrder') !== 'false',
+      order: (searchQuery.get('order') as Order) ?? '',
       interests: searchQuery.getAll('interest') ?? [],
+      university: searchQuery.get('university') ?? '',
+      facility: searchQuery.get('facility') ?? '',
+      department: searchQuery.get('department') ?? '',
     })
   }, [searchQuery])
 
@@ -42,13 +53,25 @@ const UserFilterContent = (props: UserFilterContentProps) => {
     Url.setUrlParam(router, pathname, searchQuery, 'sortBy', value)
   }
 
+  const handleUniversityChange = (value: string | null) => {
+    Url.setUrlParam(router, pathname, searchQuery, 'university', value)
+  }
+
+  const handleFacilityChange = (value: string | null) => {
+    Url.setUrlParam(router, pathname, searchQuery, 'facility', value)
+  }
+
+  const handleDepartmentChange = (value: string | null) => {
+    Url.setUrlParam(router, pathname, searchQuery, 'department', value)
+  }
+
   const handleInterestsChange = (value: string[]) => {
     Url.replaceArrayInUrl(router, pathname, searchQuery, 'interest', value)
   }
 
   const handleOrderChange = () => {
-    const value = !form.values.inAscendingOrder
-    Url.setUrlParam(router, pathname, searchQuery, 'inAscendingOrder', value.toString())
+    const value = form.values.order === Order.ASC ? Order.DESC : Order.ASC
+    Url.setUrlParam(router, pathname, searchQuery, 'order', value)
   }
 
   const reset = () => {
@@ -81,7 +104,7 @@ const UserFilterContent = (props: UserFilterContentProps) => {
             </Grid.Col>
             <Grid.Col span={2}>
               <ActionIcon variant="transparent" onClick={handleOrderChange}>
-                {form.values.inAscendingOrder ? <IconArrowUp /> : <IconArrowDown />}
+                {form.values.order === Order.ASC ? <IconArrowUp /> : <IconArrowDown />}
               </ActionIcon>
             </Grid.Col>
           </Grid>
@@ -99,6 +122,51 @@ const UserFilterContent = (props: UserFilterContentProps) => {
             searchable
             value={form.values.interests}
             onChange={handleInterestsChange}
+          />
+
+          <Select
+            label="Universidad"
+            placeholder='Ej: "UTN"'
+            data={[{ value: '', label: '' }].concat(
+              props.institutions.map((attr) => ({
+                value: attr.value,
+                label: attr.label,
+              }))
+            )}
+            clearable
+            searchable
+            value={form.values.university}
+            onChange={handleUniversityChange}
+          />
+
+          <Select
+            label="Regional"
+            placeholder='Ej: "Regional Buenos Aires"'
+            data={[{ value: '', label: '' }].concat(
+              props.facilities.map((attr) => ({
+                value: attr.value,
+                label: attr.label,
+              }))
+            )}
+            clearable
+            searchable
+            value={form.values.facility}
+            onChange={handleFacilityChange}
+          />
+
+          <Select
+            label="Departamento"
+            placeholder='Ej: "Ingeniería En Sistemas"'
+            data={[{ value: '', label: '' }].concat(
+              props.departments.map((attr) => ({
+                value: attr.value,
+                label: attr.label,
+              }))
+            )}
+            clearable
+            searchable
+            value={form.values.department}
+            onChange={handleDepartmentChange}
           />
 
           <Group grow mt="xs">
