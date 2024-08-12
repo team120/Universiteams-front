@@ -42,10 +42,4 @@ export const Users = {
     const result = await axios.get<User>(`${prefix}/${id}`)
     return result.data
   },
-
-  // Get the enrollments of a user
-  async getEnrollmentRequests(id: number): Promise<EnrollmentRequestsShow> {
-    const result = await axios.get<EnrollmentRequestsShow>(`${prefix}/${id}/enroll-requests`)
-    return result.data
-  },
 }
