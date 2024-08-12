@@ -33,6 +33,7 @@ import { InstitutionCreateDto } from '../../../entities/Institution/InstitutionC
 import { CurrentUserQueryOptions, UserSystemRole } from '../../../services/currentUser'
 import { AxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
+import { excludeProperty } from '../../../utils/mapper'
 
 const InstitutionAdminPage: NextPage = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({})
@@ -45,41 +46,6 @@ const InstitutionAdminPage: NextPage = () => {
   }
 
   const currentUserQuery = useQuery(CurrentUserQueryOptions.currentUser())
-
-  if (currentUserQuery.isLoading) return <SkeletonFull />
-
-  if (
-    currentUserQuery.error instanceof AxiosError &&
-    currentUserQuery.error.response?.status === 401
-  ) {
-    return (
-      <>
-        <Alert variant="light" color="red.6" title="Error" icon={<IconAlertCircle />}>
-          <Text size="lg" style={{ weight: 500 }} mb="xs">
-            Debes estar autenticado para acceder a esta página
-          </Text>
-          <Anchor size="md" onClick={handleGoToLoginClick}>
-            <Center inline>
-              <IconArrowLeft stroke={1.5} />
-              <Box ml={5}>Ir a la página de inicio de sesión</Box>
-            </Center>
-          </Anchor>
-        </Alert>
-      </>
-    )
-  }
-
-  if (currentUserQuery.data?.systemRole !== UserSystemRole.ADMIN) {
-    return (
-      <>
-        <Alert variant="light" color="red.6" title="Error" icon={<IconAlertCircle />}>
-          <Text size="lg" style={{ weight: 500 }} mb="xs">
-            No tiene permisos para acceder a esta página
-          </Text>
-        </Alert>
-      </>
-    )
-  }
 
   const queryClient = useQueryClient()
 
@@ -188,6 +154,7 @@ const InstitutionAdminPage: NextPage = () => {
         message: 'La institución se ha eliminado exitosamente',
         color: 'green',
       })
+      modals.closeAll()
     },
     onError: (error) => {
       notifications.show({
@@ -245,7 +212,8 @@ const InstitutionAdminPage: NextPage = () => {
         return
       }
       setValidationErrors({})
-      await createMutation.mutateAsync(values)
+      const createValues = excludeProperty(values as Institution, 'id')
+      await createMutation.mutateAsync(createValues)
       exitCreatingMode()
     },
     onEditingRowCancel: () => setValidationErrors({}),
@@ -306,6 +274,41 @@ const InstitutionAdminPage: NextPage = () => {
       showProgressBars: institutionsQuery.isFetching,
     },
   })
+
+  if (currentUserQuery.isLoading) return <SkeletonFull />
+
+  if (
+    currentUserQuery.error instanceof AxiosError &&
+    currentUserQuery.error.response?.status === 401
+  ) {
+    return (
+      <>
+        <Alert variant="light" color="red.6" title="Error" icon={<IconAlertCircle />}>
+          <Text size="lg" style={{ weight: 500 }} mb="xs">
+            Debes estar autenticado para acceder a esta página
+          </Text>
+          <Anchor size="md" onClick={handleGoToLoginClick}>
+            <Center inline>
+              <IconArrowLeft stroke={1.5} />
+              <Box ml={5}>Ir a la página de inicio de sesión</Box>
+            </Center>
+          </Anchor>
+        </Alert>
+      </>
+    )
+  }
+
+  if (currentUserQuery.data?.systemRole !== UserSystemRole.ADMIN) {
+    return (
+      <>
+        <Alert variant="light" color="red.6" title="Error" icon={<IconAlertCircle />}>
+          <Text size="lg" style={{ weight: 500 }} mb="xs">
+            No tiene permisos para acceder a esta página
+          </Text>
+        </Alert>
+      </>
+    )
+  }
 
   if (institutionsQuery.isLoading) return <SkeletonFull />
 
