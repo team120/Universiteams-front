@@ -64,15 +64,13 @@ const UsersPage: NextPage = () => {
 
   const userParams: GetUsersInput = {
     interestIds: searchQuery.getAll('interest').map((id: string) => +id),
-    institutionId: searchQuery.get('university')
-      ? parseInt(searchQuery.get('university')!)
-      : undefined,
-    facilityId: searchQuery.get('facility') ? parseInt(searchQuery.get('facility')!) : undefined,
+    institutionId: searchQuery.get('university') ? +searchQuery.get('university')! : undefined,
+    facilityId: searchQuery.get('facility') ? +searchQuery.get('facility')! : undefined,
     researchDepartmentId: searchQuery.get('department')
-      ? parseInt(searchQuery.get('department')!)
+      ? +searchQuery.get('department')!
       : undefined,
     sortBy: searchQuery.get('sortBy') as UserSortAttribute | undefined,
-    order: (searchQuery.get('order') as Order) || undefined,
+    order: searchQuery.get('order') as Order | undefined,
     offset: (currentPage - 1) * usersPerPage,
     limit: usersPerPage,
   }
