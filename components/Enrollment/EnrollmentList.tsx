@@ -36,7 +36,7 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
   const { data: currentUser } = useQuery(CurrentUserQueryOptions.currentUser())
 
   const handleMemberClick = (userId: number) => {
-    router.push(`/projects?user=${userId}`)
+    router.push(`/users/${userId}`)
   }
 
   const handleDepartmentBadgeClick = (
