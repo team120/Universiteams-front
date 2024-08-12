@@ -7,7 +7,9 @@ import styles from './UserItem.module.css'
 import { Url } from '@/services/url'
 
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
+import Interest from '@/entities/Interest'
 import User from '@/entities/User'
+import UserAffiliation from '@/entities/UserAffiliation'
 import { UserDetailsTabs } from './UserDetails'
 
 interface UserItemProps {
@@ -26,6 +28,32 @@ const UserItem = (props: UserItemProps) => {
     event.stopPropagation()
     Url.appendToUrl(router, pathname, searchQuery, 'interest', [interestId.toString()])
   }
+
+  const handleDepartmentBadgeClick = (
+    institutionId: number,
+    facilityId: number,
+    departmentId: number,
+    event: React.MouseEvent
+  ) => {
+    event.stopPropagation()
+    let modifiedSearchQuery = searchQuery
+    modifiedSearchQuery = Url.setUrlParam(
+      router,
+      pathname,
+      searchQuery,
+      'university',
+      institutionId.toString()
+    )
+    modifiedSearchQuery = Url.setUrlParam(
+      router,
+      pathname,
+      modifiedSearchQuery,
+      'facility',
+      facilityId.toString()
+    )
+    Url.setUrlParam(router, pathname, modifiedSearchQuery, 'department', departmentId.toString())
+  }
+
   if (!user) return <InfoMessage text="No se ha podido cargar el usuario" type="error" />
 
   return (
@@ -46,18 +74,44 @@ const UserItem = (props: UserItemProps) => {
         </Flex>
 
         <Chip.Group>
+          <Group gap={'1rem'} mt={'1rem'}>
+            {Array.isArray(user.userAffiliations) &&
+              user.userAffiliations.length > 0 &&
+              user.userAffiliations.map((affiliation: UserAffiliation) => (
+                <Badge
+                  key={affiliation.id}
+                  color="pink.6"
+                  variant="light"
+                  component="button"
+                  style={{ cursor: 'pointer' }}
+                  onClick={(event) =>
+                    handleDepartmentBadgeClick(
+                      affiliation.researchDepartment.facility.institution.id,
+                      affiliation.researchDepartment.facility.id,
+                      affiliation.researchDepartment.id,
+                      event
+                    )
+                  }>
+                  {affiliation.researchDepartment.facility.institution.abbreviation} |{' '}
+                  {affiliation.researchDepartment.facility.abbreviation} |{' '}
+                  {affiliation.researchDepartment.name}
+                </Badge>
+              ))}
+          </Group>
           <Group gap={'0.5rem'} mt={'1rem'}>
-            {user.interests.map((interest) => (
-              <Badge
-                variant="dot"
-                key={interest.id}
-                color="blue.6"
-                size="lg"
-                style={{ cursor: 'pointer' }}
-                onClick={(event) => handleInterestTagClick(interest.id, event)}>
-                {interest.name}
-              </Badge>
-            ))}
+            {Array.isArray(user.interests) &&
+              user.interests.length > 0 &&
+              user.interests.map((interest: Interest) => (
+                <Badge
+                  variant="dot"
+                  key={interest.id}
+                  color="blue.6"
+                  size="lg"
+                  style={{ cursor: 'pointer' }}
+                  onClick={(event) => handleInterestTagClick(interest.id, event)}>
+                  {interest.name}
+                </Badge>
+              ))}
           </Group>
         </Chip.Group>
       </div>
