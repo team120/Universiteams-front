@@ -36,7 +36,7 @@ import EnrollmentButton from '@/components/Enrollment/EnrollmentButton'
 import { EnrollmentList } from '../Enrollment/EnrollmentList'
 import { EnrollmentRequestAdminForm } from '../Enrollment/EnrollmentRequestAdmin'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
-import SkeletonFull from '@/components/Loader/SkeletonFull'
+import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 
 interface ProjectDetailsParams {

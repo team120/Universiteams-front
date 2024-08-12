@@ -8,7 +8,7 @@ import { Users } from '@/services/users'
 import { IconBulb, IconFolders, IconSchool } from '@tabler/icons-react'
 
 import styles from '@/components/Enrollment/EnrollmentList.module.css'
-import SkeletonFull from '@/components/Loader/SkeletonFull'
+import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
 import UserAffiliation from '@/entities/User/UserAffiliation'
 import Interest from '@/entities/Interest'
 import Enrollment from '@/entities/Enrollment/Enrollment'

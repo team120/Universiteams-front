@@ -4,7 +4,7 @@ import { useMediaQuery } from '@mantine/hooks'
 import Theme from 'src/app/theme'
 
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
-import SkeletonFull from '../Loader/SkeletonFull'
+import SkeletonFull from '../Common/Loader/SkeletonFull'
 import User from '@/entities/User/User'
 import UserItem from './UserItem'
 

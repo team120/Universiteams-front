@@ -5,7 +5,7 @@ import { useMediaQuery } from '@mantine/hooks'
 import Theme from 'src/app/theme'
 import ProjectInList from '@/entities/Project/ProjectInList'
 import ProjectItem from './ProjectItem'
-import SkeletonFull from '../Loader/SkeletonFull'
+import SkeletonFull from '../Common/Loader/SkeletonFull'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 
 interface ProjectsListProps {
