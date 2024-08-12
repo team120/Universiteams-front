@@ -8,7 +8,7 @@ import Filter from '@/components/Common/Filter/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
 import ProjectsList from '@/components/Project/ProjectsList'
 import { useSearchParams } from 'next/navigation'
-import { Institutions } from '@/services/institutions'
+import { InstitutionQueryKey, Institutions } from '@/services/institutions'
 import { Facilities } from '@/services/facilities'
 import { DepartmentQueryKey, ResearchDepartments } from '@/services/departments'
 import { InterestQueryKey, Interests } from '@/services/interests'
@@ -65,7 +65,7 @@ const ProjectsPage: NextPage = () => {
   })
 
   const institutionsQuery = useQuery({
-    queryKey: ['institutions'],
+    queryKey: [InstitutionQueryKey],
     queryFn: Institutions.getInstitutions,
   })
 
