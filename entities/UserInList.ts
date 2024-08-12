@@ -3,7 +3,6 @@ import Interest from './Interest'
 import UserAffiliation from './UserAffiliation'
 
 export enum UserSortAttribute {
-  FirstName = 'firstName',
   LastName = 'lastName',
 }
 

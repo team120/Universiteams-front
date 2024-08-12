@@ -31,10 +31,7 @@ const UsersPage: NextPage = () => {
   )
 
   const sortAttributes = useMemo(
-    () => [
-      { value: UserSortAttribute.FirstName, label: 'nombre' },
-      { value: UserSortAttribute.LastName, label: 'apellido' },
-    ],
+    () => [{ value: UserSortAttribute.LastName, label: 'apellido' }],
     [errorCurrentUser, currentUser]
   )
 
