@@ -35,11 +35,6 @@ const UserDetails = (props: UserDetailsParams) => {
 
   const { colorScheme } = useMantineColorScheme()
 
-  // No mutations --- Current used not needed now
-  // const { data: currentUser, error: errorCurrentUser } = useQuery(
-  //   CurrentUserQueryOptions.currentUser()
-  // )
-
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -101,7 +96,7 @@ const UserDetails = (props: UserDetailsParams) => {
             </Flex>
           </Group>
         )}
-        {Array.isArray(user.userAffiliations) && user.userAffiliations.length > 0 && (
+        {Array.isArray(user.interests) && user.interests.length > 0 && (
           <Group mt={'1rem'}>
             <IconBulb size={25} />
             <Group gap={'0.5rem'} mt={'0.5rem'}>
