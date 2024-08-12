@@ -5,7 +5,7 @@ import { Alert, Badge, Card, Flex, Group, Tabs, Text } from '@mantine/core'
 import { useMantineColorScheme } from '@mantine/core'
 
 import { Users } from '@/services/users'
-import { IconBulb, IconFolders, IconMail, IconSchool } from '@tabler/icons-react'
+import { IconBulb, IconFolders, IconSchool } from '@tabler/icons-react'
 
 import styles from '@/components/Enrollment/EnrollmentList.module.css'
 import SkeletonFull from '@/components/Loader/SkeletonFull'
@@ -74,17 +74,6 @@ const UserDetails = (props: UserDetailsParams) => {
         <Text style={{ fontSize: '3rem', fontWeight: 500, lineHeight: '3rem' }}>
           {user.firstName} {user.lastName}
         </Text>
-        <Flex direction={'row'} align={'center'} gap={10} mt="0.5rem">
-          <IconMail size={25} />
-          <Text
-            style={{
-              fontSize: '1.25rem',
-              fontWeight: 500,
-              lineHeight: '2rem',
-            }}>
-            {user.email}
-          </Text>
-        </Flex>
         {Array.isArray(user.userAffiliations) && user.userAffiliations.length > 0 && (
           <Group mt={'1rem'}>
             <IconSchool size={25} />
