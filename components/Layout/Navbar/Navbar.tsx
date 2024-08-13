@@ -14,16 +14,17 @@ import {
   IconShare,
   IconTerminal2,
   IconUserCircle,
+  IconUsers,
 } from '@tabler/icons-react'
 import { CurrentUserQueryOptions } from '../../../services/currentUser'
-import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import Link from 'next/link'
-import { Account } from '../../../services/account'
-import UserBanner from './UserBanner'
-import { notifications } from '@mantine/notifications'
 import { useMediaQuery } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
+import { Link } from 'tabler-icons-react'
+import { RequestState, ProjectSortAttribute } from '../../../entities/Project/ProjectInList'
+import { Account } from '../../../services/account'
 import Theme from '../../../src/app/theme'
+import UserBanner from './UserBanner'
 
 const mockAppVersion = 'v1.0.0'
 
@@ -119,6 +120,9 @@ const Navbar = () => {
             link="/projects?isFavorite=true"
             icon={<IconFolderHeart size={iconSize} />}
           />
+        )}
+        {currentUser && (
+          <NavbarItem text="Usuarios" link="/users" icon={<IconUsers size={iconSize} />} />
         )}
       </AppShell.Section>
       <Divider />
