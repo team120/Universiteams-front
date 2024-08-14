@@ -11,7 +11,6 @@ export interface ProjectNewRequest {
   description?: string
   endDate?: string
   web?: string
-  requesterMessage?: string
 
   interestsIds: number[]
   interestsToCreate: string[]
