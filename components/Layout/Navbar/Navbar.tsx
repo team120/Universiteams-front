@@ -35,12 +35,10 @@ const Navbar = () => {
 
   const [userMenuOpened, userMenuHandlers] = useDisclosure(false)
 
-  const router = useRouter()
-
   const logoutMutation = useMutation({
     mutationFn: () => Account.logout(),
     onSuccess: () => {
-      router.push('/')
+      window.location.reload()
     },
     onError: (error) => {
       console.error(error)
