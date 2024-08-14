@@ -4,6 +4,7 @@ interface ResearchDepartment {
   id: number
   name: string
   abbreviation: string
+  web?: string
   facility: Facility
 }
 
