@@ -26,7 +26,7 @@ import {
 } from '@mantine/core'
 import { IconAlertCircle, IconArrowLeft, IconEdit, IconTrash } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
-import { ModalsProvider, modals } from '@mantine/modals'
+import { modals } from '@mantine/modals'
 import { InstitutionUpdateDto } from '../../../entities/Institution/InstitutionUpdateDto'
 import { InstitutionCreateDto } from '../../../entities/Institution/InstitutionCreateDto'
 import { CurrentUserQueryOptions, UserSystemRole } from '../../../services/currentUser'
@@ -318,11 +318,7 @@ const InstitutionAdminPage: NextPage = () => {
 
   if (institutionsQuery.isLoading) return <SkeletonFull />
 
-  return (
-    <ModalsProvider>
-      <MantineReactTable table={table} />
-    </ModalsProvider>
-  )
+  return <MantineReactTable table={table} />
 }
 
 const validateRequired = (value: string) => !!value.length

@@ -11,7 +11,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ActionIcon, Alert, Anchor, Box, Button, Center, Flex, Text, Tooltip } from '@mantine/core'
 import { IconAlertCircle, IconArrowLeft, IconEdit, IconTrash } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
-import { ModalsProvider, modals } from '@mantine/modals'
+import { modals } from '@mantine/modals'
 import { CurrentUserQueryOptions, UserSystemRole } from '../../../services/currentUser'
 import { AxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
@@ -197,11 +197,7 @@ const FacilitiesAdminPage: NextPage = () => {
 
   if (facilitiesQuery.isLoading) return <SkeletonFull />
 
-  return (
-    <ModalsProvider>
-      <MantineReactTable table={table} />
-    </ModalsProvider>
-  )
+  return <MantineReactTable table={table} />
 }
 
 export default FacilitiesAdminPage
