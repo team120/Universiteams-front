@@ -25,7 +25,6 @@ import { Interests } from '@/services/interests'
 import { Projects } from '@/services/projects'
 import { ResearchDepartments } from '@/services/departments'
 
-import Facility from '@/entities/Facility'
 import Institution from '@/entities/Institution'
 import Interest from '@/entities/Interest'
 import Language from '@/entities/HelpTypes/Language'
@@ -37,6 +36,7 @@ import ResearchDepartment from '@/entities/ResearchDepartment'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
+import Facility from '../../entities/Facility/Facility'
 
 interface ProjectNewForm extends ProjectNewRequest {
   institutionId?: number
