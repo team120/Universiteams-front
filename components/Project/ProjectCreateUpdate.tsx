@@ -19,11 +19,11 @@ import {
 } from '@tabler/icons-react'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
-import { Facilities } from '@/services/facilities'
-import { Institutions } from '@/services/institutions'
-import { Interests } from '@/services/interests'
+import { Facilities, FacilitiesQueryKey } from '@/services/facilities'
+import { InstitutionQueryKey, Institutions } from '@/services/institutions'
+import { InterestQueryKey, Interests } from '@/services/interests'
 import { Projects } from '@/services/projects'
-import { ResearchDepartments } from '@/services/departments'
+import { DepartmentsQueryKey, ResearchDepartments } from '@/services/departments'
 
 import Institution from '@/entities/Institution'
 import Interest from '@/entities/Interest'
@@ -82,23 +82,23 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
   )
 
   const interestsQuery = useQuery({
-    queryKey: ['interests'],
+    queryKey: [InterestQueryKey],
     queryFn: Interests.getInterests,
   })
 
   const institutionsQuery = useQuery({
-    queryKey: ['institutions'],
+    queryKey: [InstitutionQueryKey],
     queryFn: Institutions.getInstitutions,
   })
 
   const facilitiesQuery = useQuery({
-    queryKey: ['facilities', institutionId ?? 0],
+    queryKey: [FacilitiesQueryKey, institutionId ?? 0],
     queryFn: () => Facilities.getFacilities({ institutionId: institutionId ?? 0 }),
     enabled: !!institutionId,
   })
 
   const departmentsQuery = useQuery({
-    queryKey: ['departments', facilityId ?? 0],
+    queryKey: [DepartmentsQueryKey, facilityId ?? 0],
     queryFn: () =>
       ResearchDepartments.getResearchDepartments({
         facilityId: facilityId ?? 0,
