@@ -12,9 +12,9 @@ export interface ProjectNewRequest {
   endDate?: string
   web?: string
 
-  interestsIds: number[]
+  interestsIds: string[]
   interestsToCreate: string[]
-  researchDepartmentsIds: number[]
+  researchDepartmentsIds: string[]
 }
 
 export interface ProjectNewResponse {

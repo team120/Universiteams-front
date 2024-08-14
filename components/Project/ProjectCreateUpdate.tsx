@@ -99,8 +99,8 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
       }
 
       // Validate IDs as integers
-      newProject.interestsIds = newProject.interestsIds.map((id) => +id)
-      newProject.researchDepartmentsIds = newProject.researchDepartmentsIds.map((id) => +id)
+      newProject.interestsIds = newProject.interestsIds.map((id) => id)
+      newProject.researchDepartmentsIds = newProject.researchDepartmentsIds.map((id) => id)
 
       // If id exists, update the project
       if (props?.id) {
@@ -190,7 +190,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
     return null
   }
 
-  const validateArray = (array?: number[]) => {
+  const validateArray = (array?: string[]) => {
     if (!Array.isArray(array) || array.length == 0) {
       return 'Este campo debe tener al menos 1 elemento'
     }
@@ -212,9 +212,10 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
           endDate: currentProject?.endDate,
           //web: currentProject?.web,
           web: '',
-          interestsIds: [],
+          interestsIds: currentProject?.interests.map((interest) => String(interest.id)) ?? [],
           interestsToCreate: [],
-          researchDepartmentsIds: [],
+          researchDepartmentsIds:
+            currentProject?.researchDepartments.map((department) => String(department.id)) ?? [],
         }
       : {
           // Create project
@@ -233,8 +234,8 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
       name: (value: string) => validateText(value),
       type: (value: ProjectType) => validateText(value),
       language: (value: Language) => validateText(value),
-      interestsIds: (value: number[]) => validateArray(value),
-      researchDepartmentsIds: (value: number[]) => validateArray(value),
+      interestsIds: (value: string[]) => validateArray(value),
+      researchDepartmentsIds: (value: string[]) => validateArray(value),
     },
   })
 
