@@ -2,16 +2,16 @@ import React, { useMemo } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  Alert,
   ActionIcon,
+  Alert,
   Badge,
   Card,
   Chip,
   Flex,
   Group,
-  Text,
-  Tabs,
   Loader,
+  Tabs,
+  Text,
 } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { modals } from '@mantine/modals'
@@ -23,6 +23,8 @@ import {
   IconX,
   IconCheck,
   IconBubbleText,
+  IconEdit,
+  IconTrash,
 } from '@tabler/icons-react'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
@@ -107,6 +109,14 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
 
   const handleFavoriteClick = () => {
     favoriteMutation.mutate()
+  }
+
+  const handleEditClick = () => {
+    console.log('Edit project')
+  }
+
+  const handleDeleteClick = () => {
+    console.log('Delete project')
   }
 
   const router = useRouter()
@@ -212,23 +222,44 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
 
         <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
 
-        <Flex justify="flex-end" align="center">
+        <Flex justify="flex-end" align="center" gap={'1rem'}>
           <EnrollmentButton
             projectId={project.id}
             requestState={project.requestState}
             requesterMessage={project.requesterMessage}
             adminMessage={project.adminMessage}
           />
-
-          <ActionIcon
-            variant="transparent"
-            aria-label="Guardar en marcadores"
-            onClick={handleFavoriteClick}
-            size="lg"
-            color={project.isFavorite ? 'blue' : 'gray'}>
-            {project.isFavorite ? <IconHeartFilled /> : <IconHeart />}
-          </ActionIcon>
-          <Text size="sm">{project.favoriteCount}</Text>
+          <Group gap={'0.25rem'}>
+            <ActionIcon
+              variant="transparent"
+              aria-label="Guardar en marcadores"
+              onClick={handleFavoriteClick}
+              size="lg"
+              color={project.isFavorite ? 'blue' : 'gray'}>
+              {project.isFavorite ? <IconHeartFilled /> : <IconHeart />}
+            </ActionIcon>
+            <Text size="sm">{project.favoriteCount}</Text>
+          </Group>
+          {!project.requestEnrollmentCount /* Is Admin */ && (
+            <>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Editar"
+                onClick={handleEditClick}
+                size="lg"
+                color={'orange.6'}>
+                <IconEdit />
+              </ActionIcon>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Eliminar"
+                onClick={handleDeleteClick}
+                size="lg"
+                color={'red.6'}>
+                <IconTrash />
+              </ActionIcon>
+            </>
+          )}
         </Flex>
 
         <Tabs
