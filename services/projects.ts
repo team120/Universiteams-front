@@ -67,7 +67,9 @@ export const Projects = {
     return result.data
   },
 
-  async getProject(id: number): Promise<Project | undefined> {
+  async getProject(id: number | undefined): Promise<Project | undefined> {
+    if (!id) return
+
     const result = await axios.get<Project>(`${prefix}/${id}`)
     return result.data
   },

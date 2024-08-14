@@ -29,6 +29,7 @@ import Facility from '@/entities/Facility'
 import Institution from '@/entities/Institution'
 import Interest from '@/entities/Interest'
 import Language from '@/entities/HelpTypes/Language'
+import Project from '@/entities/Project/Project'
 import { ProjectNewRequest, ProjectNewResponse } from '@/entities/Project/ProjectNew'
 import ProjectType from '@/entities/Project/ProjectType'
 import ResearchDepartment from '@/entities/ResearchDepartment'
@@ -42,17 +43,36 @@ interface ProjectNewForm extends ProjectNewRequest {
   facilityId?: number
 }
 
-const ProjectCreateUpdate = () => {
+interface ProjectCreateUpdateProps {
+  id?: number
+}
+
+const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
   const router = useRouter()
 
   const [createStatus, setCreateStatus] = useState<string>('start')
   const [institutionId, setInstitutionId] = useState<number | undefined>(0)
   const [facilityId, setFacilityId] = useState<number | undefined>(0)
+  const [currentProject, setCurrentProject] = useState<Project | undefined>(undefined)
+
+  const getProject = async () => {
+    const project = await Projects.getProject(props?.id)
+    if (!project) {
+      setCurrentProject(undefined)
+      return
+    }
+    setCurrentProject(project)
+  }
 
   useEffect(() => {
     setCreateStatus('start')
-    setInstitutionId(undefined)
-    setFacilityId(undefined)
+
+    if (!props?.id) {
+      setInstitutionId(undefined)
+      setFacilityId(undefined)
+    } else {
+      getProject()
+    }
   }, [])
 
   const queryClient = useQueryClient()
@@ -102,25 +122,25 @@ const ProjectCreateUpdate = () => {
     form.setFieldValue('researchDepartmentsIds', [])
   }
 
-  const createProjectMutation = useMutation({
+  const createUpdateProjectMutation = useMutation({
     mutationFn: async (values: ProjectNewForm) => {
       if (errorCurrentUser || !currentUser) {
         notifications.show({
-          title: 'Debes iniciar sesión para crear proyectos',
+          title: 'Debes iniciar sesión para crear o modificar proyectos',
           color: 'red',
-          message: <NotLoggedError action="crear proyectos" />,
+          message: <NotLoggedError action="crear o modificar proyectos" />,
         })
 
         return Promise.reject('User not logged in')
       }
 
       if (currentUser?.isEmailVerified === false) {
-        notifications.show(verifyEmailNotification('crear proyectos'))
+        notifications.show(verifyEmailNotification('crear o modificar proyectos'))
 
         return Promise.reject('Email not verified')
       }
 
-      // Set the new project values ignoring facilityID and institutionID
+      // Set the project values ignoring facilityID and institutionID
       const newProject: ProjectNewRequest = { ...values }
 
       // Format the date correctly (if given)
@@ -133,6 +153,33 @@ const ProjectCreateUpdate = () => {
       newProject.interestsIds = newProject.interestsIds.map((id) => +id)
       newProject.researchDepartmentsIds = newProject.researchDepartmentsIds.map((id) => +id)
 
+      console.log(newProject)
+
+      // If id exists, update the project
+      if (props?.id) {
+        if (!currentProject?.requestEnrollmentCount) {
+          notifications.show({
+            title: 'Debes tener el rol de líder de proyecto para modificar este proyecto',
+            color: 'red',
+            message:
+              'Solo puedes modificar los proyectos en los que tienes el rol de líder. Consulta al líder de tu proyecto para realizar esta acción',
+          })
+
+          return Promise.reject('No leader role')
+        }
+
+        const updatedProject: ProjectNewResponse = await Projects.updateProject(
+          props.id,
+          newProject
+        )
+        if (!updatedProject || updatedProject.id == 0) {
+          return Promise.reject('Project not updated')
+        }
+
+        return Promise.resolve(updatedProject)
+      }
+
+      // Without id, create a new project
       const createdProject: ProjectNewResponse = await Projects.newProject(newProject)
       if (!createdProject || createdProject.id == 0) {
         return Promise.reject('Project not created')
@@ -141,12 +188,12 @@ const ProjectCreateUpdate = () => {
       return Promise.resolve(createdProject)
     },
     onSuccess: () => {
-      const key = 'project-new'
+      const key = 'project-create-update'
       queryClient.invalidateQueries({ queryKey: [key] })
       setCreateStatus('success')
       notifications.show({
-        title: 'Proyecto creado',
-        message: 'Tu proyecto ha sido creado con éxito.',
+        title: `Proyecto ${props?.id ? `#${props.id} modificado` : 'creado'}`,
+        message: `Tu proyecto ha sido ${props?.id ? 'modificado' : 'creado'} con éxito.`,
         color: 'green',
       })
     },
@@ -155,7 +202,9 @@ const ProjectCreateUpdate = () => {
       setCreateStatus('fail')
       notifications.show({
         title: 'Error',
-        message: 'No se pudo crear el nuevo proyecto. Inténtalo mas tarde.',
+        message: `No se pudo ${
+          props?.id ? 'modificar' : 'crear'
+        } el proyecto. Inténtalo mas tarde.`,
         color: 'red',
       })
     },
@@ -165,7 +214,9 @@ const ProjectCreateUpdate = () => {
     return (
       <Box mx={'-1.5rem'} pt={'1.5rem'}>
         <InfoMessage
-          text={'Ocurrió un error al crear proyecto, inténtalo mas tarde'}
+          text={`Ocurrió un error al ${
+            props?.id ? 'modificar' : 'crear'
+          } proyecto, inténtalo mas tarde`}
           type={'error'}
         />
         <Button mx={'1.5rem'} onClick={() => handleGoBack()}>
@@ -178,7 +229,10 @@ const ProjectCreateUpdate = () => {
   const mutationSuccessMessage = () => {
     return (
       <Box mx={'-1.5rem'} pt={'1.5rem'}>
-        <InfoMessage text={`El proyecto ha sido creado con éxito`} type={'info'} />
+        <InfoMessage
+          text={`El proyecto ha sido ${props?.id ? 'modificado' : 'creado'} con éxito`}
+          type={'info'}
+        />
         <Button mx={'1.5rem'} onClick={() => handleGoBack()}>
           Volver a Proyectos
         </Button>
@@ -203,19 +257,37 @@ const ProjectCreateUpdate = () => {
   }
 
   const form = useForm<ProjectNewForm>({
-    initialValues: {
-      name: '',
-      type: 'Informal',
-      language: 'spanish',
-      description: '',
-      endDate: undefined,
-      web: undefined,
-      interestsIds: [],
-      interestsToCreate: [],
-      institutionId: undefined,
-      facilityId: undefined,
-      researchDepartmentsIds: [],
-    },
+    initialValues: !props?.id
+      ? {
+          // Update project
+          name: currentProject?.name ?? '',
+          type: (currentProject?.type as ProjectType) ?? 'Informal',
+          // language: currentProject?.language as Language ?? 'spanish',
+          language: 'spanish',
+          description: currentProject?.description,
+          endDate: currentProject?.endDate,
+          //web: currentProject?.web,
+          web: '',
+          interestsIds: [],
+          interestsToCreate: [],
+          institutionId: undefined,
+          facilityId: undefined,
+          researchDepartmentsIds: [],
+        }
+      : {
+          // Create project
+          name: '',
+          type: 'Informal',
+          language: 'spanish',
+          description: '',
+          endDate: undefined,
+          web: undefined,
+          interestsIds: [],
+          interestsToCreate: [],
+          institutionId: undefined,
+          facilityId: undefined,
+          researchDepartmentsIds: [],
+        },
 
     validate: {
       name: (value: string) => validateText(value),
@@ -230,11 +302,11 @@ const ProjectCreateUpdate = () => {
     <>
       <Paper withBorder shadow="md" mx={'1.5rem'} my={'1rem'} p={'2rem'} radius="md">
         <Text size="2rem" mb="2rem">
-          Nuevo proyecto
+          {props?.id ? `Modificar proyecto #${props.id}` : 'Nuevo proyecto'}
         </Text>
         <form
           onSubmit={form.onSubmit((values: ProjectNewForm) =>
-            createProjectMutation.mutate(values)
+            createUpdateProjectMutation.mutate(values)
           )}>
           <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
             <IconFolder size={'2rem'} />
@@ -411,7 +483,7 @@ const ProjectCreateUpdate = () => {
             mutationSuccessMessage()
           ) : (
             <Button type="submit" mt={'3rem'} color="orange.9">
-              Crear proyecto
+              {props?.id ? 'Modificar proyecto' : 'Crear proyecto'}
             </Button>
           )}
         </form>
