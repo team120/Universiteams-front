@@ -1,7 +1,17 @@
 import React, { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Box, Button, Flex, MultiSelect, Paper, Select, Text, TextInput } from '@mantine/core'
+import {
+  Box,
+  Button,
+  Flex,
+  Group,
+  MultiSelect,
+  Paper,
+  Select,
+  Text,
+  TextInput,
+} from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
@@ -33,6 +43,7 @@ import ResearchDepartment from '@/entities/ResearchDepartment'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
+import TextEditor from '../Common/TextEditor/TextEditor'
 
 interface ProjectCreateUpdateProps {
   id?: number
@@ -289,12 +300,18 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
           </Flex>
           <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
             <IconAlignBoxLeftBottom size={'2rem'} />
-            <TextInput
-              flex={1}
-              label="Descripción"
-              placeholder="Movilización de piezas robóticas mediante wifi"
-              {...form.getInputProps('description')}
-            />
+
+            <Flex flex={1} direction="column">
+              <Text size="sm" mb="0.1rem">
+                Descripción
+              </Text>
+              <TextEditor
+                content={form.values.description}
+                onChange={(content) => {
+                  form.values.description = content
+                }}
+              />
+            </Flex>
           </Flex>
           <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
             <IconCalendarEvent size={'2rem'} />
