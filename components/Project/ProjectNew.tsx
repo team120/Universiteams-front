@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, MultiSelect, Paper, Select, Text, TextInput } from '@mantine/core'
+import { Box, Button, MultiSelect, Paper, Select, Text, TextInput } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
@@ -111,16 +111,27 @@ const ProjectNew = () => {
       // Set the new project values ignoring facilityID and institutionID
       const newProject: ProjectNewRequest = { ...values }
 
+      // Format the date correctly (if given)
+      if (newProject.endDate) {
+        const date: Date = newProject.endDate as unknown as Date
+        newProject.endDate = date.toISOString()
+      }
+
+      // Validate IDs as integers
+      newProject.interestsIds = newProject.interestsIds.map((id) => +id)
+      newProject.researchDepartmentsIds = newProject.researchDepartmentsIds.map((id) => +id)
+
       const createdProject: ProjectNewResponse = await Projects.newProject(newProject)
       if (!createdProject || createdProject.id == 0) {
-        return setCreateStatus('fail')
-      } else {
-        return setCreateStatus('success')
+        return Promise.reject('Project not created')
       }
+
+      return Promise.resolve(createdProject)
     },
     onSuccess: () => {
       const key = 'project-new'
       queryClient.invalidateQueries({ queryKey: [key] })
+      setCreateStatus('success')
       notifications.show({
         title: 'Proyecto creado',
         message: 'Tu proyecto ha sido creado con éxito.',
@@ -129,6 +140,7 @@ const ProjectNew = () => {
     },
     onError: (error) => {
       console.error(error)
+      setCreateStatus('fail')
       notifications.show({
         title: 'Error',
         message: 'No se pudo crear el nuevo proyecto. Inténtalo mas tarde.',
@@ -139,7 +151,7 @@ const ProjectNew = () => {
 
   const mutationFailMessage = () => {
     return (
-      <>
+      <Box mx={'-1.5rem'} pt={'1.5rem'}>
         <InfoMessage
           text={'Ocurrió un error al crear proyecto, inténtalo mas tarde'}
           type={'error'}
@@ -147,18 +159,18 @@ const ProjectNew = () => {
         <Button mx={'1.5rem'} onClick={() => handleGoBack()}>
           Volver a Proyectos
         </Button>
-      </>
+      </Box>
     )
   }
 
   const mutationSuccessMessage = () => {
     return (
-      <>
+      <Box mx={'-1.5rem'} pt={'1.5rem'}>
         <InfoMessage text={`El proyecto ha sido creado con éxito`} type={'info'} />
         <Button mx={'1.5rem'} onClick={() => handleGoBack()}>
           Volver a Proyectos
         </Button>
-      </>
+      </Box>
     )
   }
 
@@ -352,13 +364,16 @@ const ProjectNew = () => {
             searchable
             {...form.getInputProps('researchDepartmentsIds')}
           />
-          <Button type="submit" mt={'3rem'} color="orange.9">
-            Crear proyecto
-          </Button>
+          {createStatus == 'fail' && mutationFailMessage()}
+          {createStatus == 'success' ? (
+            mutationSuccessMessage()
+          ) : (
+            <Button type="submit" mt={'3rem'} color="orange.9">
+              Crear proyecto
+            </Button>
+          )}
         </form>
       </Paper>
-      {createStatus === 'fail' && mutationFailMessage()}
-      {createStatus === 'success' && mutationSuccessMessage()}
     </>
   )
 }
