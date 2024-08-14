@@ -80,8 +80,6 @@ export const Projects = {
     project.researchDepartmentsIds = project.researchDepartmentsIds.map((id) => +id) as any[]
 
     const result = await axios.post<ProjectNewResponse>(prefix, project)
-    console.log(result)
-    console.log(result.data)
     return result.data
   },
 
