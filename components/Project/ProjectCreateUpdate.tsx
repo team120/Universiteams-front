@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Box, Button, Flex, MultiSelect, Paper, Select, Text, TextInput } from '@mantine/core'
@@ -7,8 +7,6 @@ import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import {
   IconAlignBoxLeftBottom,
-  IconBuildingCommunity,
-  IconBuildingEstate,
   IconBulb,
   IconCalendarEvent,
   IconFolder,
@@ -17,15 +15,15 @@ import {
   IconSchool,
   IconWorldWww,
 } from '@tabler/icons-react'
-
 import { CurrentUserQueryOptions } from '@/services/currentUser'
-import { Facilities, FacilitiesQueryKey } from '@/services/facilities'
-import { InstitutionQueryKey, Institutions } from '@/services/institutions'
 import { InterestQueryKey, Interests } from '@/services/interests'
 import { Projects, ProjectsQueryKey } from '@/services/projects'
-import { DepartmentsQueryKey, ResearchDepartments } from '@/services/departments'
+import {
+  DepartmentsQueryKey,
+  ResearchDepartmentRelations,
+  ResearchDepartments,
+} from '@/services/departments'
 
-import Institution from '@/entities/Institution'
 import Interest from '@/entities/Interest'
 import Language from '@/entities/HelpTypes/Language'
 import { ProjectNewRequest, ProjectNewResponse } from '@/entities/Project/ProjectNew'
@@ -35,7 +33,6 @@ import ResearchDepartment from '@/entities/ResearchDepartment'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
-import Facility from '../../entities/Facility/Facility'
 
 interface ProjectNewForm extends ProjectNewRequest {
   institutionId?: number
@@ -48,9 +45,6 @@ interface ProjectCreateUpdateProps {
 
 const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
   const router = useRouter()
-
-  const [institutionId, setInstitutionId] = useState<number | undefined>(0)
-  const [facilityId, setFacilityId] = useState<number | undefined>(0)
 
   const currentProjectQuery = useQuery({
     queryKey: [ProjectsQueryKey, props?.id],
@@ -70,40 +64,16 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
     queryFn: Interests.getInterests,
   })
 
-  const institutionsQuery = useQuery({
-    queryKey: [InstitutionQueryKey],
-    queryFn: Institutions.getInstitutions,
-  })
-
-  const facilitiesQuery = useQuery({
-    queryKey: [FacilitiesQueryKey, institutionId ?? 0],
-    queryFn: () => Facilities.getFacilities({ institutionId: institutionId ?? 0 }),
-    enabled: !!institutionId,
-  })
-
   const departmentsQuery = useQuery({
-    queryKey: [DepartmentsQueryKey, facilityId ?? 0],
+    queryKey: [DepartmentsQueryKey],
     queryFn: () =>
       ResearchDepartments.getResearchDepartments({
-        facilityId: facilityId ?? 0,
+        relations: [ResearchDepartmentRelations.facility, ResearchDepartmentRelations.institution],
       }),
-    enabled: !!facilityId,
   })
 
   const handleGoBack = () => {
     router.push('/projects')
-  }
-
-  const handleUniversityChange = (value: string | null) => {
-    setInstitutionId(!value ? undefined : +value)
-    setFacilityId(undefined)
-    form.setFieldValue('facilityId', undefined)
-    form.setFieldValue('researchDepartmentsIds', [])
-  }
-
-  const handleFacilityChange = (value: string | null) => {
-    setFacilityId(!value ? undefined : +value)
-    form.setFieldValue('researchDepartmentsIds', [])
   }
 
   const createUpdateProjectMutation = useMutation({
@@ -170,8 +140,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
       return Promise.resolve(createdProject)
     },
     onSuccess: () => {
-      const key = 'project-create-update'
-      queryClient.invalidateQueries({ queryKey: [key] })
+      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey, props?.id] })
       notifications.show({
         title: `Proyecto ${props?.id ? `#${props.id} modificado` : 'creado'}`,
         message: `Tu proyecto ha sido ${props?.id ? 'modificado' : 'creado'} con éxito.`,
@@ -381,75 +350,20 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
               {...form.getInputProps('interestsIds')}
             />
           </Flex>
-          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
-            <IconBuildingCommunity size={'2rem'} />
-            <Select
-              styles={{ input: { cursor: 'pointer' } }}
-              labelProps={{ cursor: 'pointer' }}
-              flex={1}
-              label="Universidad"
-              placeholder="Universidad de Robótica"
-              data={
-                institutionsQuery?.data
-                  ? institutionsQuery.data.map((institution: Institution) => ({
-                      value: institution.id.toString(),
-                      label: institution.name,
-                    }))
-                  : []
-              }
-              required
-              clearable
-              searchable
-              onChange={handleUniversityChange}
-            />
-          </Flex>
-          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
-            <IconBuildingEstate size={'2rem'} />
-            <Select
-              styles={
-                !institutionId
-                  ? { input: { cursor: 'not-allowed' } }
-                  : { input: { cursor: 'pointer' } }
-              }
-              labelProps={!institutionId ? { cursor: 'default' } : { cursor: 'pointer' }}
-              flex={1}
-              label="Regional"
-              placeholder="Facultad regional de Rosario"
-              disabled={!institutionId}
-              data={
-                facilitiesQuery?.data
-                  ? facilitiesQuery.data.map((facility: Facility) => ({
-                      value: facility.id.toString(),
-                      label: facility.name,
-                    }))
-                  : []
-              }
-              required
-              clearable
-              searchable
-              onChange={handleFacilityChange}
-            />
-          </Flex>
+
           <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
             <IconSchool size={'2rem'} />
             <MultiSelect
-              styles={
-                !facilityId
-                  ? { inputField: { cursor: 'not-allowed' } }
-                  : { inputField: { cursor: 'pointer' } }
-              }
-              labelProps={!facilityId ? { cursor: 'default' } : { cursor: 'pointer' }}
               flex={1}
               label="Departamentos"
               placeholder={
                 form.values.researchDepartmentsIds.length == 0 ? 'Ingeniería electrónica' : ''
               }
-              disabled={!facilityId}
               data={
                 departmentsQuery?.data
                   ? departmentsQuery.data.map((department: ResearchDepartment) => ({
                       value: department.id.toString(),
-                      label: department.name,
+                      label: `${department.facility.institution.name} ${department.facility.name} ${department.name}`,
                     }))
                   : []
               }
