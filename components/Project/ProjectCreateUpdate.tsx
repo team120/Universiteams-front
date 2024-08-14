@@ -206,7 +206,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
   }
 
   const form = useForm<ProjectNewForm>({
-    initialValues: !props?.id
+    initialValues: props?.id
       ? {
           // Update project
           name: currentProject?.name ?? '',
