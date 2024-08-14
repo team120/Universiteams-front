@@ -164,7 +164,6 @@ const ProjectNew = () => {
 
   const validateText = (value?: string) => {
     if (!value) return 'Este campo es obligatorio'
-    if (value.length < 8) return 'Mínimo 8 caracteres'
     if (value.length > 256) return 'Máximo 256 caracteres'
     return null
   }
@@ -198,8 +197,8 @@ const ProjectNew = () => {
       name: (value: string) => validateText(value),
       type: (value: ProjectType) => validateText(value),
       language: (value: Language) => validateText(value),
-      interestsIds: (value) => validateArray(value),
-      researchDepartmentsIds: (value) => validateArray(value),
+      interestsIds: (value: number[]) => validateArray(value),
+      researchDepartmentsIds: (value: number[]) => validateArray(value),
     },
   })
 
@@ -353,10 +352,10 @@ const ProjectNew = () => {
             searchable
             {...form.getInputProps('researchDepartmentsIds')}
           />
+          <Button type="submit" mt={'3rem'} color="orange.9">
+            Crear proyecto
+          </Button>
         </form>
-        <Button type="submit" mt={'3rem'} color="orange.9">
-          Crear proyecto
-        </Button>
       </Paper>
       {createStatus === 'fail' && mutationFailMessage()}
       {createStatus === 'success' && mutationSuccessMessage()}
