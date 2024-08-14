@@ -91,8 +91,6 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
         return Promise.reject('Email not verified')
       }
 
-      console.log(values)
-
       // Set the project values
       const newProject: ProjectNewRequest = { ...values }
 
