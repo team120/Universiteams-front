@@ -8,6 +8,7 @@ import { EnrollmentRequestInput } from '../entities/Enrollment/EnrollmentRequest
 import { EnrollmentRequestsShow } from '@/entities/Enrollment/EnrollmentRequestsShow'
 import { Order } from '@/entities/HelpTypes/Order'
 import Project from '@/entities/Project/Project'
+import { ProjectNewRequest, ProjectNewResponse } from '@/entities/Project/ProjectNew'
 import ProjectsResult from '@/entities/Project/ProjectsResult'
 import { ProjectSortAttribute, RequestState } from '@/entities/Project/ProjectInList'
 
@@ -68,6 +69,11 @@ export const Projects = {
 
   async getProject(id: number): Promise<Project | undefined> {
     const result = await axios.get<Project>(`${prefix}/${id}`)
+    return result.data
+  },
+
+  async newProject(project: ProjectNewRequest): Promise<ProjectNewResponse> {
+    const result = await axios.post<ProjectNewResponse>(prefix, project)
     return result.data
   },
 
