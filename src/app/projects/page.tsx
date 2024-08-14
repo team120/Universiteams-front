@@ -1,22 +1,21 @@
 'use client'
 import React, { useState, useMemo, useEffect } from 'react'
 import { NextPage } from 'next'
-
-import { Order, ProjectQueryOptions } from '@/services/projects'
-
+import { useSearchParams } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+import { Center, Pagination } from '@mantine/core'
+import { ProjectQueryOptions } from '@/services/projects'
+import { CurrentUserQueryOptions } from '@/services/currentUser'
+import { DepartmentQueryKey, ResearchDepartments } from '@/services/departments'
+import { Facilities } from '@/services/facilities'
+import { Institutions, InstitutionQueryKey } from '@/services/institutions'
+import { InterestQueryKey, Interests } from '@/services/interests'
+import { Users } from '@/services/users'
 import Filter from '@/components/Common/Filter/Filter'
 import ProjectFilterContent from '@/components/Project/ProjectFilterContent'
 import ProjectsList from '@/components/Project/ProjectsList'
-import { useSearchParams } from 'next/navigation'
-import { InstitutionQueryKey, Institutions } from '@/services/institutions'
-import { Facilities } from '@/services/facilities'
-import { DepartmentQueryKey, ResearchDepartments } from '@/services/departments'
-import { InterestQueryKey, Interests } from '@/services/interests'
-import { Users } from '@/services/user'
-import { Center, Pagination } from '@mantine/core'
-import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
-import { useQuery } from '@tanstack/react-query'
-import { CurrentUserQueryOptions } from '../../../services/currentUser'
+import { Order } from '@/entities/HelpTypes/Order'
+import { ProjectSortAttribute, RequestState } from '../../../entities/Project/ProjectInList'
 
 const ProjectsPage: NextPage = () => {
   const projectsPerPage = 5
@@ -45,7 +44,7 @@ const ProjectsPage: NextPage = () => {
 
   const usersQuery = useQuery({
     queryKey: ['users'],
-    queryFn: Users.getUsers,
+    queryFn: () => Users.getUsers,
   })
 
   const facilitiesQuery = useQuery({
@@ -107,8 +106,8 @@ const ProjectsPage: NextPage = () => {
   )
 
   const users = useMemo(() => {
-    if (usersQuery.data?.users) {
-      return usersQuery.data.users.map((user) => ({
+    if (Array.isArray(usersQuery.data)) {
+      return usersQuery.data.map((user) => ({
         value: user.id.toString(),
         label: `${user.firstName} ${user.lastName}`,
       }))

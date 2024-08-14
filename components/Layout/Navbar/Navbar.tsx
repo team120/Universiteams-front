@@ -1,10 +1,12 @@
 import React from 'react'
-import { AppShell, Divider, ScrollArea } from '@mantine/core'
+import { AppShell, Divider, rem, ScrollArea } from '@mantine/core'
 import NavbarItem from './NavbarItem'
 import {
   IconAlertCircle,
   IconBuildingCommunity,
   IconBulb,
+  IconDoorExit,
+  IconEdit,
   IconFileDescription,
   IconFolderHeart,
   IconFolders,
@@ -12,10 +14,15 @@ import {
   IconShare,
   IconTerminal2,
   IconUserCircle,
+  IconUsers,
 } from '@tabler/icons-react'
 import { CurrentUserQueryOptions } from '../../../services/currentUser'
-import { ProjectSortAttribute, RequestState } from '../../../entities/ProjectInList'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useDisclosure } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
+import { RequestState, ProjectSortAttribute } from '../../../entities/Project/ProjectInList'
+import { Account } from '../../../services/account'
+import UserBanner from './UserBanner'
 
 const mockAppVersion = 'v1.0.0'
 
@@ -25,16 +32,52 @@ const iconSize = 40
 const Navbar = () => {
   const { data: currentUser } = useQuery(CurrentUserQueryOptions.currentUser())
 
+  const [userMenuOpened, userMenuHandlers] = useDisclosure(false)
+
+  const logoutMutation = useMutation({
+    mutationFn: () => Account.logout(),
+    onSuccess: () => {
+      window.location.reload()
+    },
+    onError: (error) => {
+      console.error(error)
+      notifications.show({
+        title: 'Error',
+        message: 'No se pudo cerrar sesión. Intente mas tarde.',
+        color: 'red',
+      })
+    },
+  })
+
   return (
     <>
       {currentUser ? (
         <AppShell.Section>
-          <NavbarItem
-            text={currentUser.user}
-            textSecondLine={currentUser.email}
-            link="/account/profile"
-            icon={<IconUserCircle size={iconSize} />}
+          <UserBanner
+            profileIcon={<IconUserCircle size={iconSize} />}
+            name={currentUser.user}
+            email={currentUser.email}
+            onClick={userMenuHandlers.toggle}
           />
+          {userMenuOpened && (
+            <>
+              <NavbarItem
+                text="Editar Perfil"
+                link="/account/profile"
+                icon={<IconEdit style={{ width: rem(14), height: rem(14) }} />}
+                small
+                background="var(--mantine-color-gray-lightest)"
+              />
+              <NavbarItem
+                text="Cerrar Sesión"
+                icon={<IconDoorExit style={{ width: rem(14), height: rem(14) }} />}
+                small
+                background="var(--mantine-color-gray-lightest)"
+                onClick={logoutMutation.mutate}
+                link="#"
+              />
+            </>
+          )}
         </AppShell.Section>
       ) : (
         <AppShell.Section>
@@ -68,6 +111,9 @@ const Navbar = () => {
             link="/projects?isFavorite=true"
             icon={<IconFolderHeart size={iconSize} />}
           />
+        )}
+        {currentUser && (
+          <NavbarItem text="Usuarios" link="/users" icon={<IconUsers size={iconSize} />} />
         )}
       </AppShell.Section>
       <Divider />

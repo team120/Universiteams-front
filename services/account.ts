@@ -5,7 +5,7 @@ import LoginRegisterType from '@/entities/HelpTypes/LoginRegisterType'
 import { CurrentUserInfo } from './currentUser'
 import { ResetPassword } from '../entities/HelpTypes/ResetPassword'
 import Interest from '../entities/Interest'
-import UserAffiliation, { UserAffiliationType } from '../entities/UserAffiliation'
+import UserAffiliation, { UserAffiliationType } from '../entities/User/UserAffiliation'
 
 const prefix = `${Env.backendAPI}/auth`
 
@@ -30,6 +30,10 @@ export const Account = {
   authenticate: async (values: Login, type: LoginRegisterType) => {
     const url = `${prefix}/${type}`
     await axios.post<CurrentUserInfo>(url, values)
+  },
+  logout: async () => {
+    const url = `${prefix}/logout`
+    await axios.post(url)
   },
   saveProfile: async (values: ProfileInputDto) => {
     const url = `${prefix}/profile`

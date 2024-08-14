@@ -10,7 +10,6 @@ import {
 import { NextPage } from 'next'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { InstitutionQueryKey, Institutions } from '../../../services/institutions'
-import SkeletonFull from '../../../components/Loader/SkeletonFull'
 import Institution from '../../../entities/Institution'
 import {
   ActionIcon,
@@ -34,6 +33,7 @@ import { CurrentUserQueryOptions, UserSystemRole } from '../../../services/curre
 import { AxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { excludeProperty } from '../../../utils/mapper'
+import SkeletonFull from '../../../components/Common/Loader/SkeletonFull'
 
 const InstitutionAdminPage: NextPage = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({})
