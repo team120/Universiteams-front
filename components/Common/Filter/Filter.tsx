@@ -7,6 +7,7 @@ import Theme from 'src/app/theme'
 
 interface FilterProps {
   counter: number
+  newButtonDirection?: string
   children: React.ReactNode
   content: React.ReactNode
 }
@@ -30,7 +31,8 @@ const Filter = (props: FilterProps) => {
   }
 
   const handleNewProject = () => {
-    router.push('/projects/newProject')
+    if (!props.newButtonDirection) return
+    router.push(props.newButtonDirection)
   }
 
   const resultsCounter =
@@ -44,12 +46,14 @@ const Filter = (props: FilterProps) => {
 
   return (
     <>
-      <Group
-        justify={isMobile ? 'flex-end' : 'flex-start'}
-        mt={'1rem'}
-        mx={isMobile ? '1rem' : '1.4rem'}>
-        <Button onClick={() => handleNewProject()}>Nuevo proyecto</Button>
-      </Group>
+      {props.newButtonDirection && (
+        <Group
+          justify={isMobile ? 'flex-end' : 'flex-start'}
+          mt={'1rem'}
+          mx={isMobile ? '1rem' : '1.4rem'}>
+          <Button onClick={() => handleNewProject()}>Nuevo proyecto</Button>
+        </Group>
+      )}
       <Group justify={isMobile ? 'flex-end' : 'flex-start'} gap="xs">
         <Group my={'1rem'}>{isMobile && resultsCounter}</Group>
         <ActionIcon

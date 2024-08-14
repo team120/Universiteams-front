@@ -165,6 +165,7 @@ const ProjectsPage: NextPage = () => {
     <>
       <Filter
         counter={projectsQuery.data?.projectCount ?? 0}
+        newButtonDirection="/projects/new"
         content={
           <ProjectFilterContent
             sortAttributes={sortAttributes}
