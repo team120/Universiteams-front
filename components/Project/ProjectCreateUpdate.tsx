@@ -34,11 +34,6 @@ import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 
-interface ProjectNewForm extends ProjectNewRequest {
-  institutionId?: number
-  facilityId?: number
-}
-
 interface ProjectCreateUpdateProps {
   id?: number
 }
@@ -77,7 +72,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
   }
 
   const createUpdateProjectMutation = useMutation({
-    mutationFn: async (values: ProjectNewForm) => {
+    mutationFn: async (values: ProjectNewRequest) => {
       if (errorCurrentUser || !currentUser) {
         notifications.show({
           title: 'Debes iniciar sesión para crear o modificar proyectos',
@@ -94,7 +89,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
         return Promise.reject('Email not verified')
       }
 
-      // Set the project values ignoring facilityID and institutionID
+      // Set the project values
       const newProject: ProjectNewRequest = { ...values }
 
       // Format the date correctly (if given)
@@ -205,7 +200,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
     return null
   }
 
-  const form = useForm<ProjectNewForm>({
+  const form = useForm<ProjectNewRequest>({
     initialValues: props?.id
       ? {
           // Update project
@@ -219,8 +214,6 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
           web: '',
           interestsIds: [],
           interestsToCreate: [],
-          institutionId: undefined,
-          facilityId: undefined,
           researchDepartmentsIds: [],
         }
       : {
@@ -233,8 +226,6 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
           web: undefined,
           interestsIds: [],
           interestsToCreate: [],
-          institutionId: undefined,
-          facilityId: undefined,
           researchDepartmentsIds: [],
         },
 
@@ -254,7 +245,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
           {props?.id ? `Modificar proyecto #${props.id}` : 'Nuevo proyecto'}
         </Text>
         <form
-          onSubmit={form.onSubmit((values: ProjectNewForm) =>
+          onSubmit={form.onSubmit((values: ProjectNewRequest) =>
             createUpdateProjectMutation.mutate(values)
           )}>
           <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
