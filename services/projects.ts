@@ -77,6 +77,16 @@ export const Projects = {
     return result.data
   },
 
+  async updateProject(projectId: number, project: ProjectNewRequest): Promise<ProjectNewResponse> {
+    const result = await axios.put<ProjectNewResponse>(`${prefix}/${projectId}`, project)
+    return result.data
+  },
+
+  async deleteProject(projectId: number) {
+    await axios.delete(`${prefix}/${projectId}`)
+    return
+  },
+
   async favorite(id: number): Promise<void> {
     await axios.post(`${prefix}/${id}/favorite`)
   },
