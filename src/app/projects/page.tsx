@@ -7,7 +7,7 @@ import { Center, Pagination } from '@mantine/core'
 import { ProjectQueryOptions } from '@/services/projects'
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { DepartmentQueryKey, ResearchDepartments } from '@/services/departments'
-import { Facilities } from '@/services/facilities'
+import { Facilities, FacilitiesQueryKey } from '@/services/facilities'
 import { Institutions, InstitutionQueryKey } from '@/services/institutions'
 import { InterestQueryKey, Interests } from '@/services/interests'
 import { Users } from '@/services/users'
@@ -48,7 +48,7 @@ const ProjectsPage: NextPage = () => {
   })
 
   const facilitiesQuery = useQuery({
-    queryKey: ['facilities', searchQuery.get('university')],
+    queryKey: [FacilitiesQueryKey, searchQuery.get('university')],
     queryFn: () =>
       Facilities.getFacilities({ institutionId: parseInt(searchQuery.get('university')!) }),
     enabled: !!searchQuery.get('university'),

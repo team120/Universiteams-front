@@ -1,4 +1,4 @@
-import Facility from './Facility'
+import Facility from './Facility/Facility'
 
 interface ResearchDepartment {
   id: number
