@@ -26,7 +26,11 @@ const Filter = (props: FilterProps) => {
     setOpened((prevOpened) => !prevOpened)
   }
 
-  const resultsCounter = <Text>{props.counter} Resultados</Text>
+  const resultsCounter = (
+    <Text>
+      {props.counter} {props.counter != 1 ? 'Resultados' : 'Resultado'}
+    </Text>
+  )
   return (
     <>
       <Group justify={isMobile ? 'flex-end' : 'flex-start'} gap="xs">
