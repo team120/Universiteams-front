@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Box, Button, MultiSelect, Paper, Select, Text, TextInput } from '@mantine/core'
+import { Box, Button, Flex, MultiSelect, Paper, Select, Text, TextInput } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
+import {
+  IconAlignBoxLeftBottom,
+  IconBuildingCommunity,
+  IconBuildingEstate,
+  IconBulb,
+  IconCalendarEvent,
+  IconFolder,
+  IconInfoSquareRounded,
+  IconLanguage,
+  IconSchool,
+  IconWorldWww,
+} from '@tabler/icons-react'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Facilities } from '@/services/facilities'
@@ -224,146 +236,176 @@ const ProjectNew = () => {
           onSubmit={form.onSubmit((values: ProjectNewForm) =>
             createProjectMutation.mutate(values)
           )}>
-          <TextInput
-            mt={'1rem'}
-            label="Nombre"
-            placeholder="Gran proyecto de robótica"
-            required
-            {...form.getInputProps('name')}
-          />
-          <Select
-            styles={{ input: { cursor: 'pointer' } }}
-            labelProps={{ cursor: 'pointer' }}
-            mt={'1rem'}
-            label="Tipo"
-            placeholder="Formal"
-            data={['Formal', 'Informal']}
-            required
-            clearable
-            searchable
-            {...form.getInputProps('type')}
-          />
-          <Select
-            styles={{ input: { cursor: 'pointer' } }}
-            labelProps={{ cursor: 'pointer' }}
-            mt={'1rem'}
-            label="Idioma"
-            placeholder="Español"
-            data={['spanish', 'english']}
-            required
-            clearable
-            searchable
-            {...form.getInputProps('language')}
-          />
-          <TextInput
-            mt={'1rem'}
-            label="Descripción"
-            placeholder="Movilización de piezas robóticas mediante wifi"
-            {...form.getInputProps('description')}
-          />
-          <DateInput
-            styles={{ input: { cursor: 'pointer' } }}
-            labelProps={{ cursor: 'pointer' }}
-            mt={'1rem'}
-            label="Fecha de finalización"
-            placeholder="Fecha de finalización"
-            clearable
-            {...form.getInputProps('endDate')}
-          />
-          <TextInput
-            mt={'1rem'}
-            label="Web"
-            placeholder="www.universidadRobotica.com/projectos/20"
-            {...form.getInputProps('web')}
-          />
-          <MultiSelect
-            styles={{ inputField: { cursor: 'pointer' } }}
-            labelProps={{ cursor: 'pointer' }}
-            mt={'1rem'}
-            label="Intereses"
-            placeholder={form.values.interestsIds.length == 0 ? 'Robótica, Redes' : ''}
-            data={
-              interestsQuery?.data
-                ? interestsQuery.data.map((interest: Interest) => ({
-                    value: interest.id.toString(),
-                    label: interest.name,
-                  }))
-                : []
-            }
-            required
-            clearable
-            searchable
-            {...form.getInputProps('interestsIds')}
-          />
-          <Select
-            styles={{ input: { cursor: 'pointer' } }}
-            labelProps={{ cursor: 'pointer' }}
-            mt={'1rem'}
-            label="Universidad"
-            placeholder="Universidad de Robótica"
-            data={
-              institutionsQuery?.data
-                ? institutionsQuery.data.map((institution: Institution) => ({
-                    value: institution.id.toString(),
-                    label: institution.name,
-                  }))
-                : []
-            }
-            required
-            clearable
-            searchable
-            onChange={handleUniversityChange}
-          />
-          <Select
-            styles={
-              !institutionId
-                ? { input: { cursor: 'not-allowed' } }
-                : { input: { cursor: 'pointer' } }
-            }
-            labelProps={!institutionId ? { cursor: 'default' } : { cursor: 'pointer' }}
-            mt={'1rem'}
-            label="Regional"
-            placeholder="Facultad regional de Rosario"
-            disabled={!institutionId}
-            data={
-              facilitiesQuery?.data
-                ? facilitiesQuery.data.map((facility: Facility) => ({
-                    value: facility.id.toString(),
-                    label: facility.name,
-                  }))
-                : []
-            }
-            required
-            clearable
-            searchable
-            onChange={handleFacilityChange}
-          />
-          <MultiSelect
-            styles={
-              !facilityId
-                ? { inputField: { cursor: 'not-allowed' } }
-                : { inputField: { cursor: 'pointer' } }
-            }
-            labelProps={!facilityId ? { cursor: 'default' } : { cursor: 'pointer' }}
-            mt={'1rem'}
-            label="Departamentos"
-            placeholder={
-              form.values.researchDepartmentsIds.length == 0 ? 'Ingeniería electrónica' : ''
-            }
-            disabled={!facilityId}
-            data={
-              departmentsQuery?.data
-                ? departmentsQuery.data.map((department: ResearchDepartment) => ({
-                    value: department.id.toString(),
-                    label: department.name,
-                  }))
-                : []
-            }
-            required
-            clearable
-            searchable
-            {...form.getInputProps('researchDepartmentsIds')}
-          />
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconFolder size={'2rem'} />
+            <TextInput
+              flex={1}
+              label="Nombre"
+              placeholder="Gran proyecto de robótica"
+              required
+              {...form.getInputProps('name')}
+            />
+          </Flex>
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconInfoSquareRounded size={'2rem'} />
+            <Select
+              styles={{ input: { cursor: 'pointer' } }}
+              labelProps={{ cursor: 'pointer' }}
+              flex={1}
+              label="Tipo"
+              placeholder="Formal"
+              data={['Formal', 'Informal']}
+              required
+              clearable
+              searchable
+              {...form.getInputProps('type')}
+            />
+          </Flex>
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconLanguage size={'2rem'} />
+            <Select
+              styles={{ input: { cursor: 'pointer' } }}
+              labelProps={{ cursor: 'pointer' }}
+              flex={1}
+              label="Idioma"
+              placeholder="Español"
+              data={['spanish', 'english']}
+              required
+              clearable
+              searchable
+              {...form.getInputProps('language')}
+            />
+          </Flex>
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconAlignBoxLeftBottom size={'2rem'} />
+            <TextInput
+              flex={1}
+              label="Descripción"
+              placeholder="Movilización de piezas robóticas mediante wifi"
+              {...form.getInputProps('description')}
+            />
+          </Flex>
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconCalendarEvent size={'2rem'} />
+            <DateInput
+              styles={{ input: { cursor: 'pointer' } }}
+              labelProps={{ cursor: 'pointer' }}
+              flex={1}
+              label="Fecha de finalización"
+              placeholder="Fecha de finalización"
+              clearable
+              {...form.getInputProps('endDate')}
+            />
+          </Flex>
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconWorldWww size={'2rem'} />
+            <TextInput
+              flex={1}
+              label="Web"
+              placeholder="www.universidadRobotica.com/projectos/20"
+              {...form.getInputProps('web')}
+            />
+          </Flex>
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconBulb size={'2rem'} />
+            <MultiSelect
+              styles={{ inputField: { cursor: 'pointer' } }}
+              labelProps={{ cursor: 'pointer' }}
+              flex={1}
+              label="Intereses"
+              placeholder={form.values.interestsIds.length == 0 ? 'Robótica, Redes' : ''}
+              data={
+                interestsQuery?.data
+                  ? interestsQuery.data.map((interest: Interest) => ({
+                      value: interest.id.toString(),
+                      label: interest.name,
+                    }))
+                  : []
+              }
+              required
+              clearable
+              searchable
+              {...form.getInputProps('interestsIds')}
+            />
+          </Flex>
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconBuildingCommunity size={'2rem'} />
+            <Select
+              styles={{ input: { cursor: 'pointer' } }}
+              labelProps={{ cursor: 'pointer' }}
+              flex={1}
+              label="Universidad"
+              placeholder="Universidad de Robótica"
+              data={
+                institutionsQuery?.data
+                  ? institutionsQuery.data.map((institution: Institution) => ({
+                      value: institution.id.toString(),
+                      label: institution.name,
+                    }))
+                  : []
+              }
+              required
+              clearable
+              searchable
+              onChange={handleUniversityChange}
+            />
+          </Flex>
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconBuildingEstate size={'2rem'} />
+            <Select
+              styles={
+                !institutionId
+                  ? { input: { cursor: 'not-allowed' } }
+                  : { input: { cursor: 'pointer' } }
+              }
+              labelProps={!institutionId ? { cursor: 'default' } : { cursor: 'pointer' }}
+              flex={1}
+              label="Regional"
+              placeholder="Facultad regional de Rosario"
+              disabled={!institutionId}
+              data={
+                facilitiesQuery?.data
+                  ? facilitiesQuery.data.map((facility: Facility) => ({
+                      value: facility.id.toString(),
+                      label: facility.name,
+                    }))
+                  : []
+              }
+              required
+              clearable
+              searchable
+              onChange={handleFacilityChange}
+            />
+          </Flex>
+          <Flex align={'center'} mt={'1rem'} gap={'1rem'}>
+            <IconSchool size={'2rem'} />
+            <MultiSelect
+              styles={
+                !facilityId
+                  ? { inputField: { cursor: 'not-allowed' } }
+                  : { inputField: { cursor: 'pointer' } }
+              }
+              labelProps={!facilityId ? { cursor: 'default' } : { cursor: 'pointer' }}
+              flex={1}
+              label="Departamentos"
+              placeholder={
+                form.values.researchDepartmentsIds.length == 0 ? 'Ingeniería electrónica' : ''
+              }
+              disabled={!facilityId}
+              data={
+                departmentsQuery?.data
+                  ? departmentsQuery.data.map((department: ResearchDepartment) => ({
+                      value: department.id.toString(),
+                      label: department.name,
+                    }))
+                  : []
+              }
+              required
+              clearable
+              searchable
+              {...form.getInputProps('researchDepartmentsIds')}
+            />
+          </Flex>
           {createStatus == 'fail' && mutationFailMessage()}
           {createStatus == 'success' ? (
             mutationSuccessMessage()
