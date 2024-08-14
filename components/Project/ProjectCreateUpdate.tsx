@@ -50,7 +50,6 @@ interface ProjectCreateUpdateProps {
 const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
   const router = useRouter()
 
-  const [createStatus, setCreateStatus] = useState<string>('start')
   const [institutionId, setInstitutionId] = useState<number | undefined>(0)
   const [facilityId, setFacilityId] = useState<number | undefined>(0)
 
@@ -174,7 +173,6 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
     onSuccess: () => {
       const key = 'project-create-update'
       queryClient.invalidateQueries({ queryKey: [key] })
-      setCreateStatus('success')
       notifications.show({
         title: `Proyecto ${props?.id ? `#${props.id} modificado` : 'creado'}`,
         message: `Tu proyecto ha sido ${props?.id ? 'modificado' : 'creado'} con éxito.`,
@@ -183,7 +181,6 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
     },
     onError: (error) => {
       console.error(error)
-      setCreateStatus('fail')
       notifications.show({
         title: 'Error',
         message: `No se pudo ${
@@ -463,8 +460,8 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
               {...form.getInputProps('researchDepartmentsIds')}
             />
           </Flex>
-          {createStatus == 'fail' && mutationFailMessage()}
-          {createStatus == 'success' ? (
+          {createUpdateProjectMutation.isError && mutationFailMessage()}
+          {createUpdateProjectMutation.isSuccess ? (
             mutationSuccessMessage()
           ) : (
             <Button type="submit" mt={'3rem'} color="orange.9">
