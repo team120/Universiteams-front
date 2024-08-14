@@ -150,7 +150,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   }
 
   const handleEditClick = () => {
-    console.log('Edit project')
+    router.push(`/projects/${project?.id}/edit`)
   }
 
   const handleDeleteClick = () => {
