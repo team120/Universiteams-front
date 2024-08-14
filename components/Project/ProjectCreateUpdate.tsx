@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Box, Button, Flex, MultiSelect, Paper, Select, Text, TextInput } from '@mantine/core'
@@ -28,7 +28,6 @@ import { DepartmentsQueryKey, ResearchDepartments } from '@/services/departments
 import Institution from '@/entities/Institution'
 import Interest from '@/entities/Interest'
 import Language from '@/entities/HelpTypes/Language'
-import Project from '@/entities/Project/Project'
 import { ProjectNewRequest, ProjectNewResponse } from '@/entities/Project/ProjectNew'
 import ProjectType from '@/entities/Project/ProjectType'
 import ResearchDepartment from '@/entities/ResearchDepartment'

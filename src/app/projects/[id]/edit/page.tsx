@@ -1,6 +1,5 @@
 'use client'
 import React from 'react'
-import { useParams } from 'next/navigation'
 
 import ProjectCreateUpdate from '@/components/Project/ProjectCreateUpdate'
 import InfoMessage from '@/components/Common/InfoMessage/InfoMessage'
