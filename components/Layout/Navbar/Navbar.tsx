@@ -23,7 +23,6 @@ import { notifications } from '@mantine/notifications'
 import { RequestState, ProjectSortAttribute } from '../../../entities/Project/ProjectInList'
 import { Account } from '../../../services/account'
 import UserBanner from './UserBanner'
-import { useRouter } from 'next/navigation'
 
 const mockAppVersion = 'v1.0.0'
 
