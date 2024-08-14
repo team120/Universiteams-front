@@ -42,7 +42,7 @@ interface ProjectNewForm extends ProjectNewRequest {
   facilityId?: number
 }
 
-const ProjectNew = () => {
+const ProjectCreateUpdate = () => {
   const router = useRouter()
 
   const [createStatus, setCreateStatus] = useState<string>('start')
@@ -420,4 +420,4 @@ const ProjectNew = () => {
   )
 }
 
-export default ProjectNew
+export default ProjectCreateUpdate

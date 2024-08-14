@@ -1,10 +1,10 @@
 'use client'
 import React from 'react'
 
-import ProjectNew from '@/components/Project/ProjectNew'
+import ProjectCreateUpdate from '@/components/Project/ProjectCreateUpdate'
 
 const ProjectNewPage = () => {
-  return <ProjectNew />
+  return <ProjectCreateUpdate />
 }
 
 export default ProjectNewPage
