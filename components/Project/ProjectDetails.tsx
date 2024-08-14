@@ -5,6 +5,7 @@ import {
   ActionIcon,
   Alert,
   Badge,
+  Button,
   Card,
   Chip,
   Flex,
@@ -82,6 +83,43 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
       project?.requestEnrollmentCount !== undefined && project?.requestEnrollmentCount !== null,
   })
 
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      if (errorCurrentUser || !currentUser) {
+        notifications.show({
+          title: 'Debes iniciar sesión para eliminar un proyecto',
+          color: 'red',
+          message: <NotLoggedError action="eliminar proyecto" />,
+        })
+
+        return Promise.reject('User not logged in')
+      }
+
+      if (currentUser?.isEmailVerified === false) {
+        notifications.show(verifyEmailNotification('eliminar proyecto'))
+
+        return Promise.reject('Email not verified')
+      }
+
+      // Admin
+      if (!project?.requestEnrollmentCount) {
+        notifications.show({
+          title: 'Debes tener el rol de líder de proyecto para eliminar este proyecto',
+          color: 'red',
+          message:
+            'Solo puedes eliminar los proyectos en los que tienes el rol de líder. Consulta al líder de tu proyecto para realizar esta acción',
+        })
+
+        return Promise.reject('No leader role')
+      }
+
+      return Projects.deleteProject(project.id)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
+    },
+  })
+
   const favoriteMutation = useMutation({
     mutationFn: async () => {
       if (errorCurrentUser || !currentUser) {
@@ -116,7 +154,27 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   }
 
   const handleDeleteClick = () => {
-    console.log('Delete project')
+    modals.open({
+      title: 'Eliminar proyecto',
+      centered: true,
+      children: (
+        <Group mt={'1rem'}>
+          <Group>
+            <Text>{`El proyecto '${project?.name}' será eliminado permanentemente.`}</Text>
+            <Text>{'¿Estás seguro?'}</Text>
+          </Group>
+          <Group>
+            <Button
+              onClick={() => {
+                deleteMutation.mutate()
+                modals.closeAll()
+              }}>
+              Eliminar
+            </Button>
+          </Group>
+        </Group>
+      ),
+    })
   }
 
   const router = useRouter()
