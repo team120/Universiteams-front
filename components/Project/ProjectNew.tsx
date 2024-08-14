@@ -77,13 +77,42 @@ const ProjectNew = () => {
     },
   })
 
+  const mutationFailMessage = () => {
+    return (
+      <>
+        <InfoMessage
+          text={'Ocurrió un error al crear proyecto, intente de nuevo más tarde'}
+          type={'error'}
+        />
+        <Button mx={'1.5rem'} onClick={() => handleGoBack()}>
+          Volver a 'Proyectos'
+        </Button>
+      </>
+    )
+  }
+
+  const mutationSuccessMessage = () => {
+    return (
+      <>
+        <InfoMessage text={`El proyecto ha sido creado con éxito`} type={'info'} />
+        <Button mx={'1.5rem'} onClick={() => handleGoBack()}>
+          Volver a 'Proyectos'
+        </Button>
+      </>
+    )
+  }
+
   return (
-    <Box mx="1.5rem" my={'1rem'}>
-      <Card key={1}>Test</Card>
-      <Button mt={'1rem'} onClick={() => createProjectMutation.mutate()}>
-        Crear proyecto
-      </Button>
-    </Box>
+    <>
+      <Box mx="1.5rem" my={'1rem'}>
+        <Card key={1}>Test</Card>
+        <Button mt={'1rem'} onClick={() => createProjectMutation.mutate()}>
+          Crear proyecto
+        </Button>
+      </Box>
+      {createStatus === 'fail' && mutationFailMessage()}
+      {createStatus === 'success' && mutationSuccessMessage()}
+    </>
   )
 }
 
