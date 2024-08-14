@@ -45,6 +45,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
   const currentProjectQuery = useQuery({
     queryKey: [ProjectsQueryKey, props?.id],
     queryFn: () => Projects.getProject(props?.id),
+    enabled: !!props?.id,
   })
 
   const currentProject = useMemo(() => currentProjectQuery.data, [currentProjectQuery.data])
@@ -89,6 +90,8 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
 
         return Promise.reject('Email not verified')
       }
+
+      console.log(values)
 
       // Set the project values
       const newProject: ProjectNewRequest = { ...values }
