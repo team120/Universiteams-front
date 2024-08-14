@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Box, Button, Flex, MultiSelect, Paper, Select, Text, TextInput } from '@mantine/core'
@@ -22,7 +22,7 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Facilities, FacilitiesQueryKey } from '@/services/facilities'
 import { InstitutionQueryKey, Institutions } from '@/services/institutions'
 import { InterestQueryKey, Interests } from '@/services/interests'
-import { Projects } from '@/services/projects'
+import { Projects, ProjectsQueryKey } from '@/services/projects'
 import { DepartmentsQueryKey, ResearchDepartments } from '@/services/departments'
 
 import Institution from '@/entities/Institution'
@@ -53,27 +53,13 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
   const [createStatus, setCreateStatus] = useState<string>('start')
   const [institutionId, setInstitutionId] = useState<number | undefined>(0)
   const [facilityId, setFacilityId] = useState<number | undefined>(0)
-  const [currentProject, setCurrentProject] = useState<Project | undefined>(undefined)
 
-  const getProject = async () => {
-    const project = await Projects.getProject(props?.id)
-    if (!project) {
-      setCurrentProject(undefined)
-      return
-    }
-    setCurrentProject(project)
-  }
+  const currentProjectQuery = useQuery({
+    queryKey: [ProjectsQueryKey, props?.id],
+    queryFn: () => Projects.getProject(props?.id),
+  })
 
-  useEffect(() => {
-    setCreateStatus('start')
-
-    if (!props?.id) {
-      setInstitutionId(undefined)
-      setFacilityId(undefined)
-    } else {
-      getProject()
-    }
-  }, [])
+  const currentProject = useMemo(() => currentProjectQuery.data, [currentProjectQuery.data])
 
   const queryClient = useQueryClient()
 
