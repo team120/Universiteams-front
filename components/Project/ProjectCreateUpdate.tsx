@@ -153,8 +153,6 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
       newProject.interestsIds = newProject.interestsIds.map((id) => +id)
       newProject.researchDepartmentsIds = newProject.researchDepartmentsIds.map((id) => +id)
 
-      console.log(newProject)
-
       // If id exists, update the project
       if (props?.id) {
         if (!currentProject?.requestEnrollmentCount) {
@@ -365,6 +363,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
               flex={1}
               label="Fecha de finalización"
               placeholder="Fecha de finalización"
+              minDate={new Date()}
               clearable
               {...form.getInputProps('endDate')}
             />
