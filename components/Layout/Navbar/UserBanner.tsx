@@ -1,15 +1,16 @@
 import React, { forwardRef } from 'react'
 import { UnstyledButton, Group, Avatar, Text, Flex } from '@mantine/core'
-import { IconChevronRight } from '@tabler/icons-react'
+import { IconChevronDown, IconChevronRight } from '@tabler/icons-react'
 
 interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   profileIcon: React.ReactNode
   name: string
   email: string
+  isMenuOpen?: boolean
 }
 
 const UserBanner = forwardRef<HTMLButtonElement, UserButtonProps>(
-  ({ profileIcon, name, email, ...others }: UserButtonProps, ref) => (
+  ({ profileIcon, name, email, isMenuOpen, ...others }: UserButtonProps, ref) => (
     <UnstyledButton
       ref={ref}
       style={{
@@ -31,7 +32,11 @@ const UserBanner = forwardRef<HTMLButtonElement, UserButtonProps>(
             </Text>
           </div>
         </Group>
-        <IconChevronRight size="1rem" style={{ flexShrink: 0 }} />
+        {isMenuOpen ? (
+          <IconChevronDown size="1rem" style={{ flexShrink: 0 }} />
+        ) : (
+          <IconChevronRight size="1rem" style={{ flexShrink: 0 }} />
+        )}
       </Flex>
     </UnstyledButton>
   )
