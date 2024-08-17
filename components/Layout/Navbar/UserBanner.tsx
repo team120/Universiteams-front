@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-import { UnstyledButton, Group, Avatar, Text } from '@mantine/core'
+import { UnstyledButton, Group, Avatar, Text, Flex } from '@mantine/core'
 import { IconChevronRight } from '@tabler/icons-react'
 
 interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
@@ -16,23 +16,23 @@ const UserBanner = forwardRef<HTMLButtonElement, UserButtonProps>(
         padding: 'var(--mantine-spacing-md)',
         color: 'var(--mantine-color-text)',
         borderRadius: 'var(--mantine-radius-sm)',
+        width: '100%',
       }}
       {...others}>
-      <Group>
-        <Avatar radius="xl">{profileIcon}</Avatar>
-
-        <div style={{ flex: 1 }}>
-          <Text size="sm" fw={500}>
-            {name}
-          </Text>
-
-          <Text c="dimmed" size="xs">
-            {email}
-          </Text>
-        </div>
-
-        <IconChevronRight size="1rem" />
-      </Group>
+      <Flex align="center" justify="space-between">
+        <Group>
+          <Avatar radius="xl">{profileIcon}</Avatar>
+          <div style={{ maxWidth: 'calc(100% - 60px)' }}>
+            <Text size="sm" fw={500} truncate>
+              {name}
+            </Text>
+            <Text c="dimmed" size="xs" truncate>
+              {email}
+            </Text>
+          </div>
+        </Group>
+        <IconChevronRight size="1rem" style={{ flexShrink: 0 }} />
+      </Flex>
     </UnstyledButton>
   )
 )
