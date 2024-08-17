@@ -152,8 +152,14 @@ const Profile = () => {
 
   if (isLoadingUserProfile) {
     return (
-      <Container size="xs" my={40}>
-        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Container size="100%" px="xs" my={40}>
+        <Paper
+          withBorder
+          shadow="md"
+          p={30}
+          mt={30}
+          radius="md"
+          style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
           <Center>
             <Loader variant="dots" />
           </Center>
@@ -164,8 +170,14 @@ const Profile = () => {
 
   if (userProfileErr !== null && (userProfileErr as AxiosError).response?.status === 401) {
     return (
-      <Container size="xs" my={40}>
-        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Container size="100%" px="xs" my={40}>
+        <Paper
+          withBorder
+          shadow="md"
+          p={30}
+          mt={30}
+          radius="md"
+          style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
           <Center>
             <Alert
               variant="light"
@@ -182,8 +194,14 @@ const Profile = () => {
 
   if (userProfileErr !== null) {
     return (
-      <Container size="xs" my={40}>
-        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Container size="100%" px="xs" my={40}>
+        <Paper
+          withBorder
+          shadow="md"
+          p={30}
+          mt={30}
+          radius="md"
+          style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
           <Center>
             <Alert variant="light" color="red" title="Error" icon={<IconExclamationCircle />}>
               No se pudo cargar tu perfil
@@ -196,8 +214,14 @@ const Profile = () => {
 
   if (departmentsQuery.isLoading || interestsQuery.isLoading) {
     return (
-      <Container size="xs" my={40}>
-        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Container size="100%" px="xs" my={40}>
+        <Paper
+          withBorder
+          shadow="md"
+          p={30}
+          mt={30}
+          radius="md"
+          style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
           <Center>
             <Loader variant="dots" />
           </Center>
@@ -207,10 +231,16 @@ const Profile = () => {
   }
 
   return (
-    <Container size="xs" my={40}>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+    <Container size="100%" px="xs" my={40}>
+      <Paper
+        withBorder
+        shadow="md"
+        p={30}
+        mt={30}
+        radius="md"
+        style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
         <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-          <Text size="lg" w={500} mb="lg">
+          <Text size="lg" mb="lg">
             Edita tu perfil
           </Text>
 
