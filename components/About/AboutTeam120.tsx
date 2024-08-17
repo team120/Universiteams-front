@@ -18,14 +18,7 @@ const AboutUniversiteams = () => {
       withBorder>
       <Card.Section p="1rem">
         <Flex justify="center">
-          <Image
-            src="/team120.jpeg"
-            h="200"
-            w="auto"
-            alt="Universiteams logo"
-            p="rem"
-            radius="md"
-          />
+          <Image src="/team120.jpeg" h="200" w="auto" alt="Team 120 logo" p="rem" radius="md" />
         </Flex>
       </Card.Section>
 
