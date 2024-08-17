@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Badge, Button, Card, Flex, Group, Image, Text } from '@mantine/core'
+import { Badge, Button, Card, Group, Image, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import Theme from 'src/app/theme'
 
