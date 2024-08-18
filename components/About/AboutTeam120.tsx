@@ -29,14 +29,14 @@ const AboutUniversiteams = () => {
       </Group>
 
       <Text size="sm" c="dimmed">
-        We are a small GitHub organization made up of graduate students from the National
-        Technological University (Argentina), eager to develop applications that we consider may be
-        useful but do not yet exist.
+        Somos una pequeña <i>GitHub organization</i> formada por graduados de la{' '}
+        <b>Universidad Tecnológica Nacional</b> (Argentina), con ganas de desarrollar aplicaciones
+        que consideramos pueden ser útiles pero que aún no existen.
       </Text>
       <Text size="sm" mt="1rem" c="dimmed">
-        All our source code is publicly accessible and can be viewed online on GitHub. For
-        Universiteams we have 2 code repositories: Universiteams (backend) and Universiteams-front
-        (frontend).
+        Todo nuestro código fuente es de acceso público y se puede visualizar en línea en{' '}
+        <i>GitHub</i>. Para <b>Universiteams</b> tenemos 2 repositorios de código: Universiteams
+        (backend) y Universiteams-front (frontend).
       </Text>
 
       <Button color="blue" mt="md" radius="md">
@@ -44,7 +44,7 @@ const AboutUniversiteams = () => {
           target="_blank"
           href="https://github.com/team120"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
-          Visit GitHub.com/Team120
+          Visitar GitHub.com/Team120
         </Link>
       </Button>
       <Button color="orange.6" mt="md" radius="md">
@@ -52,7 +52,7 @@ const AboutUniversiteams = () => {
           target="_blank"
           href="https://github.com/team120/Universiteams"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
-          Visit Universiteams backend repo
+          Visitar Universiteams backend repo
         </Link>
       </Button>
       <Button color="orange.6" mt="md" radius="md">
@@ -60,7 +60,7 @@ const AboutUniversiteams = () => {
           target="_blank"
           href="https://github.com/team120/Universiteams-front  "
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
-          Visit Universiteams frontend repo
+          Visitar Universiteams frontend repo
         </Link>
       </Button>
     </Card>

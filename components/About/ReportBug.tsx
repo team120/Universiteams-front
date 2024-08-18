@@ -60,8 +60,8 @@ const AboutUniversiteams = () => {
       </Card.Section>
 
       <Group justify="space-between" mt="md" mb="xs">
-        <Text size="xl">Report a bug</Text>
-        <Badge color="pink">If you found one</Badge>
+        <Text size="xl">Reportar bug</Text>
+        <Badge color="pink">Si encuentras uno</Badge>
       </Group>
 
       <form onSubmit={form.onSubmit((values: ReportInputs) => handleSubmit(values))}>
@@ -106,8 +106,8 @@ const AboutUniversiteams = () => {
           />
         </Flex>
 
-        <Button type="submit" color="blue" mt="md" radius="md" fullWidth>
-          Report bug
+        <Button type="submit" color="blue" mt="xl" radius="md" fullWidth>
+          Reportar bug
         </Button>
       </form>
     </Card>

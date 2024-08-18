@@ -27,17 +27,18 @@ const AboutUniversiteams = () => {
       </Group>
 
       <Text size="sm" c="dimmed">
-        This project was thought in order to facilitate the creation, management and formalization
-        of university research projects. Both students and teachers will be able to organize their
-        projects, which will be visible to other students who may want to join the research team.
+        Este proyecto nace con el objetivo de facilitar la creación, gestión y formalización de
+        proyectos de investigación universitarios. Tanto estudiantes como profesores tienen la
+        posibilidad administrar sus proyectos, que serán visibles para otros estudiantes que quieran
+        sumarse al equipo de investigación.
       </Text>
       <Text size="sm" mt="1rem" c="dimmed">
-        It mainly consists of a web application, the main page will contain all the projects in
-        order to make them known for everyone, and they will be accepting requests for those who
-        want to get in.
+        El proyecto consiste principalmente en una <i>Web App</i>, con una página principal que
+        contiene todos los proyectos con el fin de darlos a conocer al público, y aceptar o rechazar
+        solicitudes para aquellos que quieran participar en los mismos.
       </Text>
       <Text size="sm" mt="1rem">
-        <b>Our main purpose is to facilitate and promote scientific dissemination.</b>
+        <b>Nuestro principal propósito es facilitar y promover la divulgación científica.</b>
       </Text>
 
       <Button color="blue" mt="md" radius="md">
@@ -45,7 +46,7 @@ const AboutUniversiteams = () => {
           target="_blank"
           href="https://www.universiteams.com"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
-          Visit Universiteams.com
+          Visitar Universiteams.com
         </Link>
       </Button>
     </Card>
