@@ -33,12 +33,12 @@ const AboutUniversiteams = () => {
         sumarse al equipo de investigación.
       </Text>
       <Text size="sm" mt="1rem" c="dimmed">
-        El proyecto consiste principalmente en una <i>Web App</i>, con una página principal que
+        El proyecto consiste principalmente de una <i>Web App</i>, con una página principal que
         contiene todos los proyectos con el fin de darlos a conocer al público, y aceptar o rechazar
         solicitudes para aquellos que quieran participar en los mismos.
       </Text>
       <Text size="sm" mt="1rem">
-        <b>Nuestro principal propósito es facilitar y promover la divulgación científica.</b>
+        <b>Nuestro principal objetivo es facilitar y promover la divulgación científica.</b>
       </Text>
 
       <Button color="blue" mt="md" radius="md">
@@ -47,6 +47,14 @@ const AboutUniversiteams = () => {
           href="https://www.universiteams.com"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
           Visitar Universiteams.com
+        </Link>
+      </Button>
+      <Button color="orange.6" mt="md" radius="md">
+        <Link
+          target="_blank"
+          href="https://api.universiteams.com/Docs"
+          style={{ color: 'inherit', textDecoration: 'inherit' }}>
+          Visitar API de Universiteams
         </Link>
       </Button>
     </Card>
