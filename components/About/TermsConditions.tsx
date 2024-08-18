@@ -31,176 +31,186 @@ const TermsConditions = () => {
       </Card.Section>
 
       <Group justify="space-between" mt="md" mb="xs">
-        <Text size="xl">Terms & Conditions</Text>
-        <Badge color="pink">Legal info</Badge>
+        <Text size="xl">Términos y Condiciones</Text>
+        <Badge color="pink">Info legal</Badge>
       </Group>
 
       <Card.Section p="1rem">
         <Group justify="space-between" mt="md" mb="xs">
-          <Text size="lg">Universiteams - Terms and Conditions</Text>
-          <Badge color="orange.8">Last updated: 17/08/2024</Badge>
+          <Text size="lg">Universiteams - Términos y Condiciones</Text>
+          <Badge color="orange.8">Última actualización: 18/08/2024</Badge>
         </Group>
         <Text size="sm" c="dimmed">
-          Welcome to Universiteams! These Terms and Conditions ("Terms") govern your use of the
-          Universiteams application ("App"), owned and operated by "Team120" (GitHub Organization).
-          By accessing or using the App, you agree to be bound by these Terms. If you do not agree
-          to these Terms, you may not use the App.
+          ¡Bienvenido a Universiteams! Estos Términos y Condiciones ("Términos") rigen el uso de la
+          Aplicación Universiteams ("Aplicación"), propiedad y operada por "Team120" (Organización
+          de GitHub). Al acceder o usar la Aplicación, usted acepta estar sujeto a estos Términos.
+          Si no acepta estos Términos, no podrá usar la Aplicación.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">1. Acceptance of Terms</Text>
+        <Text size="lg">1. Aceptación de los Términos</Text>
         <Text size="sm" c="dimmed">
-          By registering, accessing, or using the App, you acknowledge that you have read,
-          understood, and agree to be bound by these Terms and all applicable laws and regulations.
+          Al registrarse, acceder o utilizar la Aplicación, usted reconoce que ha leído, comprendido
+          y acepta estar sujeto a estos Términos y todas las leyes y regulaciones aplicables.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">2. Eligibility</Text>
+        <Text size="lg">2. Requisitos de elegibilidad</Text>
         <Text size="sm" c="dimmed">
-          To use Universiteams, you must be a student, faculty member, or affiliated with a
-          university or educational institution. By using the App, you represent and warrant that
-          you meet these eligibility requirements.
+          Para utilizar Universiteams, debes ser estudiante, miembro del cuerpo docente o estar
+          afiliado a una universidad o institución educativa. Al utilizar la Aplicación, declaras y
+          garantizas que cumples con estos requisitos de elegibilidad.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">3. Account Registration</Text>
+        <Text size="lg">3. Registro de la cuenta</Text>
         <Text size="sm" c="dimmed">
-          To access certain features of the App, you may be required to create an account. You agree
-          to provide accurate, current, and complete information during the registration process and
-          to update such information to keep it accurate, current, and complete. You are responsible
-          for safeguarding your account credentials and for all activities that occur under your
-          account.
+          Para acceder a ciertas funciones de la Aplicación, es posible que se te solicite que crees
+          una cuenta. Aceptas proporcionar información precisa, actual y completa durante el proceso
+          de registro y actualizar dicha información para mantenerla precisa, actual y completa.
+          Eres responsable de proteger las credenciales de tu cuenta y de todas las actividades que
+          se realicen en ella.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">4. Use of the App</Text>
+        <Text size="lg">4. Uso de la Aplicación</Text>
         <Text size="sm" c="dimmed">
-          - Creating Projects: Users may create and manage university-related projects. You are
-          responsible for the content and accuracy of the project information you provide.
+          - Creación de proyectos: los usuarios pueden crear y gestionar proyectos relacionados con
+          la universidad. Usted es responsable del contenido y la precisión de la información del
+          proyecto que proporcione.
         </Text>
         <Text size="sm" c="dimmed">
-          - Searching Projects: Users can search for university projects. Universiteams does not
-          guarantee the availability, quality, or relevance of any projects listed on the App.
+          - Búsqueda de proyectos: los usuarios pueden buscar proyectos universitarios.
+          Universiteams no garantiza la disponibilidad, calidad o relevancia de los proyectos
+          incluidos en la Aplicación.
         </Text>
         <Text size="sm" c="dimmed">
-          - Enrolling in Projects: Users may apply to join projects listed on the App. Acceptance
-          into a project is at the sole discretion of the project creator or manager.
-        </Text>
-      </Card.Section>
-
-      <Card.Section p="1rem">
-        <Text size="lg">5. User Conduct</Text>
-        <Text size="sm" c="dimmed">
-          You agree to use the App only for lawful purposes. You are prohibited from:
-        </Text>
-        <Text size="sm" c="dimmed">
-          - Posting false, misleading, or inappropriate content.
-        </Text>
-        <Text size="sm" c="dimmed">
-          - Impersonating another person or entity.
-        </Text>
-        <Text size="sm" c="dimmed">
-          - Engaging in any activity that could disrupt or interfere with the App's functionality.
-        </Text>
-        <Text size="sm" c="dimmed">
-          - Collecting personal data from other users without their consent.
+          - Inscripción en proyectos: los usuarios pueden solicitar unirse a los proyectos incluidos
+          en la Aplicación. La aceptación en un proyecto queda a criterio exclusivo del creador o
+          administrador del proyecto.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">6. Content Ownership and License</Text>
+        <Text size="lg">5. Conducta del usuario</Text>
         <Text size="sm" c="dimmed">
-          - User Content: You retain ownership of any content you submit, post, or display on the
-          App. By posting content, you grant Universiteams a non-exclusive, worldwide, royalty-free
-          license to use, display, and distribute your content on the App.
+          Usted acepta utilizar la Aplicación únicamente con fines lícitos. Tiene prohibido:
         </Text>
         <Text size="sm" c="dimmed">
-          - App Content: All other content provided on the App, including text, graphics, logos, and
-          software, is owned by Universiteams or its licensors and is protected by intellectual
-          property laws.
-        </Text>
-      </Card.Section>
-
-      <Card.Section p="1rem">
-        <Text size="lg">7. Privacy Policy</Text>
-        <Text size="sm" c="dimmed">
-          At Universiteams, we value your privacy. We collect personal information such as your
-          name, email address, and university affiliation when you create an account, as well as
-          data on how you use the app. This information helps us manage your account, facilitate
-          project participation, and improve our services. We also collect device information like
-          your IP address to enhance your experience.
+          - Publicar contenido falso, engañoso o inapropiado.
         </Text>
         <Text size="sm" c="dimmed">
-          We may share your information with other users when you engage in projects and with
-          trusted service providers who help us operate the app. Your data may also be disclosed if
-          required by law. We take security seriously and use measures to protect your information,
-          though no system is completely secure.
+          - Suplantar la identidad de otra persona o entidad.
+        </Text>
+        <Text size="sm" c="dimmed">
+          - Participar en cualquier actividad que pueda interrumpir o interferir con la
+          funcionalidad de la Aplicación.
+        </Text>
+        <Text size="sm" c="dimmed">
+          - Recopilar datos personales de otros usuarios sin su consentimiento.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">8. Termination</Text>
+        <Text size="lg">6. Propiedad y licencia del contenido</Text>
         <Text size="sm" c="dimmed">
-          Universiteams reserves the right to suspend or terminate your account or access to the App
-          at any time, with or without cause, and with or without notice.
+          - Contenido del usuario: Usted conserva la propiedad de cualquier contenido que envíe,
+          publique o muestre en la Aplicación. Al publicar contenido, usted otorga a Universiteams
+          una licencia no exclusiva, mundial y libre de regalías para usar, mostrar y distribuir su
+          contenido en la Aplicación.
+        </Text>
+        <Text size="sm" c="dimmed">
+          - Contenido de la Aplicación: Todo el resto del contenido proporcionado en la Aplicación,
+          incluidos textos, gráficos, logotipos y software, es propiedad de Universiteams o sus
+          licenciantes y está protegido por las leyes de propiedad intelectual.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">9. Disclaimers</Text>
+        <Text size="lg">7. Política de privacidad</Text>
         <Text size="sm" c="dimmed">
-          - The App is provided on an "as is" and "as available" basis. Universiteams makes no
-          warranties, express or implied, regarding the App's operation, availability, or content.
+          En Universiteams, valoramos su privacidad. Recopilamos información personal como su
+          nombre, dirección de correo electrónico y afiliación universitaria cuando crea una cuenta,
+          así como datos sobre cómo utiliza la Aplicación. Esta información nos ayuda a administrar
+          su cuenta, facilitar la participación en proyectos y mejorar nuestros servicios. También
+          recopilamos información del dispositivo, como su dirección IP, para mejorar su
+          experiencia.
         </Text>
         <Text size="sm" c="dimmed">
-          - Universiteams is not responsible for the actions or content of users or third parties on
-          the App.
-        </Text>
-      </Card.Section>
-
-      <Card.Section p="1rem">
-        <Text size="lg">10. Limitation of Liability</Text>
-        <Text size="sm" c="dimmed">
-          To the fullest extent permitted by law, Universiteams shall not be liable for any direct,
-          indirect, incidental, special, or consequential damages arising out of or in connection
-          with your use of the App.
+          Podemos compartir su información con otros usuarios cuando participe en proyectos y con
+          proveedores de servicios de confianza que nos ayudan a operar la Aplicación. Sus datos
+          también pueden divulgarse si así lo exige la ley. Nos tomamos la seguridad en serio y
+          utilizamos medidas para proteger su información, aunque ningún sistema es completamente
+          seguro.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">11. Indemnification</Text>
+        <Text size="lg">8. Terminación </Text>
         <Text size="sm" c="dimmed">
-          You agree to indemnify and hold harmless Universiteams, its affiliates, and their
-          respective officers, directors, employees, and agents from any claims, liabilities,
-          damages, or expenses arising from your use of the App or violation of these Terms.
+          Universiteams se reserva el derecho de suspender o cancelar su cuenta o acceso a la
+          Aplicación en cualquier momento, con o sin motivo, y con o sin previo aviso.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">12. Governing Law</Text>
+        <Text size="lg">9. Descargo de responsabilidad</Text>
         <Text size="sm" c="dimmed">
-          These Terms are governed by and construed in accordance with the laws of Argentina,
-          without regard to its conflict of law principles.
+          - La Aplicación se proporciona "tal como está" y "según disponibilidad". Universiteams no
+          ofrece garantías, expresas o implícitas, con respecto al funcionamiento, la disponibilidad
+          o el contenido de la Aplicación.
+        </Text>
+        <Text size="sm" c="dimmed">
+          - Universiteams no es responsable de las acciones o el contenido de los usuarios o
+          terceros en la Aplicación.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">13. Changes to Terms</Text>
+        <Text size="lg">10. Limitación de responsabilidad</Text>
         <Text size="sm" c="dimmed">
-          Universiteams reserves the right to modify these Terms at any time. We will notify you of
-          any changes by posting the updated Terms on the App. Your continued use of the App after
-          any changes constitutes your acceptance of the new Terms.
+          En la medida máxima permitida por la ley, Universiteams no será responsable de ningún daño
+          directo, indirecto, incidental, especial o consecuente que surja de o en relación con su
+          uso de la Aplicación.
         </Text>
       </Card.Section>
 
       <Card.Section p="1rem">
-        <Text size="lg">14. Contact Information</Text>
+        <Text size="lg">11. Indemnización</Text>
         <Text size="sm" c="dimmed">
-          If you have any questions or concerns about these Terms, please contact us at{' '}
+          Usted acepta indemnizar y eximir de responsabilidad a Universiteams, sus afiliados y sus
+          respectivos funcionarios, directores, empleados y agentes de cualquier reclamo,
+          responsabilidad, daño o gasto que surja de su uso de la Aplicación o de la violación de
+          estos Términos.
+        </Text>
+      </Card.Section>
+
+      <Card.Section p="1rem">
+        <Text size="lg">12. Ley aplicable</Text>
+        <Text size="sm" c="dimmed">
+          Estos Términos se rigen por las leyes de Argentina y se interpretan de conformidad con
+          ellas, sin tener en cuenta sus principios de conflicto de leyes.
+        </Text>
+      </Card.Section>
+
+      <Card.Section p="1rem">
+        <Text size="lg">13. Cambios en los Términos</Text>
+        <Text size="sm" c="dimmed">
+          Universiteams se reserva el derecho de modificar estos Términos en cualquier momento. Le
+          notificaremos cualquier cambio mediante la publicación de los Términos actualizados en la
+          Aplicación. El uso continuo de la Aplicación después de cualquier cambio constituye su
+          aceptación de los nuevos Términos.
+        </Text>
+      </Card.Section>
+
+      <Card.Section p="1rem">
+        <Text size="lg">14. Información de contacto</Text>
+        <Text size="sm" c="dimmed">
+          Si tiene alguna pregunta o inquietud sobre estos Términos, comuníquese con nosotros a{' '}
           {Env.contactMail}.
         </Text>
       </Card.Section>
