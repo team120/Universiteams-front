@@ -10,6 +10,7 @@ const TermsConditions = () => {
 
   return (
     <Card
+      id="termsConditions"
       shadow="sm"
       my="4rem"
       mx={isPhone ? '2rem' : isTablet ? '3rem' : '20%'}

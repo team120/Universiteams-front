@@ -46,6 +46,7 @@ const AboutUniversiteams = () => {
 
   return (
     <Card
+      id="reportBug"
       shadow="sm"
       my="2rem"
       mx={isPhone ? '2rem' : isTablet ? '3rem' : '20%'}

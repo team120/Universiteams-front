@@ -10,6 +10,7 @@ const AboutUniversiteams = () => {
 
   return (
     <Card
+      id="team120"
       shadow="sm"
       my="4rem"
       mx={isPhone ? '2rem' : isTablet ? '3rem' : '20%'}
