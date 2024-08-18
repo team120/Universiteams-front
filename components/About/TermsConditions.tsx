@@ -1,13 +1,12 @@
 import React from 'react'
 import { Badge, Card, Flex, Group, Image, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
+import Env from 'utils/config/Env'
 import Theme from 'src/app/theme'
 
 const TermsConditions = () => {
   const isTablet = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
   const isPhone = useMediaQuery(`(max-width: ${Theme.breakpoints?.sm})`)
-
-  const contact = 'team120@gmail.com'
 
   return (
     <Card
@@ -200,7 +199,8 @@ const TermsConditions = () => {
       <Card.Section p="1rem">
         <Text size="lg">14. Contact Information</Text>
         <Text size="sm" c="dimmed">
-          If you have any questions or concerns about these Terms, please contact us at {contact}.
+          If you have any questions or concerns about these Terms, please contact us at{' '}
+          {Env.contactMail}.
         </Text>
       </Card.Section>
     </Card>

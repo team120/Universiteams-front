@@ -2,13 +2,14 @@ import React from 'react'
 import { Badge, Button, Card, Flex, Group, Image, Text, TextInput } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
-import Theme from 'src/app/theme'
 import {
   IconAlignBoxLeftBottom,
   IconInfoSquareRounded,
   IconMail,
   IconUser,
 } from '@tabler/icons-react'
+import Env from 'utils/config/Env'
+import Theme from 'src/app/theme'
 
 const AboutUniversiteams = () => {
   const isTablet = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
@@ -29,9 +30,7 @@ const AboutUniversiteams = () => {
   }
 
   const handleSubmit = (values: ReportInputs) => {
-    const team120mail = 'team120@gmail.com'
-
-    window.location.href = `mailto:${team120mail}?subject=[UNIVERSITEAMS] ${
+    window.location.href = `mailto:${Env.contactMail}?subject=[UNIVERSITEAMS] ${
       values.subject
     }&body=${bodyFormat(values)}`
   }
