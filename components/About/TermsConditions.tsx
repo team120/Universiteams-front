@@ -1,5 +1,5 @@
 import React from 'react'
-import { Badge, Card, Flex, Group, Image, Text } from '@mantine/core'
+import { Anchor, Badge, Card, Flex, Group, Image, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import Env from 'utils/config/Env'
 import Theme from 'src/app/theme'
@@ -211,7 +211,14 @@ const TermsConditions = () => {
         <Text size="lg">14. Información de contacto</Text>
         <Text size="sm" c="dimmed">
           Si tiene alguna pregunta o inquietud sobre estos Términos, comuníquese con nosotros a{' '}
-          {Env.contactMail}.
+          <Anchor
+            href={`mailto:${Env.contactMail}`}
+            target="_blank"
+            underline="hover"
+            style={{ color: '#fd7e14' }}>
+            {Env.contactMail}
+          </Anchor>
+          .
         </Text>
       </Card.Section>
     </Card>

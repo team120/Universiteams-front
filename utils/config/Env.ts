@@ -10,7 +10,7 @@ const backendAPI: string =
     : process.env.NEXT_PUBLIC_BACKEND_HOST ?? ''
 
 // Team 120 contact mail
-const contactMail: string = process.env.NEXT_PUBLIC_CONTACT_MAIL ?? ''
+const contactMail: string = process.env.NEXT_PUBLIC_CONTACT ?? ''
 
 const Env = { mode, backendAPI, contactMail }
 export default Env
