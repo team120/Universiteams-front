@@ -41,10 +41,11 @@ const TermsConditions = () => {
           <Badge color="orange.8">Última actualización: 18/08/2024</Badge>
         </Group>
         <Text size="sm" c="dimmed">
-          ¡Bienvenido a Universiteams! Estos Términos y Condiciones ("Términos") rigen el uso de la
-          Aplicación Universiteams ("Aplicación"), propiedad y operada por "Team120" (Organización
-          de GitHub). Al acceder o usar la Aplicación, usted acepta estar sujeto a estos Términos.
-          Si no acepta estos Términos, no podrá usar la Aplicación.
+          ¡Bienvenido a Universiteams! Estos Términos y Condiciones (&quot;Términos&quot;) rigen el
+          uso de la Aplicación Universiteams (&quot;Aplicación&quot;), propiedad y operada por
+          &quot;Team120&quot; (Organización de GitHub). Al acceder o usar la Aplicación, usted
+          acepta estar sujeto a estos Términos. Si no acepta estos Términos, no podrá usar la
+          Aplicación.
         </Text>
       </Card.Section>
 
@@ -160,9 +161,9 @@ const TermsConditions = () => {
       <Card.Section p="1rem">
         <Text size="lg">9. Descargo de responsabilidad</Text>
         <Text size="sm" c="dimmed">
-          - La Aplicación se proporciona "tal como está" y "según disponibilidad". Universiteams no
-          ofrece garantías, expresas o implícitas, con respecto al funcionamiento, la disponibilidad
-          o el contenido de la Aplicación.
+          - La Aplicación se proporciona &quot;tal como está&quot; y &quot;según
+          disponibilidad&quot;. Universiteams no ofrece garantías, expresas o implícitas, con
+          respecto al funcionamiento, la disponibilidad o el contenido de la Aplicación.
         </Text>
         <Text size="sm" c="dimmed">
           - Universiteams no es responsable de las acciones o el contenido de los usuarios o
