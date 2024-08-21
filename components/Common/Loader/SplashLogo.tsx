@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SpriteLogo = () => {
+const SplashLogo = () => {
   return (
     <div
       style={{
@@ -27,4 +27,4 @@ const SpriteLogo = () => {
   )
 }
 
-export default SpriteLogo
+export default SplashLogo
