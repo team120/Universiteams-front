@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { PDFDownloadLink } from '@react-pdf/renderer'
 import {
   ActionIcon,
   Alert,
@@ -26,6 +27,7 @@ import {
   IconBubbleText,
   IconEdit,
   IconTrash,
+  IconPdf,
 } from '@tabler/icons-react'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
@@ -41,6 +43,7 @@ import { EnrollmentRequestAdminForm } from '../Enrollment/EnrollmentRequestAdmin
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
+import PDF from '../Common/PDF/PDF'
 
 interface ProjectDetailsParams {
   id: number
@@ -149,6 +152,10 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
 
   const handleFavoriteClick = () => {
     favoriteMutation.mutate()
+  }
+
+  const handlePDFClick = () => {
+    console.log('print!')
   }
 
   const handleEditClick = () => {
@@ -300,6 +307,24 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
             </ActionIcon>
             <Text size="sm">{project.favoriteCount}</Text>
           </Group>
+          <PDFDownloadLink
+            document={
+              <PDF>
+                <div>{project.name}</div>
+              </PDF>
+            }
+            fileName="project9.pdf">
+            {({ loading }) => (
+              <ActionIcon
+                variant="transparent"
+                aria-label="Exportar a PDF"
+                onClick={handlePDFClick}
+                size="lg"
+                color="blue">
+                <IconPdf />
+              </ActionIcon>
+            )}
+          </PDFDownloadLink>
 
           {/* Admin */}
           {project?.requestEnrollmentCount !== undefined &&
