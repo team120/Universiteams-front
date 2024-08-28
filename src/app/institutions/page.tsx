@@ -34,6 +34,7 @@ import { AxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { excludeProperty } from '../../../utils/mapper'
 import SkeletonFull from '../../../components/Common/Loader/SkeletonFull'
+import { MRT_Localization_ES } from 'mantine-react-table/locales/es'
 
 const InstitutionAdminPage: NextPage = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({})
@@ -184,6 +185,7 @@ const InstitutionAdminPage: NextPage = () => {
     columns,
     data: institutionsQuery.data ?? [],
     enableColumnPinning: true,
+    localization: MRT_Localization_ES,
     initialState: {
       columnPinning: {
         left: ['mrt-row-actions'],

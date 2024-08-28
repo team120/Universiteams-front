@@ -24,6 +24,7 @@ import {
 import ResearchDepartment from '../../../entities/ResearchDepartment'
 import DepartmentCreateForm from '../../../components/Department/DepartmentCreateForm'
 import DepartmentUpdateForm from '../../../components/Department/DepartmentUpdateForm'
+import { MRT_Localization_ES } from 'mantine-react-table/locales/es'
 
 const DepartmentsAdminPage: NextPage = () => {
   const router = useRouter()
@@ -110,6 +111,7 @@ const DepartmentsAdminPage: NextPage = () => {
     columns,
     data: departmentsQuery.data ?? [],
     enableColumnPinning: true,
+    localization: MRT_Localization_ES,
     initialState: {
       columnPinning: {
         left: ['mrt-row-actions'],

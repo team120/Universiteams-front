@@ -20,6 +20,7 @@ import { Facilities, FacilitiesQueryKey, FacilityRelations } from '../../../serv
 import Facility from '../../../entities/Facility/Facility'
 import FacilityEditForm from '../../../components/Facility/FacilityEditForm'
 import FacilityCreateForm from '../../../components/Facility/FacilityCreateForm'
+import { MRT_Localization_ES } from 'mantine-react-table/locales/es'
 
 const FacilitiesAdminPage: NextPage = () => {
   const router = useRouter()
@@ -104,6 +105,7 @@ const FacilitiesAdminPage: NextPage = () => {
     columns,
     data: facilitiesQuery.data ?? [],
     enableColumnPinning: true,
+    localization: MRT_Localization_ES,
     initialState: {
       columnPinning: {
         left: ['mrt-row-actions'],
