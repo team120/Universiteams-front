@@ -37,11 +37,6 @@ const FacilitiesAdminPage: NextPage = () => {
   const columns = useMemo<MRT_ColumnDef<Facility>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID',
-        size: 80,
-      },
-      {
         accessorKey: 'name',
         header: 'Nombre',
       },

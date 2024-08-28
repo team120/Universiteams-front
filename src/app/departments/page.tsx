@@ -41,11 +41,6 @@ const DepartmentsAdminPage: NextPage = () => {
   const columns = useMemo<MRT_ColumnDef<ResearchDepartment>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID',
-        size: 80,
-      },
-      {
         accessorKey: 'name',
         header: 'Nombre',
       },
