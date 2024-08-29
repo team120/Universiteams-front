@@ -2,10 +2,11 @@ import React from 'react'
 import { Text, StyleSheet } from '@react-pdf/renderer'
 
 import PDF from '@/components/Common/PDF/PDF'
-import Project from '@/entities/Project/Project'
-import Interest from '@/entities/Interest'
-import ResearchDepartment from '@/entities/ResearchDepartment'
+
 import Enrollment from '@/entities/Enrollment/Enrollment'
+import Interest from '@/entities/Interest'
+import Project from '@/entities/Project/Project'
+import ResearchDepartment from '@/entities/ResearchDepartment'
 
 const styles = StyleSheet.create({
   big: {
@@ -28,12 +29,15 @@ const ProjectPDF = (props: ProjectPDFProps) => {
 
   return (
     <PDF>
-      <Text style={styles.space}>Reporte de projecto:</Text>
+      <Text style={styles.space}>Reporte de proyecto:</Text>
       <Text style={styles.big}>{project.name}</Text>
       <Text style={styles.space}>Descripción (formato HTML):</Text>
       <Text style={styles.small}>{project.description.trim()}</Text>
       <Text style={styles.space}>Tipo: {project.type}</Text>
-      <Text>Idioma: {project.language}</Text>
+      {project.web && <Text>Web: {project.web}</Text>}
+      {project.language && (
+        <Text>Idioma: {project.language == 'spanish' ? 'Español' : 'Inglés'}</Text>
+      )}
       <Text>Fecha creación: {project.creationDate}</Text>
       <Text>Cantidad de favoritos: {project.favoriteCount}</Text>
       {Array.isArray(project.interests) && project.interests.length > 0 && (
@@ -55,7 +59,7 @@ const ProjectPDF = (props: ProjectPDFProps) => {
           ))}
         </>
       )}
-      {Array.isArray(project.researchDepartments) && project.researchDepartments.length > 0 && (
+      {Array.isArray(project.enrollments) && project.enrollments.length > 0 && (
         <>
           <Text style={styles.space}>Miembros ({project.userCount}):</Text>
           {project.enrollments.map((enrollment: Enrollment) => (
