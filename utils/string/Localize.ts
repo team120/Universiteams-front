@@ -32,9 +32,9 @@ export function localizeAffiliationType(type: UserAffiliationType): string {
 
 export function localizeProjectLanguage(language: Language): string {
   switch (language) {
-    case 'spanish':
+    case Language.Spanish:
       return 'Español'
-    case 'english':
+    case Language.English:
       return 'Inglés'
     default:
       return 'Desconocido'

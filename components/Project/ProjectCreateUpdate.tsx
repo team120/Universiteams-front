@@ -34,6 +34,7 @@ import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 import TextEditor from '../Common/TextEditor/TextEditor'
+import { localizeProjectLanguage } from '../../utils/string/Localize'
 
 interface ProjectCreateUpdateProps {
   id?: number
@@ -211,7 +212,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
           // Update project
           name: currentProject?.name ?? '',
           type: (currentProject?.type as ProjectType) ?? 'Informal',
-          language: currentProject?.language ?? 'spanish',
+          language: currentProject?.language ?? Language.Spanish,
           description: currentProject?.description,
           endDate: currentProject?.endDate,
           web: currentProject?.web,
@@ -224,7 +225,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
           // Create project
           name: '',
           type: 'Informal',
-          language: 'spanish',
+          language: Language.Spanish,
           description: '',
           endDate: undefined,
           web: undefined,
@@ -285,7 +286,10 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
               flex={1}
               label="Idioma"
               placeholder="Español"
-              data={['spanish', 'english']}
+              data={Object.values(Language).map((language) => ({
+                value: language,
+                label: localizeProjectLanguage(language),
+              }))}
               required
               clearable
               searchable
