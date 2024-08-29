@@ -44,7 +44,7 @@ const HelpManuals = () => {
       <Button color="blue" mt="md" radius="md">
         <Link
           target="_blank"
-          href="https://www.universiteams.com"
+          href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20visitante.pdf"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
           Manual de usuario visitante
         </Link>
@@ -52,7 +52,7 @@ const HelpManuals = () => {
       <Button color="blue" mt="md" radius="md">
         <Link
           target="_blank"
-          href="https://www.universiteams.com"
+          href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20registrado.pdf"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
           Manual de usuario registrado
         </Link>
@@ -60,17 +60,17 @@ const HelpManuals = () => {
       <Button color="orange.6" mt="md" radius="md">
         <Link
           target="_blank"
-          href="https://api.universiteams.com/Docs"
+          href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20Lider%20o%20Admin%20de%20Proyecto.pdf"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
-          Manual de líder de proyecto
+          Manual de usuario líder o administrador de proyecto
         </Link>
       </Button>
       <Button color="orange.6" mt="md" radius="md">
         <Link
           target="_blank"
-          href="https://api.universiteams.com/Docs"
+          href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20Administrador%20de%20Sistema.pdf"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
-          Manual de administrador de sistema
+          Manual de usuario administrador de sistema
         </Link>
       </Button>
     </Card>
