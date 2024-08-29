@@ -1,5 +1,5 @@
 import React from 'react'
-import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
+import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import { Html } from 'react-pdf-html'
 import Localize from 'utils/string/Localize'
 
@@ -154,6 +154,7 @@ const ProjectPDF: React.FC<ProjectPDFProps> = ({ project }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        <Image src="/universiteams_banner.png" />
         <Text style={styles.title}>{project.name}</Text>
         <Text style={styles.subtitle}>Descripción:</Text>
         <Html style={styles.text}>{project.description.trim()}</Html>
