@@ -41,7 +41,7 @@ import EnrollmentButton from '@/components/Enrollment/EnrollmentButton'
 import { EnrollmentList } from '../Enrollment/EnrollmentList'
 import { EnrollmentRequestAdminForm } from '../Enrollment/EnrollmentRequestAdmin'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
-import PDF from '@/components/Common/PDF/PDF'
+import ProjectPDF from '@/components/Project/ProjectPDF'
 import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 
@@ -152,10 +152,6 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
 
   const handleFavoriteClick = () => {
     favoriteMutation.mutate()
-  }
-
-  const handlePDFClick = () => {
-    console.log('print!')
   }
 
   const handleEditClick = () => {
@@ -308,19 +304,10 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
             <Text size="sm">{project.favoriteCount}</Text>
           </Group>
           <PDFDownloadLink
-            document={
-              <PDF>
-                <div>{project.name}</div>
-              </PDF>
-            }
+            document={<ProjectPDF project={project} />}
             fileName={`project_document_${Dates.getDateTimeShort()}.pdf`}>
             {({ loading }) => (
-              <ActionIcon
-                variant="transparent"
-                aria-label="Exportar a PDF"
-                onClick={handlePDFClick}
-                size="lg"
-                color="blue">
+              <ActionIcon variant="transparent" aria-label="Exportar a PDF" size="lg" color="blue">
                 <IconPdf />
               </ActionIcon>
             )}
