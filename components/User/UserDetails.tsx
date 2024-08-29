@@ -120,7 +120,7 @@ const UserDetails = (props: UserDetailsParams) => {
           <PDFDownloadLink
             document={<UserPDF user={user} />}
             fileName={`user_document_${Dates.getDateTimeShort()}.pdf`}>
-            {({ loading }) => (
+            {() => (
               <ActionIcon variant="transparent" aria-label="Exportar a PDF" size="lg" color="blue">
                 <IconPdf />
               </ActionIcon>
