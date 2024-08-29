@@ -43,7 +43,6 @@ const HelpManuals = () => {
 
       <Button color="blue" mt="md" radius="md">
         <Link
-          target="_blank"
           href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20visitante.pdf"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
           Manual de usuario visitante
@@ -51,7 +50,6 @@ const HelpManuals = () => {
       </Button>
       <Button color="blue" mt="md" radius="md">
         <Link
-          target="_blank"
           href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20registrado.pdf"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
           Manual de usuario registrado
@@ -59,7 +57,6 @@ const HelpManuals = () => {
       </Button>
       <Button color="orange.6" mt="md" radius="md">
         <Link
-          target="_blank"
           href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20Lider%20o%20Admin%20de%20Proyecto.pdf"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
           Manual de usuario líder o administrador de proyecto
@@ -67,7 +64,6 @@ const HelpManuals = () => {
       </Button>
       <Button color="orange.6" mt="md" radius="md">
         <Link
-          target="_blank"
           href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20Administrador%20de%20Sistema.pdf"
           style={{ color: 'inherit', textDecoration: 'inherit' }}>
           Manual de usuario administrador de sistema
