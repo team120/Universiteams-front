@@ -211,10 +211,10 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
           // Update project
           name: currentProject?.name ?? '',
           type: (currentProject?.type as ProjectType) ?? 'Informal',
-          language: 'spanish',
+          language: currentProject?.language ?? 'spanish',
           description: currentProject?.description,
           endDate: currentProject?.endDate,
-          web: '',
+          web: currentProject?.web,
           interestsIds: currentProject?.interests.map((interest) => String(interest.id)) ?? [],
           interestsToCreate: [],
           researchDepartmentsIds:
