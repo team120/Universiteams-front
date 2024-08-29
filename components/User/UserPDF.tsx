@@ -7,6 +7,7 @@ import Enrollment from '@/entities/Enrollment/Enrollment'
 import Interest from '@/entities/Interest'
 import User from '@/entities/User/User'
 import UserAffiliation from '@/entities/User/UserAffiliation'
+import { localizeAffiliationType, localizeProjectRole } from '../../utils/string/Localize'
 
 const styles = StyleSheet.create({
   big: {
@@ -43,9 +44,9 @@ const UserPDF = (props: UserPDFProps) => {
           <Text style={styles.space}>Afiliaciones:</Text>
           {user.userAffiliations.map((affiliation: UserAffiliation) => (
             <Text key={affiliation.id}>
-              -- {affiliation.currentType}: {affiliation.researchDepartment.name} |{' '}
-              {affiliation.researchDepartment.facility.name} |{' '}
-              {affiliation.researchDepartment.facility.institution.name}
+              -- {localizeAffiliationType(affiliation.currentType)}:{' '}
+              {affiliation.researchDepartment.name} | {affiliation.researchDepartment.facility.name}{' '}
+              | {affiliation.researchDepartment.facility.institution.name}
             </Text>
           ))}
         </>
@@ -55,7 +56,7 @@ const UserPDF = (props: UserPDFProps) => {
           <Text style={styles.space}>Projectos donde participa:</Text>
           {user.enrollments.map((enrollment: Enrollment) => (
             <Text key={enrollment.id}>
-              -- {enrollment.role}: {enrollment.project.name}
+              -- {localizeProjectRole(enrollment.role)}: {enrollment.project.name}
             </Text>
           ))}
         </>

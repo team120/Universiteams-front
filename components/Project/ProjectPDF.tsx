@@ -8,6 +8,7 @@ import Enrollment from '@/entities/Enrollment/Enrollment'
 import Interest from '@/entities/Interest'
 import Project from '@/entities/Project/Project'
 import ResearchDepartment from '@/entities/ResearchDepartment'
+import { localizeProjectRole } from '../../utils/string/Localize'
 
 const styles = StyleSheet.create({
   big: {
@@ -62,7 +63,8 @@ const ProjectPDF = (props: ProjectPDFProps) => {
           <Text style={styles.space}>Miembros ({project.userCount}):</Text>
           {project.enrollments.map((enrollment: Enrollment) => (
             <Text key={enrollment.id}>
-              -- {enrollment.user.firstName} {enrollment.user.lastName} ({enrollment.role})
+              -- {enrollment.user.firstName} {enrollment.user.lastName} (
+              {localizeProjectRole(enrollment.role)})
             </Text>
           ))}
         </>
