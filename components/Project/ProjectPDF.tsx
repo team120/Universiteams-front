@@ -5,7 +5,7 @@ import Project from '@/entities/Project/Project'
 import Enrollment from '@/entities/Enrollment/Enrollment'
 import Interest from '@/entities/Interest'
 import ResearchDepartment from '@/entities/ResearchDepartment'
-import { localizeProjectRole } from '../../utils/string/Localize'
+import { localizeProjectLanguage, localizeProjectRole } from '../../utils/string/Localize'
 
 const styles = StyleSheet.create({
   page: {
@@ -79,7 +79,7 @@ const ProjectPDF: React.FC<ProjectPDFProps> = ({ project }) => {
     <View style={styles.table}>
       {[
         { label: 'Tipo', value: project.type },
-        { label: 'Idioma', value: project.language === 'spanish' ? 'Español' : 'Inglés' },
+        { label: 'Idioma', value: localizeProjectLanguage(project.language) },
         { label: 'Fecha creación', value: project.creationDate },
         { label: 'Cantidad de favoritos', value: project.favoriteCount.toString() },
       ].map((row, index) => (

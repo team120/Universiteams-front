@@ -1,4 +1,5 @@
 import { ProjectRole } from '../../entities/Enrollment/Enrollment'
+import Language from '../../entities/HelpTypes/Language'
 import { UserAffiliationType } from '../../entities/User/UserAffiliation'
 
 export function localizeProjectRole(role: ProjectRole) {
@@ -24,6 +25,17 @@ export function localizeAffiliationType(type: UserAffiliationType): string {
       return 'Investigador'
     case UserAffiliationType.Other:
       return 'Otro'
+    default:
+      return 'Desconocido'
+  }
+}
+
+export function localizeProjectLanguage(language: Language): string {
+  switch (language) {
+    case 'spanish':
+      return 'Español'
+    case 'english':
+      return 'Inglés'
     default:
       return 'Desconocido'
   }
