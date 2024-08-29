@@ -5,17 +5,12 @@ import PDF from '@/components/Common/PDF/PDF'
 
 import Enrollment from '@/entities/Enrollment/Enrollment'
 import Interest from '@/entities/Interest'
-import Project from '@/entities/Project/Project'
-import ResearchDepartment from '@/entities/ResearchDepartment'
 import User from '@/entities/User/User'
 import UserAffiliation from '@/entities/User/UserAffiliation'
 
 const styles = StyleSheet.create({
   big: {
     fontSize: 24,
-  },
-  small: {
-    fontSize: 12,
   },
   space: {
     marginTop: 16,
