@@ -1,11 +1,16 @@
 import React from 'react'
 import Link from 'next/link'
-import { Anchor, Badge, Button, Card, Group, Image, Text } from '@mantine/core'
+import { Anchor, Badge, Button, Card, Group, Image, Loader, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import Env from 'utils/config/Env'
 import Theme from 'src/app/theme'
+import { CurrentUserInfo, UserSystemRole } from '../../services/currentUser'
 
-const HelpManuals = () => {
+interface HelpManualsProps {
+  currentUser?: CurrentUserInfo
+}
+
+const HelpManuals = ({ currentUser }: HelpManualsProps) => {
   const isTablet = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
   const isPhone = useMediaQuery(`(max-width: ${Theme.breakpoints?.sm})`)
 
@@ -62,13 +67,15 @@ const HelpManuals = () => {
           Manual de usuario líder o administrador de proyecto
         </Link>
       </Button>
-      <Button color="orange.6" mt="md" radius="md">
-        <Link
-          href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20Administrador%20de%20Sistema.pdf"
-          style={{ color: 'inherit', textDecoration: 'inherit' }}>
-          Manual de usuario administrador de sistema
-        </Link>
-      </Button>
+      {currentUser?.systemRole === UserSystemRole.ADMIN && (
+        <Button color="orange.6" mt="md" radius="md">
+          <Link
+            href="https://px6qytsypezat9xj.public.blob.vercel-storage.com/Manual%20-%20Usuario%20Administrador%20de%20Sistema.pdf"
+            style={{ color: 'inherit', textDecoration: 'inherit' }}>
+            Manual de usuario administrador de sistema
+          </Link>
+        </Button>
+      )}
     </Card>
   )
 }
