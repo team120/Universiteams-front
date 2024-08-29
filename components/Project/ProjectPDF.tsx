@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, StyleSheet } from '@react-pdf/renderer'
+import { Html } from 'react-pdf-html'
 
 import PDF from '@/components/Common/PDF/PDF'
 
@@ -11,9 +12,6 @@ import ResearchDepartment from '@/entities/ResearchDepartment'
 const styles = StyleSheet.create({
   big: {
     fontSize: 24,
-  },
-  small: {
-    fontSize: 12,
   },
   space: {
     marginTop: 16,
@@ -31,8 +29,8 @@ const ProjectPDF = (props: ProjectPDFProps) => {
     <PDF>
       <Text style={styles.space}>Reporte de proyecto:</Text>
       <Text style={styles.big}>{project.name}</Text>
-      <Text style={styles.space}>Descripción (formato HTML):</Text>
-      <Text style={styles.small}>{project.description.trim()}</Text>
+      <Text style={styles.space}>Descripción:</Text>
+      <Html>{project.description.trim()}</Html>
       <Text style={styles.space}>Tipo: {project.type}</Text>
       {project.web && <Text>Web: {project.web}</Text>}
       {project.language && (
