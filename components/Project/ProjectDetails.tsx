@@ -30,20 +30,20 @@ import {
   IconPdf,
 } from '@tabler/icons-react'
 
+import sanitizeHtml from 'sanitize-html'
+import Dates from 'utils/string/Dates'
+
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { EnrollmentRequestsQueryKey, Projects, ProjectsQueryKey } from '@/services/projects'
-
-import Dates from '../../utils/string/Dates'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
-import sanitizeHtml from 'sanitize-html'
 
 import EnrollmentButton from '@/components/Enrollment/EnrollmentButton'
 import { EnrollmentList } from '../Enrollment/EnrollmentList'
 import { EnrollmentRequestAdminForm } from '../Enrollment/EnrollmentRequestAdmin'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
+import PDF from '@/components/Common/PDF/PDF'
 import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
-import PDF from '../Common/PDF/PDF'
 
 interface ProjectDetailsParams {
   id: number
@@ -313,7 +313,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
                 <div>{project.name}</div>
               </PDF>
             }
-            fileName="project9.pdf">
+            fileName={`project_document_${Dates.getDateTimeShort()}.pdf`}>
             {({ loading }) => (
               <ActionIcon
                 variant="transparent"
