@@ -65,7 +65,7 @@ const InstitutionCreateForm: React.FC<InstitutionEditFormProps> = ({
   return (
     <Stack>
       <LoadingOverlay visible={createMutation.isPending || institutionsQuery.isLoading} />
-      <Title order={3}>Editar Institución</Title>
+      <Title order={3}>Crear Institución</Title>
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
           label="Nombre"
