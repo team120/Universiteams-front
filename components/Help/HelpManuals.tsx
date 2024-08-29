@@ -11,7 +11,7 @@ const HelpManuals = () => {
 
   return (
     <Card
-      id="universiteams-help"
+      id="universiteamsHelp"
       shadow="sm"
       my="2rem"
       mx={isPhone ? '2rem' : isTablet ? '3rem' : '20%'}
@@ -38,6 +38,7 @@ const HelpManuals = () => {
           style={{ color: '#fd7e14' }}>
           {Env.contactMail}
         </Anchor>
+        .
       </Text>
 
       <Button color="blue" mt="md" radius="md">
