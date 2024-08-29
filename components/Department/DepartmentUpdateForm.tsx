@@ -9,6 +9,7 @@ import Validation from '../../utils/string/Validation'
 import { DepartmentsQueryKey, ResearchDepartments } from '../../services/departments'
 import { DepartmentUpdateDto } from '../../entities/Department/DepartmentUpdateDto'
 import ResearchDepartment from '../../entities/ResearchDepartment'
+import { AxiosError } from 'axios'
 
 export interface DepartmentUpdateFormProps {
   facility: ResearchDepartment
@@ -34,10 +35,10 @@ const DepartmentUpdateForm: React.FC<DepartmentUpdateFormProps> = ({
       table.setEditingRow(null)
       modals.closeAll()
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       notifications.show({
         title: 'Error al actualizar el departamento',
-        message: error.message,
+        message: (error.response?.data as { message: string }).message ?? error.message,
         color: 'red',
       })
     },

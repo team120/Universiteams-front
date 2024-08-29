@@ -68,10 +68,10 @@ const InstitutionAdminPage: NextPage = () => {
       })
       modals.closeAll()
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       notifications.show({
         title: 'Error al eliminar la institución',
-        message: error.message,
+        message: (error.response?.data as { message: string }).message ?? error.message,
         color: 'red',
       })
       modals.closeAll()

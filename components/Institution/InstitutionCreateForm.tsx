@@ -9,6 +9,7 @@ import { InstitutionCreateDto } from '../../entities/Institution/InstitutionCrea
 import SelectItem from '../../entities/HelpTypes/SelectItem'
 import Validation from '../../utils/string/Validation'
 import Institution from '../../entities/Institution'
+import { AxiosError } from 'axios'
 
 export interface InstitutionEditFormProps {
   table: MRT_TableInstance<Institution>
@@ -31,10 +32,10 @@ const InstitutionCreateForm: React.FC<InstitutionEditFormProps> = ({
       })
       table.setCreatingRow(null)
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       notifications.show({
         title: 'Error al crear la institución',
-        message: error.message,
+        message: (error.response?.data as { message: string }).message ?? error.message,
         color: 'red',
       })
     },

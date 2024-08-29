@@ -9,6 +9,7 @@ import { MRT_TableInstance } from 'mantine-react-table'
 import { InstitutionUpdateDto } from '../../entities/Institution/InstitutionUpdateDto'
 import Validation from '../../utils/string/Validation'
 import Institution from '../../entities/Institution'
+import { AxiosError } from 'axios'
 
 export interface InstitutionEditFormProps {
   institution: Institution
@@ -34,10 +35,10 @@ const InstitutionEditForm: React.FC<InstitutionEditFormProps> = ({
       table.setEditingRow(null)
       modals.closeAll()
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       notifications.show({
         title: 'Error al actualizar la institución',
-        message: error.message,
+        message: (error.response?.data as { message: string }).message ?? error.message,
         color: 'red',
       })
     },
