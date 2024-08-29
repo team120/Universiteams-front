@@ -1,16 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import {
-  ActionIcon,
-  Badge,
-  Card,
-  Group,
-  Menu,
-  Text,
-  rem,
-  useMantineColorScheme,
-} from '@mantine/core'
+import { ActionIcon, Badge, Card, Group, Menu, Text, useMantineColorScheme } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { IconDots, IconHierarchy3, IconTrash } from '@tabler/icons-react'
 
