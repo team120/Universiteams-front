@@ -1,12 +1,11 @@
-import React, { useMemo } from 'react'
-import { Title, Flex, TextInput, Button, Stack, LoadingOverlay, Select } from '@mantine/core'
+import React from 'react'
+import { Title, Flex, TextInput, Button, Stack, LoadingOverlay } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Institutions, InstitutionQueryKey } from '../../services/institutions'
 import { MRT_TableInstance } from 'mantine-react-table'
 import { InstitutionCreateDto } from '../../entities/Institution/InstitutionCreateDto'
-import SelectItem from '../../entities/HelpTypes/SelectItem'
 import Validation from '../../utils/string/Validation'
 import Institution from '../../entities/Institution'
 import { AxiosError } from 'axios'
@@ -62,15 +61,6 @@ const InstitutionCreateForm: React.FC<InstitutionEditFormProps> = ({
   const handleSubmit = (values: InstitutionCreateDto) => {
     createMutation.mutate(values)
   }
-
-  const institutions: SelectItem[] = useMemo(() => {
-    return (
-      institutionsQuery.data?.map((institution) => ({
-        value: String(institution.id),
-        label: institution.name,
-      })) ?? []
-    )
-  }, [institutionsQuery.data])
 
   return (
     <Stack>
