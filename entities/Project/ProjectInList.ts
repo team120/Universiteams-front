@@ -32,6 +32,7 @@ interface ProjectInList {
   requestState?: RequestState
   requesterMessage?: string
   adminMessage?: string
+  senderName?: string
   requestEnrollmentCount?: number
   researchDepartments: ResearchDepartment[]
   interests: Interest[]

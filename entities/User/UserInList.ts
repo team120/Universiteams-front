@@ -11,6 +11,7 @@ interface UserInList {
   firstName: string
   lastName: string
   email: string
+  requestEnrollmentInvitationsCount: number
   userAffiliations: UserAffiliation[]
   interests: Interest[]
   enrollments: Enrollment[]
