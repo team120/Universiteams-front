@@ -144,6 +144,14 @@ export const Projects = {
     await axios.put(`${prefix}/${id}/enroll-requests/${userId}/reject`, adminOptions)
   },
 
+  async acceptEnrollmentInvitation(id: number, options: EnrollmentRequestInput): Promise<void> {
+    await axios.put(`${prefix}/${id}/invitation/accept`, options)
+  },
+
+  async declineEnrollmentInvitation(id: number, options: EnrollmentRequestInput): Promise<void> {
+    await axios.put(`${prefix}/${id}/invitation/decline`, options)
+  },
+
   async revokeEnrollment(
     id: number,
     userId: number,
