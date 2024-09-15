@@ -119,6 +119,20 @@ const UserDetails = (props: UserDetailsParams) => {
           </Group>
         )}
         <Flex justify="flex-end" align="center" gap={'1rem'}>
+          {/* Admin */}
+          {project?.requestEnrollmentCount !== undefined &&
+            project?.requestEnrollmentCount !== null && (
+              <>
+                <ActionIcon
+                  variant="transparent"
+                  aria-label="Editar"
+                  onClick={handleEditClick}
+                  size="lg"
+                  color={'orange.6'}>
+                  <IconEdit />
+                </ActionIcon>
+              </>
+            )}
           <PDFDownloadLink
             document={<UserPDF user={user} />}
             fileName={`user_document_${Dates.getDateTimeShort()}.pdf`}>

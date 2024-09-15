@@ -24,7 +24,7 @@ import { EnrollmentRevoked } from './EnrollmentRevoked'
 import { NotLoggedError } from '../Account/NotLoggedError'
 import { RequestState } from '@/entities/Project/ProjectInList'
 import { UnenrollModal } from './Unenroll'
-import { verifyEmailNotification as verifyEmailErrorNotification } from '../Account/VerifyEmailNotification'
+import { verifyEmailNotification } from '../Account/VerifyEmailNotification'
 
 interface ActionIconComponentProps {
   projectId: number
@@ -70,7 +70,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     }
 
     if (currentUser?.isEmailVerified === false) {
-      notifications.show(verifyEmailErrorNotification('solicitar inscripciones'))
+      notifications.show(verifyEmailNotification('solicitar inscripciones'))
 
       return
     }
