@@ -8,7 +8,7 @@ import { modals } from '@mantine/modals'
 import { EnrollmentRequestsQueryKey, Projects } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
-import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestReject'
+import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestAdmin'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
 import TextEditor from '../Common/TextEditor/TextEditor'
 

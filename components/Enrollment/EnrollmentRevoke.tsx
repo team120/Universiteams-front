@@ -9,7 +9,7 @@ import { Projects, ProjectsQueryKey } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
 import Enrollment from '@/entities/Enrollment/Enrollment'
-import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestReject'
+import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestAdmin'
 import TextEditor from '../Common/TextEditor/TextEditor'
 
 interface EnrollmentRequestProps {
