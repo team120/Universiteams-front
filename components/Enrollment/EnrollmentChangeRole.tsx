@@ -56,7 +56,7 @@ export const EnrollmentChangeRoleForm = (props: EnrollmentChangeRoleProps): Reac
 
       <Select
         label={`Rol de ${props.enrollment.user.firstName} ${props.enrollment.user.lastName}`}
-        placeholder="Pick value"
+        placeholder="Seleccionar un valor"
         data={Object.values(ProjectRole)
           .filter((role) => role !== ProjectRole.Leader)
           .map((role) => ({
