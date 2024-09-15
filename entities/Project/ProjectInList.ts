@@ -12,10 +12,14 @@ export enum ProjectSortAttribute {
 export enum RequestState {
   Pending = 'Pending',
   Accepted = 'Accepted',
-  Rejected = 'Rejected',
+  Rejected = 'Rejected', // The admin or leader rejected the enrollment request
+  Declined = 'Declined', // The user declined the enrollment invitation
   Unenrolled = 'Unenrolled',
   Kicked = 'Kicked',
 }
+
+export type ManageEnrollRequestAction = 'approve' | 'reject'
+export type ManageEnrollInvitationAction = 'accept' | 'decline'
 
 interface ProjectInList {
   id: number
