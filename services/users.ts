@@ -1,10 +1,11 @@
 import axios from 'axios'
 import Env from 'utils/config/Env'
 
+import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
+import { Order } from '@/entities/HelpTypes/Order'
 import User from '@/entities/User/User'
 import UsersResult from '@/entities/User/UsersResult'
 import { UserSortAttribute } from '@/entities/User/UserInList'
-import { Order } from '@/entities/HelpTypes/Order'
 
 const prefix = `${Env.backendAPI}/users`
 
@@ -47,5 +48,25 @@ export const Users = {
   getUser: async (id: number): Promise<User | undefined> => {
     const result = await axios.get<User>(`${prefix}/${id}`)
     return result.data
+  },
+
+  createEnrollInvitation: async (
+    id: number,
+    projectId: number,
+    options: EnrollmentRequestInput
+  ): Promise<void> => {
+    await axios.post(`${prefix}/${id}/invitation/${projectId}`, options)
+  },
+
+  updateEnrollInvitation: async (
+    id: number,
+    projectId: number,
+    options: EnrollmentRequestInput
+  ): Promise<void> => {
+    await axios.put(`${prefix}/${id}/invitation/${projectId}`, options)
+  },
+
+  cancelEnrollInvitation: async (id: number, projectId: number): Promise<void> => {
+    await axios.delete(`${prefix}/${id}/invitation/${projectId}`)
   },
 }
