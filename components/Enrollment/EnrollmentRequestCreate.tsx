@@ -11,11 +11,11 @@ import sanitizeHtml from 'sanitize-html'
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import TextEditor from '../Common/TextEditor/TextEditor'
 
-interface EnrollmentRequestProps {
+interface EnrollmentRequestCreateProps {
   projectId: number
 }
 
-export const EnrollmentRequestCreate = (props: EnrollmentRequestProps): React.JSX.Element => {
+export const EnrollmentRequestCreate = (props: EnrollmentRequestCreateProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 

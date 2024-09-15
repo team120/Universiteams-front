@@ -17,7 +17,7 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { ProjectsQueryKey, Projects } from '@/services/projects'
 import sanitize from 'sanitize-html'
 
-import { EnrollmentRequestCreate } from './EnrollmentRequest'
+import { EnrollmentRequestCreate } from './EnrollmentRequestCreate'
 import { EnrollmentRequestRejected } from './EnrollmentRequestRejected'
 import { EnrollmentRequestRevision } from './EnrollmentRequestRevision'
 import { EnrollmentRevoked } from './EnrollmentRevoked'
