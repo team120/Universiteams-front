@@ -3,7 +3,6 @@ import Env from 'utils/config/Env'
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 
 import { EnrollmentChangeRole } from '@/entities/Enrollment/EnrollmentChangeRole'
-import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestAdmin'
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import { EnrollmentRequestsShow } from '@/entities/Enrollment/EnrollmentRequestsShow'
 import { Order } from '@/entities/HelpTypes/Order'
@@ -132,7 +131,7 @@ export const Projects = {
   async approveEnrollmentRequest(
     id: number,
     userId: number,
-    adminOptions: EnrollmentRequestAdmin
+    adminOptions: EnrollmentRequestInput
   ): Promise<void> {
     await axios.put(`${prefix}/${id}/enroll-requests/${userId}/approve`, adminOptions)
   },
@@ -140,7 +139,7 @@ export const Projects = {
   async rejectEnrollmentRequest(
     id: number,
     userId: number,
-    adminOptions: EnrollmentRequestAdmin
+    adminOptions: EnrollmentRequestInput
   ): Promise<void> {
     await axios.put(`${prefix}/${id}/enroll-requests/${userId}/reject`, adminOptions)
   },
@@ -148,7 +147,7 @@ export const Projects = {
   async revokeEnrollment(
     id: number,
     userId: number,
-    adminOptions: EnrollmentRequestAdmin
+    adminOptions: EnrollmentRequestInput
   ): Promise<void> {
     await axios.put(`${prefix}/${id}/enrollments/${userId}/kick`, adminOptions)
   },

@@ -8,13 +8,13 @@ import { modals } from '@mantine/modals'
 import { EnrollmentRequestsQueryKey, Projects } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
-import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestAdmin'
+import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
 import TextEditor from '../Common/TextEditor/TextEditor'
 
 interface AdminMutation {
   userId: number
-  adminOptions: EnrollmentRequestAdmin
+  adminOptions: EnrollmentRequestInput
 }
 
 interface EnrollmentRequestProps {
