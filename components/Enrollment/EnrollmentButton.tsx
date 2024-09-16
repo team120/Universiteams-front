@@ -17,9 +17,9 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { ProjectsQueryKey, Projects } from '@/services/projects'
 import sanitize from 'sanitize-html'
 
+import { EnrollmentRequestCancel } from './EnrollmentRequestCancel'
 import { EnrollmentRequestCreate } from './EnrollmentRequestCreate'
-import { EnrollmentRequestRejected } from './EnrollmentRequestRejected'
-import { EnrollmentRequestRevision } from './EnrollmentRequestRevision'
+import { EnrollmentRequestUpdate } from './EnrollmentRequestUpdate'
 import { EnrollmentRevoked } from './EnrollmentRevoked'
 import { NotLoggedError } from '../Account/NotLoggedError'
 import { RequestState } from '@/entities/Project/ProjectInList'
@@ -82,17 +82,17 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     })
   }
 
-  const handleViewRequestClick = (event: React.MouseEvent) => {
+  const handleReviewRequestClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
     modals.open({
       title: 'Solicitud de inscripción',
       centered: true,
-      children: <EnrollmentRequestRevision content={requesterMessage} projectId={projectId} />,
+      children: <EnrollmentRequestUpdate content={requesterMessage} projectId={projectId} />,
     })
   }
 
-  const handleViewAdminMessageClick = (event: React.MouseEvent) => {
+  const handleReviewAdminMessageClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
     modals.open({
@@ -115,7 +115,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
       title: 'Solicitud rechazada',
       centered: true,
       children: (
-        <EnrollmentRequestRejected
+        <EnrollmentRequestCancel
           projectId={projectId}
           adminMessage={adminMessage}
           requesterMessage={requesterMessage}
@@ -195,7 +195,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
           </Menu.Target>
           <Menu.Dropdown>
             {requesterMessage && (
-              <Menu.Item leftSection={<IconPencil size={14} />} onClick={handleViewRequestClick}>
+              <Menu.Item leftSection={<IconPencil size={14} />} onClick={handleReviewRequestClick}>
                 Revisar solicitud
               </Menu.Item>
             )}
@@ -222,7 +222,9 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
           </Menu.Target>
           <Menu.Dropdown>
             {adminMessage && (
-              <Menu.Item leftSection={<IconEye size={14} />} onClick={handleViewAdminMessageClick}>
+              <Menu.Item
+                leftSection={<IconEye size={14} />}
+                onClick={handleReviewAdminMessageClick}>
                 Ver mensaje del administrador
               </Menu.Item>
             )}

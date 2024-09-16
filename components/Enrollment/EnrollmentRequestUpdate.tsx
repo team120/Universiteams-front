@@ -11,12 +11,12 @@ import sanitizeHtml from 'sanitize-html'
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import TextEditor from '../Common/TextEditor/TextEditor'
 
-interface EnrollmentRequestRevisionProps {
+interface EnrollmentRequestUpdateProps {
   projectId: number
   content?: string
 }
 
-export const EnrollmentRequestRevision = (props: EnrollmentRequestRevisionProps) => {
+export const EnrollmentRequestUpdate = (props: EnrollmentRequestUpdateProps) => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 

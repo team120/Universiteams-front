@@ -7,15 +7,13 @@ import { notifications } from '@mantine/notifications'
 import { Projects, ProjectsQueryKey } from '@/services/projects'
 import sanitize from 'sanitize-html'
 
-interface EnrollmentRequestRejectedProps {
+interface EnrollmentRequestCancelProps {
   projectId: number
   requesterMessage?: string
   adminMessage?: string
 }
 
-export const EnrollmentRequestRejected = (
-  props: EnrollmentRequestRejectedProps
-): React.JSX.Element => {
+export const EnrollmentRequestCancel = (props: EnrollmentRequestCancelProps): React.JSX.Element => {
   const queryClient = useQueryClient()
 
   const cancelEnrollmentRequestMutation = useMutation({
