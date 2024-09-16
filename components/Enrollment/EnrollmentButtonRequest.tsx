@@ -145,6 +145,7 @@ const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
 
   switch (props.requestState) {
     case RequestState.Unenrolled:
+    case RequestState.Declined:
     case undefined:
     case null:
       return (
