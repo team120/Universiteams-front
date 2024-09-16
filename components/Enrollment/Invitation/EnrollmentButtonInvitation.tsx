@@ -20,12 +20,12 @@ import sanitize from 'sanitize-html'
 import { EnrollmentInvitationCancel } from './EnrollmentInvitationCancel'
 import { EnrollmentInvitationCreate } from './EnrollmentInvitationCreate'
 import { EnrollmentInvitationUpdate } from './EnrollmentInvitationUpdate'
-import { NotLoggedError } from '../Account/NotLoggedError'
+import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { RequestState } from '@/entities/Project/ProjectInList'
-import { verifyEmailNotification } from '../Account/VerifyEmailNotification'
+import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 import { Users } from '@/services/users'
 
-interface ActionIconComponentProps {
+interface EnrollmentButtonInvitationProps {
   userId: number
   projectId?: number
   requestState?: RequestState | null
@@ -33,8 +33,8 @@ interface ActionIconComponentProps {
   adminMessage?: string
 }
 
-const EnrollmentButtonInvitation: React.FC<ActionIconComponentProps> = (
-  props: ActionIconComponentProps
+const EnrollmentButtonInvitation: React.FC<EnrollmentButtonInvitationProps> = (
+  props: EnrollmentButtonInvitationProps
 ) => {
   const queryClient = useQueryClient()
 
