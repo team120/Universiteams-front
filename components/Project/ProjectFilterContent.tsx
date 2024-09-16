@@ -1,11 +1,11 @@
 import React, { ChangeEvent, useEffect } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Select, Stack, Grid, ActionIcon, Group, Switch, MultiSelect } from '@mantine/core'
+import { Select, Stack, Grid, ActionIcon, Switch, MultiSelect } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
 
-import { IconArrowUp, IconArrowDown, IconTrash } from '@tabler/icons-react'
+import { IconArrowUp, IconArrowDown } from '@tabler/icons-react'
 import Theme from 'src/app/theme'
 
 import { Order } from '@/entities/HelpTypes/Order'
