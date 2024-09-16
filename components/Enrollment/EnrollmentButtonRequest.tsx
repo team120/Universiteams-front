@@ -33,7 +33,7 @@ interface ActionIconComponentProps {
   adminMessage?: string
 }
 
-const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
+const EnrollmentButtonRequest: React.FC<ActionIconComponentProps> = ({
   requestState,
   requesterMessage,
   adminMessage,
@@ -241,4 +241,4 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
   }
 }
 
-export default EnrollmentButton
+export default EnrollmentButtonRequest

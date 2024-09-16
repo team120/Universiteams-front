@@ -37,7 +37,7 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { EnrollmentRequestsQueryKey, Projects, ProjectsQueryKey } from '@/services/projects'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
 
-import EnrollmentButton from '@/components/Enrollment/EnrollmentButton'
+import EnrollmentButtonRequest from '@/components/Enrollment/EnrollmentButtonRequest'
 import { EnrollmentList } from '../Enrollment/EnrollmentList'
 import { EnrollmentRequestAdminForm } from '../Enrollment/EnrollmentRequestAdmin'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
@@ -286,7 +286,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
         <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
 
         <Flex justify="flex-end" align="center" gap={'1rem'}>
-          <EnrollmentButton
+          <EnrollmentButtonRequest
             projectId={project.id}
             requestState={project.requestState}
             requesterMessage={project.requesterMessage}

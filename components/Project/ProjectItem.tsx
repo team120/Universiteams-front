@@ -12,7 +12,7 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Projects, ProjectsQueryKey } from '@/services/projects'
 import { Url } from '@/services/url'
 
-import EnrollmentButton from '../Enrollment/EnrollmentButton'
+import EnrollmentButtonRequest from '../Enrollment/EnrollmentButtonRequest'
 import InfoMessage from '../Common/InfoMessage/InfoMessage'
 import { NotLoggedError } from '../Account/NotLoggedError'
 import { ProjectDetailsTabs } from './ProjectDetails'
@@ -186,7 +186,7 @@ const ProjectItem = (props: ProjectItemProps) => {
             </div>
           )}
 
-          <EnrollmentButton
+          <EnrollmentButtonRequest
             projectId={project.id}
             requestState={project.requestState}
             requesterMessage={project.requesterMessage}
