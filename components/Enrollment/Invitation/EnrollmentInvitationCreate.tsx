@@ -17,6 +17,7 @@ import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
 interface EnrollmentInvitationCreateProps {
   userId: number
+  possibleProjects?: ProjectInList[]
 }
 
 export const EnrollmentInvitationCreate = (
@@ -31,12 +32,14 @@ export const EnrollmentInvitationCreate = (
 
   const projectsQuery = useQuery({
     queryKey: [ProjectsQueryKey, currentUser?.id],
-    queryFn: () => Projects.getProjects({ userId: currentUser?.id }),
+    queryFn: () =>
+      props.possibleProjects ??
+      Projects.getProjects({ userId: currentUser?.id }).then((res) => res?.projects),
   })
 
   const projects: SelectItem[] = useMemo(() => {
     return (
-      projectsQuery.data?.projects?.map((project: ProjectInList) => ({
+      projectsQuery.data?.map((project: ProjectInList) => ({
         value: String(project.id),
         label: project.name,
       })) ?? []

@@ -15,18 +15,19 @@ import {
 } from '@tabler/icons-react'
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { ProjectsQueryKey } from '@/services/projects'
+import { Users } from '@/services/users'
 import sanitize from 'sanitize-html'
 
 import { EnrollmentInvitationCancel } from './EnrollmentInvitationCancel'
 import { EnrollmentInvitationCreate } from './EnrollmentInvitationCreate'
 import { EnrollmentInvitationUpdate } from './EnrollmentInvitationUpdate'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
-import { RequestState } from '@/entities/Project/ProjectInList'
+import ProjectInList, { RequestState } from '@/entities/Project/ProjectInList'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
-import { Users } from '@/services/users'
 
 interface EnrollmentButtonInvitationProps {
   userId: number
+  possibleProjects?: ProjectInList[]
   projectId?: number
   requestState?: RequestState | null
   requesterMessage?: string
@@ -75,7 +76,12 @@ const EnrollmentButtonInvitation: React.FC<EnrollmentButtonInvitationProps> = (
     modals.open({
       title: 'Invitación de inscripción',
       centered: true,
-      children: <EnrollmentInvitationCreate userId={props.userId} />,
+      children: (
+        <EnrollmentInvitationCreate
+          userId={props.userId}
+          possibleProjects={props.possibleProjects}
+        />
+      ),
     })
   }
 
