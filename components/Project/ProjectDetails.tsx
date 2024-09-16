@@ -39,7 +39,7 @@ import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestSh
 
 import EnrollmentButtonRequest from '@/components/Enrollment/EnrollmentButtonRequest'
 import { EnrollmentList } from '../Enrollment/EnrollmentList'
-import { EnrollmentRequestAdminForm } from '../Enrollment/EnrollmentRequestAdmin'
+import { EnrollmentRequestAdmin } from '../Enrollment/EnrollmentRequestAdmin'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import ProjectPDF from '@/components/Project/ProjectPDF'
 import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
@@ -216,9 +216,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     modals.open({
       title: `Aceptar solicitud de ${request.user.firstName} ${request.user.lastName}`,
       centered: true,
-      children: (
-        <EnrollmentRequestAdminForm projectId={props.id} request={request} action="approve" />
-      ),
+      children: <EnrollmentRequestAdmin projectId={props.id} request={request} action="approve" />,
     })
   }
 
@@ -226,9 +224,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     modals.open({
       title: `Rechazar solicitud de ${request.user.firstName} ${request.user.lastName}`,
       centered: true,
-      children: (
-        <EnrollmentRequestAdminForm projectId={props.id} request={request} action="reject" />
-      ),
+      children: <EnrollmentRequestAdmin projectId={props.id} request={request} action="reject" />,
     })
   }
 
