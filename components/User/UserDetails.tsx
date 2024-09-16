@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { ActionIcon, Alert, Badge, Card, Flex, Group, Tabs, Text } from '@mantine/core'
 import { useMantineColorScheme } from '@mantine/core'
 
+import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Users } from '@/services/users'
 import { IconBulb, IconFolders, IconPdf, IconSchool } from '@tabler/icons-react'
 
@@ -12,12 +13,15 @@ import Dates from 'utils/string/Dates'
 import Localize from 'utils/string/Localize'
 import styles from '@/components/Enrollment/List/EnrollmentList.module.css'
 
+import Enrollment, { ProjectRole } from '@/entities/Enrollment/Enrollment'
+import EnrollmentButtonInvitation from '@/components/Enrollment/Invitation/EnrollmentButtonInvitation'
+import Interest from '@/entities/Interest'
+import Project from '@/entities/Project/Project'
+import ResearchDepartment from '@/entities/ResearchDepartment'
 import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
 import UserAffiliation from '@/entities/User/UserAffiliation'
-import Interest from '@/entities/Interest'
-import Enrollment from '@/entities/Enrollment/Enrollment'
-import ResearchDepartment from '@/entities/ResearchDepartment'
 import UserPDF from './UserPDF'
+import ProjectInList from '@/entities/Project/ProjectInList'
 
 interface UserDetailsParams {
   id: number
@@ -30,12 +34,60 @@ export enum UserDetailsTabs {
 const UserDetails = (props: UserDetailsParams) => {
   const {
     data: user,
-    error,
-    isLoading,
+    error: errorUser,
+    isLoading: isLoadingUser,
   } = useQuery({
     queryKey: ['users', props.id],
     queryFn: () => Users.getUser(props.id),
   })
+
+  const { data: currentUserInfo } = useQuery(CurrentUserQueryOptions.currentUser())
+
+  const {
+    data: currentUser,
+    error: errorCurrentUser,
+    isLoading: isLoadingCurrentUser,
+  } = useQuery({
+    queryKey: ['currentUser', currentUserInfo?.id],
+    queryFn: () => Users.getUser(currentUserInfo?.id as number),
+  })
+
+  const [possibleProjects, setPossibleProjects] = useState<ProjectInList[]>([])
+
+  useEffect(() => {
+    if (!currentUser) return
+    if (!user) return
+
+    // Admin of at least one project
+    const currentUserAdminProjects: ProjectInList[] = currentUser.enrollments
+      .filter(
+        (enrollment: Enrollment) =>
+          enrollment.role === ProjectRole.Admin || enrollment.role === ProjectRole.Leader
+      )
+      .map((enrollment: Enrollment) => enrollment.project)
+
+    if (currentUserAdminProjects.length === 0) {
+      setPossibleProjects([])
+      return
+    }
+
+    // Projects in which the user is enrolled
+    const selectedUserEnrolledProjects: number[] = user.enrollments.map(
+      (enrollment: Enrollment) => enrollment.project.id
+    )
+
+    if (selectedUserEnrolledProjects.length === 0) {
+      setPossibleProjects(currentUserAdminProjects)
+      return
+    }
+
+    // Projects in which the user is not enrolled and the current user is admin
+    const filteredProjects: ProjectInList[] = currentUserAdminProjects.filter(
+      (project: ProjectInList) => !selectedUserEnrolledProjects.includes(project.id)
+    )
+
+    setPossibleProjects(filteredProjects)
+  }, [currentUser, user])
 
   const { colorScheme } = useMantineColorScheme()
 
@@ -63,9 +115,11 @@ const UserDetails = (props: UserDetailsParams) => {
     router.push(`/projects/${projectId}`)
   }
 
-  if (isLoading) return <SkeletonFull />
-  if (error) return <Alert color="red">{error.message}</Alert>
+  if (isLoadingUser || isLoadingCurrentUser) return <SkeletonFull />
+  if (errorUser) return <Alert color="red">{errorUser.message}</Alert>
+  if (errorCurrentUser) return <Alert color="red">{errorCurrentUser.message}</Alert>
   if (!user) return <Alert color="red">No se encontró el usuario</Alert>
+  if (!currentUser) return <Alert color="red">No se ha cargado el usuario actual</Alert>
 
   return (
     <>
@@ -119,6 +173,11 @@ const UserDetails = (props: UserDetailsParams) => {
           </Group>
         )}
         <Flex justify="flex-end" align="center" gap={'1rem'}>
+          {possibleProjects.length > 0 && (
+            <>
+              <EnrollmentButtonInvitation userId={user.id} possibleProjects={possibleProjects} />
+            </>
+          )}
           <PDFDownloadLink
             document={<UserPDF user={user} />}
             fileName={`user_document_${Dates.getDateTimeShort()}.pdf`}>
