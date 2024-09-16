@@ -307,7 +307,7 @@ const ProjectCreateUpdate = (props?: ProjectCreateUpdateProps) => {
               <TextEditor
                 content={form.values.description}
                 onChange={(content) => {
-                  form.setValues({ ...form.values, description: content })
+                  form.setFieldValue('description', content)
                 }}
               />
             </Flex>
