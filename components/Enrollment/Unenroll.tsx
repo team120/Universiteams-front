@@ -12,7 +12,7 @@ interface EnrollmentCancelProps {
   projectId: number
 }
 
-export const UnenrollModal = (props: EnrollmentCancelProps): React.JSX.Element => {
+export const Unenroll = (props: EnrollmentCancelProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 

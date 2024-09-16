@@ -23,7 +23,7 @@ import { EnrollmentRequestUpdate } from './EnrollmentRequestUpdate'
 import { EnrollmentRevoked } from './EnrollmentRevoked'
 import { NotLoggedError } from '../Account/NotLoggedError'
 import { RequestState } from '@/entities/Project/ProjectInList'
-import { UnenrollModal } from './Unenroll'
+import { Unenroll } from './Unenroll'
 import { verifyEmailNotification } from '../Account/VerifyEmailNotification'
 
 interface EnrollmentButtonRequestProps {
@@ -139,7 +139,7 @@ const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
     modals.open({
       title: 'Desinscribirse del proyecto',
       centered: true,
-      children: <UnenrollModal projectId={props.projectId} />,
+      children: <Unenroll projectId={props.projectId} />,
     })
   }
 
