@@ -24,7 +24,7 @@ export const EnrollmentRequestRejected = (
       queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
       notifications.show({
         title: 'Solicitud de inscripción cancelada',
-        message: 'Tu solicitud de inscripción ha eliminada correctamente',
+        message: 'Tu solicitud de inscripción ha sido eliminada correctamente',
       })
       modals.closeAll()
     },
