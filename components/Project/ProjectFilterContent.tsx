@@ -99,11 +99,6 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
     Url.setUrlParam(router, pathname, searchQuery, 'order', value)
   }
 
-  const reset = () => {
-    form.reset()
-    router.push(`${pathname}`)
-  }
-
   const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   return (
@@ -220,12 +215,6 @@ const ProjectFilterContent = (props: ProjectFilterContentProps) => {
             value={form.values.dateFrom}
             onChange={handleDateInputChange}
           />
-
-          <Group grow mt="xs">
-            <ActionIcon color="red" onClick={reset}>
-              <IconTrash />
-            </ActionIcon>
-          </Group>
         </Stack>
       </form>
     </>

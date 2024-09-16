@@ -170,12 +170,6 @@ const UserFilterContent = (props: UserFilterContentProps) => {
             onChange={handleDepartmentChange}
             disabled={!form.values.facility}
           />
-
-          <Group grow mt="xs">
-            <ActionIcon color="red" onClick={reset}>
-              <IconTrash />
-            </ActionIcon>
-          </Group>
         </Stack>
       </form>
     </>
