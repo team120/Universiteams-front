@@ -116,7 +116,7 @@ export const EnrollmentRequestAdmin = (props: EnrollmentRequestAdminProps): Reac
         type="submit"
         fullWidth
         mt="md"
-        aria-label="Rechazar solicitud"
+        aria-label="Aprobar o rechazar solicitud"
         color={props.action === 'approve' ? 'blue' : 'red'}>
         {props.action === 'approve' ? 'Aprobar solicitud' : 'Rechazar solicitud'}
       </Button>
