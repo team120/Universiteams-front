@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { CloseButton, TextInput } from '@mantine/core'
 import { useDebouncedValue, useMediaQuery } from '@mantine/hooks'
 
@@ -9,6 +9,7 @@ import { Url } from '@/services/url'
 
 const SearchBar = () => {
   const router = useRouter()
+  const pathname = usePathname()
   const searchQuery = useSearchParams()
 
   const [generalSearch, setGeneralSearch] = useState('')
@@ -17,10 +18,15 @@ const SearchBar = () => {
   const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   useEffect(() => {
-    if (debouncedGeneralSearch.trim()) {
-      Url.setUrlParam(router, '/projects', searchQuery, 'generalSearch', generalSearch)
+    const trimmedSearchQuery = debouncedGeneralSearch.trim()
+    if (trimmedSearchQuery === '') {
+      Url.removeUrlParam(router, pathname, searchQuery, 'generalSearch')
+      return
     }
-  }, [debouncedGeneralSearch])
+
+    const targetPath = pathname === '/users' ? '/users' : '/projects'
+    Url.setUrlParam(router, targetPath, searchQuery, 'generalSearch', generalSearch)
+  }, [debouncedGeneralSearch, pathname])
 
   return (
     <>
@@ -38,7 +44,6 @@ const SearchBar = () => {
             aria-label="Limpiar búsqueda"
             onClick={() => {
               setGeneralSearch('')
-              Url.setUrlParam(router, '/projects', searchQuery, 'generalSearch', null)
             }}
             style={{ display: generalSearch ? undefined : 'none' }}
           />
