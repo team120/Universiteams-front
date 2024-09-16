@@ -8,33 +8,35 @@ import { notifications } from '@mantine/notifications'
 import { Projects, ProjectsQueryKey } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
+import Enrollment from '@/entities/Enrollment/Enrollment'
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
-import TextEditor from '../Common/TextEditor/TextEditor'
+import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
-interface EnrollmentRequestCreateProps {
+interface EnrollmentRequestProps {
   projectId: number
+  enrollment: Enrollment
 }
 
-export const EnrollmentRequestCreate = (props: EnrollmentRequestCreateProps): React.JSX.Element => {
+export const EnrollmentRevoke = (props: EnrollmentRequestProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 
-  const enrollmentRequestMutation = useMutation({
-    mutationFn: async (enrollmentRequest: EnrollmentRequestInput) => {
-      return Projects.requestEnrollment(props.projectId, enrollmentRequest)
-    },
+  const revokeEnrollmentMutation = useMutation({
+    mutationFn: async (adminOptions: EnrollmentRequestInput) =>
+      Projects.revokeEnrollment(props.projectId, props.enrollment.user.id, adminOptions),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
+      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey, props.projectId] })
       notifications.show({
-        title: 'Solicitud de inscripción enviada',
-        message: 'Espera a que el líder del proyecto acepte tu solicitud',
+        title: 'Inscripción revocada',
+        message: 'El usuario ya no es miembro del proyecto',
+        color: 'blue',
       })
       modals.closeAll()
     },
     onError: (error) => {
-      console.error('Enrollment request failed:', error)
+      console.error(error)
       notifications.show({
-        title: 'Error al enviar la solicitud de inscripción',
+        title: 'Error al revocar la inscripción',
         message: 'Por favor, inténtalo de nuevo más tarde',
         color: 'red',
       })
@@ -43,21 +45,25 @@ export const EnrollmentRequestCreate = (props: EnrollmentRequestCreateProps): Re
 
   const handleSubmit = (values: typeof form.values) => {
     const sanitizedMessage = sanitizeHtml(values.message)
-    enrollmentRequestMutation.mutate({ message: sanitizedMessage })
+    revokeEnrollmentMutation.mutate({
+      message: sanitizedMessage,
+    })
   }
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <LoadingOverlay
-        visible={enrollmentRequestMutation.isPending}
+        visible={revokeEnrollmentMutation.isPending}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
-      <Text size="lg">[Opcional] Envía un mensaje al líder o admin del proyecto</Text>
-      <Text size="sm">Puedes indicar tus motivaciones, habilidades, disponibilidad, etc.</Text>
+      <Text style={{ marginBottom: '1rem' }}>
+        [Opcional] Puedes enviar un mensaje al usuario para explicar la decisión de revocar la
+        inscripción
+      </Text>
       <TextEditor onChange={(content) => form.setValues({ message: content })} />
-      <Button type="submit" fullWidth mt="md">
-        Solicitar
+      <Button type="submit" fullWidth mt="md" aria-label="Revocar inscripción" color="red">
+        Revocar inscripción
       </Button>
     </form>
   )

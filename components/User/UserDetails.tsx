@@ -10,7 +10,7 @@ import { IconBulb, IconFolders, IconPdf, IconSchool } from '@tabler/icons-react'
 
 import Dates from 'utils/string/Dates'
 import Localize from 'utils/string/Localize'
-import styles from '@/components/Enrollment/EnrollmentList.module.css'
+import styles from '@/components/Enrollment/List/EnrollmentList.module.css'
 
 import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
 import UserAffiliation from '@/entities/User/UserAffiliation'
@@ -119,20 +119,6 @@ const UserDetails = (props: UserDetailsParams) => {
           </Group>
         )}
         <Flex justify="flex-end" align="center" gap={'1rem'}>
-          {/* Admin */}
-          {project?.requestEnrollmentCount !== undefined &&
-            project?.requestEnrollmentCount !== null && (
-              <>
-                <ActionIcon
-                  variant="transparent"
-                  aria-label="Editar"
-                  onClick={handleEditClick}
-                  size="lg"
-                  color={'orange.6'}>
-                  <IconEdit />
-                </ActionIcon>
-              </>
-            )}
           <PDFDownloadLink
             document={<UserPDF user={user} />}
             fileName={`user_document_${Dates.getDateTimeShort()}.pdf`}>

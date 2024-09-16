@@ -12,12 +12,12 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Projects, ProjectsQueryKey } from '@/services/projects'
 import { Url } from '@/services/url'
 
-import EnrollmentButtonRequest from '../Enrollment/EnrollmentButtonRequest'
-import InfoMessage from '../Common/InfoMessage/InfoMessage'
-import { NotLoggedError } from '../Account/NotLoggedError'
+import EnrollmentButtonRequest from '@/components/Enrollment/Request/EnrollmentButtonRequest'
+import InfoMessage from '@/components/Common/InfoMessage/InfoMessage'
+import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { ProjectDetailsTabs } from './ProjectDetails'
 import ProjectInList from '@/entities/Project/ProjectInList'
-import { verifyEmailNotification } from '../Account/VerifyEmailNotification'
+import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 
 interface ProjectItemProps {
   project?: ProjectInList

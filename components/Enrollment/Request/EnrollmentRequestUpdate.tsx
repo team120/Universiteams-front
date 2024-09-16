@@ -9,7 +9,7 @@ import { Projects, ProjectsQueryKey } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
-import TextEditor from '../Common/TextEditor/TextEditor'
+import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
 interface EnrollmentRequestUpdateProps {
   projectId: number

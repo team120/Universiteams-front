@@ -6,7 +6,7 @@ import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 
 import { Projects, ProjectsQueryKey } from '@/services/projects'
-import TextEditor from '../Common/TextEditor/TextEditor'
+import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
 interface EnrollmentCancelProps {
   projectId: number

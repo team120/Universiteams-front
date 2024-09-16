@@ -21,10 +21,10 @@ import { EnrollmentRequestCancel } from './EnrollmentRequestCancel'
 import { EnrollmentRequestCreate } from './EnrollmentRequestCreate'
 import { EnrollmentRequestUpdate } from './EnrollmentRequestUpdate'
 import { EnrollmentRevoked } from './EnrollmentRevoked'
-import { NotLoggedError } from '../Account/NotLoggedError'
+import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { RequestState } from '@/entities/Project/ProjectInList'
 import { Unenroll } from './Unenroll'
-import { verifyEmailNotification } from '../Account/VerifyEmailNotification'
+import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 
 interface EnrollmentButtonRequestProps {
   projectId: number

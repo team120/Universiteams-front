@@ -11,7 +11,7 @@ import sanitizeHtml from 'sanitize-html'
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
 import { ManageEnrollRequestAction } from '@/entities/Project/ProjectInList'
-import TextEditor from '../Common/TextEditor/TextEditor'
+import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
 interface AdminMutation {
   userId: number
