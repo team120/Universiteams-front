@@ -10,6 +10,7 @@ import sanitizeHtml from 'sanitize-html'
 
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
+import { ManageEnrollRequestAction } from '@/entities/Project/ProjectInList'
 import TextEditor from '../Common/TextEditor/TextEditor'
 
 interface AdminMutation {
@@ -17,13 +18,13 @@ interface AdminMutation {
   adminOptions: EnrollmentRequestInput
 }
 
-interface EnrollmentRequestProps {
+interface EnrollmentRequestAdminProps {
   projectId: number
   request: EnrollmentRequestShow
-  action: 'approve' | 'reject'
+  action: ManageEnrollRequestAction
 }
 
-export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React.JSX.Element => {
+export const EnrollmentRequestAdmin = (props: EnrollmentRequestAdminProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 
