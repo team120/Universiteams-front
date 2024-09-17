@@ -16,6 +16,7 @@ const SearchBar = () => {
   const [debouncedGeneralSearch] = useDebouncedValue(generalSearch, 400)
 
   const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
+  const targetPath = pathname === '/users' ? '/users' : '/projects'
 
   useEffect(() => {
     const trimmedSearchQuery = debouncedGeneralSearch.trim()
@@ -24,14 +25,13 @@ const SearchBar = () => {
       return
     }
 
-    const targetPath = pathname === '/users' ? '/users' : '/projects'
     Url.setUrlParam(router, targetPath, searchQuery, 'generalSearch', generalSearch)
   }, [debouncedGeneralSearch, pathname])
 
   return (
     <>
       <TextInput
-        placeholder="Buscar..."
+        placeholder={`Buscar ${pathname === '/users' ? 'usuarios' : 'proyectos'}`}
         style={{
           width: isMobile ? '55vw' : '55vw',
         }}
