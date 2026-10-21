@@ -20,6 +20,18 @@ Local setup is in `README.md`; env variables are documented in `.env.example`.
 
 ## Review guidelines
 
+### How to review
+
+- Review the entire PR diff in one pass and report every finding at once, P0 through P3. Don't stop after the most severe ones; a later round should not find something that was already in the diff.
+- On re-reviews, review the whole PR again, not only the new commits, and report everything still applicable in that single review.
+- When you find a defect, check every other place in the diff where the same kind of defect can occur, and report each one.
+- Also check these easy-to-miss areas:
+  - Flows that change data: loading and error states, double submits, and cached data that goes stale after a mutation.
+  - Every state of a component: empty, loading, error, long text, and each user role.
+  - Every API call against the backend contract (routes, fields, and error responses).
+
+### What to flag
+
 Flag these as issues:
 
 - A bug fix without a regression test that would fail without the fix.
