@@ -18,6 +18,21 @@ Then install Make with the following command:
 $ choco install make
 ```
 
+## Environment variables
+
+Copy [`.env.example`](.env.example) to `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable                   | Description                                                      |
+| :------------------------- | :--------------------------------------------------------------- |
+| `NEXT_PUBLIC_BACKEND_HOST` | Backend API base URL. `http://api.localhost` for the local stack |
+| `NEXT_PUBLIC_CONTACT`      | Contact email shown in the Help and About pages                  |
+
+The frontend needs the backend running. Start it with `make dev` in the [backend repository](https://github.com/team120/Universiteams).
+
 ## Run a server
 
 To run a server on _development mode_ you need to execute:
