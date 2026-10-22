@@ -3,6 +3,7 @@ import Env from 'utils/config/Env'
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 
 import { EnrollmentChangeRole } from '@/entities/Enrollment/EnrollmentChangeRole'
+import { EnrollmentInvitationsShow } from '@/entities/Enrollment/EnrollmentInvitationsShow'
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import { EnrollmentRequestsShow } from '@/entities/Enrollment/EnrollmentRequestsShow'
 import { Order } from '@/entities/HelpTypes/Order'
@@ -144,12 +145,37 @@ export const Projects = {
     await axios.put(`${prefix}/${id}/enroll-requests/${userId}/reject`, adminOptions)
   },
 
-  async acceptEnrollmentInvitation(id: number, options: EnrollmentRequestInput): Promise<void> {
-    await axios.put(`${prefix}/${id}/invitation/accept`, options)
+  async getEnrollmentInvitations(id: number): Promise<EnrollmentInvitationsShow> {
+    const result = await axios.get<EnrollmentInvitationsShow>(`${prefix}/${id}/invitations`)
+    return result.data
   },
 
-  async declineEnrollmentInvitation(id: number, options: EnrollmentRequestInput): Promise<void> {
-    await axios.put(`${prefix}/${id}/invitation/decline`, options)
+  async createEnrollmentInvitation(
+    id: number,
+    userId: number,
+    invitation: EnrollmentRequestInput
+  ): Promise<void> {
+    await axios.post(`${prefix}/${id}/invitations/${userId}`, invitation)
+  },
+
+  async updateEnrollmentInvitation(
+    id: number,
+    userId: number,
+    invitation: EnrollmentRequestInput
+  ): Promise<void> {
+    await axios.put(`${prefix}/${id}/invitations/${userId}`, invitation)
+  },
+
+  async cancelEnrollmentInvitation(id: number, userId: number): Promise<void> {
+    await axios.delete(`${prefix}/${id}/invitations/${userId}`)
+  },
+
+  async acceptEnrollmentInvitation(id: number, answer: EnrollmentRequestInput): Promise<void> {
+    await axios.put(`${prefix}/${id}/invitation/accept`, answer)
+  },
+
+  async declineEnrollmentInvitation(id: number, answer: EnrollmentRequestInput): Promise<void> {
+    await axios.put(`${prefix}/${id}/invitation/decline`, answer)
   },
 
   async revokeEnrollment(
@@ -181,3 +207,5 @@ export const ProjectQueryOptions = {
 }
 
 export const EnrollmentRequestsQueryKey = 'enrollmentRequests'
+
+export const EnrollmentInvitationsQueryKey = 'enrollmentInvitations'

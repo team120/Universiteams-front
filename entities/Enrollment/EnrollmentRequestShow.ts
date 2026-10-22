@@ -5,5 +5,4 @@ export interface EnrollmentRequestShow {
   requesterMessage: string
   creationDate: string
   user: User
-  sender?: User
 }

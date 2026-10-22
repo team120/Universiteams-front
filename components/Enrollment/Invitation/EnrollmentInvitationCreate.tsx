@@ -1,79 +1,70 @@
-import React, { useMemo, useState } from 'react'
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
+import React from 'react'
+import { AxiosError } from 'axios'
+import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { Button, LoadingOverlay, Select, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 
-import { Projects, ProjectsQueryKey } from '@/services/projects'
-import { CurrentUserQueryOptions } from '@/services/currentUser'
-import { Users } from '@/services/users'
+import { EnrollmentInvitationsQueryKey, Projects } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
-import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import ProjectInList from '@/entities/Project/ProjectInList'
-import SelectItem from '@/entities/HelpTypes/SelectItem'
 import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
 interface EnrollmentInvitationCreateProps {
   userId: number
-  possibleProjects?: ProjectInList[]
+  invitableProjects: ProjectInList[]
+}
+
+interface InvitationMutation {
+  projectId: number
+  message: string
 }
 
 export const EnrollmentInvitationCreate = (
   props: EnrollmentInvitationCreateProps
 ): React.JSX.Element => {
-  const form = useForm({ initialValues: { message: '' } })
+  const form = useForm({
+    initialValues: { projectId: '', message: '' },
+    validate: {
+      projectId: (value) => (value ? null : 'Selecciona un proyecto'),
+    },
+  })
   const queryClient = useQueryClient()
 
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
-
-  const { data: currentUser } = useQuery(CurrentUserQueryOptions.currentUser())
-
-  const projectsQuery = useQuery({
-    queryKey: [ProjectsQueryKey, currentUser?.id],
-    queryFn: () =>
-      props.possibleProjects ??
-      Projects.getProjects({ userId: currentUser?.id }).then((res) => res?.projects),
-  })
-
-  const projects: SelectItem[] = useMemo(() => {
-    return (
-      projectsQuery.data?.map((project: ProjectInList) => ({
-        value: String(project.id),
-        label: project.name,
-      })) ?? []
-    )
-  }, [projectsQuery.data])
-
   const enrollmentInvitationCreateMutation = useMutation({
-    mutationFn: async (enrollmentRequest: EnrollmentRequestInput) => {
-      if (!selectedProjectId) {
-        throw new Error('No se ha seleccionado ningún proyecto')
-      }
-      return Users.createEnrollInvitation(props.userId, +selectedProjectId, enrollmentRequest)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
+    mutationFn: async (invitation: InvitationMutation) =>
+      Projects.createEnrollmentInvitation(invitation.projectId, props.userId, {
+        message: invitation.message,
+      }),
+    onSuccess: (_, invitation) => {
+      queryClient.invalidateQueries({
+        queryKey: [EnrollmentInvitationsQueryKey, invitation.projectId],
+      })
       notifications.show({
         title: 'Invitación de inscripción enviada',
-        message: 'Espera a que el usuario acepte tu invitación de inscripción',
+        message: 'Espera a que el usuario responda tu invitación de inscripción',
       })
       modals.closeAll()
     },
     onError: (error) => {
       console.error('Enrollment invitation failed:', error)
+      // The API explains why, e.g. the user was already invited or requested to enroll
+      const apiMessage = ((error as AxiosError)?.response?.data as { message?: string })?.message
       notifications.show({
         title: 'Error al enviar la invitación de inscripción',
-        message: 'Por favor, inténtalo de nuevo más tarde',
+        message: apiMessage ?? 'Por favor, inténtalo de nuevo más tarde',
         color: 'red',
       })
     },
   })
 
   const handleSubmit = (values: typeof form.values) => {
-    const sanitizedMessage = sanitizeHtml(values.message)
-    enrollmentInvitationCreateMutation.mutate({ message: sanitizedMessage })
+    enrollmentInvitationCreateMutation.mutate({
+      projectId: Number(values.projectId),
+      message: sanitizeHtml(values.message),
+    })
   }
 
   return (
@@ -84,15 +75,20 @@ export const EnrollmentInvitationCreate = (
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <Select
-        label="Proyectos donde soy Admin"
-        placeholder="Seleccione proyecto a invitar"
+        label="Proyecto"
+        placeholder="Selecciona el proyecto al que quieres invitar"
         searchable
-        data={projects}
-        onChange={(value) => setSelectedProjectId(value)}
+        withAsterisk
+        mb="md"
+        data={props.invitableProjects.map((project) => ({
+          value: String(project.id),
+          label: project.name,
+        }))}
+        {...form.getInputProps('projectId')}
       />
       <Text size="lg">[Opcional] Envía un mensaje al usuario</Text>
       <Text size="sm">Puedes indicar tus motivaciones, objetivos, etc.</Text>
-      <TextEditor onChange={(content) => form.setValues({ message: content })} />
+      <TextEditor onChange={(content) => form.setFieldValue('message', content)} />
       <Button type="submit" fullWidth mt="md">
         Invitar
       </Button>

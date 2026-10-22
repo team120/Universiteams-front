@@ -15,6 +15,8 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
     axios: 'axios/dist/node/axios.cjs',
+    // Same aliases as tsconfig.json paths, so jest.mock() can use them too
+    '^@/(components|entities|services|styles)/(.*)$': '<rootDir>/$1/$2',
   },
 }
 

@@ -11,7 +11,6 @@ interface Enrollment {
   id: number
   role: ProjectRole
   user: User
-  sender?: User
   project: ProjectInList
 }
 

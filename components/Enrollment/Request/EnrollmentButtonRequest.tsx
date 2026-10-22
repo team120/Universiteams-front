@@ -12,17 +12,21 @@ import {
   IconUserOff,
   IconPencil,
   IconEye,
+  IconMail,
+  IconCheck,
+  IconX,
 } from '@tabler/icons-react'
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { ProjectsQueryKey, Projects } from '@/services/projects'
 import sanitize from 'sanitize-html'
 
+import { EnrollmentInvitationAnswer } from '@/components/Enrollment/Invitation/EnrollmentInvitationAnswer'
 import { EnrollmentRequestCancel } from './EnrollmentRequestCancel'
 import { EnrollmentRequestCreate } from './EnrollmentRequestCreate'
 import { EnrollmentRequestUpdate } from './EnrollmentRequestUpdate'
 import { EnrollmentRevoked } from './EnrollmentRevoked'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
-import { RequestState } from '@/entities/Project/ProjectInList'
+import { ManageEnrollInvitationAction, RequestState } from '@/entities/Project/ProjectInList'
 import { Unenroll } from './Unenroll'
 import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 
@@ -31,6 +35,8 @@ interface EnrollmentButtonRequestProps {
   requestState?: RequestState | null
   requesterMessage?: string
   adminMessage?: string
+  // Set only when the enrollment is an invitation
+  senderName?: string
 }
 
 const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
@@ -133,6 +139,33 @@ const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
     })
   }
 
+  const handleViewInvitationClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+
+    modals.open({
+      title: `Invitación de ${props.senderName}`,
+      centered: true,
+      children: props.adminMessage ? (
+        <div dangerouslySetInnerHTML={{ __html: sanitize(props.adminMessage) }} />
+      ) : (
+        'La invitación no incluye un mensaje'
+      ),
+    })
+  }
+
+  const handleAnswerInvitationClick = (
+    event: React.MouseEvent,
+    action: ManageEnrollInvitationAction
+  ) => {
+    event.stopPropagation()
+
+    modals.open({
+      title: action === 'accept' ? 'Aceptar invitación' : 'Declinar invitación',
+      centered: true,
+      children: <EnrollmentInvitationAnswer projectId={props.projectId} action={action} />,
+    })
+  }
+
   const handleUnenrollClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
@@ -181,6 +214,38 @@ const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
         </ActionIcon>
       )
     case RequestState.Pending:
+      if (props.senderName) {
+        return (
+          <Menu position="bottom" offset={0}>
+            <Menu.Target>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Opciones de invitación"
+                size="lg"
+                color="green"
+                onClick={(event) => event.stopPropagation()}>
+                <IconMail />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item leftSection={<IconEye size={14} />} onClick={handleViewInvitationClick}>
+                Ver invitación
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<IconCheck size={14} />}
+                onClick={(event) => handleAnswerInvitationClick(event, 'accept')}>
+                Aceptar invitación
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<IconX color="red" size={14} />}
+                onClick={(event) => handleAnswerInvitationClick(event, 'decline')}>
+                Declinar invitación
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        )
+      }
+
       return (
         <Menu position="bottom" offset={0}>
           <Menu.Target>

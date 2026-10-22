@@ -5,6 +5,7 @@ import { notifications } from '@mantine/notifications'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import Dates from 'utils/string/Dates'
+import Enrollments from 'utils/enrollment/Enrollments'
 import { IconBell, IconHeart, IconHeartFilled } from '@tabler/icons-react'
 import styles from './ProjectItem.module.css'
 
@@ -104,6 +105,8 @@ const ProjectItem = (props: ProjectItemProps) => {
   // Small loader needed?
   if (!project) return <InfoMessage text="No se ha podido cargar el projecto" type="error" />
 
+  const leader = Enrollments.projectLeader(project.enrollments)
+
   return (
     <Card
       key={project.id}
@@ -144,14 +147,15 @@ const ProjectItem = (props: ProjectItemProps) => {
         </Group>
 
         <Group gap={'0.5rem'} mt={'1rem'}>
-          {project.enrollments && (
+          {leader && (
             <Badge
               variant="filled"
               color="violet.6"
               size="lg"
               style={{ cursor: 'pointer' }}
-              onClick={(event) => handleLeaderTagClick(project.enrollments[0].user.id, event)}>
-              {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}
+              data-testid="project-card-leader"
+              onClick={(event) => handleLeaderTagClick(leader.id, event)}>
+              {leader.firstName} {leader.lastName}
               {project.userCount > 1 ? `, +${project.userCount - 1} personas` : ''}
             </Badge>
           )}
@@ -191,6 +195,7 @@ const ProjectItem = (props: ProjectItemProps) => {
             requestState={project.requestState}
             requesterMessage={project.requesterMessage}
             adminMessage={project.adminMessage}
+            senderName={project.senderName}
           />
 
           <div style={{ display: 'flex', alignItems: 'center' }}>

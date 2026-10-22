@@ -28,6 +28,7 @@ import {
   IconEdit,
   IconTrash,
   IconPdf,
+  IconMail,
 } from '@tabler/icons-react'
 
 import sanitizeHtml from 'sanitize-html'
@@ -38,6 +39,7 @@ import { EnrollmentRequestsQueryKey, Projects, ProjectsQueryKey } from '@/servic
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
 
 import EnrollmentButtonRequest from '@/components/Enrollment/Request/EnrollmentButtonRequest'
+import { EnrollmentInvitationList } from '@/components/Enrollment/Invitation/EnrollmentInvitationList'
 import { EnrollmentList } from '@/components/Enrollment/List/EnrollmentList'
 import { EnrollmentRequestAdmin } from '@/components/Enrollment/Request/EnrollmentRequestAdmin'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
@@ -52,6 +54,7 @@ interface ProjectDetailsParams {
 export enum ProjectDetailsTabs {
   Members = 'members',
   Requests = 'requests',
+  Invitations = 'invitations',
 }
 
 const ProjectDetails = (props: ProjectDetailsParams) => {
@@ -287,6 +290,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
             requestState={project.requestState}
             requesterMessage={project.requesterMessage}
             adminMessage={project.adminMessage}
+            senderName={project.senderName}
           />
           <Group gap={'0.25rem'}>
             <ActionIcon
@@ -361,6 +365,13 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
                   Solicitudes
                 </Tabs.Tab>
               )}
+
+            {project.requestEnrollmentCount !== undefined &&
+              project.requestEnrollmentCount !== null && (
+                <Tabs.Tab value={ProjectDetailsTabs.Invitations} leftSection={<IconMail />}>
+                  Invitaciones
+                </Tabs.Tab>
+              )}
           </Tabs.List>
 
           <Tabs.Panel value={ProjectDetailsTabs.Members}>
@@ -373,6 +384,13 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
               }
             />
           </Tabs.Panel>
+
+          {project.requestEnrollmentCount !== undefined &&
+            project.requestEnrollmentCount !== null && (
+              <Tabs.Panel value={ProjectDetailsTabs.Invitations}>
+                <EnrollmentInvitationList projectId={props.id} />
+              </Tabs.Panel>
+            )}
 
           {!enrollmentRequestsQuery.isError && enrollmentRequestsQuery.data && (
             <Tabs.Panel value={ProjectDetailsTabs.Requests}>

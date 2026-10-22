@@ -36,6 +36,7 @@ interface ProjectInList {
   requestState?: RequestState
   requesterMessage?: string
   adminMessage?: string
+  // Set only when the current user's enrollment is an invitation
   senderName?: string
   requestEnrollmentCount?: number
   researchDepartments: ResearchDepartment[]

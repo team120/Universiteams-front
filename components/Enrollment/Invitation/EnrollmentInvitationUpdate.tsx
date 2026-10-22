@@ -5,37 +5,38 @@ import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 
-import { ProjectsQueryKey } from '@/services/projects'
-import { Users } from '@/services/users'
+import { EnrollmentInvitationsQueryKey, Projects } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
 interface EnrollmentInvitationUpdateProps {
-  userId: number
   projectId: number
+  userId: number
   content?: string
 }
 
 export const EnrollmentInvitationUpdate = (props: EnrollmentInvitationUpdateProps) => {
-  const form = useForm({ initialValues: { message: '' } })
+  // Saving without edits must keep the current message
+  const form = useForm({ initialValues: { message: props.content ?? '' } })
   const queryClient = useQueryClient()
 
   const enrollmentInvitationUpdateMutation = useMutation({
-    mutationFn: async (enrollmentRequest: EnrollmentRequestInput) => {
-      return Users.updateEnrollInvitation(props.userId, props.projectId, enrollmentRequest)
-    },
+    mutationFn: async (invitation: EnrollmentRequestInput) =>
+      Projects.updateEnrollmentInvitation(props.projectId, props.userId, invitation),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
+      queryClient.invalidateQueries({
+        queryKey: [EnrollmentInvitationsQueryKey, props.projectId],
+      })
       notifications.show({
         title: 'Invitación de inscripción actualizada',
-        message: 'Espera a que el usuario acepte tu invitación de inscripción',
+        message: 'Espera a que el usuario responda tu invitación de inscripción',
       })
       modals.closeAll()
     },
     onError: (error) => {
-      console.error('Enrollment invitation failed:', error)
+      console.error('Enrollment invitation update failed:', error)
       notifications.show({
         title: 'Error al actualizar la invitación de inscripción',
         message: 'Por favor, inténtalo de nuevo más tarde',
@@ -45,8 +46,7 @@ export const EnrollmentInvitationUpdate = (props: EnrollmentInvitationUpdateProp
   })
 
   const handleSubmit = (values: typeof form.values) => {
-    const sanitizedMessage = sanitizeHtml(values.message)
-    enrollmentInvitationUpdateMutation.mutate({ message: sanitizedMessage })
+    enrollmentInvitationUpdateMutation.mutate({ message: sanitizeHtml(values.message) })
   }
 
   return (
@@ -62,7 +62,7 @@ export const EnrollmentInvitationUpdate = (props: EnrollmentInvitationUpdateProp
       />
 
       <Button type="submit" fullWidth mt="md">
-        Actualizar
+        Actualizar invitación
       </Button>
     </form>
   )

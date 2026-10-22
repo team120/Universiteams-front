@@ -17,7 +17,8 @@ interface EnrollmentRequestUpdateProps {
 }
 
 export const EnrollmentRequestUpdate = (props: EnrollmentRequestUpdateProps) => {
-  const form = useForm({ initialValues: { message: '' } })
+  // Saving without edits must keep the current message
+  const form = useForm({ initialValues: { message: props.content ?? '' } })
   const queryClient = useQueryClient()
 
   const enrollmentRequestUpdateMutation = useMutation({
