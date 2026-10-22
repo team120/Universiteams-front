@@ -32,6 +32,7 @@ import {
 } from '@tabler/icons-react'
 
 import sanitizeHtml from 'sanitize-html'
+import ApiErrors from 'utils/string/ApiErrors'
 import Dates from 'utils/string/Dates'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
@@ -231,7 +232,8 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   }
 
   if (isLoading) return <SkeletonFull />
-  if (error) return <Alert color="red">{error.message}</Alert>
+  if (error)
+    return <Alert color="red">{ApiErrors.message(error, 'No se pudo cargar el proyecto')}</Alert>
   if (!project) return <Alert color="red">No se encontró el proyecto</Alert>
 
   return (
@@ -335,7 +337,9 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
           )}
         </Flex>
 
+        {/* Only the open tab is mounted, so invitations are fetched when needed */}
         <Tabs
+          keepMounted={false}
           value={searchParams.get('activeTab') ?? ProjectDetailsTabs.Members}
           onChange={(value) => router.push(`${pathname}?activeTab=${value}`)}>
           <Tabs.List>
@@ -378,8 +382,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
             />
           </Tabs.Panel>
 
-          {/* Fetched only when the tab is open */}
-          {isAdmin && searchParams.get('activeTab') === ProjectDetailsTabs.Invitations && (
+          {isAdmin && (
             <Tabs.Panel value={ProjectDetailsTabs.Invitations}>
               <EnrollmentInvitationList projectId={props.id} />
             </Tabs.Panel>

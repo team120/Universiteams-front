@@ -9,6 +9,7 @@ export interface EnrollmentInvitationShow {
   // The invited user's answer, if they declined with a message
   requesterMessage?: string
   creationDate: string
-  user: User
+  // Loaded without the user's enrollments
+  user: Omit<User, 'enrollments'>
   sender: Pick<User, 'id' | 'firstName' | 'lastName' | 'email'>
 }

@@ -84,6 +84,16 @@ describe('EnrollmentButtonRequest', () => {
     })
   })
 
+  describe('when the user declined an invitation', () => {
+    it('should let them request to enroll', () => {
+      renderWithQueryClient(
+        <EnrollmentButtonRequest projectId={1} requestState={RequestState.Declined} />
+      )
+
+      expect(screen.getByRole('button', { name: 'Solicitar inscripción' })).toBeInTheDocument()
+    })
+  })
+
   describe('when the pending enrollment is a request from the user', () => {
     it('should offer to cancel the request', async () => {
       renderWithQueryClient(

@@ -9,6 +9,7 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Users, UsersQueryKey } from '@/services/users'
 import { IconBulb, IconFolders, IconPdf, IconSchool } from '@tabler/icons-react'
 
+import ApiErrors from 'utils/string/ApiErrors'
 import Dates from 'utils/string/Dates'
 import Enrollments from 'utils/enrollment/Enrollments'
 import Localize from 'utils/string/Localize'
@@ -79,7 +80,8 @@ const UserDetails = (props: UserDetailsParams) => {
   }
 
   if (isLoading) return <SkeletonFull />
-  if (error) return <Alert color="red">{error.message}</Alert>
+  if (error)
+    return <Alert color="red">{ApiErrors.message(error, 'No se pudo cargar el usuario')}</Alert>
   if (!user) return <Alert color="red">No se encontró el usuario</Alert>
 
   const invitableProjects = currentUser ? Enrollments.invitableProjects(currentUser, user) : []
