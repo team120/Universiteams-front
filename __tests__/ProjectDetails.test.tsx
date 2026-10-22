@@ -91,5 +91,20 @@ describe('ProjectDetails invitations tab', () => {
       expect(screen.queryByRole('tab', { name: 'Invitaciones' })).toBeNull()
       expect(EnrollmentInvitationList).not.toHaveBeenCalled()
     })
+
+    it.each([ProjectDetailsTabs.Invitations, ProjectDetailsTabs.Requests])(
+      'should show the members when a link opens the %s tab',
+      async (tab) => {
+        mockedProjects.getProject.mockResolvedValue(project(null))
+        mockActiveTab = tab
+
+        renderWithQueryClient(<ProjectDetails id={1} />)
+
+        expect(await screen.findByRole('tab', { name: /Miembros/ })).toHaveAttribute(
+          'aria-selected',
+          'true'
+        )
+      }
+    )
   })
 })

@@ -189,6 +189,13 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
+  // Admin-only tabs fall back to the members when the viewer isn't an admin,
+  // e.g. from a shared link
+  const requestedTab = searchParams.get('activeTab') ?? ProjectDetailsTabs.Members
+  const adminOnlyTabs: string[] = [ProjectDetailsTabs.Requests, ProjectDetailsTabs.Invitations]
+  const activeTab =
+    !isAdmin && adminOnlyTabs.includes(requestedTab) ? ProjectDetailsTabs.Members : requestedTab
+
   const handleInterestTagClick = (interestId: number) => {
     router.push(`/projects?interest=${interestId}`)
   }
@@ -340,7 +347,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
         {/* Only the open tab is mounted, so invitations are fetched when needed */}
         <Tabs
           keepMounted={false}
-          value={searchParams.get('activeTab') ?? ProjectDetailsTabs.Members}
+          value={activeTab}
           onChange={(value) => router.push(`${pathname}?activeTab=${value}`)}>
           <Tabs.List>
             <Tabs.Tab
