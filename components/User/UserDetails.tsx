@@ -48,6 +48,8 @@ const UserDetails = (props: UserDetailsParams) => {
     queryKey: [UsersQueryKey, currentUserId],
     queryFn: () => (currentUserId ? Users.getUser(currentUserId) : null),
     enabled: !!currentUserId,
+    // Super admins have no public profile, so it returns 404
+    retry: false,
   })
 
   const { colorScheme } = useMantineColorScheme()

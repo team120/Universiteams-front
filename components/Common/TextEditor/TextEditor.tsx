@@ -91,7 +91,8 @@ const TextEditor = (props: TextEditorProps) => {
   useEffect(() => {
     if (editor) {
       editor.on('update', ({ editor }) => {
-        props.onChange(editor.getHTML())
+        // An empty editor still has an empty paragraph
+        props.onChange(editor.isEmpty ? '' : editor.getHTML())
       })
     }
   }, [editor])
