@@ -4,7 +4,7 @@ import TextEditor from '@/components/Common/TextEditor/TextEditor'
 type UpdateHandler = (props: { editor: typeof mockEditor }) => void
 
 const mockEditor = {
-  isEmpty: false,
+  state: { doc: { textContent: '' } },
   getHTML: jest.fn(),
   handler: undefined as UpdateHandler | undefined,
   on(_event: string, handler: UpdateHandler) {
@@ -29,11 +29,14 @@ describe('TextEditor', () => {
     mockEditor.handler = undefined
   })
 
-  it('should send an empty editor as an empty message', () => {
+  it.each([
+    ['an empty editor', '', '<p></p>'],
+    ['blank lines', ' \n ', '<p></p><p> </p><p></p>'],
+  ])('should send %s as an empty message', (_, textContent, html) => {
     const onChange = jest.fn()
     render(<TextEditor onChange={onChange} />)
-    mockEditor.isEmpty = true
-    mockEditor.getHTML.mockReturnValue('<p></p>')
+    mockEditor.state.doc.textContent = textContent
+    mockEditor.getHTML.mockReturnValue(html)
 
     mockEditor.handler?.({ editor: mockEditor })
 
@@ -43,7 +46,7 @@ describe('TextEditor', () => {
   it('should send the HTML of a message', () => {
     const onChange = jest.fn()
     render(<TextEditor onChange={onChange} />)
-    mockEditor.isEmpty = false
+    mockEditor.state.doc.textContent = 'Hola'
     mockEditor.getHTML.mockReturnValue('<p>Hola</p>')
 
     mockEditor.handler?.({ editor: mockEditor })
