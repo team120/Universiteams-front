@@ -64,6 +64,9 @@ const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
   const handleEnrollmentRequestClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
+    // Wait for the current user instead of treating them as logged out
+    if (isLoadingCurrentUser) return
+
     if (errorCurrentUser || !currentUser) {
       notifications.show({
         title: 'Debes iniciar sesión para solicitar inscripciones',
