@@ -31,5 +31,7 @@ export const CurrentUserQueryOptions = {
     queryOptions({
       queryKey: ['currentUser'],
       queryFn: CurrentUserService.fetchUserInfo,
+      // A 401 means logged out; retrying only delays telling the user so
+      retry: false,
     }),
 }
