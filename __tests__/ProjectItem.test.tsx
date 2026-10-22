@@ -52,10 +52,11 @@ describe('ProjectItem', () => {
     expect(screen.getByTestId('project-card-leader')).toHaveTextContent('Camila Villa, +2 personas')
   })
 
-  it('should render a project with no current leader', () => {
+  it('should render a project with no current leader, with its member count', () => {
     renderWithQueryClient(<ProjectItem project={project([])} />)
 
     expect(screen.getByText('Proyecto A')).toBeInTheDocument()
     expect(screen.queryByTestId('project-card-leader')).toBeNull()
+    expect(screen.getByTestId('project-card-members')).toHaveTextContent('3 personas')
   })
 })

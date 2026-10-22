@@ -6,7 +6,7 @@ import { ActionIcon, Alert, Badge, Card, Flex, Group, Tabs, Text } from '@mantin
 import { useMantineColorScheme } from '@mantine/core'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
-import { Users } from '@/services/users'
+import { Users, UsersQueryKey } from '@/services/users'
 import { IconBulb, IconFolders, IconPdf, IconSchool } from '@tabler/icons-react'
 
 import Dates from 'utils/string/Dates'
@@ -36,7 +36,7 @@ const UserDetails = (props: UserDetailsParams) => {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ['users', props.id],
+    queryKey: [UsersQueryKey, props.id],
     queryFn: () => Users.getUser(props.id),
   })
 
@@ -45,7 +45,7 @@ const UserDetails = (props: UserDetailsParams) => {
   // The current user's projects, to offer the ones they can invite this user to
   const currentUserId = currentUserInfo?.id
   const { data: currentUser } = useQuery({
-    queryKey: ['users', currentUserId],
+    queryKey: [UsersQueryKey, currentUserId],
     queryFn: () => (currentUserId ? Users.getUser(currentUserId) : null),
     enabled: !!currentUserId,
   })

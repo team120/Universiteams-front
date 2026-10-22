@@ -8,6 +8,7 @@ import { IconBubbleText, IconEdit, IconTrash } from '@tabler/icons-react'
 
 import { EnrollmentInvitationsQueryKey, Projects } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
+import ApiErrors from 'utils/string/ApiErrors'
 import Dates from 'utils/string/Dates'
 
 import { EnrollmentInvitationShow } from '@/entities/Enrollment/EnrollmentInvitationShow'
@@ -42,9 +43,12 @@ export const EnrollmentInvitationList = (
     },
     onError: (error) => {
       console.error('Enrollment invitation cancel failed:', error)
+      queryClient.invalidateQueries({
+        queryKey: [EnrollmentInvitationsQueryKey, props.projectId],
+      })
       notifications.show({
         title: 'Error al eliminar la invitación de inscripción',
-        message: 'Por favor, inténtalo de nuevo más tarde',
+        message: ApiErrors.message(error, 'Por favor, inténtalo de nuevo más tarde'),
         color: 'red',
       })
     },
@@ -75,11 +79,31 @@ export const EnrollmentInvitationList = (
     })
   }
 
+  const handleCancelClick = (invitation: EnrollmentInvitationShow, isDeclined: boolean) => {
+    modals.openConfirmModal({
+      title: isDeclined ? 'Descartar invitación' : 'Cancelar invitación',
+      centered: true,
+      children: (
+        <Text>
+          {isDeclined
+            ? `La invitación declinada por ${userFullName(invitation)} será eliminada.`
+            : `La invitación a ${userFullName(invitation)} será cancelada.`}
+        </Text>
+      ),
+      labels: { confirm: 'Eliminar', cancel: 'Volver' },
+      confirmProps: { color: 'red' },
+      onConfirm: () => cancelInvitationMutation.mutate(invitation.user.id),
+    })
+  }
+
   if (invitationsQuery.isLoading) return <Loader type="dots" mt="md" />
   if (invitationsQuery.isError)
     return (
       <Alert color="red" mt="md">
-        {invitationsQuery.error.message}
+        {ApiErrors.message(
+          invitationsQuery.error,
+          'No se pudieron cargar las invitaciones de inscripción'
+        )}
       </Alert>
     )
 
@@ -161,7 +185,7 @@ export const EnrollmentInvitationList = (
                   cancelInvitationMutation.isPending &&
                   cancelInvitationMutation.variables === invitation.user.id
                 }
-                onClick={() => cancelInvitationMutation.mutate(invitation.user.id)}>
+                onClick={() => handleCancelClick(invitation, isDeclined)}>
                 <IconTrash />
               </ActionIcon>
             </Group>

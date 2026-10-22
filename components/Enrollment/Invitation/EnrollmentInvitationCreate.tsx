@@ -1,5 +1,4 @@
 import React from 'react'
-import { AxiosError } from 'axios'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { Button, LoadingOverlay, Select, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
@@ -8,6 +7,7 @@ import { notifications } from '@mantine/notifications'
 
 import { EnrollmentInvitationsQueryKey, Projects } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
+import ApiErrors from 'utils/string/ApiErrors'
 
 import ProjectInList from '@/entities/Project/ProjectInList'
 import TextEditor from '@/components/Common/TextEditor/TextEditor'
@@ -50,11 +50,9 @@ export const EnrollmentInvitationCreate = (
     },
     onError: (error) => {
       console.error('Enrollment invitation failed:', error)
-      // The API explains why, e.g. the user was already invited or requested to enroll
-      const apiMessage = ((error as AxiosError)?.response?.data as { message?: string })?.message
       notifications.show({
         title: 'Error al enviar la invitación de inscripción',
-        message: apiMessage ?? 'Por favor, inténtalo de nuevo más tarde',
+        message: ApiErrors.message(error, 'Por favor, inténtalo de nuevo más tarde'),
         color: 'red',
       })
     },

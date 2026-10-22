@@ -67,6 +67,10 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     queryFn: () => Projects.getProject(props.id),
   })
 
+  // Only current admins and leaders get the request count
+  const isAdmin =
+    project?.requestEnrollmentCount !== undefined && project?.requestEnrollmentCount !== null
+
   const sanitizedDescription = useMemo(
     () => sanitizeHtml(project?.description ?? ''),
     [project?.description]
@@ -81,8 +85,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   const enrollmentRequestsQuery = useQuery({
     queryKey: [EnrollmentRequestsQueryKey, props.id],
     queryFn: () => Projects.getEnrollmentRequests(props.id),
-    enabled:
-      project?.requestEnrollmentCount !== undefined && project?.requestEnrollmentCount !== null,
+    enabled: isAdmin,
   })
 
   const deleteMutation = useMutation({
@@ -314,27 +317,26 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
           </PDFDownloadLink>
 
           {/* Admin */}
-          {project?.requestEnrollmentCount !== undefined &&
-            project?.requestEnrollmentCount !== null && (
-              <>
-                <ActionIcon
-                  variant="transparent"
-                  aria-label="Editar"
-                  onClick={handleEditClick}
-                  size="lg"
-                  color={'orange.6'}>
-                  <IconEdit />
-                </ActionIcon>
-                <ActionIcon
-                  variant="transparent"
-                  aria-label="Eliminar"
-                  onClick={handleDeleteClick}
-                  size="lg"
-                  color={'red.6'}>
-                  <IconTrash />
-                </ActionIcon>
-              </>
-            )}
+          {isAdmin && (
+            <>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Editar"
+                onClick={handleEditClick}
+                size="lg"
+                color={'orange.6'}>
+                <IconEdit />
+              </ActionIcon>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Eliminar"
+                onClick={handleDeleteClick}
+                size="lg"
+                color={'red.6'}>
+                <IconTrash />
+              </ActionIcon>
+            </>
+          )}
         </Flex>
 
         <Tabs
@@ -352,45 +354,40 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
               Miembros
             </Tabs.Tab>
 
-            {project.requestEnrollmentCount !== undefined &&
-              project.requestEnrollmentCount !== null && (
-                <Tabs.Tab
-                  value={ProjectDetailsTabs.Requests}
-                  leftSection={<IconSend />}
-                  rightSection={
-                    <Badge color="blue" variant="filled">
-                      {project.requestEnrollmentCount}
-                    </Badge>
-                  }>
-                  Solicitudes
-                </Tabs.Tab>
-              )}
+            {isAdmin && (
+              <Tabs.Tab
+                value={ProjectDetailsTabs.Requests}
+                leftSection={<IconSend />}
+                rightSection={
+                  <Badge color="blue" variant="filled">
+                    {project.requestEnrollmentCount}
+                  </Badge>
+                }>
+                Solicitudes
+              </Tabs.Tab>
+            )}
 
-            {project.requestEnrollmentCount !== undefined &&
-              project.requestEnrollmentCount !== null && (
-                <Tabs.Tab value={ProjectDetailsTabs.Invitations} leftSection={<IconMail />}>
-                  Invitaciones
-                </Tabs.Tab>
-              )}
+            {isAdmin && (
+              <Tabs.Tab value={ProjectDetailsTabs.Invitations} leftSection={<IconMail />}>
+                Invitaciones
+              </Tabs.Tab>
+            )}
           </Tabs.List>
 
           <Tabs.Panel value={ProjectDetailsTabs.Members}>
             <EnrollmentList
               projectId={props.id}
               enrollments={project.enrollments}
-              isAdmin={
-                project.requestEnrollmentCount !== undefined &&
-                project.requestEnrollmentCount !== null
-              }
+              isAdmin={isAdmin}
             />
           </Tabs.Panel>
 
-          {project.requestEnrollmentCount !== undefined &&
-            project.requestEnrollmentCount !== null && (
-              <Tabs.Panel value={ProjectDetailsTabs.Invitations}>
-                <EnrollmentInvitationList projectId={props.id} />
-              </Tabs.Panel>
-            )}
+          {/* Fetched only when the tab is open */}
+          {isAdmin && searchParams.get('activeTab') === ProjectDetailsTabs.Invitations && (
+            <Tabs.Panel value={ProjectDetailsTabs.Invitations}>
+              <EnrollmentInvitationList projectId={props.id} />
+            </Tabs.Panel>
+          )}
 
           {!enrollmentRequestsQuery.isError && enrollmentRequestsQuery.data && (
             <Tabs.Panel value={ProjectDetailsTabs.Requests}>

@@ -6,7 +6,9 @@ import { notifications } from '@mantine/notifications'
 import { modals } from '@mantine/modals'
 
 import { Projects, ProjectsQueryKey } from '@/services/projects'
+import { UsersQueryKey } from '@/services/users'
 import sanitizeHtml from 'sanitize-html'
+import ApiErrors from 'utils/string/ApiErrors'
 
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import { ManageEnrollInvitationAction } from '@/entities/Project/ProjectInList'
@@ -33,7 +35,7 @@ export const EnrollmentInvitationAnswer = (
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
       // Accepting adds the project to the user's profile
-      queryClient.invalidateQueries({ queryKey: ['users'] })
+      queryClient.invalidateQueries({ queryKey: [UsersQueryKey] })
       notifications.show({
         title: isAccept
           ? 'Invitación de inscripción aceptada'
@@ -47,11 +49,13 @@ export const EnrollmentInvitationAnswer = (
     },
     onError: (error) => {
       console.error(error)
+      // The invitation may have been canceled or changed in the meantime
+      queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
       notifications.show({
         title: isAccept
           ? 'Error al aceptar la invitación de inscripción'
           : 'Error al declinar la invitación de inscripción',
-        message: 'Por favor, inténtalo de nuevo más tarde',
+        message: ApiErrors.message(error, 'Por favor, inténtalo de nuevo más tarde'),
         color: 'red',
       })
     },

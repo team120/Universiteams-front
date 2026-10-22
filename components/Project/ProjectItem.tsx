@@ -159,6 +159,11 @@ const ProjectItem = (props: ProjectItemProps) => {
               {project.userCount > 1 ? `, +${project.userCount - 1} personas` : ''}
             </Badge>
           )}
+          {!leader && project.userCount > 0 && (
+            <Badge variant="filled" color="violet.6" size="lg" data-testid="project-card-members">
+              {project.userCount === 1 ? '1 persona' : `${project.userCount} personas`}
+            </Badge>
+          )}
           {project.interests.map((interest) => (
             <Badge
               variant="dot"

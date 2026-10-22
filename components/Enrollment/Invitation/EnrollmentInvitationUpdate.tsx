@@ -7,6 +7,7 @@ import { notifications } from '@mantine/notifications'
 
 import { EnrollmentInvitationsQueryKey, Projects } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
+import ApiErrors from 'utils/string/ApiErrors'
 
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import TextEditor from '@/components/Common/TextEditor/TextEditor'
@@ -37,9 +38,13 @@ export const EnrollmentInvitationUpdate = (props: EnrollmentInvitationUpdateProp
     },
     onError: (error) => {
       console.error('Enrollment invitation update failed:', error)
+      // The user may have answered the invitation in the meantime
+      queryClient.invalidateQueries({
+        queryKey: [EnrollmentInvitationsQueryKey, props.projectId],
+      })
       notifications.show({
         title: 'Error al actualizar la invitación de inscripción',
-        message: 'Por favor, inténtalo de nuevo más tarde',
+        message: ApiErrors.message(error, 'Por favor, inténtalo de nuevo más tarde'),
         color: 'red',
       })
     },

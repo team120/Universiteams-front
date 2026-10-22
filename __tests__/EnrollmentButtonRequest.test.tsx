@@ -1,19 +1,23 @@
 import '@testing-library/jest-dom/extend-expect'
 import { modals } from '@mantine/modals'
+import { notifications } from '@mantine/notifications'
 import { renderWithQueryClient, screen, userEvent } from '../utils/tests'
 import EnrollmentButtonRequest from '@/components/Enrollment/Request/EnrollmentButtonRequest'
 import { RequestState } from '@/entities/Project/ProjectInList'
 
 jest.mock('@mantine/modals', () => ({ modals: { open: jest.fn(), closeAll: jest.fn() } }))
+jest.mock('@mantine/notifications', () => ({ notifications: { show: jest.fn() } }))
+const mockCurrentUser = { id: 8, isEmailVerified: true }
 jest.mock('@/services/currentUser', () => ({
   CurrentUserQueryOptions: {
-    currentUser: () => ({ queryKey: ['currentUser'], queryFn: () => ({ id: 8 }) }),
+    currentUser: () => ({ queryKey: ['currentUser'], queryFn: () => mockCurrentUser }),
   },
 }))
 
 describe('EnrollmentButtonRequest', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockCurrentUser.isEmailVerified = true
   })
 
   describe('when the pending enrollment is an invitation', () => {
@@ -53,6 +57,19 @@ describe('EnrollmentButtonRequest', () => {
           children: expect.objectContaining({ props: { projectId: 1, action } }),
         })
       )
+    })
+
+    it('should ask an unverified user to verify their email before answering', async () => {
+      mockCurrentUser.isEmailVerified = false
+      renderInvitation()
+      // Let the current user query resolve
+      await new Promise((resolve) => setTimeout(resolve, 0))
+
+      await userEvent.click(screen.getByRole('button', { name: 'Opciones de invitación' }))
+      await userEvent.click(await screen.findByRole('menuitem', { name: 'Aceptar invitación' }))
+
+      expect(modals.open).not.toHaveBeenCalled()
+      expect(notifications.show).toHaveBeenCalled()
     })
 
     it('should show who sent the invitation', async () => {

@@ -159,6 +159,12 @@ const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
   ) => {
     event.stopPropagation()
 
+    if (currentUser?.isEmailVerified === false) {
+      notifications.show(verifyEmailNotification('responder invitaciones de inscripción'))
+
+      return
+    }
+
     modals.open({
       title: action === 'accept' ? 'Aceptar invitación' : 'Declinar invitación',
       centered: true,

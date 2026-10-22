@@ -1,12 +1,15 @@
 import '@testing-library/jest-dom/extend-expect'
-import { renderWithQueryClient, screen, userEvent, within } from '../utils/tests'
+import { modals } from '@mantine/modals'
+import { renderWithQueryClient, screen, userEvent, waitFor, within } from '../utils/tests'
 import { EnrollmentInvitationList } from '@/components/Enrollment/Invitation/EnrollmentInvitationList'
 import { Projects } from '@/services/projects'
 import { EnrollmentInvitationShow } from '@/entities/Enrollment/EnrollmentInvitationShow'
 import { RequestState } from '@/entities/Project/ProjectInList'
 import User from '@/entities/User/User'
 
-jest.mock('@mantine/modals', () => ({ modals: { open: jest.fn(), closeAll: jest.fn() } }))
+jest.mock('@mantine/modals', () => ({
+  modals: { open: jest.fn(), openConfirmModal: jest.fn(), closeAll: jest.fn() },
+}))
 jest.mock('@mantine/notifications', () => ({ notifications: { show: jest.fn() } }))
 jest.mock('@/services/projects', () => ({
   ...jest.requireActual('@/services/projects'),
@@ -16,6 +19,12 @@ jest.mock('@/services/projects', () => ({
   },
 }))
 const mockedProjects = Projects as jest.Mocked<typeof Projects>
+const mockedModals = modals as jest.Mocked<typeof modals>
+
+const confirmLastModal = () => {
+  const [options] = mockedModals.openConfirmModal.mock.calls.at(-1)!
+  options.onConfirm?.()
+}
 
 const sender = { id: 2, firstName: 'Camila', lastName: 'Villa', email: 'user2@example.com' }
 
@@ -79,8 +88,16 @@ describe('EnrollmentInvitationList', () => {
       ).toBeNull()
 
       await userEvent.click(within(pending).getByRole('button', { name: 'Cancelar invitación' }))
+      expect(mockedProjects.cancelEnrollmentInvitation).not.toHaveBeenCalled()
+      expect(mockedModals.openConfirmModal).toHaveBeenCalledWith(
+        expect.objectContaining({ title: 'Cancelar invitación' })
+      )
 
-      expect(mockedProjects.cancelEnrollmentInvitation).toHaveBeenCalledWith(1, 8)
+      confirmLastModal()
+
+      await waitFor(() =>
+        expect(mockedProjects.cancelEnrollmentInvitation).toHaveBeenCalledWith(1, 8)
+      )
     })
 
     it('should let the admin read the answer and dismiss a declined invitation', async () => {
@@ -93,8 +110,26 @@ describe('EnrollmentInvitationList', () => {
       expect(within(declined).queryByRole('button', { name: 'Editar invitación' })).toBeNull()
 
       await userEvent.click(within(declined).getByRole('button', { name: 'Descartar invitación' }))
+      confirmLastModal()
 
-      expect(mockedProjects.cancelEnrollmentInvitation).toHaveBeenCalledWith(1, 9)
+      await waitFor(() =>
+        expect(mockedProjects.cancelEnrollmentInvitation).toHaveBeenCalledWith(1, 9)
+      )
+    })
+  })
+
+  describe('when the invitations cannot be loaded', () => {
+    it('should show the API message in Spanish', async () => {
+      mockedProjects.getEnrollmentInvitations.mockRejectedValue(
+        Object.assign(new Error('Request failed with status code 403'), {
+          response: { data: { message: 'No tienes autorización' } },
+        })
+      )
+
+      renderWithQueryClient(<EnrollmentInvitationList projectId={1} />)
+
+      expect(await screen.findByText('No tienes autorización')).toBeInTheDocument()
+      expect(screen.queryByText(/Request failed/)).toBeNull()
     })
   })
 
