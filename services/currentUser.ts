@@ -31,7 +31,9 @@ export const CurrentUserQueryOptions = {
     queryOptions({
       queryKey: ['currentUser'],
       queryFn: CurrentUserService.fetchUserInfo,
-      // A 401 means logged out; retrying only delays telling the user so
-      retry: false,
+      // A 401 means logged out; retrying it only delays telling the user so.
+      // Other errors (network, 5xx) are retried like any query.
+      retry: (failureCount, error) =>
+        !(axios.isAxiosError(error) && error.response?.status === 401) && failureCount < 3,
     }),
 }
