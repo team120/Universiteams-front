@@ -67,12 +67,13 @@ const labels: RichTextEditorLabels = {
 
 interface TextEditorProps {
   content?: string
+  // Accessible name of the editable area, which has no visible label
+  label?: string
   onChange: (content: string) => void
 }
 
 const TextEditor = (props: TextEditorProps) => {
   const sanitizedContent = useMemo(() => sanitizeHtml(props.content ?? ''), [props.content])
-  console.log(sanitizedContent)
 
   const editor = useEditor({
     extensions: [
@@ -86,12 +87,19 @@ const TextEditor = (props: TextEditorProps) => {
       Placeholder.configure({ placeholder: 'Escribe aquí tu mensaje' }),
     ],
     content: sanitizedContent,
+    editorProps: {
+      attributes: props.label
+        ? { role: 'textbox', 'aria-multiline': 'true', 'aria-label': props.label }
+        : {},
+    },
   })
 
   useEffect(() => {
     if (editor) {
       editor.on('update', ({ editor }) => {
-        props.onChange(editor.getHTML())
+        // An editor with no text still has empty paragraphs
+        const hasText = editor.state.doc.textContent.trim() !== ''
+        props.onChange(hasText ? editor.getHTML() : '')
       })
     }
   }, [editor])

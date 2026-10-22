@@ -8,6 +8,8 @@ import { Order } from '@/entities/HelpTypes/Order'
 
 const prefix = `${Env.backendAPI}/users`
 
+export const UsersQueryKey = 'users'
+
 export interface GetUsersInput {
   generalSearchTerm?: string
   interestIds?: number[]

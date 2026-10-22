@@ -1,6 +1,6 @@
 import React from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button, LoadingOverlay } from '@mantine/core'
+import { useQueryClient, useMutation } from '@tanstack/react-query'
+import { Button, LoadingOverlay, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
@@ -9,25 +9,24 @@ import { Projects, ProjectsQueryKey } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
 import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
-import TextEditor from '../Common/TextEditor/TextEditor'
+import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
-interface EnrollmentRequestRevisionProps {
+interface EnrollmentRequestCreateProps {
   projectId: number
-  content?: string
 }
 
-export const EnrollmentRequestRevision = (props: EnrollmentRequestRevisionProps) => {
+export const EnrollmentRequestCreate = (props: EnrollmentRequestCreateProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 
-  const enrollmentRequestUpdateMutation = useMutation({
+  const enrollmentRequestMutation = useMutation({
     mutationFn: async (enrollmentRequest: EnrollmentRequestInput) => {
-      return Projects.updateEnrollmentRequest(props.projectId, enrollmentRequest)
+      return Projects.requestEnrollment(props.projectId, enrollmentRequest)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
       notifications.show({
-        title: 'Solicitud de inscripción actualizada',
+        title: 'Solicitud de inscripción enviada',
         message: 'Espera a que el líder del proyecto acepte tu solicitud',
       })
       modals.closeAll()
@@ -35,7 +34,7 @@ export const EnrollmentRequestRevision = (props: EnrollmentRequestRevisionProps)
     onError: (error) => {
       console.error('Enrollment request failed:', error)
       notifications.show({
-        title: 'Error al actualizar la solicitud de inscripción',
+        title: 'Error al enviar la solicitud de inscripción',
         message: 'Por favor, inténtalo de nuevo más tarde',
         color: 'red',
       })
@@ -44,23 +43,24 @@ export const EnrollmentRequestRevision = (props: EnrollmentRequestRevisionProps)
 
   const handleSubmit = (values: typeof form.values) => {
     const sanitizedMessage = sanitizeHtml(values.message)
-    enrollmentRequestUpdateMutation.mutate({ message: sanitizedMessage })
+    enrollmentRequestMutation.mutate({ message: sanitizedMessage })
   }
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <LoadingOverlay
-        visible={enrollmentRequestUpdateMutation.isPending}
+        visible={enrollmentRequestMutation.isPending}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
+      <Text size="lg">[Opcional] Envía un mensaje al líder o admin del proyecto</Text>
+      <Text size="sm">Puedes indicar tus motivaciones, habilidades, disponibilidad, etc.</Text>
       <TextEditor
-        content={props.content}
+        label="Mensaje de la solicitud"
         onChange={(content) => form.setValues({ message: content })}
       />
-
       <Button type="submit" fullWidth mt="md">
-        Actualizar
+        Solicitar
       </Button>
     </form>
   )

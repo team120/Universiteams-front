@@ -13,8 +13,11 @@ const customJestConfig = {
   // if using TypeScript with a baseUrl set to the root directory then you need the below for alias' to work
   moduleDirectories: ['node_modules', '<rootDir>/'],
   testEnvironment: 'jest-environment-jsdom',
+  globalSetup: '<rootDir>/jest.global-setup.js',
   moduleNameMapper: {
     axios: 'axios/dist/node/axios.cjs',
+    // Same aliases as tsconfig.json paths, so jest.mock() can use them too
+    '^@/(components|entities|services|styles)/(.*)$': '<rootDir>/$1/$2',
   },
 }
 

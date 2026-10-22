@@ -6,13 +6,13 @@ import { modals } from '@mantine/modals'
 import { notifications } from '@mantine/notifications'
 
 import { Projects, ProjectsQueryKey } from '@/services/projects'
-import TextEditor from '../Common/TextEditor/TextEditor'
+import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
 interface EnrollmentCancelProps {
   projectId: number
 }
 
-export const UnenrollModal = (props: EnrollmentCancelProps): React.JSX.Element => {
+export const Unenroll = (props: EnrollmentCancelProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 
@@ -47,7 +47,10 @@ export const UnenrollModal = (props: EnrollmentCancelProps): React.JSX.Element =
         Puedes indicar porque te quieres desvincular del proyecto, sugerencias, etc.
       </Text>
 
-      <TextEditor onChange={(content) => form.setValues({ message: content })} />
+      <TextEditor
+        label="Motivo de la baja"
+        onChange={(content) => form.setValues({ message: content })}
+      />
 
       <Button type="submit" fullWidth mt="md" color="red">
         Darse de baja

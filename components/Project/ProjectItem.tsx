@@ -5,6 +5,7 @@ import { notifications } from '@mantine/notifications'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import Dates from 'utils/string/Dates'
+import Enrollments from 'utils/enrollment/Enrollments'
 import { IconBell, IconHeart, IconHeartFilled } from '@tabler/icons-react'
 import styles from './ProjectItem.module.css'
 
@@ -12,12 +13,12 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { Projects, ProjectsQueryKey } from '@/services/projects'
 import { Url } from '@/services/url'
 
-import EnrollmentButton from '../Enrollment/EnrollmentButton'
-import InfoMessage from '../Common/InfoMessage/InfoMessage'
-import { NotLoggedError } from '../Account/NotLoggedError'
+import EnrollmentButtonRequest from '@/components/Enrollment/Request/EnrollmentButtonRequest'
+import InfoMessage from '@/components/Common/InfoMessage/InfoMessage'
+import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { ProjectDetailsTabs } from './ProjectDetails'
 import ProjectInList from '@/entities/Project/ProjectInList'
-import { verifyEmailNotification } from '../Account/VerifyEmailNotification'
+import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 
 interface ProjectItemProps {
   project?: ProjectInList
@@ -104,6 +105,8 @@ const ProjectItem = (props: ProjectItemProps) => {
   // Small loader needed?
   if (!project) return <InfoMessage text="No se ha podido cargar el projecto" type="error" />
 
+  const leader = Enrollments.projectLeader(project.enrollments)
+
   return (
     <Card
       key={project.id}
@@ -144,15 +147,21 @@ const ProjectItem = (props: ProjectItemProps) => {
         </Group>
 
         <Group gap={'0.5rem'} mt={'1rem'}>
-          {project.enrollments && (
+          {leader && (
             <Badge
               variant="filled"
               color="violet.6"
               size="lg"
               style={{ cursor: 'pointer' }}
-              onClick={(event) => handleLeaderTagClick(project.enrollments[0].user.id, event)}>
-              {project.enrollments[0].user.firstName} {project.enrollments[0].user.lastName}
+              data-testid="project-card-leader"
+              onClick={(event) => handleLeaderTagClick(leader.id, event)}>
+              {leader.firstName} {leader.lastName}
               {project.userCount > 1 ? `, +${project.userCount - 1} personas` : ''}
+            </Badge>
+          )}
+          {!leader && project.userCount > 0 && (
+            <Badge variant="filled" color="violet.6" size="lg" data-testid="project-card-members">
+              {project.userCount === 1 ? '1 persona' : `${project.userCount} personas`}
             </Badge>
           )}
           {project.interests.map((interest) => (
@@ -186,11 +195,12 @@ const ProjectItem = (props: ProjectItemProps) => {
             </div>
           )}
 
-          <EnrollmentButton
+          <EnrollmentButtonRequest
             projectId={project.id}
             requestState={project.requestState}
             requesterMessage={project.requesterMessage}
             adminMessage={project.adminMessage}
+            senderName={project.senderName}
           />
 
           <div style={{ display: 'flex', alignItems: 'center' }}>

@@ -10,7 +10,7 @@ import { DepartmentsQueryKey, ResearchDepartments } from '@/services/departments
 import { Facilities, FacilitiesQueryKey } from '@/services/facilities'
 import { Institutions } from '@/services/institutions'
 import { Interests } from '@/services/interests'
-import { GetUsersInput, Users } from '@/services/users'
+import { GetUsersInput, Users, UsersQueryKey } from '@/services/users'
 
 import Filter from '@/components/Common/Filter/Filter'
 import Interest from '@/entities/Interest'
@@ -78,7 +78,7 @@ const UsersPage: NextPage = () => {
 
   const usersQuery = useQuery(
     queryOptions({
-      queryKey: ['users', userParams, currentPage, usersPerPage],
+      queryKey: [UsersQueryKey, userParams, currentPage, usersPerPage],
       queryFn: () => Users.getUsers(userParams),
       placeholderData: keepPreviousData,
     })

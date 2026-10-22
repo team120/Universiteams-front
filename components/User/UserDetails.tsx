@@ -5,13 +5,17 @@ import { PDFDownloadLink } from '@react-pdf/renderer'
 import { ActionIcon, Alert, Badge, Card, Flex, Group, Tabs, Text } from '@mantine/core'
 import { useMantineColorScheme } from '@mantine/core'
 
-import { Users } from '@/services/users'
+import { CurrentUserQueryOptions } from '@/services/currentUser'
+import { Users, UsersQueryKey } from '@/services/users'
 import { IconBulb, IconFolders, IconPdf, IconSchool } from '@tabler/icons-react'
 
+import ApiErrors from 'utils/string/ApiErrors'
 import Dates from 'utils/string/Dates'
+import Enrollments from 'utils/enrollment/Enrollments'
 import Localize from 'utils/string/Localize'
-import styles from '@/components/Enrollment/EnrollmentList.module.css'
+import styles from '@/components/Enrollment/List/EnrollmentList.module.css'
 
+import EnrollmentButtonInvitation from '@/components/Enrollment/Invitation/EnrollmentButtonInvitation'
 import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
 import UserAffiliation from '@/entities/User/UserAffiliation'
 import Interest from '@/entities/Interest'
@@ -33,8 +37,20 @@ const UserDetails = (props: UserDetailsParams) => {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ['users', props.id],
+    queryKey: [UsersQueryKey, props.id],
     queryFn: () => Users.getUser(props.id),
+  })
+
+  const { data: currentUserInfo } = useQuery(CurrentUserQueryOptions.currentUser())
+
+  // The current user's projects, to offer the ones they can invite this user to
+  const currentUserId = currentUserInfo?.id
+  const { data: currentUser } = useQuery({
+    queryKey: [UsersQueryKey, currentUserId],
+    queryFn: () => (currentUserId ? Users.getUser(currentUserId) : null),
+    enabled: !!currentUserId,
+    // Super admins have no public profile, so it returns 404
+    retry: false,
   })
 
   const { colorScheme } = useMantineColorScheme()
@@ -64,8 +80,11 @@ const UserDetails = (props: UserDetailsParams) => {
   }
 
   if (isLoading) return <SkeletonFull />
-  if (error) return <Alert color="red">{error.message}</Alert>
+  if (error)
+    return <Alert color="red">{ApiErrors.message(error, 'No se pudo cargar el usuario')}</Alert>
   if (!user) return <Alert color="red">No se encontró el usuario</Alert>
+
+  const invitableProjects = currentUser ? Enrollments.invitableProjects(currentUser, user) : []
 
   return (
     <>
@@ -119,6 +138,14 @@ const UserDetails = (props: UserDetailsParams) => {
           </Group>
         )}
         <Flex justify="flex-end" align="center" gap={'1rem'}>
+          {currentUserInfo && invitableProjects.length > 0 && (
+            <EnrollmentButtonInvitation
+              currentUser={currentUserInfo}
+              userId={user.id}
+              userFullName={`${user.firstName} ${user.lastName}`}
+              invitableProjects={invitableProjects}
+            />
+          )}
           <PDFDownloadLink
             document={<UserPDF user={user} />}
             fileName={`user_document_${Dates.getDateTimeShort()}.pdf`}>

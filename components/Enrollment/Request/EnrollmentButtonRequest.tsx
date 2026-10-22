@@ -12,41 +12,46 @@ import {
   IconUserOff,
   IconPencil,
   IconEye,
+  IconMail,
+  IconCheck,
+  IconX,
 } from '@tabler/icons-react'
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { ProjectsQueryKey, Projects } from '@/services/projects'
 import sanitize from 'sanitize-html'
 
-import { EnrollmentRequestCreate } from './EnrollmentRequest'
-import { EnrollmentRequestRejected } from './EnrollmentRequestRejected'
-import { EnrollmentRequestRevision } from './EnrollmentRequestRevision'
+import { EnrollmentInvitationAnswer } from '@/components/Enrollment/Invitation/EnrollmentInvitationAnswer'
+import { EnrollmentRequestCancel } from './EnrollmentRequestCancel'
+import { EnrollmentRequestCreate } from './EnrollmentRequestCreate'
+import { EnrollmentRequestUpdate } from './EnrollmentRequestUpdate'
 import { EnrollmentRevoked } from './EnrollmentRevoked'
-import { NotLoggedError } from '../Account/NotLoggedError'
-import { RequestState } from '@/entities/Project/ProjectInList'
-import { UnenrollModal } from './Unenroll'
-import { verifyEmailNotification as verifyEmailErrorNotification } from '../Account/VerifyEmailNotification'
+import { NotLoggedError } from '@/components/Account/NotLoggedError'
+import { ManageEnrollInvitationAction, RequestState } from '@/entities/Project/ProjectInList'
+import { Unenroll } from './Unenroll'
+import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 
-interface ActionIconComponentProps {
+interface EnrollmentButtonRequestProps {
   projectId: number
   requestState?: RequestState | null
   requesterMessage?: string
   adminMessage?: string
+  // Set only when the enrollment is an invitation
+  senderName?: string
 }
 
-const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
-  requestState,
-  requesterMessage,
-  adminMessage,
-  projectId,
-}) => {
+const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
+  props: EnrollmentButtonRequestProps
+) => {
   const queryClient = useQueryClient()
 
-  const { data: currentUser, error: errorCurrentUser } = useQuery(
-    CurrentUserQueryOptions.currentUser()
-  )
+  const {
+    data: currentUser,
+    error: errorCurrentUser,
+    isLoading: isLoadingCurrentUser,
+  } = useQuery(CurrentUserQueryOptions.currentUser())
 
   const cancelEnrollmentRequestMutation = useMutation({
-    mutationFn: () => Projects.cancelEnrollmentRequest(projectId),
+    mutationFn: () => Projects.cancelEnrollmentRequest(props.projectId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
       notifications.show({
@@ -59,6 +64,9 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
   const handleEnrollmentRequestClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
+    // Wait for the current user instead of treating them as logged out
+    if (isLoadingCurrentUser) return
+
     if (errorCurrentUser || !currentUser) {
       notifications.show({
         title: 'Debes iniciar sesión para solicitar inscripciones',
@@ -70,7 +78,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     }
 
     if (currentUser?.isEmailVerified === false) {
-      notifications.show(verifyEmailErrorNotification('solicitar inscripciones'))
+      notifications.show(verifyEmailNotification('solicitar inscripciones'))
 
       return
     }
@@ -78,27 +86,29 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     modals.open({
       title: 'Solicitar inscripción',
       centered: true,
-      children: <EnrollmentRequestCreate projectId={projectId} />,
+      children: <EnrollmentRequestCreate projectId={props.projectId} />,
     })
   }
 
-  const handleViewRequestClick = (event: React.MouseEvent) => {
+  const handleReviewRequestClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
     modals.open({
       title: 'Solicitud de inscripción',
       centered: true,
-      children: <EnrollmentRequestRevision content={requesterMessage} projectId={projectId} />,
+      children: (
+        <EnrollmentRequestUpdate content={props.requesterMessage} projectId={props.projectId} />
+      ),
     })
   }
 
-  const handleViewAdminMessageClick = (event: React.MouseEvent) => {
+  const handleReviewAdminMessageClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
     modals.open({
       title: 'Mensaje del administrador',
       centered: true,
-      children: <div dangerouslySetInnerHTML={{ __html: sanitize(adminMessage ?? '') }} />,
+      children: <div dangerouslySetInnerHTML={{ __html: sanitize(props.adminMessage ?? '') }} />,
     })
   }
 
@@ -115,10 +125,10 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
       title: 'Solicitud rechazada',
       centered: true,
       children: (
-        <EnrollmentRequestRejected
-          projectId={projectId}
-          adminMessage={adminMessage}
-          requesterMessage={requesterMessage}
+        <EnrollmentRequestCancel
+          projectId={props.projectId}
+          adminMessage={props.adminMessage}
+          requesterMessage={props.requesterMessage}
         />
       ),
     })
@@ -130,7 +140,53 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     modals.open({
       title: 'Inscripción revocada',
       centered: true,
-      children: <EnrollmentRevoked projectId={projectId} adminMessage={adminMessage} />,
+      children: <EnrollmentRevoked projectId={props.projectId} adminMessage={props.adminMessage} />,
+    })
+  }
+
+  const handleViewInvitationClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+
+    modals.open({
+      title: `Invitación de ${props.senderName}`,
+      centered: true,
+      children: props.adminMessage ? (
+        <div dangerouslySetInnerHTML={{ __html: sanitize(props.adminMessage) }} />
+      ) : (
+        'La invitación no incluye un mensaje'
+      ),
+    })
+  }
+
+  const handleAnswerInvitationClick = (
+    event: React.MouseEvent,
+    action: ManageEnrollInvitationAction
+  ) => {
+    event.stopPropagation()
+
+    // Wait for the current user instead of treating them as logged out
+    if (isLoadingCurrentUser) return
+
+    if (errorCurrentUser || !currentUser) {
+      notifications.show({
+        title: 'Debes iniciar sesión para responder invitaciones de inscripción',
+        color: 'red',
+        message: <NotLoggedError action="responder invitaciones de inscripción" />,
+      })
+
+      return
+    }
+
+    if (currentUser.isEmailVerified === false) {
+      notifications.show(verifyEmailNotification('responder invitaciones de inscripción'))
+
+      return
+    }
+
+    modals.open({
+      title: action === 'accept' ? 'Aceptar invitación' : 'Declinar invitación',
+      centered: true,
+      children: <EnrollmentInvitationAnswer projectId={props.projectId} action={action} />,
     })
   }
 
@@ -140,12 +196,13 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     modals.open({
       title: 'Darse de baja del proyecto',
       centered: true,
-      children: <UnenrollModal projectId={projectId} />,
+      children: <Unenroll projectId={props.projectId} />,
     })
   }
 
-  switch (requestState) {
+  switch (props.requestState) {
     case RequestState.Unenrolled:
+    case RequestState.Declined:
     case undefined:
     case null:
       return (
@@ -181,6 +238,38 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
         </ActionIcon>
       )
     case RequestState.Pending:
+      if (props.senderName) {
+        return (
+          <Menu position="bottom" offset={0}>
+            <Menu.Target>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Opciones de invitación"
+                size="lg"
+                color="green"
+                onClick={(event) => event.stopPropagation()}>
+                <IconMail />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item leftSection={<IconEye size={14} />} onClick={handleViewInvitationClick}>
+                Ver invitación
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<IconCheck size={14} />}
+                onClick={(event) => handleAnswerInvitationClick(event, 'accept')}>
+                Aceptar invitación
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<IconX color="red" size={14} />}
+                onClick={(event) => handleAnswerInvitationClick(event, 'decline')}>
+                Declinar invitación
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        )
+      }
+
       return (
         <Menu position="bottom" offset={0}>
           <Menu.Target>
@@ -194,8 +283,8 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            {requesterMessage && (
-              <Menu.Item leftSection={<IconPencil size={14} />} onClick={handleViewRequestClick}>
+            {props.requesterMessage && (
+              <Menu.Item leftSection={<IconPencil size={14} />} onClick={handleReviewRequestClick}>
                 Revisar solicitud
               </Menu.Item>
             )}
@@ -221,8 +310,10 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            {adminMessage && (
-              <Menu.Item leftSection={<IconEye size={14} />} onClick={handleViewAdminMessageClick}>
+            {props.adminMessage && (
+              <Menu.Item
+                leftSection={<IconEye size={14} />}
+                onClick={handleReviewAdminMessageClick}>
                 Ver mensaje del administrador
               </Menu.Item>
             )}
@@ -239,4 +330,4 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
   }
 }
 
-export default EnrollmentButton
+export default EnrollmentButtonRequest

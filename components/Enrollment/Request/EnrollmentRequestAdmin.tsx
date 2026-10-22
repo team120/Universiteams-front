@@ -8,22 +8,23 @@ import { modals } from '@mantine/modals'
 import { EnrollmentRequestsQueryKey, Projects } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
-import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestReject'
+import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
-import TextEditor from '../Common/TextEditor/TextEditor'
+import { ManageEnrollRequestAction } from '@/entities/Project/ProjectInList'
+import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
 interface AdminMutation {
   userId: number
-  adminOptions: EnrollmentRequestAdmin
+  adminOptions: EnrollmentRequestInput
 }
 
-interface EnrollmentRequestProps {
+interface EnrollmentRequestAdminProps {
   projectId: number
   request: EnrollmentRequestShow
-  action: 'approve' | 'reject'
+  action: ManageEnrollRequestAction
 }
 
-export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React.JSX.Element => {
+export const EnrollmentRequestAdmin = (props: EnrollmentRequestAdminProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 
@@ -110,13 +111,11 @@ export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React
           ? `[Opcional] ¿Por qué rechazas la solicitud de inscripción? Este mensaje será enviado al usuario`
           : '[Opcional] Indica un mensaje para el usuario aceptado. Por ejemplo, instrucciones para comenzar a colaborar'}
       </Text>
-      <TextEditor onChange={(content) => form.setValues({ message: content })} />
-      <Button
-        type="submit"
-        fullWidth
-        mt="md"
-        aria-label="Rechazar solicitud"
-        color={props.action === 'approve' ? 'blue' : 'red'}>
+      <TextEditor
+        label="Mensaje para el usuario"
+        onChange={(content) => form.setValues({ message: content })}
+      />
+      <Button type="submit" fullWidth mt="md" color={props.action === 'approve' ? 'blue' : 'red'}>
         {props.action === 'approve' ? 'Aprobar solicitud' : 'Rechazar solicitud'}
       </Button>
     </form>

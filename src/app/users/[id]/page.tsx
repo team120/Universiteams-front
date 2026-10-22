@@ -3,11 +3,12 @@ import React from 'react'
 import UserDetails from '@/components/User/UserDetails'
 
 interface UserDetailsParams {
-  params: { id: number }
+  // Route params are always strings
+  params: { id: string }
 }
 
 const UserDetailsPage = ({ params }: UserDetailsParams) => {
-  return <UserDetails id={params.id} />
+  return <UserDetails id={Number(params.id)} />
 }
 
 export default UserDetailsPage

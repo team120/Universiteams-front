@@ -28,18 +28,21 @@ import {
   IconEdit,
   IconTrash,
   IconPdf,
+  IconMail,
 } from '@tabler/icons-react'
 
 import sanitizeHtml from 'sanitize-html'
+import ApiErrors from 'utils/string/ApiErrors'
 import Dates from 'utils/string/Dates'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { EnrollmentRequestsQueryKey, Projects, ProjectsQueryKey } from '@/services/projects'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
 
-import EnrollmentButton from '@/components/Enrollment/EnrollmentButton'
-import { EnrollmentList } from '../Enrollment/EnrollmentList'
-import { EnrollmentRequestAdminForm } from '../Enrollment/EnrollmentRequestAdmin'
+import EnrollmentButtonRequest from '@/components/Enrollment/Request/EnrollmentButtonRequest'
+import { EnrollmentInvitationList } from '@/components/Enrollment/Invitation/EnrollmentInvitationList'
+import { EnrollmentList } from '@/components/Enrollment/List/EnrollmentList'
+import { EnrollmentRequestAdmin } from '@/components/Enrollment/Request/EnrollmentRequestAdmin'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import ProjectPDF from '@/components/Project/ProjectPDF'
 import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
@@ -52,6 +55,7 @@ interface ProjectDetailsParams {
 export enum ProjectDetailsTabs {
   Members = 'members',
   Requests = 'requests',
+  Invitations = 'invitations',
 }
 
 const ProjectDetails = (props: ProjectDetailsParams) => {
@@ -63,6 +67,10 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     queryKey: [ProjectsQueryKey, props.id],
     queryFn: () => Projects.getProject(props.id),
   })
+
+  // Only current admins and leaders get the request count
+  const isAdmin =
+    project?.requestEnrollmentCount !== undefined && project?.requestEnrollmentCount !== null
 
   const sanitizedDescription = useMemo(
     () => sanitizeHtml(project?.description ?? ''),
@@ -78,8 +86,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   const enrollmentRequestsQuery = useQuery({
     queryKey: [EnrollmentRequestsQueryKey, props.id],
     queryFn: () => Projects.getEnrollmentRequests(props.id),
-    enabled:
-      project?.requestEnrollmentCount !== undefined && project?.requestEnrollmentCount !== null,
+    enabled: isAdmin,
   })
 
   const deleteMutation = useMutation({
@@ -100,11 +107,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
         return Promise.reject('Email not verified')
       }
 
-      // Admin
-      if (
-        project?.requestEnrollmentCount === undefined ||
-        project?.requestEnrollmentCount === null
-      ) {
+      if (!isAdmin || !project) {
         notifications.show({
           title: 'Debes tener el rol de líder de proyecto para eliminar este proyecto',
           color: 'red',
@@ -186,6 +189,13 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
+  // Admin-only tabs fall back to the members when the viewer isn't an admin,
+  // e.g. from a shared link
+  const requestedTab = searchParams.get('activeTab') ?? ProjectDetailsTabs.Members
+  const adminOnlyTabs: string[] = [ProjectDetailsTabs.Requests, ProjectDetailsTabs.Invitations]
+  const activeTab =
+    !isAdmin && adminOnlyTabs.includes(requestedTab) ? ProjectDetailsTabs.Members : requestedTab
+
   const handleInterestTagClick = (interestId: number) => {
     router.push(`/projects?interest=${interestId}`)
   }
@@ -216,9 +226,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     modals.open({
       title: `Aceptar solicitud de ${request.user.firstName} ${request.user.lastName}`,
       centered: true,
-      children: (
-        <EnrollmentRequestAdminForm projectId={props.id} request={request} action="approve" />
-      ),
+      children: <EnrollmentRequestAdmin projectId={props.id} request={request} action="approve" />,
     })
   }
 
@@ -226,14 +234,13 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     modals.open({
       title: `Rechazar solicitud de ${request.user.firstName} ${request.user.lastName}`,
       centered: true,
-      children: (
-        <EnrollmentRequestAdminForm projectId={props.id} request={request} action="reject" />
-      ),
+      children: <EnrollmentRequestAdmin projectId={props.id} request={request} action="reject" />,
     })
   }
 
   if (isLoading) return <SkeletonFull />
-  if (error) return <Alert color="red">{error.message}</Alert>
+  if (error)
+    return <Alert color="red">{ApiErrors.message(error, 'No se pudo cargar el proyecto')}</Alert>
   if (!project) return <Alert color="red">No se encontró el proyecto</Alert>
 
   return (
@@ -286,11 +293,12 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
         <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
 
         <Flex justify="flex-end" align="center" gap={'1rem'}>
-          <EnrollmentButton
+          <EnrollmentButtonRequest
             projectId={project.id}
             requestState={project.requestState}
             requesterMessage={project.requesterMessage}
             adminMessage={project.adminMessage}
+            senderName={project.senderName}
           />
           <Group gap={'0.25rem'}>
             <ActionIcon
@@ -314,31 +322,32 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
           </PDFDownloadLink>
 
           {/* Admin */}
-          {project?.requestEnrollmentCount !== undefined &&
-            project?.requestEnrollmentCount !== null && (
-              <>
-                <ActionIcon
-                  variant="transparent"
-                  aria-label="Editar"
-                  onClick={handleEditClick}
-                  size="lg"
-                  color={'orange.6'}>
-                  <IconEdit />
-                </ActionIcon>
-                <ActionIcon
-                  variant="transparent"
-                  aria-label="Eliminar"
-                  onClick={handleDeleteClick}
-                  size="lg"
-                  color={'red.6'}>
-                  <IconTrash />
-                </ActionIcon>
-              </>
-            )}
+          {isAdmin && (
+            <>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Editar"
+                onClick={handleEditClick}
+                size="lg"
+                color={'orange.6'}>
+                <IconEdit />
+              </ActionIcon>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Eliminar"
+                onClick={handleDeleteClick}
+                size="lg"
+                color={'red.6'}>
+                <IconTrash />
+              </ActionIcon>
+            </>
+          )}
         </Flex>
 
+        {/* Only the open tab is mounted, so invitations are fetched when needed */}
         <Tabs
-          value={searchParams.get('activeTab') ?? ProjectDetailsTabs.Members}
+          keepMounted={false}
+          value={activeTab}
           onChange={(value) => router.push(`${pathname}?activeTab=${value}`)}>
           <Tabs.List>
             <Tabs.Tab
@@ -352,31 +361,39 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
               Miembros
             </Tabs.Tab>
 
-            {project.requestEnrollmentCount !== undefined &&
-              project.requestEnrollmentCount !== null && (
-                <Tabs.Tab
-                  value={ProjectDetailsTabs.Requests}
-                  leftSection={<IconSend />}
-                  rightSection={
-                    <Badge color="blue" variant="filled">
-                      {project.requestEnrollmentCount}
-                    </Badge>
-                  }>
-                  Solicitudes
-                </Tabs.Tab>
-              )}
+            {isAdmin && (
+              <Tabs.Tab
+                value={ProjectDetailsTabs.Requests}
+                leftSection={<IconSend />}
+                rightSection={
+                  <Badge color="blue" variant="filled">
+                    {project.requestEnrollmentCount}
+                  </Badge>
+                }>
+                Solicitudes
+              </Tabs.Tab>
+            )}
+
+            {isAdmin && (
+              <Tabs.Tab value={ProjectDetailsTabs.Invitations} leftSection={<IconMail />}>
+                Invitaciones
+              </Tabs.Tab>
+            )}
           </Tabs.List>
 
           <Tabs.Panel value={ProjectDetailsTabs.Members}>
             <EnrollmentList
               projectId={props.id}
               enrollments={project.enrollments}
-              isAdmin={
-                project.requestEnrollmentCount !== undefined &&
-                project.requestEnrollmentCount !== null
-              }
+              isAdmin={isAdmin}
             />
           </Tabs.Panel>
+
+          {isAdmin && (
+            <Tabs.Panel value={ProjectDetailsTabs.Invitations}>
+              <EnrollmentInvitationList projectId={props.id} />
+            </Tabs.Panel>
+          )}
 
           {!enrollmentRequestsQuery.isError && enrollmentRequestsQuery.data && (
             <Tabs.Panel value={ProjectDetailsTabs.Requests}>
