@@ -23,17 +23,26 @@ describe('EnrollmentInvitationAnswer', () => {
     jest.clearAllMocks()
   })
 
-  it.each([
-    ['accept', 'Aceptar invitación', 'acceptEnrollmentInvitation'],
-    ['decline', 'Declinar invitación', 'declineEnrollmentInvitation'],
-  ] as const)('should %s the invitation with the message', async (action, button, method) => {
-    mockedProjects[method].mockResolvedValue()
-    renderWithQueryClient(<EnrollmentInvitationAnswer projectId={1} action={action} />)
+  it('should accept the invitation without asking for a message nobody would read', async () => {
+    mockedProjects.acceptEnrollmentInvitation.mockResolvedValue()
+    renderWithQueryClient(<EnrollmentInvitationAnswer projectId={1} action="accept" />)
 
-    await userEvent.type(screen.getByRole('textbox', { name: 'Mensaje' }), 'Gracias')
-    await userEvent.click(screen.getByRole('button', { name: button }))
+    expect(screen.queryByRole('textbox', { name: 'Mensaje' })).toBeNull()
+    await userEvent.click(screen.getByRole('button', { name: 'Aceptar invitación' }))
 
-    expect(mockedProjects[method]).toHaveBeenCalledWith(1, { message: 'Gracias' })
+    expect(mockedProjects.acceptEnrollmentInvitation).toHaveBeenCalledWith(1, {})
+  })
+
+  it('should decline the invitation with the message', async () => {
+    mockedProjects.declineEnrollmentInvitation.mockResolvedValue()
+    renderWithQueryClient(<EnrollmentInvitationAnswer projectId={1} action="decline" />)
+
+    await userEvent.type(screen.getByRole('textbox', { name: 'Mensaje' }), 'No puedo ahora')
+    await userEvent.click(screen.getByRole('button', { name: 'Declinar invitación' }))
+
+    expect(mockedProjects.declineEnrollmentInvitation).toHaveBeenCalledWith(1, {
+      message: 'No puedo ahora',
+    })
   })
 
   it('should show why the answer failed', async () => {

@@ -3,11 +3,12 @@ import React from 'react'
 import ProjectDetails from '@/components/Project/ProjectDetails'
 
 interface ProjectDetailsParams {
-  params: { id: number }
+  // Route params are always strings
+  params: { id: string }
 }
 
 const ProjectDetailsPage = ({ params }: ProjectDetailsParams) => {
-  return <ProjectDetails id={params.id} />
+  return <ProjectDetails id={Number(params.id)} />
 }
 
 export default ProjectDetailsPage

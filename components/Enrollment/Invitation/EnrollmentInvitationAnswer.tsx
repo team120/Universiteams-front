@@ -42,7 +42,7 @@ export const EnrollmentInvitationAnswer = (
           : 'Invitación de inscripción declinada',
         message: isAccept
           ? 'Ahora eres miembro del proyecto'
-          : 'El admin o líder será notificado de tu decisión',
+          : 'Los admins y líderes del proyecto verán tu respuesta en sus invitaciones',
         color: 'blue',
       })
       modals.closeAll()
@@ -61,8 +61,9 @@ export const EnrollmentInvitationAnswer = (
     },
   })
 
+  // Only a decline message is shown to the admins, in their list of invitations
   const handleSubmit = (values: typeof form.values) => {
-    answerInvitationMutation.mutate({ message: sanitizeHtml(values.message) })
+    answerInvitationMutation.mutate(isAccept ? {} : { message: sanitizeHtml(values.message) })
   }
 
   return (
@@ -72,12 +73,17 @@ export const EnrollmentInvitationAnswer = (
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
-      <Text style={{ marginBottom: '1rem' }}>
-        {isAccept
-          ? '[Opcional] Indica un mensaje para el admin o líder que te invitó. Por ejemplo, preguntas para comenzar a colaborar'
-          : '[Opcional] ¿Por qué declinas la invitación de inscripción? Este mensaje será enviado al admin o líder'}
-      </Text>
-      <TextEditor onChange={(content) => form.setValues({ message: content })} />
+      {isAccept ? (
+        <Text>Te unirás al proyecto como miembro.</Text>
+      ) : (
+        <>
+          <Text style={{ marginBottom: '1rem' }}>
+            [Opcional] ¿Por qué declinas la invitación de inscripción? Los admins y líderes del
+            proyecto podrán leer tu respuesta
+          </Text>
+          <TextEditor onChange={(content) => form.setValues({ message: content })} />
+        </>
+      )}
       <Button type="submit" fullWidth mt="md" color={isAccept ? 'blue' : 'red'}>
         {isAccept ? 'Aceptar invitación' : 'Declinar invitación'}
       </Button>

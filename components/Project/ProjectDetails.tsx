@@ -106,11 +106,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
         return Promise.reject('Email not verified')
       }
 
-      // Admin
-      if (
-        project?.requestEnrollmentCount === undefined ||
-        project?.requestEnrollmentCount === null
-      ) {
+      if (!isAdmin || !project) {
         notifications.show({
           title: 'Debes tener el rol de líder de proyecto para eliminar este proyecto',
           color: 'red',

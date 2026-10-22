@@ -5,7 +5,11 @@ import { AxiosError } from 'axios'
 const message = (error: Error, fallback: string): string => {
   const apiMessage = ((error as AxiosError).response?.data as { message?: unknown } | undefined)
     ?.message
-  return typeof apiMessage === 'string' ? apiMessage : fallback
+  if (typeof apiMessage === 'string') return apiMessage
+  // Validation errors list every failed rule
+  if (Array.isArray(apiMessage) && apiMessage.every((item) => typeof item === 'string'))
+    return apiMessage.join('. ')
+  return fallback
 }
 
 const ApiErrors = { message }
