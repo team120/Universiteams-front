@@ -1,5 +1,8 @@
 import Dates from 'utils/string/Dates'
 
+// Run as a browser in Argentina (UTC-3) would, whatever the machine's zone
+process.env.TZ = 'America/Argentina/Buenos_Aires'
+
 describe('Dates.formatDate', () => {
   it.each(['2026-10-22', '2026-10-22T00:00:00.000Z'])(
     'should keep the calendar day of %s in any time zone',
