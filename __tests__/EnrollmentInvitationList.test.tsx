@@ -122,6 +122,7 @@ describe('EnrollmentInvitationList', () => {
     it('should show the API message in Spanish', async () => {
       mockedProjects.getEnrollmentInvitations.mockRejectedValue(
         Object.assign(new Error('Request failed with status code 403'), {
+          isAxiosError: true,
           response: { data: { message: 'No tienes autorización' } },
         })
       )

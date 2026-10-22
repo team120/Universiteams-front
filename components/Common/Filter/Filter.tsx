@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query'
 import { ActionIcon, Button, Drawer, Flex, Group, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconFilter, IconXboxX } from '@tabler/icons-react'
-
 import Theme from 'src/app/theme'
-import { CurrentUserQueryOptions } from '@/services/currentUser'
+import { CurrentUserQueryOptions } from '../../../services/currentUser'
+import { useQuery } from '@tanstack/react-query'
 
 interface FilterProps {
   counter: number

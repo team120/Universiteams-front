@@ -48,6 +48,7 @@ describe('EnrollmentInvitationAnswer', () => {
   it('should show why the answer failed', async () => {
     mockedProjects.acceptEnrollmentInvitation.mockRejectedValue(
       Object.assign(new Error('Request failed with status code 400'), {
+        isAxiosError: true,
         response: { data: { message: 'No tienes una invitación pendiente para este proyecto' } },
       })
     )
