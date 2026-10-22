@@ -8,9 +8,14 @@ import { RequestState } from '@/entities/Project/ProjectInList'
 jest.mock('@mantine/modals', () => ({ modals: { open: jest.fn(), closeAll: jest.fn() } }))
 jest.mock('@mantine/notifications', () => ({ notifications: { show: jest.fn() } }))
 const mockCurrentUser = { id: 8, isEmailVerified: true }
+let mockCurrentUserFails = false
 jest.mock('@/services/currentUser', () => ({
   CurrentUserQueryOptions: {
-    currentUser: () => ({ queryKey: ['currentUser'], queryFn: () => mockCurrentUser }),
+    currentUser: () => ({
+      queryKey: ['currentUser'],
+      queryFn: () =>
+        mockCurrentUserFails ? Promise.reject(new Error('401')) : Promise.resolve(mockCurrentUser),
+    }),
   },
 }))
 
@@ -18,6 +23,7 @@ describe('EnrollmentButtonRequest', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockCurrentUser.isEmailVerified = true
+    mockCurrentUserFails = false
   })
 
   describe('when the pending enrollment is an invitation', () => {
@@ -70,6 +76,23 @@ describe('EnrollmentButtonRequest', () => {
 
       expect(modals.open).not.toHaveBeenCalled()
       expect(notifications.show).toHaveBeenCalled()
+    })
+
+    it('should not open the answer form while the current user is unknown', async () => {
+      mockCurrentUserFails = true
+      renderInvitation()
+      // Let the current user query fail
+      await new Promise((resolve) => setTimeout(resolve, 0))
+
+      await userEvent.click(screen.getByRole('button', { name: 'Opciones de invitación' }))
+      await userEvent.click(await screen.findByRole('menuitem', { name: 'Aceptar invitación' }))
+
+      expect(modals.open).not.toHaveBeenCalled()
+      expect(notifications.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: 'Debes iniciar sesión para responder invitaciones de inscripción',
+        })
+      )
     })
 
     it('should show who sent the invitation', async () => {

@@ -12,8 +12,10 @@ const mockEditor = {
   },
 }
 
+const mockUseEditor = jest.fn((_options: unknown) => mockEditor)
+
 // The real editor needs a browser; this one lets the test fire updates
-jest.mock('@tiptap/react', () => ({ useEditor: () => mockEditor }))
+jest.mock('@tiptap/react', () => ({ useEditor: (options: unknown) => mockUseEditor(options) }))
 jest.mock('@mantine/tiptap', () => {
   const Stub = ({ children }: { children?: React.ReactNode }) => <>{children}</>
   return {
@@ -41,6 +43,22 @@ describe('TextEditor', () => {
     mockEditor.handler?.({ editor: mockEditor })
 
     expect(onChange).toHaveBeenCalledWith('')
+  })
+
+  it('should give the editable area the label as its accessible name', () => {
+    render(<TextEditor label="Mensaje de la invitación" onChange={jest.fn()} />)
+
+    expect(mockUseEditor).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        editorProps: {
+          attributes: {
+            role: 'textbox',
+            'aria-multiline': 'true',
+            'aria-label': 'Mensaje de la invitación',
+          },
+        },
+      })
+    )
   })
 
   it('should send the HTML of a message', () => {

@@ -27,7 +27,7 @@ describe('EnrollmentInvitationAnswer', () => {
     mockedProjects.acceptEnrollmentInvitation.mockResolvedValue()
     renderWithQueryClient(<EnrollmentInvitationAnswer projectId={1} action="accept" />)
 
-    expect(screen.queryByRole('textbox', { name: 'Mensaje' })).toBeNull()
+    expect(screen.queryByRole('textbox')).toBeNull()
     await userEvent.click(screen.getByRole('button', { name: 'Aceptar invitación' }))
 
     expect(mockedProjects.acceptEnrollmentInvitation).toHaveBeenCalledWith(1, {})
@@ -37,7 +37,10 @@ describe('EnrollmentInvitationAnswer', () => {
     mockedProjects.declineEnrollmentInvitation.mockResolvedValue()
     renderWithQueryClient(<EnrollmentInvitationAnswer projectId={1} action="decline" />)
 
-    await userEvent.type(screen.getByRole('textbox', { name: 'Mensaje' }), 'No puedo ahora')
+    await userEvent.type(
+      screen.getByRole('textbox', { name: 'Motivo para declinar la invitación' }),
+      'No puedo ahora'
+    )
     await userEvent.click(screen.getByRole('button', { name: 'Declinar invitación' }))
 
     expect(mockedProjects.declineEnrollmentInvitation).toHaveBeenCalledWith(1, {

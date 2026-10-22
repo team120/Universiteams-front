@@ -50,7 +50,10 @@ describe('EnrollmentInvitationCreate', () => {
 
     await userEvent.click(screen.getByRole('textbox', { name: 'Proyecto' }))
     await userEvent.click(await screen.findByRole('option', { name: 'Proyecto B' }))
-    await userEvent.type(screen.getByRole('textbox', { name: 'Mensaje' }), 'Te invito')
+    await userEvent.type(
+      screen.getByRole('textbox', { name: 'Mensaje de la invitación' }),
+      'Te invito'
+    )
     await userEvent.click(screen.getByRole('button', { name: 'Invitar' }))
 
     expect(mockedProjects.createEnrollmentInvitation).toHaveBeenCalledWith(11, 8, {

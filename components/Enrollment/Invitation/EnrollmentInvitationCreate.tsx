@@ -86,7 +86,10 @@ export const EnrollmentInvitationCreate = (
       />
       <Text size="lg">[Opcional] Envía un mensaje al usuario</Text>
       <Text size="sm">Puedes indicar tus motivaciones, objetivos, etc.</Text>
-      <TextEditor onChange={(content) => form.setFieldValue('message', content)} />
+      <TextEditor
+        label="Mensaje de la invitación"
+        onChange={(content) => form.setFieldValue('message', content)}
+      />
       <Button type="submit" fullWidth mt="md">
         Invitar
       </Button>

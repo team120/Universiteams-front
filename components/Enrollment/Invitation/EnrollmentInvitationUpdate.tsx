@@ -62,6 +62,7 @@ export const EnrollmentInvitationUpdate = (props: EnrollmentInvitationUpdateProp
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <TextEditor
+        label="Mensaje de la invitación"
         content={props.content}
         onChange={(content) => form.setValues({ message: content })}
       />

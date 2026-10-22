@@ -159,7 +159,18 @@ const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
   ) => {
     event.stopPropagation()
 
-    if (currentUser?.isEmailVerified === false) {
+    // Also covers the current user not being loaded yet
+    if (errorCurrentUser || !currentUser) {
+      notifications.show({
+        title: 'Debes iniciar sesión para responder invitaciones de inscripción',
+        color: 'red',
+        message: <NotLoggedError action="responder invitaciones de inscripción" />,
+      })
+
+      return
+    }
+
+    if (currentUser.isEmailVerified === false) {
       notifications.show(verifyEmailNotification('responder invitaciones de inscripción'))
 
       return

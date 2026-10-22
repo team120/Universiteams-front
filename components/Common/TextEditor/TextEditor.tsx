@@ -67,6 +67,8 @@ const labels: RichTextEditorLabels = {
 
 interface TextEditorProps {
   content?: string
+  // Accessible name of the editable area, which has no visible label
+  label?: string
   onChange: (content: string) => void
 }
 
@@ -85,6 +87,11 @@ const TextEditor = (props: TextEditorProps) => {
       Placeholder.configure({ placeholder: 'Escribe aquí tu mensaje' }),
     ],
     content: sanitizedContent,
+    editorProps: {
+      attributes: props.label
+        ? { role: 'textbox', 'aria-multiline': 'true', 'aria-label': props.label }
+        : {},
+    },
   })
 
   useEffect(() => {

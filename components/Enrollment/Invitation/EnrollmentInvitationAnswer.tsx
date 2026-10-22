@@ -81,7 +81,10 @@ export const EnrollmentInvitationAnswer = (
             [Opcional] ¿Por qué declinas la invitación de inscripción? Los admins y líderes del
             proyecto podrán leer tu respuesta
           </Text>
-          <TextEditor onChange={(content) => form.setValues({ message: content })} />
+          <TextEditor
+            label="Motivo para declinar la invitación"
+            onChange={(content) => form.setValues({ message: content })}
+          />
         </>
       )}
       <Button type="submit" fullWidth mt="md" color={isAccept ? 'blue' : 'red'}>
