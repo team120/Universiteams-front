@@ -9,8 +9,8 @@ import { Projects, ProjectsQueryKey } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
 import Enrollment from '@/entities/Enrollment/Enrollment'
-import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestReject'
-import TextEditor from '../Common/TextEditor/TextEditor'
+import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
+import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
 interface EnrollmentRequestProps {
   projectId: number
@@ -22,7 +22,7 @@ export const EnrollmentRevoke = (props: EnrollmentRequestProps): React.JSX.Eleme
   const queryClient = useQueryClient()
 
   const revokeEnrollmentMutation = useMutation({
-    mutationFn: async (adminOptions: EnrollmentRequestAdmin) =>
+    mutationFn: async (adminOptions: EnrollmentRequestInput) =>
       Projects.revokeEnrollment(props.projectId, props.enrollment.user.id, adminOptions),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey, props.projectId] })

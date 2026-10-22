@@ -3,8 +3,7 @@ import Env from 'utils/config/Env'
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 
 import { EnrollmentChangeRole } from '@/entities/Enrollment/EnrollmentChangeRole'
-import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestReject'
-import { EnrollmentRequestInput } from '../entities/Enrollment/EnrollmentRequestInput'
+import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import { EnrollmentRequestsShow } from '@/entities/Enrollment/EnrollmentRequestsShow'
 import { Order } from '@/entities/HelpTypes/Order'
 import Project from '@/entities/Project/Project'
@@ -132,7 +131,7 @@ export const Projects = {
   async approveEnrollmentRequest(
     id: number,
     userId: number,
-    adminOptions: EnrollmentRequestAdmin
+    adminOptions: EnrollmentRequestInput
   ): Promise<void> {
     await axios.put(`${prefix}/${id}/enroll-requests/${userId}/approve`, adminOptions)
   },
@@ -140,15 +139,23 @@ export const Projects = {
   async rejectEnrollmentRequest(
     id: number,
     userId: number,
-    adminOptions: EnrollmentRequestAdmin
+    adminOptions: EnrollmentRequestInput
   ): Promise<void> {
     await axios.put(`${prefix}/${id}/enroll-requests/${userId}/reject`, adminOptions)
+  },
+
+  async acceptEnrollmentInvitation(id: number, options: EnrollmentRequestInput): Promise<void> {
+    await axios.put(`${prefix}/${id}/invitation/accept`, options)
+  },
+
+  async declineEnrollmentInvitation(id: number, options: EnrollmentRequestInput): Promise<void> {
+    await axios.put(`${prefix}/${id}/invitation/decline`, options)
   },
 
   async revokeEnrollment(
     id: number,
     userId: number,
-    adminOptions: EnrollmentRequestAdmin
+    adminOptions: EnrollmentRequestInput
   ): Promise<void> {
     await axios.put(`${prefix}/${id}/enrollments/${userId}/kick`, adminOptions)
   },

@@ -17,28 +17,25 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { ProjectsQueryKey, Projects } from '@/services/projects'
 import sanitize from 'sanitize-html'
 
-import { EnrollmentRequestCreate } from './EnrollmentRequest'
-import { EnrollmentRequestRejected } from './EnrollmentRequestRejected'
-import { EnrollmentRequestRevision } from './EnrollmentRequestRevision'
+import { EnrollmentRequestCancel } from './EnrollmentRequestCancel'
+import { EnrollmentRequestCreate } from './EnrollmentRequestCreate'
+import { EnrollmentRequestUpdate } from './EnrollmentRequestUpdate'
 import { EnrollmentRevoked } from './EnrollmentRevoked'
-import { NotLoggedError } from '../Account/NotLoggedError'
+import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import { RequestState } from '@/entities/Project/ProjectInList'
-import { UnenrollModal } from './Unenroll'
-import { verifyEmailNotification as verifyEmailErrorNotification } from '../Account/VerifyEmailNotification'
+import { Unenroll } from './Unenroll'
+import { verifyEmailNotification } from '@/components/Account/VerifyEmailNotification'
 
-interface ActionIconComponentProps {
+interface EnrollmentButtonRequestProps {
   projectId: number
   requestState?: RequestState | null
   requesterMessage?: string
   adminMessage?: string
 }
 
-const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
-  requestState,
-  requesterMessage,
-  adminMessage,
-  projectId,
-}) => {
+const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
+  props: EnrollmentButtonRequestProps
+) => {
   const queryClient = useQueryClient()
 
   const { data: currentUser, error: errorCurrentUser } = useQuery(
@@ -46,7 +43,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
   )
 
   const cancelEnrollmentRequestMutation = useMutation({
-    mutationFn: () => Projects.cancelEnrollmentRequest(projectId),
+    mutationFn: () => Projects.cancelEnrollmentRequest(props.projectId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ProjectsQueryKey] })
       notifications.show({
@@ -70,7 +67,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     }
 
     if (currentUser?.isEmailVerified === false) {
-      notifications.show(verifyEmailErrorNotification('solicitar inscripciones'))
+      notifications.show(verifyEmailNotification('solicitar inscripciones'))
 
       return
     }
@@ -78,27 +75,29 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     modals.open({
       title: 'Solicitar inscripción',
       centered: true,
-      children: <EnrollmentRequestCreate projectId={projectId} />,
+      children: <EnrollmentRequestCreate projectId={props.projectId} />,
     })
   }
 
-  const handleViewRequestClick = (event: React.MouseEvent) => {
+  const handleReviewRequestClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
     modals.open({
       title: 'Solicitud de inscripción',
       centered: true,
-      children: <EnrollmentRequestRevision content={requesterMessage} projectId={projectId} />,
+      children: (
+        <EnrollmentRequestUpdate content={props.requesterMessage} projectId={props.projectId} />
+      ),
     })
   }
 
-  const handleViewAdminMessageClick = (event: React.MouseEvent) => {
+  const handleReviewAdminMessageClick = (event: React.MouseEvent) => {
     event.stopPropagation()
 
     modals.open({
       title: 'Mensaje del administrador',
       centered: true,
-      children: <div dangerouslySetInnerHTML={{ __html: sanitize(adminMessage ?? '') }} />,
+      children: <div dangerouslySetInnerHTML={{ __html: sanitize(props.adminMessage ?? '') }} />,
     })
   }
 
@@ -115,10 +114,10 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
       title: 'Solicitud rechazada',
       centered: true,
       children: (
-        <EnrollmentRequestRejected
-          projectId={projectId}
-          adminMessage={adminMessage}
-          requesterMessage={requesterMessage}
+        <EnrollmentRequestCancel
+          projectId={props.projectId}
+          adminMessage={props.adminMessage}
+          requesterMessage={props.requesterMessage}
         />
       ),
     })
@@ -130,7 +129,7 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     modals.open({
       title: 'Inscripción revocada',
       centered: true,
-      children: <EnrollmentRevoked projectId={projectId} adminMessage={adminMessage} />,
+      children: <EnrollmentRevoked projectId={props.projectId} adminMessage={props.adminMessage} />,
     })
   }
 
@@ -140,12 +139,13 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
     modals.open({
       title: 'Darse de baja del proyecto',
       centered: true,
-      children: <UnenrollModal projectId={projectId} />,
+      children: <Unenroll projectId={props.projectId} />,
     })
   }
 
-  switch (requestState) {
+  switch (props.requestState) {
     case RequestState.Unenrolled:
+    case RequestState.Declined:
     case undefined:
     case null:
       return (
@@ -194,8 +194,8 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            {requesterMessage && (
-              <Menu.Item leftSection={<IconPencil size={14} />} onClick={handleViewRequestClick}>
+            {props.requesterMessage && (
+              <Menu.Item leftSection={<IconPencil size={14} />} onClick={handleReviewRequestClick}>
                 Revisar solicitud
               </Menu.Item>
             )}
@@ -221,8 +221,10 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            {adminMessage && (
-              <Menu.Item leftSection={<IconEye size={14} />} onClick={handleViewAdminMessageClick}>
+            {props.adminMessage && (
+              <Menu.Item
+                leftSection={<IconEye size={14} />}
+                onClick={handleReviewAdminMessageClick}>
                 Ver mensaje del administrador
               </Menu.Item>
             )}
@@ -239,4 +241,4 @@ const EnrollmentButton: React.FC<ActionIconComponentProps> = ({
   }
 }
 
-export default EnrollmentButton
+export default EnrollmentButtonRequest

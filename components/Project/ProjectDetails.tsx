@@ -37,9 +37,9 @@ import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { EnrollmentRequestsQueryKey, Projects, ProjectsQueryKey } from '@/services/projects'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
 
-import EnrollmentButton from '@/components/Enrollment/EnrollmentButton'
-import { EnrollmentList } from '../Enrollment/EnrollmentList'
-import { EnrollmentRequestAdminForm } from '../Enrollment/EnrollmentRequestAdmin'
+import EnrollmentButtonRequest from '@/components/Enrollment/Request/EnrollmentButtonRequest'
+import { EnrollmentList } from '@/components/Enrollment/List/EnrollmentList'
+import { EnrollmentRequestAdmin } from '@/components/Enrollment/Request/EnrollmentRequestAdmin'
 import { NotLoggedError } from '@/components/Account/NotLoggedError'
 import ProjectPDF from '@/components/Project/ProjectPDF'
 import SkeletonFull from '@/components/Common/Loader/SkeletonFull'
@@ -216,9 +216,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     modals.open({
       title: `Aceptar solicitud de ${request.user.firstName} ${request.user.lastName}`,
       centered: true,
-      children: (
-        <EnrollmentRequestAdminForm projectId={props.id} request={request} action="approve" />
-      ),
+      children: <EnrollmentRequestAdmin projectId={props.id} request={request} action="approve" />,
     })
   }
 
@@ -226,9 +224,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
     modals.open({
       title: `Rechazar solicitud de ${request.user.firstName} ${request.user.lastName}`,
       centered: true,
-      children: (
-        <EnrollmentRequestAdminForm projectId={props.id} request={request} action="reject" />
-      ),
+      children: <EnrollmentRequestAdmin projectId={props.id} request={request} action="reject" />,
     })
   }
 
@@ -286,7 +282,7 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
         <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
 
         <Flex justify="flex-end" align="center" gap={'1rem'}>
-          <EnrollmentButton
+          <EnrollmentButtonRequest
             projectId={project.id}
             requestState={project.requestState}
             requesterMessage={project.requesterMessage}

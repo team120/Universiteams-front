@@ -8,33 +8,33 @@ import { modals } from '@mantine/modals'
 import { EnrollmentRequestsQueryKey, Projects } from '@/services/projects'
 import sanitizeHtml from 'sanitize-html'
 
-import { EnrollmentRequestAdmin } from '@/entities/Enrollment/EnrollmentRequestReject'
+import { EnrollmentRequestInput } from '@/entities/Enrollment/EnrollmentRequestInput'
 import { EnrollmentRequestShow } from '@/entities/Enrollment/EnrollmentRequestShow'
-import TextEditor from '../Common/TextEditor/TextEditor'
+import { ManageEnrollInvitationAction } from '@/entities/Project/ProjectInList'
+import TextEditor from '@/components/Common/TextEditor/TextEditor'
 
-interface AdminMutation {
-  userId: number
-  adminOptions: EnrollmentRequestAdmin
+interface UserMutation {
+  userOptions: EnrollmentRequestInput
 }
 
-interface EnrollmentRequestProps {
+interface EnrollmentRequestUserProps {
   projectId: number
   request: EnrollmentRequestShow
-  action: 'approve' | 'reject'
+  action: ManageEnrollInvitationAction
 }
 
-export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React.JSX.Element => {
+export const EnrollmentRequestUser = (props: EnrollmentRequestUserProps): React.JSX.Element => {
   const form = useForm({ initialValues: { message: '' } })
   const queryClient = useQueryClient()
 
-  const approveEnrollmentRequestMutation = useMutation({
-    mutationFn: async (params: AdminMutation) =>
-      Projects.approveEnrollmentRequest(props.projectId, params.userId, params.adminOptions),
+  const acceptEnrollmentInvitationMutation = useMutation({
+    mutationFn: async (params: UserMutation) =>
+      Projects.acceptEnrollmentInvitation(props.projectId, params.userOptions),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [EnrollmentRequestsQueryKey, props.projectId] })
       notifications.show({
-        title: 'Solicitud de inscripción aprobada',
-        message: 'El usuario ahora es miembro del proyecto',
+        title: 'Invitación de inscripción aceptada',
+        message: 'Ahora eres miembro del proyecto',
         color: 'blue',
       })
       modals.closeAll()
@@ -42,21 +42,21 @@ export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React
     onError: (error) => {
       console.error(error)
       notifications.show({
-        title: 'Error al aprobar la solicitud de inscripción',
+        title: 'Error al aceptar la invitación de inscripción',
         message: 'Por favor, inténtalo de nuevo más tarde',
         color: 'red',
       })
     },
   })
 
-  const rejectEnrollmentRequestMutation = useMutation({
-    mutationFn: async (params: AdminMutation) =>
-      Projects.rejectEnrollmentRequest(props.projectId, params.userId, params.adminOptions),
+  const declineEnrollmentRequestMutation = useMutation({
+    mutationFn: async (params: UserMutation) =>
+      Projects.declineEnrollmentInvitation(props.projectId, params.userOptions),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [EnrollmentRequestsQueryKey, props.projectId] })
       notifications.show({
-        title: 'Solicitud de inscripción rechazada',
-        message: 'El usuario sera notificado de la decisión',
+        title: 'Invitación de inscripción declinada',
+        message: 'El admin o líder sera notificado de la decisión',
         color: 'blue',
       })
       modals.closeAll()
@@ -64,7 +64,7 @@ export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React
     onError: (error) => {
       console.error(error)
       notifications.show({
-        title: 'Error al rechazar la solicitud de inscripción',
+        title: 'Error al declinar la invitación de inscripción',
         message: 'Por favor, inténtalo de nuevo más tarde',
         color: 'red',
       })
@@ -75,18 +75,16 @@ export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React
     const sanitizedMessage = sanitizeHtml(values.message)
 
     switch (props.action) {
-      case 'approve':
-        approveEnrollmentRequestMutation.mutate({
-          userId: props.request.user.id,
-          adminOptions: {
+      case 'accept':
+        acceptEnrollmentInvitationMutation.mutate({
+          userOptions: {
             message: sanitizedMessage,
           },
         })
         break
-      case 'reject':
-        rejectEnrollmentRequestMutation.mutate({
-          userId: props.request.user.id,
-          adminOptions: {
+      case 'decline':
+        declineEnrollmentRequestMutation.mutate({
+          userOptions: {
             message: sanitizedMessage,
           },
         })
@@ -98,26 +96,26 @@ export const EnrollmentRequestAdminForm = (props: EnrollmentRequestProps): React
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <LoadingOverlay
         visible={
-          props.action === 'approve'
-            ? approveEnrollmentRequestMutation.isPending
-            : rejectEnrollmentRequestMutation.isPending
+          props.action === 'accept'
+            ? acceptEnrollmentInvitationMutation.isPending
+            : declineEnrollmentRequestMutation.isPending
         }
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <Text style={{ marginBottom: '1rem' }}>
-        {props.action === 'reject'
-          ? `[Opcional] ¿Por qué rechazas la solicitud de inscripción? Este mensaje será enviado al usuario`
-          : '[Opcional] Indica un mensaje para el usuario aceptado. Por ejemplo, instrucciones para comenzar a colaborar'}
+        {props.action === 'decline'
+          ? `[Opcional] ¿Por qué rechazas la invitación de inscripción? Este mensaje será enviado al admin o líder`
+          : '[Opcional] Indica un mensaje para el admin o líder que te invitó. Por ejemplo, preguntas para comenzar a colaborar'}
       </Text>
       <TextEditor onChange={(content) => form.setValues({ message: content })} />
       <Button
         type="submit"
         fullWidth
         mt="md"
-        aria-label="Rechazar solicitud"
-        color={props.action === 'approve' ? 'blue' : 'red'}>
-        {props.action === 'approve' ? 'Aprobar solicitud' : 'Rechazar solicitud'}
+        aria-label="Aceptar o declinar invitación"
+        color={props.action === 'accept' ? 'blue' : 'red'}>
+        {props.action === 'accept' ? 'Aceptar invitación' : 'Declinar invitación'}
       </Button>
     </form>
   )
