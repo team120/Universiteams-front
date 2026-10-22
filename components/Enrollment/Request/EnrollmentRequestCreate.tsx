@@ -55,7 +55,10 @@ export const EnrollmentRequestCreate = (props: EnrollmentRequestCreateProps): Re
       />
       <Text size="lg">[Opcional] Envía un mensaje al líder o admin del proyecto</Text>
       <Text size="sm">Puedes indicar tus motivaciones, habilidades, disponibilidad, etc.</Text>
-      <TextEditor onChange={(content) => form.setValues({ message: content })} />
+      <TextEditor
+        label="Mensaje de la solicitud"
+        onChange={(content) => form.setValues({ message: content })}
+      />
       <Button type="submit" fullWidth mt="md">
         Solicitar
       </Button>

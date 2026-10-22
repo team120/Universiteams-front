@@ -111,7 +111,10 @@ export const EnrollmentRequestAdmin = (props: EnrollmentRequestAdminProps): Reac
           ? `[Opcional] ¿Por qué rechazas la solicitud de inscripción? Este mensaje será enviado al usuario`
           : '[Opcional] Indica un mensaje para el usuario aceptado. Por ejemplo, instrucciones para comenzar a colaborar'}
       </Text>
-      <TextEditor onChange={(content) => form.setValues({ message: content })} />
+      <TextEditor
+        label="Mensaje para el usuario"
+        onChange={(content) => form.setValues({ message: content })}
+      />
       <Button type="submit" fullWidth mt="md" color={props.action === 'approve' ? 'blue' : 'red'}>
         {props.action === 'approve' ? 'Aprobar solicitud' : 'Rechazar solicitud'}
       </Button>

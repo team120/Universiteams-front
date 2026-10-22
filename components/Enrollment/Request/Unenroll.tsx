@@ -47,7 +47,10 @@ export const Unenroll = (props: EnrollmentCancelProps): React.JSX.Element => {
         Puedes indicar porque te quieres desvincular del proyecto, sugerencias, etc.
       </Text>
 
-      <TextEditor onChange={(content) => form.setValues({ message: content })} />
+      <TextEditor
+        label="Motivo de la baja"
+        onChange={(content) => form.setValues({ message: content })}
+      />
 
       <Button type="submit" fullWidth mt="md" color="red">
         Darse de baja

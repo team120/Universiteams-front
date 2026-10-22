@@ -44,9 +44,11 @@ const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
 ) => {
   const queryClient = useQueryClient()
 
-  const { data: currentUser, error: errorCurrentUser } = useQuery(
-    CurrentUserQueryOptions.currentUser()
-  )
+  const {
+    data: currentUser,
+    error: errorCurrentUser,
+    isLoading: isLoadingCurrentUser,
+  } = useQuery(CurrentUserQueryOptions.currentUser())
 
   const cancelEnrollmentRequestMutation = useMutation({
     mutationFn: () => Projects.cancelEnrollmentRequest(props.projectId),
@@ -159,7 +161,9 @@ const EnrollmentButtonRequest: React.FC<EnrollmentButtonRequestProps> = (
   ) => {
     event.stopPropagation()
 
-    // Also covers the current user not being loaded yet
+    // Wait for the current user instead of treating them as logged out
+    if (isLoadingCurrentUser) return
+
     if (errorCurrentUser || !currentUser) {
       notifications.show({
         title: 'Debes iniciar sesión para responder invitaciones de inscripción',

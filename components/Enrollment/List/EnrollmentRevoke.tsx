@@ -61,7 +61,10 @@ export const EnrollmentRevoke = (props: EnrollmentRequestProps): React.JSX.Eleme
         [Opcional] Puedes enviar un mensaje al usuario para explicar la decisión de revocar la
         inscripción
       </Text>
-      <TextEditor onChange={(content) => form.setValues({ message: content })} />
+      <TextEditor
+        label="Motivo de la revocación"
+        onChange={(content) => form.setValues({ message: content })}
+      />
       <Button type="submit" fullWidth mt="md" aria-label="Revocar inscripción" color="red">
         Revocar inscripción
       </Button>

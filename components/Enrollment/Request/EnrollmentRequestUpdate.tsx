@@ -56,6 +56,7 @@ export const EnrollmentRequestUpdate = (props: EnrollmentRequestUpdateProps) => 
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <TextEditor
+        label="Mensaje de la solicitud"
         content={props.content}
         onChange={(content) => form.setValues({ message: content })}
       />
