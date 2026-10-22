@@ -148,6 +148,7 @@ export const EnrollmentInvitationList = (
               {adminMessage && (
                 <ActionIcon
                   aria-label="Ver mensaje de la invitación"
+                  data-testid="invitation-card-view-message"
                   size="lg"
                   color="gray"
                   onClick={() => handleViewMessageClick('Mensaje de la invitación', adminMessage)}>
@@ -157,6 +158,7 @@ export const EnrollmentInvitationList = (
               {isDeclined && requesterMessage && (
                 <ActionIcon
                   aria-label="Ver respuesta del usuario"
+                  data-testid="invitation-card-view-answer"
                   size="lg"
                   color="gray"
                   onClick={() =>
@@ -171,6 +173,7 @@ export const EnrollmentInvitationList = (
               {!isDeclined && (
                 <ActionIcon
                   aria-label="Editar invitación"
+                  data-testid="invitation-card-edit"
                   size="lg"
                   color="orange.6"
                   onClick={() => handleEditClick(invitation)}>
@@ -179,6 +182,7 @@ export const EnrollmentInvitationList = (
               )}
               <ActionIcon
                 aria-label={isDeclined ? 'Descartar invitación' : 'Cancelar invitación'}
+                data-testid="invitation-card-remove"
                 size="lg"
                 color="red"
                 loading={
