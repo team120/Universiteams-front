@@ -59,4 +59,12 @@ describe('ProjectItem', () => {
     expect(screen.queryByTestId('project-card-leader')).toBeNull()
     expect(screen.getByTestId('project-card-members')).toHaveTextContent('3 personas')
   })
+
+  it('should expose the card and its title by test id, so UI tests can scope to one project', () => {
+    renderWithQueryClient(<ProjectItem project={project([])} />)
+
+    const card = screen.getByTestId('project-card')
+    expect(card).toContainElement(screen.getByTestId('project-card-title'))
+    expect(screen.getByTestId('project-card-title')).toHaveTextContent('Proyecto A')
+  })
 })
