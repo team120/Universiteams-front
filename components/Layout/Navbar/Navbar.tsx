@@ -17,7 +17,7 @@ import {
   IconUsers,
 } from '@tabler/icons-react'
 import { CurrentUserQueryOptions, UserSystemRole } from '../../../services/currentUser'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDisclosure } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { RequestState, ProjectSortAttribute } from '../../../entities/Project/ProjectInList'
@@ -34,10 +34,13 @@ const Navbar = () => {
   const [userMenuOpened, userMenuHandlers] = useDisclosure(false)
 
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   const logoutMutation = useMutation({
     mutationFn: () => Account.logout(),
     onSuccess: () => {
+      // Otherwise the cached user still looks logged in, and the login page redirects to the profile
+      queryClient.setQueryData(CurrentUserQueryOptions.currentUser().queryKey, null)
       router.push('/account/login')
     },
     onError: (error) => {
