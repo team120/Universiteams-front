@@ -28,8 +28,11 @@ cp .env.example .env.local
 
 | Variable                   | Description                                                      |
 | :------------------------- | :--------------------------------------------------------------- |
-| `NEXT_PUBLIC_BACKEND_HOST` | Backend API base URL. `http://api.localhost` for the local stack |
-| `NEXT_PUBLIC_CONTACT`      | Contact email shown in the Help and About pages                  |
+| `NEXT_PUBLIC_BACKEND_HOST` | Backend API base URL. `http://localhost:3000/api` for the local stack (through the dev proxy) |
+| `BACKEND_PROXY_TARGET`     | Dev only. Where the dev server proxies `/api`: `http://api.localhost`. Unset in production |
+| `NEXT_PUBLIC_CONTACT`      | Contact email shown in the Help and About pages |
+
+Locally, the browser only talks to `http://localhost:3000`: the dev server forwards `/api/*` to the backend. The login cookies are then first-party, which WebKit (Safari) requires. The backend's dev env must use `SAME_SITE_POLICY=lax` and `SECURE_COOKIE=false` with this setup (see the backend README).
 
 The frontend needs the backend running. Start it with `make dev` in the [backend repository](https://github.com/team120/Universiteams).
 

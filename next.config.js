@@ -17,4 +17,16 @@ module.exports = withBundleAnalyzer({
       },
     ]
   },
+  // Dev only: proxy /api to the backend, so the browser sees it as the same site as the
+  // frontend and keeps its cookies (WebKit drops cookies from api.localhost)
+  async rewrites() {
+    const target = process.env.BACKEND_PROXY_TARGET?.replace(/\/+$/, '')
+    if (!target) return []
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${target}/:path*`,
+      },
+    ]
+  },
 })
