@@ -17,8 +17,10 @@ module.exports = withBundleAnalyzer({
       },
     ]
   },
-  // Dev only: proxy /api to the backend, so the browser sees it as the same site as the
-  // frontend and keeps its cookies (WebKit drops cookies from api.localhost)
+  // Proxies /api to the backend, so the browser sees it as the same site as the frontend and
+  // keeps its cookies (WebKit drops cookies from api.localhost). Active only when
+  // BACKEND_PROXY_TARGET is set: leave it unset in production.
+  // Rewrites run after files, so a route handler under src/app/api/ would shadow a backend path.
   async rewrites() {
     const target = process.env.BACKEND_PROXY_TARGET?.replace(/\/+$/, '')
     if (!target) return []
