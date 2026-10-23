@@ -87,6 +87,34 @@ describe('Login page', () => {
     })
   })
 
+  describe('when the user check fails, the form shows, and the check runs again', () => {
+    it('should keep the form and what was typed while the check is pending', async () => {
+      mockFetchUserInfo.mockRejectedValue(httpError(502))
+      const queryClient = new QueryClient()
+      const { findByRole, getByRole } = renderLogin(queryClient)
+      await waitForStatus(queryClient, 'error')
+      fireEvent.change(await findByRole('textbox', { name: 'Correo electrónico' }), {
+        target: { value: 'user1@example.com' },
+      })
+
+      // A refetch with no cached data puts the query back in pending
+      let resolveUser: (user: CurrentUserInfo) => void = () => {}
+      mockFetchUserInfo.mockReturnValue(new Promise((resolve) => (resolveUser = resolve)))
+      act(() => {
+        queryClient.refetchQueries({ queryKey: ['currentUser'] })
+      })
+      await flushRenders()
+
+      expect(queryClient.getQueryState(['currentUser'])?.status).toBe('pending')
+      expect(getByRole('textbox', { name: 'Correo electrónico' })).toHaveValue('user1@example.com')
+
+      // A confirmed logged-in user is still redirected
+      await act(async () => resolveUser(user1))
+      await flushRenders()
+      expect(mockRouter.replace).toHaveBeenCalledWith('/account/profile')
+    })
+  })
+
   describe('when the user is logged out', () => {
     it('should stay on the login page and show the form', async () => {
       mockFetchUserInfo.mockImplementation(loggedOut)

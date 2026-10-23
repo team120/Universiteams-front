@@ -24,6 +24,13 @@ const Login: NextPage = () => {
     (status === 'success' && !currentUser)
   // Set once the page knows the user is logged out, so logging in here keeps its own redirect
   const [wasLoggedOut, setWasLoggedOut] = useState(false)
+  // Once shown, the form stays: a later check (e.g. on window focus) must not discard what was typed
+  const [formShown, setFormShown] = useState(false)
+  const showForm = formShown || isLoggedOut || status === 'error'
+
+  useEffect(() => {
+    if (showForm) setFormShown(true)
+  }, [showForm])
 
   useEffect(() => {
     if (isLoggedOut) setWasLoggedOut(true)
@@ -33,7 +40,7 @@ const Login: NextPage = () => {
   }, [isLoggedOut, status, isFetchedAfterMount, isFetching, wasLoggedOut, router])
 
   // Until the page knows, a loader, so a logged-in user doesn't see the form before the redirect
-  if (!wasLoggedOut && !isLoggedOut && status !== 'error')
+  if (!showForm)
     return (
       <Center mt="xl">
         <Loader />
