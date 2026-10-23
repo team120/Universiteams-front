@@ -39,8 +39,9 @@ const Navbar = () => {
   const logoutMutation = useMutation({
     mutationFn: () => Account.logout(),
     onSuccess: () => {
-      // Otherwise the cached user still looks logged in, and the login page redirects to the profile
-      queryClient.setQueryData(CurrentUserQueryOptions.currentUser().queryKey, null)
+      // Otherwise the cached user still looks logged in, and the login page redirects to the profile.
+      // Resetting refetches it into the logged-out (401) state the rest of the app handles
+      queryClient.resetQueries({ queryKey: CurrentUserQueryOptions.currentUser().queryKey })
       router.push('/account/login')
     },
     onError: (error) => {

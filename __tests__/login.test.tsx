@@ -19,7 +19,12 @@ jest.mock('@/services/currentUser', () => ({
   },
 }))
 
-const loggedOut = () => Promise.reject(new Error('Request failed with status code 401'))
+const httpError = (status: number) =>
+  Object.assign(new Error(`Request failed with status code ${status}`), {
+    isAxiosError: true,
+    response: { status },
+  })
+const loggedOut = () => Promise.reject(httpError(401))
 const user1 = { id: 1, user: 'Juan Rizzo', email: 'user1@example.com' } as CurrentUserInfo
 
 const renderLogin = (queryClient = new QueryClient()) =>
@@ -44,10 +49,10 @@ describe('Login page', () => {
     mockFetchUserInfo.mockReset()
   })
 
-  it('moves to register form if login button is clicked', () => {
+  it('moves to register form if login button is clicked', async () => {
     mockFetchUserInfo.mockImplementation(loggedOut)
-    const { getByText } = renderLogin()
-    const registerLink = getByText('Registrarse')
+    const { findByText, getByText } = renderLogin()
+    const registerLink = await findByText('Registrarse')
 
     fireEvent.click(registerLink)
     const registerExtraField = getByText('Nombre')
@@ -57,20 +62,40 @@ describe('Login page', () => {
   describe('when the user is already logged in', () => {
     it('should redirect to their profile', async () => {
       mockFetchUserInfo.mockResolvedValue(user1)
-      renderLogin()
+      const { queryByRole } = renderLogin()
 
       await waitFor(() => expect(mockRouter.replace).toHaveBeenCalledWith('/account/profile'))
+      // The login form never shows before the redirect
+      expect(queryByRole('textbox', { name: 'Correo electrónico' })).toBeNull()
+    })
+  })
+
+  describe('when the user check fails with a server error', () => {
+    it('should show the form, and still redirect once the user loads', async () => {
+      mockFetchUserInfo.mockRejectedValue(httpError(502))
+      const queryClient = new QueryClient()
+      const { findByRole } = renderLogin(queryClient)
+      await waitForStatus(queryClient, 'error')
+      expect(await findByRole('textbox', { name: 'Correo electrónico' })).toBeInTheDocument()
+      expect(mockRouter.replace).not.toHaveBeenCalled()
+
+      mockFetchUserInfo.mockResolvedValue(user1)
+      await act(() => queryClient.refetchQueries({ queryKey: ['currentUser'] }))
+      await flushRenders()
+
+      expect(mockRouter.replace).toHaveBeenCalledWith('/account/profile')
     })
   })
 
   describe('when the user is logged out', () => {
-    it('should stay on the login page', async () => {
+    it('should stay on the login page and show the form', async () => {
       mockFetchUserInfo.mockImplementation(loggedOut)
       const queryClient = new QueryClient()
-      renderLogin(queryClient)
+      const { getByRole } = renderLogin(queryClient)
 
       await waitForStatus(queryClient, 'error')
       expect(mockRouter.replace).not.toHaveBeenCalled()
+      expect(getByRole('textbox', { name: 'Correo electrónico' })).toBeInTheDocument()
     })
 
     it('should stay on the login page even if a user is still cached (e.g. an expired session)', async () => {
