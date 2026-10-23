@@ -114,10 +114,13 @@ const ProjectItem = (props: ProjectItemProps) => {
       mb="0.5rem"
       p="md"
       radius="md"
+      data-testid="project-card"
       onClick={() => router.push(`/projects/${project.id}`)}
       className={`${styles.card} ${colorScheme == 'dark' ? styles.cardDark : styles.cardLight}`}>
       <div style={{ width: '100%' }}>
-        <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
+        <Text
+          data-testid="project-card-title"
+          style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
           {project.name}
         </Text>
         <Group gap={'1rem'} style={{ marginBottom: 'xs' }}>
