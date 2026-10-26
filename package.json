@@ -64,7 +64,7 @@
     "@types/sanitize-html": "^2.11.0",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
-    "cross-env": "^7.0.3",
+    "cross-env": "^10.1.0",
     "eslint": "^8.44.0",
     "eslint-config-next": "^14.0.4",
     "eslint-config-prettier": "^8.3.0",
