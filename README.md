@@ -73,6 +73,10 @@ Important and interesting documentation of Next.js can be consulted at:
 -   [Nextjs.org/docs](https://nextjs.org/docs) - Features and functionalities of Next.js
 -   [Nextjs.org/learn](https://nextjs.org/learn) - Interactive tutorial about Next.js
 
+## Dependencies
+
+Dependabot version-update PRs are paused (`open-pull-requests-limit: 0` in `.github/dependabot.yml`) until the planned dependency upgrades, which go one major version per PR. To turn them back on, remove that line. Dependabot alerts are a repository setting and are not affected.
+
 ## Technologies used
 
 ### Frontend
