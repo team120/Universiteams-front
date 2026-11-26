@@ -27,7 +27,9 @@ describe('EnrollmentRequestAdmin', () => {
 
   it('should notify with correctly accented Spanish when rejecting a request', async () => {
     mockedProjects.rejectEnrollmentRequest.mockResolvedValue()
-    renderWithQueryClient(<EnrollmentRequestAdmin projectId={1} request={request} action="reject" />)
+    renderWithQueryClient(
+      <EnrollmentRequestAdmin projectId={1} request={request} action="reject" />
+    )
 
     await userEvent.click(screen.getByRole('button', { name: 'Rechazar solicitud' }))
 
