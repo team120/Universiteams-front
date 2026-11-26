@@ -57,7 +57,7 @@ export const EnrollmentRequestAdmin = (props: EnrollmentRequestAdminProps): Reac
       queryClient.invalidateQueries({ queryKey: [EnrollmentRequestsQueryKey, props.projectId] })
       notifications.show({
         title: 'Solicitud de inscripción rechazada',
-        message: 'El usuario sera notificado de la decisión',
+        message: 'El usuario será notificado de la decisión',
         color: 'blue',
       })
       modals.closeAll()
