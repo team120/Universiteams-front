@@ -18,7 +18,20 @@ jest.mock('@/services/projects', () => ({
   },
 }))
 const mockedProjects = Projects as jest.Mocked<typeof Projects>
-const request = { user: { id: 7 } } as EnrollmentRequestShow
+const request: EnrollmentRequestShow = {
+  id: 1,
+  requesterMessage: 'Quiero participar',
+  creationDate: '2026-01-01T00:00:00.000Z',
+  user: {
+    id: 7,
+    firstName: 'Camila',
+    lastName: 'Villa',
+    email: 'user2@example.com',
+    userAffiliations: [],
+    interests: [],
+    enrollments: [],
+  },
+}
 
 describe('EnrollmentRequestAdmin', () => {
   beforeEach(() => {
