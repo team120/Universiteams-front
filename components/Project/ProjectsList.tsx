@@ -16,7 +16,7 @@ const ProjectsList = ({ projects }: ProjectsListProps) => {
   const isMobile = useMediaQuery(`(max-width: ${Theme.breakpoints?.lg})`)
 
   if (projects === undefined) return <SkeletonFull />
-  if (projects.length == 0) return <InfoMessage text="Aún no tienes proyectos" type="info" />
+  if (projects.length == 0) return <InfoMessage text="No se encontraron proyectos" type="info" />
 
   return (
     <Suspense fallback={<SkeletonFull />}>
