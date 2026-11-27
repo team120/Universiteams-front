@@ -55,7 +55,9 @@ describe('ProjectsPage', () => {
     mockSearch = 'generalSearch=ce'
     rerender(page)
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('No se pudieron cargar los proyectos')
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'No se pudieron cargar los proyectos'
+    )
     await waitFor(() => expect(screen.queryByText('2 proyectos en la lista')).toBeNull())
     expect(screen.getByText('0 Resultados')).toBeInTheDocument()
   })
