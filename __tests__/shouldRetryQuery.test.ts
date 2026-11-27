@@ -1,4 +1,4 @@
-import { shouldRetryQuery } from '@/utils/query/shouldRetryQuery'
+import { shouldRetryQuery } from '../utils/query/shouldRetryQuery'
 
 const httpError = (status: number) =>
   Object.assign(new Error(`Request failed with status code ${status}`), {

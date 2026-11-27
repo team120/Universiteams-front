@@ -14,11 +14,12 @@ import Theme from './theme'
 import Layout from '@/components/Layout/Layout'
 import { Notifications } from '@mantine/notifications'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { shouldRetryQuery } from '../../utils/query/shouldRetryQuery'
 import { ModalsProvider } from '@mantine/modals'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from '@vercel/analytics/react'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: shouldRetryQuery } } })
 
 const App = ({ children }: { children: React.ReactNode }) => {
   // Detect the user's theme preference (dark or light)
