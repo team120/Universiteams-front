@@ -82,4 +82,21 @@ describe('ProjectsPage', () => {
     await waitFor(() => expect(screen.queryByText('2 proyectos en la lista')).toBeNull())
     expect(screen.getByText('0 Resultados')).toBeInTheDocument()
   })
+
+  it('should give the previous and next pagination buttons accessible names', async () => {
+    mockedGet.mockImplementation((url: string) =>
+      url.includes('/projects')
+        ? Promise.resolve({ data: { projects: [{ id: 1 }], projectCount: 100 } })
+        : Promise.resolve({ data: [] })
+    )
+    const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ProjectsPage />
+      </QueryClientProvider>
+    )
+
+    expect(await screen.findByRole('button', { name: 'Página anterior' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Página siguiente' })).toBeInTheDocument()
+  })
 })
