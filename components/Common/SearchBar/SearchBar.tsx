@@ -12,7 +12,8 @@ const SearchBar = () => {
   const pathname = usePathname()
   const searchQuery = useSearchParams()
 
-  const [generalSearch, setGeneralSearch] = useState('')
+  // Start from the URL, so shared or reloaded search links keep their search
+  const [generalSearch, setGeneralSearch] = useState(searchQuery.get('generalSearch') ?? '')
   const [debouncedGeneralSearch, updateDebouncedGeneralSearch] = useDebouncedValue(
     generalSearch,
     400
@@ -23,6 +24,7 @@ const SearchBar = () => {
 
   useEffect(() => {
     const trimmedSearchQuery = debouncedGeneralSearch.trim()
+    if (trimmedSearchQuery === (searchQuery.get('generalSearch') ?? '')) return
     if (trimmedSearchQuery === '') {
       Url.removeUrlParam(router, pathname, searchQuery, 'generalSearch')
       return
