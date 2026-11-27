@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { NextPage } from 'next'
 import { useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { Center, Pagination } from '@mantine/core'
+import { Alert, Center, Pagination } from '@mantine/core'
 
 import { CurrentUserQueryOptions } from '@/services/currentUser'
 import { DepartmentsQueryKey, ResearchDepartments } from '@/services/departments'
@@ -141,14 +141,18 @@ const ProjectsPage: NextPage = () => {
     return []
   }, [interestsQuery.data])
 
-  const totalPages = projectsQuery.data?.projectCount
-    ? Math.ceil(projectsQuery.data.projectCount / projectsPerPage)
-    : 1
+  // A failed request must not leave the previous results on screen
+  const projects = projectsQuery.isError ? undefined : projectsQuery.data
+
+  const generalSearch = searchQuery.get('generalSearch') ?? ''
+  const searchTooShort = generalSearch.length > 0 && generalSearch.length < 3
+
+  const totalPages = projects?.projectCount ? Math.ceil(projects.projectCount / projectsPerPage) : 1
 
   return (
     <>
       <Filter
-        counter={projectsQuery.data?.projectCount ?? 0}
+        counter={projects?.projectCount ?? 0}
         newButtonDirection="/projects/new"
         content={
           <ProjectFilterContent
@@ -159,7 +163,13 @@ const ProjectsPage: NextPage = () => {
             interests={interests}
           />
         }>
-        <ProjectsList projects={projectsQuery.data?.projects} />
+        {projectsQuery.isError ? (
+          <Alert color="red" title="No se pudieron cargar los proyectos">
+            {searchTooShort && 'La búsqueda debe tener al menos 3 caracteres.'}
+          </Alert>
+        ) : (
+          <ProjectsList projects={projects?.projects} />
+        )}
         {totalPages > 1 && (
           <Center>
             <Pagination
