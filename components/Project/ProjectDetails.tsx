@@ -246,103 +246,110 @@ const ProjectDetails = (props: ProjectDetailsParams) => {
   return (
     <>
       <Card key={project.id} mx="md" mb="0.5rem" p="md" radius="md" withBorder>
-        <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
-          {project.name}
-        </Text>
-        <Group gap={'1rem'} style={{ marginBottom: 'xs' }}>
-          <Text style={{ fontWeight: 500 }}>
-            {project.type} | {Dates.formatDate(project.creationDate)}
-            {project.endDate ? ` - ${Dates.formatDate(project.endDate)}` : ''}
+        {/* The card also holds the tabs, so the test id covers only the project's own data */}
+        <div data-testid="project-detail-header">
+          <Text style={{ fontSize: '1.25rem', fontWeight: 500, lineHeight: '1.75rem' }}>
+            {project.name}
           </Text>
-          {project.researchDepartments.map((department) => (
-            <Badge
-              key={department.id}
-              color="pink.6"
-              variant="light"
-              component="button"
-              style={{ cursor: 'pointer' }}
-              onClick={() =>
-                handleDepartmentBadgeClick(
-                  department.facility.institution.id,
-                  department.facility.id,
-                  department.id
-                )
-              }>
-              {department.facility.institution.abbreviation} | {department.facility.abbreviation} |{' '}
-              {department.name}
-            </Badge>
-          ))}
-        </Group>
-
-        <Chip.Group>
-          <Group gap={'0.5rem'} mt={'1rem'}>
-            {project.interests.map((interest) => (
+          <Group gap={'1rem'} style={{ marginBottom: 'xs' }}>
+            <Text style={{ fontWeight: 500 }}>
+              {project.type} | {Dates.formatDate(project.creationDate)}
+              {project.endDate ? ` - ${Dates.formatDate(project.endDate)}` : ''}
+            </Text>
+            {project.researchDepartments.map((department) => (
               <Badge
-                variant="dot"
-                key={interest.id}
-                color="blue.6"
-                size="lg"
+                key={department.id}
+                color="pink.6"
+                variant="light"
+                component="button"
                 style={{ cursor: 'pointer' }}
-                onClick={() => handleInterestTagClick(interest.id)}>
-                {interest.name}
+                onClick={() =>
+                  handleDepartmentBadgeClick(
+                    department.facility.institution.id,
+                    department.facility.id,
+                    department.id
+                  )
+                }>
+                {department.facility.institution.abbreviation} | {department.facility.abbreviation}{' '}
+                | {department.name}
               </Badge>
             ))}
           </Group>
-        </Chip.Group>
 
-        <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
+          <Chip.Group>
+            <Group gap={'0.5rem'} mt={'1rem'}>
+              {project.interests.map((interest) => (
+                <Badge
+                  variant="dot"
+                  key={interest.id}
+                  color="blue.6"
+                  size="lg"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleInterestTagClick(interest.id)}>
+                  {interest.name}
+                </Badge>
+              ))}
+            </Group>
+          </Chip.Group>
 
-        <Flex justify="flex-end" align="center" gap={'1rem'}>
-          <EnrollmentButtonRequest
-            projectId={project.id}
-            requestState={project.requestState}
-            requesterMessage={project.requesterMessage}
-            adminMessage={project.adminMessage}
-            senderName={project.senderName}
-          />
-          <Group gap={'0.25rem'}>
-            <ActionIcon
-              variant="transparent"
-              aria-label="Guardar en marcadores"
-              onClick={handleFavoriteClick}
-              size="lg"
-              color={project.isFavorite ? 'blue' : 'gray'}>
-              {project.isFavorite ? <IconHeartFilled /> : <IconHeart />}
-            </ActionIcon>
-            <Text size="sm">{project.favoriteCount}</Text>
-          </Group>
-          <PDFDownloadLink
-            document={<ProjectPDF project={project} />}
-            fileName={`project_document_${Dates.getDateTimeShort()}.pdf`}>
-            {() => (
-              <ActionIcon variant="transparent" aria-label="Exportar a PDF" size="lg" color="blue">
-                <IconPdf />
+          <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
+
+          <Flex justify="flex-end" align="center" gap={'1rem'}>
+            <EnrollmentButtonRequest
+              projectId={project.id}
+              requestState={project.requestState}
+              requesterMessage={project.requesterMessage}
+              adminMessage={project.adminMessage}
+              senderName={project.senderName}
+            />
+            <Group gap={'0.25rem'}>
+              <ActionIcon
+                variant="transparent"
+                aria-label="Guardar en marcadores"
+                onClick={handleFavoriteClick}
+                size="lg"
+                color={project.isFavorite ? 'blue' : 'gray'}>
+                {project.isFavorite ? <IconHeartFilled /> : <IconHeart />}
               </ActionIcon>
+              <Text size="sm">{project.favoriteCount}</Text>
+            </Group>
+            <PDFDownloadLink
+              document={<ProjectPDF project={project} />}
+              fileName={`project_document_${Dates.getDateTimeShort()}.pdf`}>
+              {() => (
+                <ActionIcon
+                  variant="transparent"
+                  aria-label="Exportar a PDF"
+                  size="lg"
+                  color="blue">
+                  <IconPdf />
+                </ActionIcon>
+              )}
+            </PDFDownloadLink>
+
+            {/* Admin */}
+            {isAdmin && (
+              <>
+                <ActionIcon
+                  variant="transparent"
+                  aria-label="Editar"
+                  onClick={handleEditClick}
+                  size="lg"
+                  color={'orange.6'}>
+                  <IconEdit />
+                </ActionIcon>
+                <ActionIcon
+                  variant="transparent"
+                  aria-label="Eliminar"
+                  onClick={handleDeleteClick}
+                  size="lg"
+                  color={'red.6'}>
+                  <IconTrash />
+                </ActionIcon>
+              </>
             )}
-          </PDFDownloadLink>
-
-          {/* Admin */}
-          {isAdmin && (
-            <>
-              <ActionIcon
-                variant="transparent"
-                aria-label="Editar"
-                onClick={handleEditClick}
-                size="lg"
-                color={'orange.6'}>
-                <IconEdit />
-              </ActionIcon>
-              <ActionIcon
-                variant="transparent"
-                aria-label="Eliminar"
-                onClick={handleDeleteClick}
-                size="lg"
-                color={'red.6'}>
-                <IconTrash />
-              </ActionIcon>
-            </>
-          )}
-        </Flex>
+          </Flex>
+        </div>
 
         {/* Only the open tab is mounted, so invitations are fetched when needed */}
         <Tabs

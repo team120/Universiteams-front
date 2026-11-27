@@ -134,10 +134,7 @@ describe('ProjectDetails test ids', () => {
       ...project(null),
       researchDepartments: [department(1, 'Sistemas')],
       interests: [{ id: 1, name: 'Interés del proyecto' }],
-      enrollments: [
-        member(3, 'Ana', 'Leader', 'Civil'),
-        member(4, 'Luis', 'Member', 'Química'),
-      ],
+      enrollments: [member(3, 'Ana', 'Leader', 'Civil'), member(4, 'Luis', 'Member', 'Química')],
     } as unknown as Project)
   })
 
