@@ -74,6 +74,7 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
       {enrollments.map((enrollment) => (
         <Card
           key={enrollment.id}
+          data-testid="project-member"
           p="md"
           mt="md"
           withBorder
