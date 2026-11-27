@@ -175,6 +175,11 @@ const ProjectsPage: NextPage = () => {
             <Pagination
               value={currentPage}
               total={totalPages}
+              getControlProps={(control) => {
+                if (control === 'previous') return { 'aria-label': 'Página anterior' }
+                if (control === 'next') return { 'aria-label': 'Página siguiente' }
+                return {}
+              }}
               onChange={(page) => {
                 setCurrentPage(page)
               }}
