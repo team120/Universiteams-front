@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-import { renderWithQueryClient, screen } from '../utils/tests'
+import { renderWithQueryClient, screen, within } from '../utils/tests'
 import ProjectDetails, { ProjectDetailsTabs } from '@/components/Project/ProjectDetails'
 import { EnrollmentInvitationList } from '@/components/Enrollment/Invitation/EnrollmentInvitationList'
 import { Projects } from '@/services/projects'
@@ -106,5 +106,60 @@ describe('ProjectDetails invitations tab', () => {
         )
       }
     )
+  })
+})
+
+describe('ProjectDetails test ids', () => {
+  const department = (id: number, name: string) => ({
+    id,
+    name,
+    facility: { id: 1, abbreviation: 'FRRo', institution: { id: 1, abbreviation: 'UTN' } },
+  })
+  const member = (id: number, firstName: string, role: string, departmentName: string) => ({
+    id,
+    role,
+    user: {
+      id,
+      firstName,
+      lastName: 'Test',
+      interests: [{ id: 10 + id, name: `Interés de ${firstName}` }],
+      userAffiliations: [{ researchDepartment: department(10 + id, departmentName) }],
+    },
+  })
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockActiveTab = null
+    mockedProjects.getProject.mockResolvedValue({
+      ...project(null),
+      researchDepartments: [department(1, 'Sistemas')],
+      interests: [{ id: 1, name: 'Interés del proyecto' }],
+      enrollments: [
+        member(3, 'Ana', 'Leader', 'Civil'),
+        member(4, 'Luis', 'Member', 'Química'),
+      ],
+    } as unknown as Project)
+  })
+
+  it("should scope the header to the project's own data", async () => {
+    renderWithQueryClient(<ProjectDetails id={1} />)
+
+    const header = await screen.findByTestId('project-detail-header')
+    expect(within(header).getByText('Proyecto A')).toBeInTheDocument()
+    expect(within(header).getByText(/Sistemas/)).toBeInTheDocument()
+    expect(within(header).getByText('Interés del proyecto')).toBeInTheDocument()
+    expect(within(header).queryByText(/Civil/)).toBeNull()
+    expect(within(header).queryByText('Interés de Ana')).toBeNull()
+  })
+
+  it('should mark each member card with its own name and role', async () => {
+    renderWithQueryClient(<ProjectDetails id={1} />)
+
+    const members = await screen.findAllByTestId('project-member')
+    expect(members).toHaveLength(2)
+    expect(within(members[0]).getByText('Ana Test')).toBeInTheDocument()
+    expect(within(members[0]).getByText('Lider')).toBeInTheDocument()
+    expect(within(members[1]).getByText('Luis Test')).toBeInTheDocument()
+    expect(within(members[1]).getByText('Miembro')).toBeInTheDocument()
   })
 })
