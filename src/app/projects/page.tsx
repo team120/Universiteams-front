@@ -144,6 +144,9 @@ const ProjectsPage: NextPage = () => {
   // A failed request must not leave the previous results on screen
   const projects = projectsQuery.isError ? undefined : projectsQuery.data
 
+  const generalSearch = searchQuery.get('generalSearch') ?? ''
+  const searchTooShort = generalSearch.length > 0 && generalSearch.length < 3
+
   const totalPages = projects?.projectCount ? Math.ceil(projects.projectCount / projectsPerPage) : 1
 
   return (
@@ -162,7 +165,7 @@ const ProjectsPage: NextPage = () => {
         }>
         {projectsQuery.isError ? (
           <Alert color="red" title="No se pudieron cargar los proyectos">
-            Revisa la búsqueda (debe tener al menos 3 caracteres) e inténtalo de nuevo.
+            {searchTooShort && 'La búsqueda debe tener al menos 3 caracteres.'}
           </Alert>
         ) : (
           <ProjectsList projects={projects?.projects} />

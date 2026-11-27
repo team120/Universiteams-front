@@ -34,7 +34,8 @@ describe('ProjectsPage', () => {
   beforeEach(() => {
     mockSearch = ''
     mockedGet.mockImplementation((url: string) => {
-      if (url.includes('generalSearch=ce')) return Promise.reject(new Error('Request failed'))
+      if (url.includes('generalSearch=ce') || url.includes('generalSearch=zzzz'))
+        return Promise.reject(new Error('Request failed'))
       if (url.includes('/projects')) {
         return Promise.resolve({ data: { projects: [{ id: 1 }, { id: 2 }], projectCount: 2 } })
       }
@@ -42,7 +43,7 @@ describe('ProjectsPage', () => {
     })
   })
 
-  it('should show an error, not the previous results, when the search request fails', async () => {
+  it('should show an error with the length hint when a short search fails', async () => {
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
     const page = (
       <QueryClientProvider client={queryClient}>
@@ -53,6 +54,26 @@ describe('ProjectsPage', () => {
     expect(await screen.findByText('2 proyectos en la lista')).toBeInTheDocument()
 
     mockSearch = 'generalSearch=ce'
+    rerender(page)
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'No se pudieron cargar los proyectos'
+    )
+    await waitFor(() => expect(screen.queryByText('2 proyectos en la lista')).toBeNull())
+    expect(screen.getByText('0 Resultados')).toBeInTheDocument()
+  })
+
+  it('should show only the neutral error, without the length hint, when a long search fails', async () => {
+    const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    const page = (
+      <QueryClientProvider client={queryClient}>
+        <ProjectsPage />
+      </QueryClientProvider>
+    )
+    const { rerender } = render(page)
+    expect(await screen.findByText('2 proyectos en la lista')).toBeInTheDocument()
+
+    mockSearch = 'generalSearch=zzzzqqq'
     rerender(page)
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
